@@ -1,6 +1,6 @@
 mount("lessons.html");
 // Template-based lesson-helps STUB: assembles an outline only from the talk's data on this site.
-// No AI, no invented doctrine. Leaders should prepare from the official text and the Spirit.
+// Template-based only; no generated text, no invented doctrine. Leaders should prepare from the official text and the Spirit.
 const A = {
   fhe: { name: "Family home evening (15–20 min)", open: "Sing a favorite hymn or Primary song, then ask:", act: "Let each family member share one experience or idea connected to the big idea. Younger children can draw it.", close: "Choose one small family goal from the invitation and check in at dinner during the week." },
   youth: { name: "Youth class (25–30 min)", open: "Write the ponder question on the board and give 1 minute of quiet thinking:", act: "In pairs, read a quote and discuss: What does it mean? Where have we seen it in real life? Then share with the class.", close: "Invite each youth to privately write one action they'll take this week." },

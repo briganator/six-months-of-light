@@ -1,4 +1,4 @@
-// Shared helpers, header/footer, device storage, and the mocked "Ask AI" panel.
+// Shared helpers, header/footer, device storage, and the "Ask the Talks" panel.
 window.esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 window.talkById = id => CONF.talks.find(t => t.id === id);
 window.sessionById = id => CONF.sessions.find(s => s.id === id);
@@ -53,21 +53,26 @@ window.downloadReminder = (talk, text) => {
 window.LOGO_RAYS = [[17.73, 39.36, 13.45, 37.97, 0.38, 1.6], [21.73, 33.07, 16.87, 27.89, 0.5, 1.78], [28.27, 29.47, 25.86, 20.08, 0.63, 1.96], [35.73, 29.47, 38.79, 17.56, 0.75, 2.14], [42.27, 33.07, 52.47, 22.2, 0.88, 2.32], [46.27, 39.36, 62.91, 33.96, 1.0, 2.5]];
 window.LOGO_MARK = (size = 40) => `<svg class="mark" width="${size}" height="${size}" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lmg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3a693"/><stop offset=".55" stop-color="#f1d394"/><stop offset="1" stop-color="#fff3d1"/></linearGradient></defs><g stroke="url(#lmg)" stroke-linecap="round">${LOGO_RAYS.map(([a,b,c,d,o,w],i) => `<line class="ray r${i}" x1="${a}" y1="${b}" x2="${c}" y2="${d}" stroke-opacity="${o}" stroke-width="${w}"/>`).join("")}</g><path d="M21 44a11 11 0 0 1 22 0z" fill="url(#lmg)"/><line x1="6" y1="44" x2="58" y2="44" stroke="url(#lmg)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="50" x2="46" y2="50" stroke="url(#lmg)" stroke-width="1.3" stroke-linecap="round" opacity=".55"/></svg>`;
 window.WORDMARK = () => `<span class="wordmark">${LOGO_MARK(36)}<span class="wm-text">Six Months <em>of</em> Light</span></span>`;
-const NAV = [["index.html","Home"],["builder.html","Card Builder"],["insights.html","Insights"],["quiz.html","Quiz"],["my.html","My Conference"],["lessons.html","Lesson helps"],["challenge.html","Challenge"]];
+const NAV = [["index.html","Home"],["builder.html","Card Studio"],["insights.html","Insights"],["quiz.html","Quiz"],["my.html","My Conference"],["challenge.html","Challenge"],["lessons.html","Lesson helps"]];
+const ICON = { home: '<path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/>', talks: '<path d="M5 4h10l4 4v12H5zM8 11h8M8 15h8M8 7h5"/>', studio: '<path d="M12 3v3M5.6 5.6l2.1 2.1M3 12h3M18.4 5.6l-2.1 2.1M21 12h-3M7 16a5 5 0 0 1 10 0zM3 19h18"/>', insights: '<path d="M5 20V10M10 20V4M15 20v-7M20 20v-11"/>', me: '<path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/>' };
+const TABS = [["index.html","Home","home"],["index.html#sessions","Talks","talks"],["builder.html","Studio","studio"],["insights.html","Insights","insights"],["my.html","Me","me"]];
+window.tabbarHTML = (active) => `<nav class="tabbar" aria-label="Quick">${TABS.map(([h,l,i]) => `<a href="${h}" class="${i === "studio" ? "tb-main" : ""}" ${active === h && i !== "talks" ? 'aria-current="page"' : ""}><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICON[i]}</svg><span>${l}</span></a>`).join("")}</nav>`;
 window.headerHTML = (active, small) => `
   <div class="unofficial" role="note">Not an official Church site · Personal study page · Quotes from recaps; confirm with official text</div>
-  <header class="hero ${small ? "hero-sm" : "hero-lg"}">
-    <div class="hero-sky" aria-hidden="true"><span class="rays"></span><span class="glow g1"></span><span class="glow g2"></span><span class="sun"></span>${LANDSCAPE()}<span class="motes"></span><span class="horizon"></span></div>
-    <nav class="topbar wrap" aria-label="Main">
+  <div class="sitebar" id="sitebar"><nav class="topbar wrap" aria-label="Main">
       <a class="brand" href="index.html" aria-label="Six Months of Light home">${WORDMARK()}</a>
       <div class="navlinks">${NAV.map(([h,l]) => `<a href="${h}" ${active===h?'aria-current="page"':""}>${l}</a>`).join("")}</div>
-    </nav>
+      ${active === "builder.html" ? "" : `<a class="btn gold small sb-cta" href="builder.html">Make a card</a>`}
+    </nav></div>
+  <header class="hero ${small ? "hero-sm" : "hero-lg"}">
+    <div class="hero-sky" aria-hidden="true"><span class="rays"></span><span class="glow g1"></span><span class="glow g2"></span><span class="sun"></span>${LANDSCAPE()}<span class="motes"></span><span class="horizon"></span></div>
     ${small ? "" : `<div class="hero-copy wrap">
       <div class="eyebrow">${esc(CONF.title)} · October 3–4</div>
       <h1 class="display"><span class="d1">Six Months</span> <em>of</em> <span class="d2">Light</span></h1>
       <p class="tagline">${esc(CONF.tagline)}</p>
+      <p class="hero-how">Find a line from conference. Make it beautiful. Share it.</p>
+      <div class="hero-actions"><a class="btn gold big" href="builder.html">Make a card</a><a class="btn glass" href="#sessions">Browse the talks</a></div>
       ${countdownHTML()}
-      <div class="hero-actions"><a class="btn gold" href="talks/${CONF.talk_of_the_week.talk_id}.html">This week's talk</a><a class="btn glass" href="#sessions">Browse all talks</a></div>
     </div>`}
     ${GROUP ? `<p class="grouptag wrap">Group: <strong>${esc(GROUP)}</strong> · <a href="?g=">leave group</a></p>` : ""}
   </header>`;
@@ -96,36 +101,47 @@ window.footerHTML = () => `
     <p class="big"><strong>This is not an official website of The Church of Jesus Christ of Latter-day Saints.</strong></p>
     <p>Six Months of Light is a personal study page. It is not affiliated with or endorsed by the Church. For official talks, audio and video, visit <a href="${esc(CONF.conference_url)}" rel="noopener">ChurchofJesusChrist.org</a>.</p>
     <p>Summaries and quotes come from Church News / Church Newsroom recaps; confirm with official text. Full talk text is not reproduced. Your saved quotes, notes and commitments stay on this device.</p>
-    <p><a href="groups.html">Family &amp; ward group links</a></p>
+    <p class="foot-links"><a href="quiz.html">Who said it? quiz</a> · <a href="lessons.html">Lesson helps</a> · <a href="challenge.html">Challenge</a> · <a href="groups.html">Family &amp; ward group links</a> · <a href="credits.html">Photo credits</a></p>
   </div></footer>`;
 window.recapNotice = () => `<div class="notice" role="note"><strong>Quotes from recaps; confirm with official text.</strong> Official talk text isn't posted yet. Summaries and quotes here come from Church News and Church Newsroom recaps.</div>`;
 window.mount = (active, small) => {
   document.body.insertAdjacentHTML("afterbegin", headerHTML(active, small));
   document.body.insertAdjacentHTML("beforeend", footerHTML());
+  if (active !== "builder.html") { document.body.insertAdjacentHTML("beforeend", tabbarHTML(active)); document.body.classList.add("has-tabbar"); }
+  // Sticky header: publish its height (for sticky sub-navs below it) and compact it on scroll (with hysteresis).
+  const bar = document.getElementById("sitebar"), root = document.documentElement;
+  const setH = () => root.style.setProperty("--hdrH", bar.offsetHeight + "px"); setH();
+  if ("ResizeObserver" in window) new ResizeObserver(setH).observe(bar);
+  let compact = false; const onScroll = () => { const y = scrollY; if (!compact && y > 64) { compact = true; document.body.classList.add("compact"); } else if (compact && y < 8) { compact = false; document.body.classList.remove("compact"); } };
+  addEventListener("scroll", onScroll, { passive: true }); onScroll();
 };
+// Sticky chip navigation for in-page sections (sits directly under the sticky header).
+window.subnavHTML = (items, label) => `<nav class="subnav" aria-label="${esc(label)}"><div class="subnav-in">${items.map(([id, l]) => `<a href="#${id}">${esc(l)}</a>`).join("")}</div></nav>`;
+window.initSubnav = () => { const links = [...document.querySelectorAll(".subnav a")]; if (!links.length || !("IntersectionObserver" in window)) return;
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) links.forEach(a => { const on = a.getAttribute("href") === "#" + e.target.id; a.toggleAttribute("aria-current", on); if (on) a.scrollIntoView({ block: "nearest", inline: "center" }); }); }), { rootMargin: "-30% 0px -60% 0px" });
+  links.forEach(a => { const t = document.getElementById(a.getAttribute("href").slice(1)); t && io.observe(t); }); };
 
-// ---- "Ask AI" — UI MOCKUP ONLY. No AI service is connected. ----
-// Design rules for the future live version (see README): answer ONLY from official talk text
-// on ChurchofJesusChrist.org, cite talk + paragraph for every claim, say "I don't know" when the
-// text doesn't answer, never speak for the Church or give doctrinal rulings.
-window.askAIPanel = (scope) => {
-  const id = "ai" + Math.random().toString(36).slice(2, 7);
-  const qs = scope.questions;
+// ---- "Ask the Talks": question chips answered from this site's talk data. Every answer cites and links the talk. ----
+// Answers are assembled from recap data on this site (official text pending); nothing is generated or invented.
+window.askTalksPanel = (scope) => {
+  const id = "ask" + Math.random().toString(36).slice(2, 7);
   setTimeout(() => {
     document.querySelectorAll(`#${id} .chip`).forEach((b, i) => b.addEventListener("click", () => {
-      document.querySelector(`#${id} .ai-answer`).innerHTML = scope.answer(i);
+      document.querySelectorAll(`#${id} .chip`).forEach(x => x.setAttribute("aria-pressed", x === b));
+      document.querySelector(`#${id} .ask-answer`).innerHTML = scope.answer(i);
     }));
   });
-  return `<section class="card ai" id="${id}" aria-labelledby="${id}-h">
-    <div class="ai-head"><h2 id="${id}-h">Ask AI</h2><span class="pill pending">Preview mockup · not live</span></div>
-    <p class="speaker">Ask about ${esc(scope.label)}. When live, answers will come <strong>only from the official talk text</strong>, with citations, and will never speak for the Church.</p>
-    <div class="chips">${qs.map(q => `<button class="chip" type="button">${esc(q)}</button>`).join("")}</div>
-    <div class="ai-input"><input type="text" disabled placeholder="Available after official text is posted"><button class="btn small" disabled>Ask</button></div>
-    <div class="ai-answer"></div>
+  return `<section class="card ask" id="${id}" aria-labelledby="${id}-h">
+    <div class="ask-head"><h2 id="${id}-h">Ask the Talks</h2></div>
+    <p class="speaker">Bring a question, find what the speakers taught. Tap a question about ${esc(scope.label)}; every answer cites and links the talk.</p>
+    <div class="chips">${scope.questions.map(q => `<button class="chip" type="button" aria-pressed="false">${esc(q)}</button>`).join("")}</div>
+    <div class="ask-answer" aria-live="polite"></div>
   </section>`;
 };
-window.mockAnswer = (text, cites) => `<div class="ai-bubble"><div class="ai-tag">Mock answer (built from this page's recap data, not AI)</div>
-  <p>${text}</p><ol class="cites">${cites.map(c => `<li>${c}</li>`).join("")}</ol></div>`;
+// talks: array of talk objects cited by this answer (linked to the talk page and its recap source)
+window.talkAnswer = (html, talks) => `<div class="ask-bubble"><p>${html}</p>
+  <ol class="cites">${talks.map(t => `<li><a href="talks/${esc(t.id)}.html">${esc(t.speaker)}, “${esc(t.title)}”</a> · <a href="${esc(t.official_url || t.recap_url)}" rel="noopener">${t.official_url ? "official text" : "recap source"} ↗</a></li>`).join("")}</ol>
+  <div class="ask-tag">From recaps on this site; confirm with the official text.</div></div>`;
 
 // Simple theme buckets used by Insights, speaker pages and lesson helps.
 window.THEMES = {
@@ -178,11 +194,13 @@ window.openShareSheet = ({ url, text, file }) => {
       <a class="sheet-btn" target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=${enc(url)}"><span>f</span>Facebook</a>
       <a class="sheet-btn" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=${enc(text)}&url=${enc(url)}"><span>𝕏</span>X</a>
       <a class="sheet-btn" href="sms:?&body=${enc(body)}"><span>💬</span>Text message</a>
+      <a class="sheet-btn" href="mailto:?subject=${enc("From Six Months of Light")}&body=${enc(body)}"><span>✉️</span>Email</a>
     </div>
-    <p class="speaker sheet-note">Links open the talk page directly. Facebook and X share the link; download the card to post the image.</p>
+    <p class="speaker sheet-note">Links open the talk page directly. Facebook and X share the link only, so download the card to post the picture. For Instagram Stories: download, then add it in Stories with the Link sticker.</p>
     <button class="btn secondary small" data-act="close">Close</button></div>`;
-  document.body.appendChild(el);
-  const close = () => el.remove();
+  const prevFocus = document.activeElement;
+  document.body.appendChild(el); el.querySelector(".sheet-btn")?.focus();
+  const close = () => { el.remove(); prevFocus?.focus?.(); };
   el.addEventListener("click", async e => {
     if (e.target === el) return close();
     const b = e.target.closest("[data-act]"); if (!b) return;

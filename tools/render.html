@@ -1,17 +1,23 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="robots" content="noindex">
 <link rel="stylesheet" href="../assets/fonts.css"><style>body{margin:0;background:#222}</style></head>
 <body><canvas id="cv"></canvas>
-<script src="../assets/data.js"></script><script src="../assets/common.js"></script>
-<script src="../assets/vendor/qrcode.js"></script><script src="../assets/cardkit.js"></script>
+<script>window.CARDKIT_BASE = "../";</script>
+<script src="../assets/data.js"></script><script src="../assets/common.js"></script><script src="../assets/insights-data.js"></script>
+<script src="../assets/photos.js"></script><script src="../assets/vendor/qrcode.js"></script><script src="../assets/cardkit.js"></script>
 <script>
 // Internal render surface for tools/render_assets.py (not part of the public site).
 const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
-window.ready = document.fonts.load('500 40px "Cormorant Garamond"').then(() => document.fonts.load('italic 500 40px "Cormorant Garamond"')).then(() => document.fonts.load('600 20px Inter'));
+window.ready = Promise.all(['500 40px "Cormorant Garamond"', 'italic 500 40px "Cormorant Garamond"', '600 20px "Cormorant Garamond"', '600 20px Inter', '400 20px Inter'].map(f => document.fonts.load(f)));
 window.og = id => { const t = talkById(id); cv.width = 1200; cv.height = 630;
   CardKit.drawOG(ctx, 1200, 630, { title: t.title, speaker: t.speaker, bigIdea: t.big_idea, url: talkUrl(t) }); return cv.toDataURL("image/jpeg", .9); };
 window.ogSite = () => { cv.width = 1200; cv.height = 630;
-  CardKit.drawOG(ctx, 1200, 630, { title: "Six Months of Light", speaker: "October 3–4, 2026 · to April 2027", bigIdea: "The words of October 2026 General Conference, to carry you to April. Summaries, quote cards and ponder questions.", url: CONF.site_url }); return cv.toDataURL("image/jpeg", .9); };
-window.card = (id, q, size, theme, time, extra) => { const t = talkById(id), [W, H] = CardKit.SIZES[size]; cv.width = W; cv.height = H;
-  CardKit.drawCard(ctx, W, H, Object.assign({ quote: t.quotes[q], speaker: t.speaker, title: t.title, theme, url: talkUrl(t) }, extra || {}), time ?? Infinity);
-  return cv.toDataURL(time == null ? "image/png" : "image/jpeg", .95); };
+  CardKit.drawOG(ctx, 1200, 630, { title: "Six Months of Light", speaker: "October 3–4, 2026 · to April 2027", bigIdea: "The words of October 2026 General Conference, to carry you to April. Quote cards, insights and ponder questions.", url: CONF.site_url }); return cv.toDataURL("image/jpeg", .9); };
+// spec: { t, q } for a quote or { ins } for an insight, plus look/palette/font/align/overlay/note
+window.opts = s => { if (s.ins) { const x = INSIGHTS.get(s.ins); return Object.assign({}, s, { kind: "insight", ins: x, eyebrow: x.id === "daily" ? "SIX MONTHS OF LIGHT · DAILY" : "OCTOBER 2026 · CONFERENCE INSIGHT", url: x.id.startsWith("spot-") ? talkUrl(talkById(x.id.slice(5))) : CONF.site_url + "insights.html" }); }
+  const t = talkById(s.t); return Object.assign({ kind: "quote", quote: t.quotes[s.q], speaker: t.speaker, title: t.title, url: talkUrl(t) }, s); };
+window.card = async (s, size, time, fmt, scale) => { const o = opts(s), [W, H] = CardKit.SIZES[size]; await CardKit.prepare(o); cv.width = W; cv.height = H;
+  CardKit.drawCard(ctx, W, H, o, time ?? Infinity);
+  if (scale) { const c2 = document.createElement("canvas"); c2.width = Math.round(W * scale); c2.height = Math.round(H * scale); c2.getContext("2d").drawImage(cv, 0, 0, c2.width, c2.height); return c2.toDataURL("image/jpeg", .8); }
+  return cv.toDataURL(fmt || (time == null ? "image/png" : "image/jpeg"), .95); };
+window.looks = () => Object.keys(CardKit.LOOKS);
 </script></body></html>

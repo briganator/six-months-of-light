@@ -5,10 +5,11 @@ import json
 SITE = json.loads((root / "assets/data.js").read_text().split("window.CONF = ", 1)[1].rstrip().rstrip(";"))["site_url"]  # from tools/talks_source.py
 NAME, TAG = "Six Months of Light", "The words of October 2026 General Conference, to carry you to April."
 pages = {
- "index": ("Six Months of Light · October 2026 General Conference", ["share"], []),
- "builder": ("Card Builder · Six Months of Light", [], ["vendor/qrcode.js", "cardkit.js"]),
+ "index": ("Six Months of Light · October 2026 General Conference", ["share"], ["insights-data.js"]),
+ "builder": ("Card Studio · Six Months of Light", [], ["insights-data.js", "photos.js", "vendor/qrcode.js", "cardkit.js"]),
  "quiz": ("Who said it? · Six Months of Light", [], []),
- "insights": ("Conference Insights · Six Months of Light", [], []),
+ "insights": ("Conference Insights · Six Months of Light", [], ["insights-data.js"]),
+ "credits": ("Credits & licenses · Six Months of Light", [], ["photos.js"]),
  "speaker": ("Speakers · Six Months of Light", [], []),
  "session": ("Session · Six Months of Light", [], []),
  "my": ("My Conference · Six Months of Light", [], []),
@@ -37,7 +38,7 @@ for name, (title, pre, libs) in pages.items():
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0d1326">
 <link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
-<link rel="preload" href="assets/fonts/CormorantGaramond-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/CormorantGaramond.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>

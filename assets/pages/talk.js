@@ -43,7 +43,7 @@ else {
   <section class="card"><h2 style="margin-top:0">Share this talk</h2>
     <p class="speaker">Quote cards include a QR code that links back to this page.</p>
     <div class="links" style="margin-bottom:0">
-      <a class="btn" href="builder.html?t=${t.id}&q=0&size=portrait">Open Card Builder</a>
+      <a class="btn" href="builder.html?t=${t.id}&q=0&size=portrait">Make a card</a>
       <a class="btn secondary" href="builder.html?t=${t.id}&q=0&anim=1">▶ Animated story</a>
       <button class="btn secondary" id="cplink">Share link</button></div></section>
 
@@ -67,10 +67,8 @@ else {
       <div class="msg" id="msg" role="status" aria-live="polite"></div>
     </form>
   </section>
-  ${askAIPanel({ label: "this talk", questions: ["What is the main message?", "Which scriptures are cited?", "What does it invite me to do?"],
-    answer: k => [mockAnswer(esc(t.big_idea) + " [1]", [`Church News recap — <a href="${esc(t.recap_url)}">${esc(t.title)}</a>`]),
-      mockAnswer("Recaps report: " + esc(t.scriptures.join("; ")) + " [1]", ["Church News recap (official text pending)"]),
-      mockAnswer(esc(t.invitation) + " [1]", ["Church News recap (official text pending)"])][k] })}
+  ${askTalksPanel({ label: "this talk", questions: ["What is the main message?", "Which scriptures are cited?", "What does it invite me to do?"],
+    answer: k => talkAnswer([esc(t.big_idea), "Recaps report: " + esc(t.scriptures.join("; ")), esc(t.invitation)][k], [t]) })}
   <nav class="links">
     ${prev ? `<a class="btn secondary small" href="talks/${esc(prev.id)}.html">← ${esc(prev.speaker)}</a>` : ""}
     ${next ? `<a class="btn secondary small" href="talks/${esc(next.id)}.html">${esc(next.speaker)} →</a>` : ""}

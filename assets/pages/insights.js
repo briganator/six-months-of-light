@@ -1,54 +1,80 @@
 mount("insights.html");
-const T = CONF.talks;
-const STOP = new Set(("a an the and or but of to in on for with as at by from is are was were be been being it its this that these those we us our you your he his she her they them their i me my not no so if than then there here who whom which what when where how all any can could will would should may might must do does did have has had also into about through more most such only own same very just even each other some one two his him who after before over under again further once both few many much because while upon out up down off whether yet still—it's let us hearts hearts' “ ” ‘ ’ don't isn't can't we're it's like even way things thing get make made said says say every always never").split(/\s+/));
-const corpusSource = T.map(t => [t.summary, ...t.quotes].join(" ")).join(" ").toLowerCase().replace(/[’']/g, "'");
-const words = corpusSource.match(/[a-z][a-z'-]{2,}/g) || [];
-const norm = w => ({ covenants: "covenant", temples: "temple", prophets: "prophet", apostles: "apostle", promises: "promise", trials: "trial", families: "family", children: "child", miracles: "miracle", testimonies: "testimony" }[w] || w.replace(/'s$/, ""));
-const freq = {}; for (const w0 of words) { const w = norm(w0); if (!STOP.has(w) && w.length > 3) freq[w] = (freq[w] || 0) + 1; }
-const topWords = Object.entries(freq).sort((a,b) => b[1]-a[1]).slice(0, 45);
-const max = topWords[0][1], min = topWords[topWords.length-1][1];
-// Scriptures: count references by book across talks' "key scriptures" (recap-reported)
-const BOOKS = ["Doctrine and Covenants","Helaman","Mosiah","Isaiah","Mark","Luke","John","Jacob","Numbers","Malachi","Hebrews","Hymns"];
-const books = {}; const refs = [];
-T.forEach(t => t.scriptures.forEach(s => BOOKS.forEach(b => { const re = new RegExp(b.replace(/ /g,"\\s") + "(\\s[\\d:–-]+)?", "g"); let m; while ((m = re.exec(s))) { books[b] = (books[b]||0)+1; refs.push({ ref: m[0].trim(), t, allusion: /alludes|echoes|cf\./i.test(s) }); } })));
-const themeCounts = Object.keys(THEMES).map(n => [n, T.filter(t => talkThemes(t).includes(n)).length]).sort((a,b) => b[1]-a[1]);
-const bar = (label, n, of, href) => `<div class="bar"><span>${href ? `<a href="${href}">${esc(label)}</a>` : esc(label)}</span><div class="track"><div class="fill" style="width:${Math.round(n/of*100)}%"></div></div><span class="n">${n}</span></div>`;
-const callings = {}; T.forEach(t => { const c = /Twelve/.test(t.calling) ? "Quorum of the Twelve" : /First Presidency/.test(t.calling) ? "First Presidency" : /Seventy/.test(t.calling) ? "General Authority Seventies" : "General officers & Presiding Bishopric"; callings[c] = (callings[c]||0)+1; });
+const T = CONF.talks, I = INSIGHTS;
+const topWords = I.topWords.slice(0, 45), max = topWords[0][1], min = topWords[topWords.length - 1][1];
+const bar = (label, n, of) => `<div class="bar"><span>${esc(label)}</span><div class="track"><div class="fill" style="width:${Math.round(n / of * 100)}%"></div></div><span class="n">${n}</span></div>`;
 function donut(obj) {
-  const cols = ["#2a2d5c", "#d8a95b", "#e3a693", "#8fb2d6", "#a493cf"], ents = Object.entries(obj).sort((a,b)=>b[1]-a[1]), tot = ents.reduce((a,[,n])=>a+n,0);
+  const cols = ["#2a2d5c", "#d8a95b", "#e3a693", "#8fb2d6", "#a493cf"], ents = Object.entries(obj).sort((a, b) => b[1] - a[1]), tot = ents.reduce((a, [, n]) => a + n, 0);
   let acc = 0; const R = 54, C = 2 * Math.PI * R;
-  const segs = ents.map(([k,n],i) => { const len = n / tot * C, seg = `<circle r="${R}" cx="70" cy="70" fill="none" stroke="${cols[i]}" stroke-width="22" stroke-dasharray="${len - 2} ${C - len + 2}" stroke-dashoffset="${-acc}" transform="rotate(-90 70 70)"><animate attributeName="stroke-dasharray" from="0 ${C}" to="${len - 2} ${C - len + 2}" dur="1.2s" fill="freeze"/></circle>`; acc += len; return seg; }).join("");
+  const segs = ents.map(([k, n], i) => { const len = n / tot * C, seg = `<circle r="${R}" cx="70" cy="70" fill="none" stroke="${cols[i]}" stroke-width="22" stroke-dasharray="${len - 2} ${C - len + 2}" stroke-dashoffset="${-acc}" transform="rotate(-90 70 70)"/>`; acc += len; return seg; }).join("");
   return `<div class="donut-wrap"><svg width="140" height="140" viewBox="0 0 140 140" role="img" aria-label="Speakers by calling">${segs}
-    <text x="70" y="68" text-anchor="middle" font-family="Cormorant Garamond" font-size="34" fill="#18213f">${tot}</text><text x="70" y="88" text-anchor="middle" font-family="Inter" font-size="10" fill="#787181">talks</text></svg>
-    <ul class="legend">${ents.map(([k,n],i) => `<li><i style="background:${cols[i]}"></i>${esc(k)} · <b>${n}</b></li>`).join("")}</ul></div>`;
+    <text x="70" y="68" text-anchor="middle" font-family="Cormorant Garamond" font-size="34" fill="#18213f">${tot}</text><text x="70" y="88" text-anchor="middle" font-family="Inter" font-size="10" fill="#5f5868">talks</text></svg>
+    <ul class="legend">${ents.map(([k, n], i) => `<li><i style="background:${cols[i]}"></i>${esc(k)} · <b>${n}</b></li>`).join("")}</ul></div>`;
 }
+// HTML mini-preview of each insight card (the real card is drawn in the studio)
+function mini(x) {
+  const B = x.body; let body = "";
+  if (B.type === "big") body = `<b class="ins-big">${esc(B.value)}</b><span class="ins-cap">${esc(B.caption)}</span>`;
+  if (B.type === "words") body = `<ol class="ins-words">${B.items.map(w => `<li>${esc(w)}</li>`).join("")}</ol>`;
+  if (B.type === "bars") { const m = Math.max(...B.items.map(i => i.value)); body = B.items.slice(0, 4).map(i => bar(i.label, i.value, m)).join(""); }
+  if (B.type === "text") body = `<p class="ins-text">${esc(B.text)}</p>`;
+  return `<article class="ins-card">
+    <div class="ins-kicker">${esc(x.kicker)}</div><h3>${esc(x.title)}</h3>${body}
+    <div class="ins-actions"><a class="btn gold small" href="builder.html?ins=${esc(x.id)}">Share this card</a></div></article>`;
+}
+const QUIZ = [
+  ["When life feels heavy, what helps you most?", [["Remembering the Savior", "Jesus Christ & His Atonement"], ["Time in the temple", "Temples & covenants"], ["A quiet prompting", "Holy Ghost & revelation"], ["Holding on and trusting", "Trusting God in trials"]]],
+  ["What would you most like to grow in these six months?", [["Serving someone near me", "Ministering & love"], ["Stronger family ties", "Family & generations"], ["Sharing what I believe", "Testimony & missionary work"], ["Following the prophet", "Prophets"]]],
+  ["Which invitation would you accept today?", [["Turn to Christ again", "Jesus Christ & His Atonement"], ["Make the temple a habit", "Temples & covenants"], ["Fast and pray with purpose", "Fasting, tithing & self-reliance"], ["See myself as God sees me", "Identity as children of God"]]],
+];
+const counts = Object.fromEntries(I.themeCounts);
 document.getElementById("main").innerHTML = `
-  <div class="section-label">Understand</div><h1 style="margin-top:0">Conference Insights</h1>
-  <div class="notice"><strong>Based on recaps, not official text.</strong> Computed in your browser from the summaries and recap quotes for Saturday's ${T.length} talks. Numbers will be recomputed from official text once it's posted.</div>
+  <div class="section-label">Understand &amp; share</div><h1 style="margin-top:0">Conference Insights</h1>
+  <p class="lede">The conference at a glance. Every insight is a card you can share in one tap.</p>
+  <div class="notice"><strong>Based on recaps, not official text.</strong> Computed in your browser from the summaries and verified recap quotes for Saturday's ${T.length} talks. Numbers will be recomputed from official text once it's posted.</div>
   <div class="stat-row">
-    <div class="stat"><b>${T.length}</b><span>talks so far</span></div>
-    <div class="stat"><b>${new Set(T.map(t=>t.speaker)).size}</b><span>speakers</span></div>
-    <div class="stat"><b>${refs.length}</b><span>scripture refs (recaps)</span></div></div>
-  <section class="card cloud-card"><div class="section-label" style="margin:0 0 6px;color:var(--gold-hi)">Word cloud</div><h2 style="margin-top:0">What Saturday talked about</h2>
-    <div class="cloud">${topWords.sort(() => .5 - Math.random()).map(([w,n]) => { const k = (n-min)/(max-min||1);
-      const pal = ["#f6dfa6","#e3a693","#fbf3e3","#c9b8f0","#d8a95b"]; const col = k > .55 ? "#f6dfa6" : pal[(w.length + n) % pal.length];
-      return `<span style="font-size:${(15 + Math.pow(k,.8)*46).toFixed(0)}px;color:${col};opacity:${(.6 + k*.4).toFixed(2)};font-style:${k>.4?"italic":"normal"};font-weight:${k>.3?500:400}" title="${n}×">${esc(w)}</span>`; }).join("")}</div>
-    <p class="speaker">Most frequent meaningful words (common words removed).</p></section>
+    <div class="stat"><b data-count="${T.length}">${T.length}</b><span>talks so far</span></div>
+    <div class="stat"><b data-count="${I.christMentions}">${I.christMentions}</b><span>mentions of Christ</span></div>
+    <div class="stat"><b data-count="${I.refs.length}">${I.refs.length}</b><span>scripture refs</span></div></div>
+  ${subnavHTML([["cards", "Cards"], ["theme-quiz", "Theme quiz"], ["spotlight", "Spotlight"], ["words", "Word cloud"], ["themes", "Themes"], ["scriptures", "Scriptures"], ["ask", "Ask the Talks"]], "Insights sections")}
+  <h2 id="cards">Shareable insight cards</h2>
+  <div class="ins-grid2">${I.list.map(mini).join("")}</div>
+  <section class="card quizbox" id="theme-quiz"><div class="ins-kicker">Quick quiz · 3 taps</div><h2 style="margin-top:4px">Which theme speaks to you?</h2>
+    <form id="tq" onsubmit="return false">${QUIZ.map(([q, opts], qi) => `<fieldset><legend>${qi + 1}. ${esc(q)}</legend><div class="tq-opts">${opts.map(([l, th], oi) => `<label class="tq-opt"><input type="radio" name="q${qi}" value="${esc(th)}"><span>${esc(l)}</span></label>`).join("")}</div></fieldset>`).join("")}</form>
+    <div id="tq-result" aria-live="polite"></div></section>
+  <section class="card" id="spotlight"><div class="ins-kicker">Speaker spotlight</div><h2 style="margin-top:4px">Share a speaker's big idea</h2>
+    <div class="spot-row"><select id="spot" class="field" aria-label="Speaker">${T.map(t => `<option value="${t.id}">${esc(t.speaker)} — ${esc(t.title)}</option>`).join("")}</select>
+    <a class="btn gold" id="spotgo" href="builder.html?ins=spot-${T[0].id}">Make spotlight card</a></div></section>
+  <section class="card cloud-card" id="words"><div class="section-label" style="margin:0 0 6px;color:var(--gold-hi)">Word cloud</div><h2 style="margin-top:0">What Saturday talked about</h2>
+    <div class="cloud">${[...topWords].sort((a, b) => a[0].length % 3 - b[0].length % 3 || a[0].localeCompare(b[0])).map(([w, n]) => { const k = (n - min) / (max - min || 1);
+      const pal = ["#f6dfa6", "#e3a693", "#fbf3e3", "#c9b8f0", "#d8a95b"]; const col = k > .55 ? "#f6dfa6" : pal[(w.length + n) % pal.length];
+      return `<span style="font-size:${(15 + Math.pow(k, .8) * 46).toFixed(0)}px;color:${col};font-style:${k > .4 ? "italic" : "normal"};font-weight:${k > .3 ? 500 : 400}" title="${n}×">${esc(w)}</span>`; }).join("")}</div>
+    <p class="speaker">Most frequent meaningful words (common words removed). <a href="builder.html?ins=ten-words">Share as “The conference in 10 words” →</a></p></section>
   <div class="ins-grid">
-  <section class="card"><h2 style="margin-top:0">Top themes</h2>
-    ${themeCounts.filter(x=>x[1]).map(([n,c]) => bar(n, c, T.length)).join("")}
-    <p class="speaker">Number of talks touching each theme (keyword-based).</p></section>
-  <section class="card"><h2 style="margin-top:0">Most-cited scriptures</h2>
-    ${Object.entries(books).sort((a,b)=>b[1]-a[1]).map(([b,n]) => bar(b, n, Math.max(...Object.values(books)))).join("")}
-    <details><summary class="speaker">All references</summary><ul class="scriptures">${refs.map(r => `<li>${esc(r.ref)}${r.allusion ? " <em>(allusion)</em>" : ""} — <a href="talks/${r.t.id}.html">${esc(r.t.speaker)}</a></li>`).join("")}</ul></details>
-  </section>
-  <section class="card"><h2 style="margin-top:0">Top words</h2>
-    ${Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([w,n]) => bar(w, n, max)).join("")}</section>
-  <section class="card"><h2 style="margin-top:0">Who spoke</h2>${donut(callings)}
-    <p class="speaker">Saturday sessions only. Sunday pending.</p></section>
-  </div>
+  <section class="card" id="themes"><h2 style="margin-top:0">Top themes</h2>${I.themeCounts.filter(x => x[1]).map(([n, c]) => bar(n, c, T.length)).join("")}
+    <p class="speaker">Number of talks touching each theme (keyword-based). <a href="builder.html?ins=themes">Share →</a></p></section>
+  <section class="card" id="scriptures"><h2 style="margin-top:0">Most-cited scriptures</h2>
+    ${Object.entries(I.books).sort((a, b) => b[1] - a[1]).map(([b, n]) => bar(b, n, Math.max(...Object.values(I.books)))).join("")}
+    <details><summary class="speaker">All references</summary><ul class="scriptures">${I.refs.map(r => `<li>${esc(r.ref)}${r.allusion ? " <em>(allusion)</em>" : ""} — <a href="talks/${r.t.id}.html">${esc(r.t.speaker)}</a></li>`).join("")}</ul></details>
+    <p class="speaker"><a href="builder.html?ins=scriptures">Share →</a></p></section>
+  <section class="card"><h2 style="margin-top:0">Who spoke</h2>${donut(I.callings)}<p class="speaker">Saturday sessions only. Sunday pending. <a href="builder.html?ins=who-spoke">Share →</a></p></section>
   <section class="card"><h2 style="margin-top:0">Compared with past conferences</h2>
-    <div class="stub"><strong>Coming after official text is posted.</strong> This will compare theme and word frequencies with the official text of recent conferences (e.g., April 2026 and October 2025). No comparison numbers are shown yet, so nothing here is guessed.</div></section>
-  ${askAIPanel({ label: "the whole conference", questions: ["What themes repeated most on Saturday?", "Which talks mentioned the temple?"],
-    answer: k => k === 0 ? mockAnswer("By keyword count in recaps: " + themeCounts.slice(0,3).map(x => esc(x[0]) + " (" + x[1] + " talks)").join(", ") + ".", ["Computed from recap summaries on this site"])
-      : mockAnswer(T.filter(t => talkText(t).includes("temple")).map(t => `<a href="talks/${t.id}.html">${esc(t.speaker)}</a>`).join(", ") + ".", ["Recap summaries and quotes on this site"]) })}`;
+    <div class="stub"><strong>Coming after official text is posted.</strong> No comparison numbers are shown yet, so nothing here is guessed.</div></section>
+  </div>
+  <div id="ask"></div>${askTalksPanel({ label: "the whole conference", questions: ["Which talks taught about the temple?", "Which talks focused on Jesus Christ?"],
+    answer: k => { const key = k === 0 ? "Temples & covenants" : "Jesus Christ & His Atonement", ts = T.filter(t => talkThemes(t).includes(key));
+      return talkAnswer(`${ts.length} of ${T.length} Saturday talks touched “${esc(key)}” (keyword-based, from recaps):`, ts); } })}`;
+initSubnav();
+const spot = document.getElementById("spot"), go = document.getElementById("spotgo");
+spot.addEventListener("change", () => go.href = `builder.html?ins=spot-${spot.value}`);
+document.getElementById("tq").addEventListener("change", () => {
+  const picks = QUIZ.map((_, i) => document.querySelector(`input[name=q${i}]:checked`)?.value);
+  document.querySelectorAll(".tq-opt").forEach(l => l.classList.toggle("on", l.querySelector("input").checked));
+  if (picks.some(p => !p)) return;
+  const score = {}; picks.forEach((p, i) => score[p] = (score[p] || 0) + 1 + (2 - i) * .01);
+  const ranked = Object.entries(score).sort((a, b) => b[1] - a[1]).map(x => x[0]);
+  const theme = ranked.find(n => counts[n] > 0) || I.themeCounts[0][0], card = I.themeCard(theme), ts = T.filter(t => talkThemes(t).includes(theme));
+  document.getElementById("tq-result").innerHTML = `<div class="tq-res"><div class="ins-kicker">Your theme</div><h3>${esc(theme)}</h3>
+    <p class="speaker">${ts.length} of ${T.length} Saturday talks touched this theme. Start with:</p>
+    <ul>${ts.slice(0, 3).map(t => `<li><a href="talks/${t.id}.html">${esc(t.title)}</a> · ${esc(t.speaker)}</li>`).join("")}</ul>
+    <a class="btn gold" href="builder.html?ins=${esc(card.id)}">Share my result card</a></div>`;
+});

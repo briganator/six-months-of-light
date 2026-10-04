@@ -24,6 +24,6 @@ if (!ts.length) {
       <dt>Recurring themes</dt><dd>${themes.length ? themes.map(x => `<span class="pill" style="margin:2px">${esc(x)}</span>`).join(" ") : "—"}
         <div class="speaker">From this conference's recap only. Will include past talks after official text is used.</div></dd>
     </dl></article>
-  ${askAIPanel({ label: s.speaker, questions: ["What did this speaker teach this weekend?"],
-    answer: () => mockAnswer(ts.map(t => esc(t.big_idea)).join(" ") + " [1]", ["Church News recap (official text pending)"]) })}`;
+  ${askTalksPanel({ label: s.speaker, questions: ["What did this speaker teach this weekend?"],
+    answer: () => talkAnswer(ts.map(t => esc(t.big_idea)).join(" "), ts) })}`;
 }

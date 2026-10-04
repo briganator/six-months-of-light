@@ -18,7 +18,7 @@ A personal study and sharing site for the 196th Semiannual General Conference (i
 - No Church photos or speaker portraits are used (copyright). Speakers get an initials monogram with painted light, plus an empty portrait slot in case the Church grants permission.
 
 ## Features
-**Card Builder** (`builder.html`; `quote.html` redirects here)
+**Card Studio** (`builder.html`; `quote.html` redirects here)
 - Pick a talk, then a quote. You can **only** choose from verified quotes in `assets/data.js`. The quote can't be typed or edited.
 - Choose a background (light rays, dawn mountains, aurora, soft glow), a theme (dusk, midnight, dawn), a font (classic serif, italic serif, modern sans), a size (1:1, 4:5, 9:16), and still or animated.
 - Optional personal line, up to 90 characters with links stripped. It's drawn in a separate box labeled "MY TAKEAWAY · ADDED BY THE SHARER, NOT A QUOTE".
@@ -35,12 +35,12 @@ A personal study and sharing site for the 196th Semiannual General Conference (i
 **Understand**
 - Conference Insights (`insights.html`): word cloud, top words, top themes, most-cited scriptures and speakers by calling. It's computed in the browser from the recap data and labeled "based on recaps." The comparison with past conferences is a labeled stub with no numbers.
 - Speaker pages (`speaker.html?s=…`): calling (from the doc only), talks at this conference, recurring themes and links to the official bio and speaker index. No invented biographical facts.
-- **Ask AI** panel on talk, speaker, session and insights pages: **UI mockup only**, not connected to any AI service. The sample answers are assembled from this site's recap data and labeled "Mock answer."
+- **Ask the Talks** panel on talk, speaker, session and insights pages: “Bring a question, find what the speakers taught.” Tap a question; the answer is assembled from this site's recap data and always cites and links the talk (plus its recap or official source). Nothing is generated or invented.
 
 **Apply** (stored only on the device, in localStorage)
 - Commit to an invitation for 7 days, with day check-ins and a downloadable `.ics` reminder that repeats daily for 7 days
 - My Conference (`my.html`): saved quotes, private notes per talk, commitments and a JSON export
-- Lesson helps (`lessons.html`): a template-based outline **stub** for FHE, youth classes and sacrament talks, built only from the talk data. No AI.
+- Lesson helps (`lessons.html`): a template-based outline **stub** for FHE, youth classes and sacrament talks, built only from the talk data; nothing is generated.
 
 **Share**
 - "What stuck with me" under each talk: optional name and one line (up to 280 characters), moderated
@@ -59,7 +59,7 @@ moderate.html            admin moderation queue (noindex, password)
 assets/data.js           GENERATED content (from tools/talks_source.py)
 assets/config.js         backend config (Supabase URL + publishable key; ?mock=1 = local mock)
 assets/api.js            backend adapter (Supabase REST, or localStorage mock)
-assets/common.js         header/footer, device storage, Ask-AI mock, themes, motion
+assets/common.js         header/footer, device storage, Ask the Talks panel, themes, motion
 assets/cardkit.js        canvas renderer: cards (backgrounds, fonts, takeaway line), animation, OG images
 assets/logo-mark.svg     logo mark (favicon too)
 assets/pages/*.js        page logic
@@ -106,7 +106,7 @@ cd /workspace/projects/conference-share && python3 -m http.server 8765 --bind 12
 - Free-tier note: Supabase pauses free projects after about a week with no activity. Restore them from the dashboard.
 - Supabase advisors flag the definer view and the anon-callable definer functions. That's intentional: this is the safe gateway design described above.
 
-## Ask AI: rules for a future live version (not built)
+## Ask the Talks: rules for a future free-text version (not built)
 Answer **only** from official talk text on ChurchofJesusChrist.org. Cite the talk and paragraph for every claim. Say "I don't know" when the text doesn't answer the question. Never speak for the Church or give doctrinal rulings. Show the "not an official Church site" notice. No paid API is wired in. If it's added later, use a free or self-hosted option behind a rate limit.
 
 ## Publishing (done Oct 2026)
@@ -116,9 +116,9 @@ Answer **only** from official talk text on ChurchofJesusChrist.org. Cite the tal
 - DNS at Porkbun: apex A records 185.199.108.153 / 109.153 / 110.153 / 111.153 (optional AAAA 2606:50c0:8000::153 / 8001::153 / 8002::153 / 8003::153) and `www` CNAME `briganator.github.io`.
 
 ## Launch plan
-- **This week:** Card Builder (still and animated), 60-second recaps, talk pages, quiz, insights (labeled "based on recaps"), What stuck with me plus moderation, challenge, group links.
+- **This week:** Card Studio (still and animated), 60-second recaps, talk pages, quiz, insights (labeled "based on recaps"), What stuck with me plus moderation, challenge, group links.
 - **When official text posts (Mon/Tue):** replace recap quotes with official wording, set `official_url` and `video_embed`, remove the recap banners, recompute insights, add Sunday talks, rerender cards and OG images.
-- **After official text posts:** consider making Ask AI live under the rules above (free-tier or self-hosted only), add the past-conference comparisons, and fill in speakers' recent talks from official listings.
+- **After official text posts:** consider letting Ask the Talks take free-text questions under the rules above (free-tier or self-hosted only), add the past-conference comparisons, and fill in speakers' recent talks from official listings.
 
 ## Test data
 The preview test comments and admin-attempt rows were deleted before launch.
@@ -133,4 +133,21 @@ The preview test comments and admin-attempt rows were deleted before launch.
 - **Domain is one setting.** In `tools/talks_source.py`: `DOMAIN = "sixmonthsoflight.com"` and `DOMAIN_LIVE = True` (live). If it were `False`, cards show the wordmark plus "Find it at Six Months of Light", and no URL text appears on any card. After the domain is bought: set `DOMAIN_LIVE = True`, run `python3 tools/talks_source.py && python3 tools/build_shells.py && python3 tools/build_pages.py`, then `/workspace/.venv-pw/bin/python tools/render_assets.py`. Cards will then print `sixmonthsoflight.com`, and canonical, OG and QR links will move to the domain.
 - **QR code** is small and secondary on every card (bottom corner on 1:1 and 4:5, below the link zone on 9:16).
 - **9:16 story cards** have a subtle dashed "Tap the link ↗" zone where the Instagram link sticker goes. The animated MP4/WebM ends on that zone.
-- **Share flow** (Card Builder and talk pages): "Share card" uses the Web Share API to send the PNG file plus text with a tappable deep link to the talk (`talks/<id>.html`). If file sharing isn't supported, it shares the text and link. "More options" opens a sheet with Copy link, Download card, Facebook, X and Text message (sms:).
+- **Share flow** (Card Studio and talk pages): "Share card" uses the Web Share API to send the PNG file plus text with a tappable deep link to the talk (`talks/<id>.html`). If file sharing isn't supported, it shares the text and link. "More options" opens a sheet with Copy link, Download card, Facebook, X and Text message (sms:).
+
+
+## v2 (Oct 4, 2026): simpler, more shareable
+See `critique-v2.md` for the design critique that drove these changes.
+- **One clear path:** Pick a quote, style it, share it. On phones a bottom tab bar (Home · Talks · Studio · Insights · Me) keeps everything within thumb reach. The home page opens with “Today's light” and a one-tap **Share this quote**.
+- **Card Studio (`builder.html`):**
+  - On phones the live preview is pinned at the top, the options scroll underneath in four tabs (Quote · Look · Size · Text & motion), and the **Share** bar is pinned to the bottom.
+  - **Share** sends the image file plus text and link through the phone's share sheet (`navigator.share` with files). **Save image** downloads a PNG (or records a video when Animated is on). **Copy link** copies the deep link.
+  - A “Your card is ready. Tap Share.” status shows after each change, with an Instagram Stories tip (save, then add it in Stories with the Link sticker).
+  - On desktop, Share opens a sheet with copy link, download, Facebook, X, text message and email.
+  - **26 looks:** sunrise rays, dawn mountains, morning light, aurora, night sky; temple at dusk/dawn/night (original silhouettes drawn in code); stained glass, scripture paper, hymn sheet, watercolor; olive branch, pines at first light; minimal and minimal dark; and openly licensed temple photos from Wikimedia Commons.
+  - **Other options:** 5 palettes, 4 fonts, centered or left alignment, overlay darkness, an optional takeaway labeled as the sharer's own words, and still or animated output.
+  - **Sizes:** Story 9:16, Post 4:5, Square 1:1, Wide 16:9, Phone wallpaper.
+- **Shareable insights** (`assets/insights-data.js`, computed only from recap data): The conference in 10 words, Most-used words, Christ at the center, Top themes, Themes by session, Scriptures cited, Who spoke, Today's light (daily quote + countdown), Speaker spotlights (one per talk), and a “Which theme speaks to you?” quiz with a shareable result card.
+- **Photos:** `assets/photos/*.webp` (about 1600px plus 240px thumbnails), listed with author and license on `credits.html`. Cards made with a photo carry a small credit line. Regenerate `assets/photos.js` with `python3 tools/build_photos.py`.
+- **Performance:** one variable font file per family, card code and photos load only in the studio, and look thumbnails render when the Look tab opens.
+- **QA:** `tools/render_assets.py` renders sample cards, 2 MP4s and a contact-sheet matrix of every look × size into `screenshots/v2/`.

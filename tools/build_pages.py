@@ -30,7 +30,7 @@ for t in d["talks"]:
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0d1326">
 <link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
-<link rel="preload" href="assets/fonts/CormorantGaramond-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/CormorantGaramond.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
