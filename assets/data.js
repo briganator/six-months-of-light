@@ -538,6 +538,30 @@ window.CONF = {
    "big_idea": "See others as children of God — pray to see as He sees, and lift labels with His grace.",
    "video_embed": null,
    "full_text_permitted": false
+  },
+  {
+   "id": "sun-am-3-andersen",
+   "session": "sun-am",
+   "order": 3,
+   "speaker": "Elder Neil L. Andersen",
+   "calling": "Quorum of the Twelve Apostles",
+   "title": "Courage Born of Our Faith in Jesus Christ",
+   "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/elder-andersen-october-2026-general-conference-courage-born-of-faith/",
+   "official_url": null,
+   "summary": "Elder Neil L. Andersen of the Quorum of the Twelve Apostles spoke about spiritual courage being born of faith in Jesus Christ. Faith and courage are hallmarks of Jesus Christ’s disciples. As we choose faith in Christ, He blesses us with courage to choose the right even in difficult situations, and as we manifest that courage, our faith strengthens. Discipleship always requires spiritual courage; courage is born of faith in Jesus Christ. Being His true disciple — overcoming the world, keeping commandments, trusting Him and His promises — is not a casual pursuit. Spiritual courage is the triumph over obstacles, doubt, and fear in choosing the right. With the world in constant commotion, disciples need stillness to nourish their faith in Christ. Even when troubled on every side, they are not in despair when hope is alive in Christ (2 Corinthians 4:8). Faith in Him brings spiritual courage to minister, keep commandments, speak openly of the Savior, be guided by the Holy Ghost, repent, and receive forgiveness.",
+   "scriptures": [
+    "2 Corinthians 4:8"
+   ],
+   "quotes": [
+    "As we choose faith in Christ, He blesses us with the courage, sometimes in very difficult situations, to choose the right, and as we manifest our courage to choose the right, our faith in Christ strengthens.",
+    "It is our faith in Christ that gives us the spiritual courage to speak openly to others of our Savior, make covenants in the house of the Lord, repent and receive forgiveness, follow living prophets and be guided by the quiet impressions of the Holy Ghost.",
+    "I promise you that as you strengthen your faith in Jesus Christ by believing and following Him and keeping His commandments, your answers will come, your spiritual power will increase, and your courage in following Christ will define your eternal soul."
+   ],
+   "invitation": "Strengthen your faith in Jesus Christ by believing, following Him, and keeping His commandments.",
+   "ponder": "Where do I need spiritual courage right now — and how will I strengthen my faith in Christ to receive it?",
+   "big_idea": "Faith in Christ gives spiritual courage to choose the right — and courage in turn strengthens that faith.",
+   "video_embed": null,
+   "full_text_permitted": false
   }
  ],
  "challenge": {
