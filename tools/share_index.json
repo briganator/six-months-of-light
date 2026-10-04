@@ -464,13 +464,28 @@
    "t": "sun-pm-4-bednar",
    "n": 3,
    "look": "temple_dusk"
+  },
+  {
+   "t": "sun-pm-5-lebethoa",
+   "n": 1,
+   "look": "temple_dusk"
+  },
+  {
+   "t": "sun-pm-5-lebethoa",
+   "n": 2,
+   "look": "mountains"
+  },
+  {
+   "t": "sun-pm-5-lebethoa",
+   "n": 3,
+   "look": "watercolor"
   }
  ],
  "insights": [
   {
    "id": "ten-words",
    "title": "The conference in 10 words",
-   "sub": "Most-used meaningful words in the recaps of the first 31 talks",
+   "sub": "Most-used meaningful words in the recaps of the first 32 talks",
    "share": "October 2026 General Conference so far in 10 words."
   },
   {
@@ -483,7 +498,7 @@
    "id": "christ",
    "title": "He was named again and again",
    "sub": "",
-   "share": "Jesus Christ was named 144 times in recaps of 25 of 31 talks."
+   "share": "Jesus Christ was named 157 times in recaps of 26 of 32 talks."
   },
   {
    "id": "themes",
@@ -501,11 +516,11 @@
    "id": "scriptures",
    "title": "Back to the scriptures",
    "sub": "",
-   "share": "21 scripture references in recaps of the first 31 talks."
+   "share": "21 scripture references in recaps of the first 32 talks."
   },
   {
    "id": "who-spoke",
-   "title": "31 talks so far",
+   "title": "32 talks so far",
    "sub": "",
    "share": "Who spoke at General Conference so far."
   }

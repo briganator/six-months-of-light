@@ -308,6 +308,15 @@ talks = [
     "Ultimately, all gospel ordinances and covenants must be sealed by the Holy Spirit of Promise."],
    "Honor your covenants and press forward in faith so your ordinances can be sealed by the Holy Spirit of Promise.",
    "Am I keeping my covenant “credentials” valid — and what would help me honor my temple covenants more faithfully?"),
+ t("sun-pm-5-lebethoa", "sun-pm", 5, "Elder Thabo Lebethoa", "General Authority Seventy", "Jesus Christ Is the Light and Life of the World",
+   "https://www.thechurchnews.com/general-conference/2026/10/04/elder-first-name-if-needed-lebethoa-october-2026-general-conference-jesus-christ-light-of-the-world/",
+   "Speaking about how to receive more of the Savior’s light. The Savior said, “I am the light and the life of the world.” Through His Spirit He enlightens our minds, and His light is also revealed through His perfect life and teachings. Jesus Christ can bring light in our moments of darkness and restore hope where there is hopelessness; whatever concerns, challenges and struggles come in life, the answer is always Jesus Christ. To receive more of His light: first, increase faith in Him — trusting that He understands our daily difficulties and knows how to help us rise above them, because He has experienced all our pains, afflictions and infirmities; second, study the scriptures daily, especially the Book of Mormon — the method, timing and length of study matter less than the consistency and sincerity of our effort; third, practice repentance daily — a change of mind and a turning of the heart to God. He invited us to ponder the changes we need to make, which may include how we use our time, what we watch or listen to, and the language and tone we use with others. He testified that today can be a new day and tomorrow a better day for all who come unto Christ.",
+   ["“I am the light and the life of the world” (no verse cited in recaps)", "“Come unto me, and I will give you rest” (no verse cited in recaps)"],
+   ["Whatever concerns, challenges and struggles we may have in our lives, the answer is always Jesus Christ.",
+    "Having faith in Jesus Christ means trusting that He understands our daily difficulties and knows how to help us rise above them, because He has experienced all our pains, afflictions and infirmities.",
+    "I testify that today can be a new day, and tomorrow will be a better day, for all who come unto Jesus Christ and receive His light in their lives."],
+   "Receive more of His light: increase faith in Christ, study the scriptures daily (especially the Book of Mormon), and practice daily repentance.",
+   "What change — in how I use my time, what I watch or listen to, or how I speak to others — would let more of the Savior’s light into my life?"),
 ]
 
 # 60-second recap "big idea" — a one-line condensation of the doc's summary (NOT a quote).
@@ -343,6 +352,7 @@ BIG_IDEAS = {
  "sun-pm-2-spannaus": "Heavenly Father knows you and is at your side — put Him first, and He will guide your righteous desires.",
  "sun-pm-3-villanueva": "Live the law of tithing and the Lord opens the windows of heaven — blessings both temporal and spiritual.",
  "sun-pm-4-bednar": "Ordinances and covenants are spiritual credentials — kept faithfully, they are sealed by the Holy Spirit of Promise.",
+ "sun-pm-5-lebethoa": "Whatever we face, the answer is always Jesus Christ — faith, daily scripture study and daily repentance let in His light.",
 }
 for _t in talks:
     _t["big_idea"] = BIG_IDEAS[_t["id"]]
