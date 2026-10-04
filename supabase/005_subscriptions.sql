@@ -34,7 +34,7 @@ alter table private.app_config enable row level security;
 revoke all on private.push_subs, private.email_subs, private.app_config from anon, authenticated;
 
 -- Keep only known option keys, so the prefs column can't be used to store anything else.
-create or replace function private.clean_prefs(p jsonb) returns jsonb language sql immutable as $$
+create or replace function private.clean_prefs(p jsonb) returns jsonb language sql immutable set search_path = '' as $$
   select jsonb_strip_nulls(jsonb_build_object(
     'f', case when p->>'f' = 'weekly' then 'weekly' else 'daily' end,
     'd', least(6, greatest(0, coalesce((p->>'d')::int, 0))),
