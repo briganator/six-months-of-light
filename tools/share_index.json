@@ -404,13 +404,43 @@
    "t": "sun-am-9-oaks",
    "n": 3,
    "look": "watercolor"
+  },
+  {
+   "t": "sun-pm-1-uchtdorf",
+   "n": 1,
+   "look": "temple_dusk"
+  },
+  {
+   "t": "sun-pm-1-uchtdorf",
+   "n": 2,
+   "look": "mountains"
+  },
+  {
+   "t": "sun-pm-1-uchtdorf",
+   "n": 3,
+   "look": "watercolor"
+  },
+  {
+   "t": "sun-pm-2-spannaus",
+   "n": 1,
+   "look": "temple_dusk"
+  },
+  {
+   "t": "sun-pm-2-spannaus",
+   "n": 2,
+   "look": "mountains"
+  },
+  {
+   "t": "sun-pm-2-spannaus",
+   "n": 3,
+   "look": "watercolor"
   }
  ],
  "insights": [
   {
    "id": "ten-words",
    "title": "The conference in 10 words",
-   "sub": "Most-used meaningful words in the recaps of the first 27 talks",
+   "sub": "Most-used meaningful words in the recaps of the first 29 talks",
    "share": "October 2026 General Conference so far in 10 words."
   },
   {
@@ -423,7 +453,7 @@
    "id": "christ",
    "title": "He was named again and again",
    "sub": "",
-   "share": "Jesus Christ was named 117 times in recaps of 22 of 27 talks."
+   "share": "Jesus Christ was named 141 times in recaps of 24 of 29 talks."
   },
   {
    "id": "themes",
@@ -441,11 +471,11 @@
    "id": "scriptures",
    "title": "Back to the scriptures",
    "sub": "",
-   "share": "20 scripture references in recaps of the first 27 talks."
+   "share": "20 scripture references in recaps of the first 29 talks."
   },
   {
    "id": "who-spoke",
-   "title": "27 talks so far",
+   "title": "29 talks so far",
    "sub": "",
    "share": "Who spoke at General Conference so far."
   }

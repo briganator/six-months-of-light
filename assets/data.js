@@ -49,7 +49,7 @@ window.CONF = {
    "when": "Sun, Oct 4 · 2:00–4:00pm MDT",
    "url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/sunday-afternoon-session?lang=eng",
    "status": "pending",
-   "note": "In progress. Conducted by Elder Gérald Caussé. Music by The Tabernacle Choir at Temple Square (opening hymn: Let Zion in Her Beauty Rise). Talks will be added as recaps post."
+   "note": "In progress. Conducted by Elder Gérald Caussé. Music by The Tabernacle Choir at Temple Square (opening hymn: Let Zion in Her Beauty Rise). First talks added from Church News recaps; more as they post."
   }
  ],
  "talks": [
@@ -704,6 +704,54 @@ window.CONF = {
    "invitation": "Get closer to the Savior — come unto Christ, and help others do the same. The gospel of Jesus Christ is for all.",
    "ponder": "What concern or struggle am I trying to overcome on my own instead of getting closer to Christ?",
    "big_idea": "The gospel of Jesus Christ is for all — overcome by getting closer to the Savior, and help others come unto Him.",
+   "video_embed": null,
+   "full_text_permitted": false
+  },
+  {
+   "id": "sun-pm-1-uchtdorf",
+   "session": "sun-pm",
+   "order": 1,
+   "speaker": "President Dieter F. Uchtdorf",
+   "calling": "Acting President of the Quorum of the Twelve Apostles",
+   "title": "Christ-centered Unity",
+   "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/president-uchtdorf-october-2026-general-conference-christ-centered-unity/",
+   "official_url": null,
+   "summary": "Baptism, while an individual ordinance, is also a unifying one — it joins us to a worldwide community of Saints. Through baptism, we become not only covenant individuals but also part of a covenant people. The Savior brought people together and broke down divisions and walls; He continues to invite all to come unto Him. Satan seeks to divide, but the Savior's work of gathering is accelerating. Members are united by love for God and neighbor; they are one in Christ (Galatians 3:28). Wars and contentions between the Nephites and the Lamanites changed when Jesus Christ appeared, taught His gospel and established His Church; they became His covenant people. The closer people become to Jesus Christ, the closer they will become to each other. If we are not one, we are not His. Now is the time to unify. The sacrament is also a weekly unifying experience. Wherever you are, join the Christ-centered unity we are trying to build. The more united in Christ we are and the more we desire to build bridges instead of walls, the more our individual lives, families, communities and nations will experience God's presence and blessings.",
+   "scriptures": [
+    "Galatians 3:28"
+   ],
+   "quotes": [
+    "When we join the Church of Jesus Christ, we say — humbly, gratefully, and with quiet confidence — that we want to follow our beloved Savior, Jesus Christ. And we want to walk that path together.",
+    "In the Savior's Church, it is not our political views, culture or personal interests that unite us. It is our love for God and neighbor — God's children. It is our commitment to our covenants with Jesus Christ and to His restored gospel. We are 'one in Christ.'",
+    "Jesus Christ has the power to change us — you and me — purify us and unite us. The closer we come to Him, the closer we will come to each other — and the closer we will come to the unity He wants for us."
+   ],
+   "invitation": "Join the Christ-centered unity; build bridges instead of walls; come closer to Christ and to each other.",
+   "ponder": "Where am I building walls instead of bridges — and how can I come closer to Christ so I come closer to others?",
+   "big_idea": "Jesus Christ unites His covenant people — the closer we come to Him, the closer we come to each other.",
+   "video_embed": null,
+   "full_text_permitted": false
+  },
+  {
+   "id": "sun-pm-2-spannaus",
+   "session": "sun-pm",
+   "order": 2,
+   "speaker": "Sister Andrea Muñoz Spannaus",
+   "calling": "Second Counselor in the Young Women General Presidency",
+   "title": "God Is at Your Side",
+   "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/sister-andrea-munoz-spannaus-october-2026-general-conference-thirteenth-article-of-faith/",
+   "official_url": null,
+   "summary": "Speaking to young women about accomplishing their crucial and important work on earth. As they look at their lives and what they want to achieve, Heavenly Father will show them the best way to make their righteous desires come true. The Lord knows where they are; He has their exact location and can guide them. He knows their dreams and gifts. Knowing everything about them does not make Him love them less. She shared seven helps and invited listeners to choose one to focus on over the next few weeks: (1) Partake of the sacrament with a humble heart; (2) Repent daily; (3) Study the scriptures with a desire to know God's character; (4) Study about ministering angels; (5) Go to bed early; (6) Limit cellphone use; (7) Seek friends who are striving to follow the Lord. The Lord has greater power than the adversary. Always put Him first and remain faithful to baptismal covenants. Angels can minister; the Father, Jesus Christ and the Holy Ghost are at your side. She invited study of the 13th article of faith and creating your own list of aspirations.",
+   "scriptures": [
+    "Articles of Faith 1:13"
+   ],
+   "quotes": [
+    "Today I invite you to look at your life and what you want to achieve with enthusiasm and the certainty that your Father in Heaven will guide you on that journey and show you the best way to make the righteous desires of your heart come true.",
+    "Dear young women, the Lord knows where you are; He has your exact location and can guide you. … He knows everything. And knowing everything about you does not make Him love you less.",
+    "Always put Him first and remain faithful to the covenants you made at your baptism. Angels can minister to you. The Father, Jesus Christ and the Holy Ghost are at your side."
+   ],
+   "invitation": "Choose one of her seven helps to focus on; study the 13th article of faith and create your own list of aspirations; put the Lord first.",
+   "ponder": "Which one of her seven invitations will I focus on for the next few weeks?",
+   "big_idea": "Heavenly Father knows you and is at your side — put Him first, and He will guide your righteous desires.",
    "video_embed": null,
    "full_text_permitted": false
   }
