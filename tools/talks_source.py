@@ -19,7 +19,7 @@ sessions = [
   {"id": "sun-am", "color": "sky", "name": "Sunday Morning Session", "when": "Sun, Oct 4 · 10:00am–noon MDT", "url": SUN_AM, "status": "complete",
    "note": "Conducted by President D. Todd Christofferson. Music by The Tabernacle Choir at Temple Square (opening hymn: How Firm a Foundation; includes Music & the Spoken Word). Closed by President Dallin H. Oaks."},
   {"id": "sun-pm", "color": "violet", "name": "Sunday Afternoon Session", "when": "Sun, Oct 4 · 2:00–4:00pm MDT", "url": SUN_PM, "status": "pending",
-   "note": "In progress. Conducted by Elder Gérald Caussé. Music by The Tabernacle Choir at Temple Square (opening hymn: Let Zion in Her Beauty Rise). Talks added from Church News recaps as they post."},
+   "note": "In progress. Conducted by Elder Gérald Caussé. Music by The Tabernacle Choir at Temple Square (opening hymn: Let Zion in Her Beauty Rise; choir: Love Will Bless Our Home). Talks added from Church News recaps as they post."},
 ]
 
 def t(id, session, order, speaker, calling, title, recap, summary, scriptures, quotes, invitation, ponder, official_url=None):

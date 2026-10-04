@@ -49,7 +49,7 @@ window.CONF = {
    "when": "Sun, Oct 4 · 2:00–4:00pm MDT",
    "url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/sunday-afternoon-session?lang=eng",
    "status": "pending",
-   "note": "In progress. Conducted by Elder Gérald Caussé. Music by The Tabernacle Choir at Temple Square (opening hymn: Let Zion in Her Beauty Rise). Talks added from Church News recaps as they post."
+   "note": "In progress. Conducted by Elder Gérald Caussé. Music by The Tabernacle Choir at Temple Square (opening hymn: Let Zion in Her Beauty Rise; choir: Love Will Bless Our Home). Talks added from Church News recaps as they post."
   }
  ],
  "talks": [
