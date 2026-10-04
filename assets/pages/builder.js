@@ -149,7 +149,7 @@ const norm = x => String(x || "").toLowerCase().normalize("NFD").replace(/[\u030
 const SESS_ORDER = CONF.sessions.map(x => x.id);
 const isOn = (t, i) => !st.ins && !st.libT && t.id === st.t && i === st.q;
 const qcard = x => `<article class="qcard ${isOn(x.t, x.i) ? "on" : ""}" role="listitem"><p class="qq">“${esc(x.q)}”</p><p class="qs"><b>${esc(x.t.speaker)}</b> · ${esc(x.t.title)}</p>
-  <button type="button" class="btn ${isOn(x.t, x.i) ? "secondary" : "gold"} small qs-use" data-t="${x.t.id}" data-q="${x.i}" aria-pressed="${isOn(x.t, x.i)}">${isOn(x.t, x.i) ? "✓ On your card" : "Use this"}</button></article>`;
+  <button type="button" class="btn ${isOn(x.t, x.i) ? "secondary" : "gold"} small qs-use" data-t="${x.t.id}" data-q="${x.i}" aria-pressed="${isOn(x.t, x.i)}" aria-label="${isOn(x.t, x.i) ? "On your card" : "Use this quote"}: ${esc(x.t.speaker)}">${isOn(x.t, x.i) ? "✓ On your card" : "Use this"}</button></article>`;
 let qview = null; // null = results list; {c, id} = one talk
 function renderQuotes() {
   const words = norm(st.filter).split(/\s+/).filter(w => w.length > 1), q = words.length > 0;
