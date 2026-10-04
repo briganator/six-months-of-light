@@ -67,7 +67,7 @@ main.wrap{max-width:860px}
 .navlinks a[aria-current]{color:#fff;background:rgba(255,255,255,.12);box-shadow:inset 0 0 0 1px rgba(246,223,166,.25)}
 .hero-copy{text-align:center;padding-top:clamp(48px,9vw,110px);padding-bottom:clamp(110px,16vw,200px)}
 .eyebrow{font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold-hi);font-weight:500}
-.display{font-family:var(--serif);font-weight:400;font-size:clamp(64px,15vw,148px);line-height:.92;letter-spacing:-.02em;margin:18px 0 18px;
+.display{font-family:var(--serif);font-weight:400;font-size:clamp(64px,15vw,148px);line-height:.92;letter-spacing:-.02em;margin:calc(18px - .05em) 0 calc(18px - .2em);padding:.05em .04em .2em;/* gradient text only paints inside the box: room for the g in "Light" */
   background:linear-gradient(180deg,#fffaf0 30%,#f3d9a8 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
   text-shadow:0 0 60px rgba(246,223,166,.15);animation:rise 1.6s var(--ease) .2s both}
 .display em{font-style:italic;background:linear-gradient(180deg,#f6dfa6,#d8a95b);-webkit-background-clip:text;background-clip:text;padding-right:.04em}
