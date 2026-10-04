@@ -35,10 +35,8 @@ document.getElementById("main").innerHTML = `
     <div class="stat"><b data-count="${T.length}">${T.length}</b><span>talks so far</span></div>
     <div class="stat"><b data-count="${I.christMentions}">${I.christMentions}</b><span>mentions of Christ</span></div>
     <div class="stat"><b data-count="${I.refs.length}">${I.refs.length}</b><span>scripture refs</span></div></div>
-  ${subnavHTML([["zoom", "Zoom"], ["compare", "Compare"], ["music", "Music"], ["cards", "Cards"], ["theme-quiz", "Theme quiz"], ["spotlight", "Spotlight"], ["words", "Word cloud"], ["themes", "Themes"], ["scriptures", "Scriptures"], ["ask", "Search"]], "Insights sections")}
-  <section class="zoom-sec" id="zoom"><h2>Zoom in or out</h2><p class="b-help">Every conference since April 2021, then one conference, one session or one talk. Each finding can become a card.</p><div id="zoomBox"><p class="empty">Loading the library…</p></div></section>
-  <section class="zoom-sec" id="compare"><h2>Compare two conferences</h2><div id="cmpBox"></div></section>
-  <section class="zoom-sec" id="music"><h2>Music at conference</h2><div id="musBox"></div></section>
+  ${subnavHTML([["zoom", "Explore"], ["cards", "Cards"], ["theme-quiz", "Theme quiz"], ["spotlight", "Spotlight"], ["words", "Word cloud"], ["themes", "Themes"], ["scriptures", "Scriptures"], ["ask", "Search"]], "Insights sections")}
+  <section class="zoom-sec" id="zoom"><h2>Explore the conferences</h2><p class="b-help">Tap a pill in the sentence to change it, or start from a preset. Every number links to the talks behind it.</p><span id="compare"></span><span id="music"></span><div id="zoomBox"><p class="empty">Loading the library…</p></div></section>
   <h2 id="cards">Shareable insight cards</h2>
   <div class="ins-grid2">${I.list.map(mini).join("")}</div>
   <section class="card quizbox" id="theme-quiz"><div class="ins-kicker">Quick quiz · 3 taps</div><h2 style="margin-top:4px">Which theme speaks to you?</h2>
@@ -82,6 +80,6 @@ document.getElementById("tq").addEventListener("change", () => {
     <a class="btn gold" href="builder.html?ins=${esc(card.id)}">Share my result card</a></div>`;
 });
 
-loadLib().then(LB => { Zoom.render(document.getElementById("zoomBox"), LB); Zoom.compare(document.getElementById("cmpBox"), LB); Zoom.music(document.getElementById("musBox"), LB);
-  if (location.hash && ["#zoom", "#compare", "#music"].includes(location.hash)) document.querySelector(location.hash).scrollIntoView(); })
+loadLib().then(LB => { Explore.make(document.getElementById("zoomBox"), LB);
+  if (location.hash && ["#zoom", "#compare", "#music"].includes(location.hash)) document.getElementById("zoom").scrollIntoView(); })
   .catch(() => { document.getElementById("zoomBox").innerHTML = `<p class="empty">The library didn't load. Check your connection and refresh.</p>`; });
