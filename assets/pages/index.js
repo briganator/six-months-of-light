@@ -16,7 +16,7 @@ html += `<div class="section-label">Keep studying</div><div class="study-strip">
   <a href="plan.html"><b>Reading plan</b><span>One talk at a time until April</span></a>
   <a href="study.html"><b>Study library</b><span>Every talk since April 2021, by topic or speaker</span></a>
   <a href="insights.html#zoom"><b>Zoom insights</b><span>From all conferences down to one talk</span></a>
-  <a href="lessons.html"><b>Family night</b><span>A ready lesson you can present</span></a></div>`;
+  <a href="lessons.html"><b>Lesson helps</b><span>Family night, Elders Quorum &amp; Relief Society, youth</span></a></div>`;
 html += `<div class="section-label" id="totw">Talk of the week</div><h2 class="sr-only">Talk of the Week</h2>
 <article class="card totw">
   <div class="label">This week's focus</div>

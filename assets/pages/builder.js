@@ -10,7 +10,7 @@ const st = {
   look: L[P.get("look")] ? P.get("look") : "sunrise", pal: K.PALETTES[P.get("pal")] ? P.get("pal") : "gold",
   font: K.FONTS[P.get("font")] ? P.get("font") : "classic", align: P.get("align") === "left" ? "left" : "center",
   size: S[P.get("size")] ? P.get("size") : (isPhone ? "story" : "portrait"), ov: P.has("ov") ? Math.min(.85, Math.max(0, +P.get("ov") / 100)) : null,
-  anim: K.ANIMS[P.get("anim")] ? P.get("anim") : P.get("anim") === "1" ? "fade" : "none", sticker: P.get("ig") === "1", note: "", tab: ["quote", "look", "size", "text", "share"].includes(P.get("tab")) ? P.get("tab") : (P.has("t") ? "look" : "quote"), src: P.get("src") === "promo" || P.has("promo") ? "promo" : P.get("ins") ? "ins" : "quote", filter: "", theme: THEMES3.get(P.get("theme")) ? P.get("theme") : "all",
+  anim: K.ANIMS[P.get("anim")] ? P.get("anim") : P.get("anim") === "1" ? "fade" : "none", sticker: P.get("ig") === "1", note: "", tab: ["quote", "look", "size", "text", "share"].includes(P.get("tab")) ? P.get("tab") : (P.has("t") ? "look" : "quote"), src: P.get("src") === "promo" || P.has("promo") ? "promo" : P.get("ins") ? "ins" : "quote", filter: "", theme: THEMES3.get(P.get("theme")) ? THEMES3.get(P.get("theme")).slug : "all",
 };
 // Advanced formatting: fx=size:1.1;ls:0.05;box:glass ... (whitelisted keys and values)
 const FMT_NUM = { size: [.6, 1.5], lh: [.8, 1.6], ls: [0, .25], vig: [0, 1], grain: [0, 1], blur: [0, 6], dx: [-.3, .3], dy: [-.3, .3] };

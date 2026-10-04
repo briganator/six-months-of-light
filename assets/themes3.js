@@ -22,7 +22,7 @@ var T=[
  {slug:'book-of-mormon',name:'Book of Mormon',icon:'▤',style:1},
  {slug:'sacrament',name:'Sacrament',icon:'✚\uFE0E',style:1},
  {slug:'baptism',name:'Baptism',icon:'〰',style:1},
- {slug:'priesthood',name:'Priesthood',icon:'⚷',style:1},
+ {slug:'elders-quorum',name:'Elders Quorum',icon:'⚷',style:1},
  {slug:'relief-society',name:'Relief Society',icon:'✿\uFE0E',style:1},
  {slug:'family-history',name:'Family History',icon:'⚘\uFE0E',style:1},
  {slug:'pioneers',name:'Pioneers',icon:'⛰\uFE0E',style:1},
@@ -52,7 +52,7 @@ var LOOKS={
  'book-of-mormon':['plates','book','candle','parchment'],
  'sacrament':['sacrament','linen','candle','olive','minimal'],
  'baptism':['baptism','ocean','lake','dove','heaven'],
- 'priesthood':['keys','temple_dusk','navy','heaven','mountains'],
+ 'elders-quorum':['keys','temple_dusk','navy','heaven','mountains'],
  'relief-society':['roses','blossoms','botanical','watercolor','blush'],
  'family-history':['familytree','parchment','family','hearth','photo:temple'],
  'pioneers':['pioneer','wheat','desert','path','snowpines'],
@@ -83,7 +83,7 @@ var Q={
 [['sat-am-2-runia#0','love'],['sat-am-2-runia#1','love'],['sat-pm-2-farnes#1','love'],['sat-pm-6-fale#0','love'],['sat-pm-6-fale#2','love'],['sat-pm-10-rasband#1','love'],
  ['sat-pm-1-renlund#1','faith'],['sat-pm-4-giuffra#2','faith'],['sat-pm-7-kearon#0','faith'],
  ['sat-pm-5-morgan#0','book-of-mormon'],['sat-pm-3-chigbundu#2','sacrament']].forEach(function(a){(Q[a[0]]=Q[a[0]]||[]);if(Q[a[0]].indexOf(a[1])<0)Q[a[0]].push(a[1]);});
-function byslug(s){for(var i=0;i<T.length;i++)if(T[i].slug===s)return T[i];return null;}
+function byslug(s){if(s==='priesthood')s='elders-quorum';/* old links */for(var i=0;i<T.length;i++)if(T[i].slug===s)return T[i];return null;}
 window.THEMES3={list:T,looks:LOOKS,quotes:Q,get:byslug,
  tagsFor:function(tid,qi){return Q[tid+'#'+qi]||[];},
  count:function(s){if(s==='all')return null;var n=0;for(var k in Q)if(Q[k].indexOf(s)>=0)n++;return n;},

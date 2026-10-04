@@ -74,7 +74,7 @@ window.headerHTML = (active, small) => `
       <h1 class="display"><span class="d1">Six Months</span> <em>of</em> <span class="d2">Light</span></h1>
       <p class="tagline">${esc(CONF.tagline)}</p>
       <p class="hero-how">Find a line from conference. Make it beautiful. Share it.</p>
-      <div class="hero-actions"><a class="btn gold big" href="builder.html">Make a card</a><a class="btn glass" href="#sessions">Browse the talks</a></div>
+      <div class="hero-actions"><a class="btn gold big" href="builder.html">Make a card</a><a class="btn glass" href="${active === "index.html" ? "" : "index.html"}#sessions">Browse the talks</a></div>
       ${countdownHTML()}
     </div>`}
     ${GROUP ? `<p class="grouptag wrap">Group: <strong>${esc(GROUP)}</strong> · <a href="?g=">leave group</a></p>` : ""}

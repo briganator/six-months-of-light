@@ -13,7 +13,7 @@ pages = {
  "speaker": ("Speakers · Six Months of Light", [], []),
  "session": ("Session · Six Months of Light", [], []),
  "my": ("My Conference · Six Months of Light", [], []),
- "lessons": ("Lesson helps · Six Months of Light", [], []),
+ "lessons": ("Lesson helps · Six Months of Light", [], ["themes3.js", "scripref.js"]),
  "challenge": ("Conference challenge · Six Months of Light", ["share"], []),
  "groups": ("Group links · Six Months of Light", [], []),
  "plan": ("Reading plan to April · Six Months of Light", [], []),

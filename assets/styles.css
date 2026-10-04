@@ -735,3 +735,28 @@ table.cmp td:first-child,table.cmp th:first-child{text-align:left}
 .study-strip span{font-size:13.5px;color:var(--muted)}
 
 .cmp th[scope=row]{text-align:left;font-weight:400}
+/* Lesson helps */
+.ls-pick{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:10px}
+.ls-pick label{display:block;min-width:0}.ls-pick select{width:100%;min-width:0}
+@media (max-width:560px){.ls-pick{grid-template-columns:1fr}}
+#aud{margin-top:12px}
+.ls-kicker{font:600 12px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:#86601f}
+.outline .src{font-size:13px;color:var(--ink-2);margin:4px 0 0}
+.outline .ls-key{margin:6px 0 0;font:500 20px/1.4 var(--serif);border-left:3px solid var(--gold);padding-left:12px}
+.outline .ls-refs{columns:2;column-gap:20px}.outline .ls-refs li{break-inside:avoid}
+@media (max-width:560px){.outline .ls-refs{columns:1}}
+.outline .ls-q li{margin:6px 0}
+.handout{display:none}
+@media print{
+  body.print-handout main>*:not(.handout){display:none!important}
+  body.print-handout .handout{display:block!important;font-size:12pt;color:#000}
+  .handout .ho-head{border-bottom:1.5pt solid #a87a35;padding-bottom:6pt;margin-bottom:8pt}
+  .handout .ho-k{font:600 9pt var(--sans);letter-spacing:.12em;text-transform:uppercase;color:#6b4c18}
+  .handout h2{font-size:18pt;margin:2pt 0}.handout h3{font-size:12pt;margin:10pt 0 3pt;text-transform:uppercase;letter-spacing:.06em}
+  .handout blockquote{margin:4pt 0;padding-left:8pt;border-left:2pt solid #a87a35;font-family:var(--serif);font-size:13pt;break-inside:avoid}
+  .handout ol{padding-left:16pt}.handout li{margin:4pt 0}
+  .handout .src,.handout .ho-foot{font-size:9pt;color:#444}.handout .ho-foot{margin-top:14pt;border-top:.5pt solid #bbb;padding-top:4pt}
+  .outline .ls-refs{columns:2}
+  .outline .ls-refs a{color:#000}
+}
+@media print{.outline::after{content:"From sixmonthsoflight.com · Not an official Church site · Read the full talk at ChurchofJesusChrist.org";display:block;margin-top:12pt;font-size:9pt;color:#444;border-top:.5pt solid #bbb;padding-top:4pt}}
