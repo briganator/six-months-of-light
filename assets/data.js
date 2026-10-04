@@ -39,8 +39,8 @@ window.CONF = {
    "name": "Sunday Morning Session",
    "when": "Sun, Oct 4 · 10:00am–noon MDT",
    "url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/sunday-morning-session?lang=eng",
-   "status": "pending",
-   "note": "Conducted by President D. Todd Christofferson. Music by The Tabernacle Choir at Temple Square (opening hymn: How Firm a Foundation). Talks are being added as Church News recaps post (8 so far; session still in progress through noon MDT)."
+   "status": "complete",
+   "note": "Conducted by President D. Todd Christofferson. Music by The Tabernacle Choir at Temple Square (opening hymn: How Firm a Foundation; includes Music & the Spoken Word). Closed by President Dallin H. Oaks."
   },
   {
    "id": "sun-pm",
@@ -680,6 +680,30 @@ window.CONF = {
    "invitation": "Consider your ways; build a strong relationship with Heavenly Father and Jesus Christ through making and keeping covenants.",
    "ponder": "What “proper adjustments” do I need to make so I can better make and keep my covenants?",
    "big_idea": "Consider your ways — build your relationship with God through covenants, and He will bless you.",
+   "video_embed": null,
+   "full_text_permitted": false
+  },
+  {
+   "id": "sun-am-9-oaks",
+   "session": "sun-am",
+   "order": 9,
+   "speaker": "President Dallin H. Oaks",
+   "calling": "President of the Church",
+   "title": "The Gospel of Jesus Christ Is for All",
+   "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/president-oaks-october-2026-general-conference-gospel-of-jesus-christ-for-all/",
+   "official_url": null,
+   "summary": "President Dallin H. Oaks, President of the Church, closed the Sunday morning session speaking about overcoming through the Savior. Members both obey Amaleki’s invitation and invite all others to “come unto Christ” (Omni 1:26). As President, he prays for what Heavenly Father wants for each of us — to be active members of the Church of Jesus Christ, proceeding forward on the covenant path into the eternities; we need one another’s prayers. Each person is a work in progress with personal trials; whatever present or future concerns or struggles we face, the way to overcome them is to get closer to the Savior. Challenges of mortality provide opportunities to develop faith. Strong faith requires more than strong desire — it means daily trying, one step at a time, with prayer and scriptural learning. Reconciling conflicts between science and religion can take time and may build faith and humility; never let secular learning limit spiritual horizons. If sins are to be forgiven through His Atonement, we must comply with the conditions He has prescribed, including faith, repentance and baptism. He testified the gospel of Jesus Christ is for all and invited all to come unto Christ and help others do the same.",
+   "scriptures": [
+    "Omni 1:26"
+   ],
+   "quotes": [
+    "I pray for what our Heavenly Father wants for each of us — to be active members of the Church of Jesus Christ, proceeding forward on the covenant path into the eternities.",
+    "We all have present or future concerns or struggles we are trying to overcome. ... Whatever they are, the way to overcome them is to get closer to our Savior, Jesus Christ.",
+    "The Lord will eventually cause the inspired teachings He has given to His children in various nations to be brought forth for the benefit of all people."
+   ],
+   "invitation": "Get closer to the Savior — come unto Christ, and help others do the same. The gospel of Jesus Christ is for all.",
+   "ponder": "What concern or struggle am I trying to overcome on my own instead of getting closer to Christ?",
+   "big_idea": "The gospel of Jesus Christ is for all — overcome by getting closer to the Savior, and help others come unto Him.",
    "video_embed": null,
    "full_text_permitted": false
   }

@@ -16,8 +16,8 @@ sessions = [
    "note": "Conducted by President Henry B. Eyring. Music by The Tabernacle Choir at Temple Square."},
   {"id": "sat-pm", "color": "amber", "name": "Saturday Afternoon Session", "when": "Sat, Oct 3 · 2:00–4:00pm MDT", "url": SAT_PM, "status": "complete",
    "note": "Conducted by Elder Neil L. Andersen. Music by a choir from Northern Utah."},
-  {"id": "sun-am", "color": "sky", "name": "Sunday Morning Session", "when": "Sun, Oct 4 · 10:00am–noon MDT", "url": SUN_AM, "status": "pending",
-   "note": "Conducted by President D. Todd Christofferson. Music by The Tabernacle Choir at Temple Square (opening hymn: How Firm a Foundation). Talks are being added as Church News recaps post (8 so far; session still in progress through noon MDT)."},
+  {"id": "sun-am", "color": "sky", "name": "Sunday Morning Session", "when": "Sun, Oct 4 · 10:00am–noon MDT", "url": SUN_AM, "status": "complete",
+   "note": "Conducted by President D. Todd Christofferson. Music by The Tabernacle Choir at Temple Square (opening hymn: How Firm a Foundation; includes Music & the Spoken Word). Closed by President Dallin H. Oaks."},
   {"id": "sun-pm", "color": "violet", "name": "Sunday Afternoon Session", "when": "Sun, Oct 4 · 2:00–4:00pm MDT", "url": SUN_PM, "status": "pending",
    "note": "Talks will be added after the session."},
 ]
@@ -263,6 +263,15 @@ talks = [
     "I know that God keeps His promises. I have seen it in my life. He gave me spiritual and physical strength when I needed it most."],
    "Consider your ways; build a strong relationship with Heavenly Father and Jesus Christ through making and keeping covenants.",
    "What “proper adjustments” do I need to make so I can better make and keep my covenants?"),
+ t("sun-am-9-oaks", "sun-am", 9, "President Dallin H. Oaks", "President of the Church", "The Gospel of Jesus Christ Is for All",
+   "https://www.thechurchnews.com/general-conference/2026/10/04/president-oaks-october-2026-general-conference-gospel-of-jesus-christ-for-all/",
+   "President Dallin H. Oaks, President of the Church, closed the Sunday morning session speaking about overcoming through the Savior. Members both obey Amaleki’s invitation and invite all others to “come unto Christ” (Omni 1:26). As President, he prays for what Heavenly Father wants for each of us — to be active members of the Church of Jesus Christ, proceeding forward on the covenant path into the eternities; we need one another’s prayers. Each person is a work in progress with personal trials; whatever present or future concerns or struggles we face, the way to overcome them is to get closer to the Savior. Challenges of mortality provide opportunities to develop faith. Strong faith requires more than strong desire — it means daily trying, one step at a time, with prayer and scriptural learning. Reconciling conflicts between science and religion can take time and may build faith and humility; never let secular learning limit spiritual horizons. If sins are to be forgiven through His Atonement, we must comply with the conditions He has prescribed, including faith, repentance and baptism. He testified the gospel of Jesus Christ is for all and invited all to come unto Christ and help others do the same.",
+   ["Omni 1:26"],
+   ["I pray for what our Heavenly Father wants for each of us — to be active members of the Church of Jesus Christ, proceeding forward on the covenant path into the eternities.",
+    "We all have present or future concerns or struggles we are trying to overcome. ... Whatever they are, the way to overcome them is to get closer to our Savior, Jesus Christ.",
+    "The Lord will eventually cause the inspired teachings He has given to His children in various nations to be brought forth for the benefit of all people."],
+   "Get closer to the Savior — come unto Christ, and help others do the same. The gospel of Jesus Christ is for all.",
+   "What concern or struggle am I trying to overcome on my own instead of getting closer to Christ?"),
 ]
 
 # 60-second recap "big idea" — a one-line condensation of the doc's summary (NOT a quote).
@@ -293,6 +302,7 @@ BIG_IDEAS = {
  "sun-am-6-cook": "Integrity, virtue and daily repentance lead to happiness and the Holy Ghost’s companionship.",
  "sun-am-7-kyungu": "Forgo harsh words; use the language of peacemakers that uplifts and preserves relationships.",
  "sun-am-8-schmeil": "Consider your ways — build your relationship with God through covenants, and He will bless you.",
+ "sun-am-9-oaks": "The gospel of Jesus Christ is for all — overcome by getting closer to the Savior, and help others come unto Him.",
 }
 for _t in talks:
     _t["big_idea"] = BIG_IDEAS[_t["id"]]
