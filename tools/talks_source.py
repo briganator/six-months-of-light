@@ -200,6 +200,15 @@ talks = [
     "We shed tears of joy and take courage whenever we hear the words, ‘Fear not, I am with thee,’ and we are touched that He offers us the trust of helping and loving others."],
    "Join the Lord in keeping His promise — help Him comfort and succor those in distress.",
    "Whom is the Lord inviting me to comfort for Him today?"),
+ t("sun-am-2-chibota", "sun-am", 2, "President Rosemary K. Chibota", "Primary General President", "A Child of God",
+   "https://www.thechurchnews.com/general-conference/2026/10/04/president-rosemary-chibota-october-2026-general-conference-a-child-of-god/",
+   "Primary General President Rosemary K. Chibota spoke about seeing each other as children of God. The Southern African greeting “Sawubona” means “I see you” — an acknowledgment of another person’s worth and humanity. Jesus Christ saw people as beloved sons and daughters of God rather than by labels. The world invites focus on labels, but labels never fully capture who we truly are; eternal identity matters more. Whatever labels weigh heavily, Jesus Christ’s grace is sufficient to lift above every label and limitation. She invited disciples this week to learn the name of someone who may feel unseen, pray to see others as Heavenly Father sees them, and replace worldly labels with the eternal truths: child of God, child of the covenant, disciple of Jesus Christ.",
+   ["No specific verses reported in recaps"],
+   ["The world invites us to focus on labels rather than eternal identity. However, labels can never fully capture who we truly are",
+    "When we ask Heavenly Father to help us see others, He guides us to those who feel unseen.",
+    "When we see one another through the Savior’s eyes, hearts change, relationships deepen and faith grows."],
+   "Pray to see others as Heavenly Father sees them; learn the name of someone who may feel unseen.",
+   "Whom am I labeling instead of seeing as a child of God?"),
 ]
 
 # 60-second recap "big idea" — a one-line condensation of the doc's summary (NOT a quote).
@@ -223,6 +232,7 @@ BIG_IDEAS = {
  "sat-pm-9-eyring": "In turbulent times, the Holy Ghost is the true source of comfort and hope.",
  "sat-pm-10-rasband": "Give your despair for wayward loved ones to Christ, and keep loving like Jesus.",
  "sun-am-1-eyring": "The Lord keeps His promise ‘Fear not, I am with thee’ — and trusts us to help comfort others.",
+ "sun-am-2-chibota": "See others as children of God — pray to see as He sees, and lift labels with His grace.",
 }
 for _t in talks:
     _t["big_idea"] = BIG_IDEAS[_t["id"]]

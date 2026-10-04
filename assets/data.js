@@ -514,6 +514,30 @@ window.CONF = {
    "big_idea": "The Lord keeps His promise ‘Fear not, I am with thee’ — and trusts us to help comfort others.",
    "video_embed": null,
    "full_text_permitted": false
+  },
+  {
+   "id": "sun-am-2-chibota",
+   "session": "sun-am",
+   "order": 2,
+   "speaker": "President Rosemary K. Chibota",
+   "calling": "Primary General President",
+   "title": "A Child of God",
+   "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/president-rosemary-chibota-october-2026-general-conference-a-child-of-god/",
+   "official_url": null,
+   "summary": "Primary General President Rosemary K. Chibota spoke about seeing each other as children of God. The Southern African greeting “Sawubona” means “I see you” — an acknowledgment of another person’s worth and humanity. Jesus Christ saw people as beloved sons and daughters of God rather than by labels. The world invites focus on labels, but labels never fully capture who we truly are; eternal identity matters more. Whatever labels weigh heavily, Jesus Christ’s grace is sufficient to lift above every label and limitation. She invited disciples this week to learn the name of someone who may feel unseen, pray to see others as Heavenly Father sees them, and replace worldly labels with the eternal truths: child of God, child of the covenant, disciple of Jesus Christ.",
+   "scriptures": [
+    "No specific verses reported in recaps"
+   ],
+   "quotes": [
+    "The world invites us to focus on labels rather than eternal identity. However, labels can never fully capture who we truly are",
+    "When we ask Heavenly Father to help us see others, He guides us to those who feel unseen.",
+    "When we see one another through the Savior’s eyes, hearts change, relationships deepen and faith grows."
+   ],
+   "invitation": "Pray to see others as Heavenly Father sees them; learn the name of someone who may feel unseen.",
+   "ponder": "Whom am I labeling instead of seeing as a child of God?",
+   "big_idea": "See others as children of God — pray to see as He sees, and lift labels with His grace.",
+   "video_embed": null,
+   "full_text_permitted": false
   }
  ],
  "challenge": {
