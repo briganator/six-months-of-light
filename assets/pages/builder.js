@@ -31,6 +31,9 @@ const resolveLooks = th => { const out = []; (T3.looks[th] || []).forEach(k => {
 if (!P.has("t") && !P.has("ins")) { const d = INSIGHTS.daily; st.t = d.t.id; st.q = d.i; }
 const seg = (id, opts, cur, label) => `<div class="seg" id="${id}" role="group" aria-label="${label}">${Object.entries(opts).map(([k, v]) => `<button type="button" data-k="${k}" aria-pressed="${k === cur}">${esc(v)}</button>`).join("")}</div>`;
 const groups = [...new Set(Object.values(L).map(l => l.group))];
+// Look picker: one row of style chips filters a single grid; "Popular" shows the first look of each style.
+const POPULAR = groups.map(g => Object.keys(L).find(id => L[id].group === g)).filter(Boolean);
+const lookCat0 = POPULAR.includes(st.look) || !L[st.look] ? "Popular" : L[st.look].group;
 const PLAT = [["igstory", "Instagram Story", "story"], ["igpost", "Instagram post", "portrait"], ["facebook", isPhone ? "Share card to Facebook" : "Facebook", isPhone ? "portrait" : "link"], ["whatsapp", "WhatsApp", null], ["sms", "Messages", null], ["x", "X", "wide"], ["pinterest", "Pinterest", "pin"], ["threads", "Threads", null], ["email", "Email", null], ["copy", "Copy link", null]];
 const lookBtn = id => { const l = L[id]; return `<button type="button" class="look" data-look="${id}" aria-pressed="${id === st.look}" aria-label="${esc(l.name)}">${l.photo ? `<img src="${esc(l.credit.thumb)}" alt="" loading="lazy" decoding="async">` : `<canvas width="72" height="96" data-thumb="${id}"></canvas>`}<span>${esc(l.name)}</span></button>`; };
 document.getElementById("main").innerHTML = `
@@ -69,12 +72,17 @@ document.getElementById("main").innerHTML = `
           <label class="b-label" for="themeSel">Theme card</label><select id="themeSel" class="field"><option value="">Choose a theme…</option>${INSIGHTS.themeCounts.filter(x => x[1]).map(([n]) => `<option value="theme-${INSIGHTS.themeSlug(n)}">${esc(n)}</option>`).join("")}</select></div>
       </section>
       <section class="st-pane" id="p-look" role="tabpanel" aria-labelledby="tab-look">
+        <div id="lookSug"></div>
+        <div class="b-label">Background</div>
+        <div class="look-cats" id="lookCats" role="group" aria-label="Background style">${["Popular", ...groups].map(g => `<button type="button" class="thm-chip" data-cat="${esc(g)}" aria-pressed="${g === lookCat0}">${esc(g)}</button>`).join("")}</div>
+        <div class="looks" data-grp="Popular" ${lookCat0 === "Popular" ? "" : "hidden"}>${POPULAR.map(lookBtn).join("")}</div>
+        ${groups.map(g => `<div class="looks" data-grp="${esc(g)}" ${g === lookCat0 ? "" : "hidden"}>${Object.keys(L).filter(id => L[id].group === g).map(lookBtn).join("")}</div>`).join("")}
         <div class="b-label">Layout <span class="b-help" id="layHelp"></span></div>
         <div class="anims layouts" id="layout" role="group" aria-label="Layout">${Object.entries(K.LAYOUTS).map(([k, l]) => `<button type="button" data-k="${k}" aria-pressed="${k === st.layout}">${esc(l.name)}</button>`).join("")}</div>
-        <div id="lookSug"></div>
-        ${groups.map(g => `<div class="b-label">${esc(g)}</div><div class="looks">${Object.keys(L).filter(id => L[id].group === g).map(lookBtn).join("")}</div>`).join("")}
+        <details class="fine"><summary>Fine-tune color and darkness</summary>
         <div class="b-label">Color palette</div><div class="pals" id="pal" role="group" aria-label="Color palette">${Object.entries(K.PALETTES).map(([k, p]) => `<button type="button" data-k="${k}" aria-pressed="${k === st.pal}"><i style="background:linear-gradient(135deg,${p.acc},${p.acc2})"></i>${p.name}</button>`).join("")}</div>
         <label class="b-label" for="ov">Overlay darkness <span class="b-help" id="ovv"></span></label><input type="range" id="ov" min="0" max="85" step="5">
+        </details>
         <p class="b-help"><a href="credits.html">Photo credits &amp; licenses</a> · temple art is original</p>
       </section>
       <section class="st-pane" id="p-size" role="tabpanel" aria-labelledby="tab-size">
@@ -245,6 +253,9 @@ $("shMode").addEventListener("click", e => { const b = e.target.closest("button[
 function setSticker(on) { st.sticker = on; $("igPreset").setAttribute("aria-pressed", on); $("stickRow").hidden = !on; $("sticker").checked = on; }
 $("igPreset").addEventListener("click", () => { const on = $("igPreset").getAttribute("aria-pressed") !== "true"; setSticker(on); if (on) { st.size = "story"; document.querySelectorAll("#size button").forEach(x => x.setAttribute("aria-pressed", x.dataset.k === "story")); } draw(true); });
 $("sticker").addEventListener("change", e => { st.sticker = e.target.checked; draw(); });
+document.addEventListener("click", e => { const c = e.target.closest("#lookCats [data-cat]"); if (!c) return;
+  document.querySelectorAll("#lookCats [data-cat]").forEach(x => x.setAttribute("aria-pressed", x === c));
+  document.querySelectorAll("#p-look .looks[data-grp]").forEach(g => g.hidden = g.dataset.grp !== c.dataset.cat); });
 document.addEventListener("click", e => { const b = e.target.closest(".look"); if (!b) return; st.look = b.dataset.look; st.ov = null; syncLooks(); draw(true); });
 $("ov").addEventListener("input", e => { st.ov = +e.target.value / 100; draw(); });
 let nt; $("note").addEventListener("input", e => { $("ncnt").textContent = e.target.value.length; clearTimeout(nt); nt = setTimeout(() => { st.note = cleanNote(e.target.value); draw(); }, 200); });

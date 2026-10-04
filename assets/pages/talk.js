@@ -8,7 +8,7 @@ else {
   const committed = Store.commitments().find(c => c.talkId === t.id);
   main.innerHTML = `
   <p class="crumbs"><a href="index.html">← All talks</a> · <a href="session.html?s=${s.id}">${esc(s.name)}</a>, talk ${t.order}</p>
-  ${recapNotice()}
+  ${recapNotice(true)}
   <article class="card talk-main s-${s.color}">
     <div class="talk-head"><span class="chip-session s-${s.color}">${esc(s.name)} · Talk ${t.order}</span><h1>${esc(t.title)}</h1>
       <p class="speaker"><a href="speaker.html?s=${slug(t.speaker)}">${esc(t.speaker)}</a> · ${esc(t.calling)}</p></div>
@@ -37,8 +37,8 @@ else {
     </div>
     ${t.official_url ? "" : `<p class="speaker">The official talk page isn't posted yet; this links to the session page on ChurchofJesusChrist.org.</p>`}
     ${t.video_embed ? `<div class="video"><iframe src="${esc(t.video_embed)}" title="Official video: ${esc(t.title)}" loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe></div>`
-      : `<div class="slot">🎬 <strong>Official video</strong> — will be embedded here only where the Church permits embedding (e.g., the official General Conference YouTube video). Until then, use the official link above.</div>`}
-    ${t.full_text_permitted ? `<div id="fulltext"></div>` : `<div class="slot">📄 <strong>Full talk text</strong> — not reproduced here (Church copyright). This space is reserved in case permission is granted; read the full talk on ChurchofJesusChrist.org.</div>`}
+      : ""}
+    ${t.full_text_permitted ? `<div id="fulltext"></div>` : `<p class="speaker">Full talk text isn't reproduced here (Church copyright); read it on ChurchofJesusChrist.org.</p>`}
   </article>
   <section class="card study-panel" id="studyPanel" aria-labelledby="sp-h"><h2 id="sp-h" style="margin-top:0">Study this talk</h2><p class="empty">Loading…</p></section>
   <section class="card"><h2 style="margin-top:0">Share this talk</h2>

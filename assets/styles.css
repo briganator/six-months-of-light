@@ -987,3 +987,26 @@ details.more-sec>summary>span>span{font-size:13px;color:var(--muted)}
 details.more-sec>summary::after{content:"";flex:none;width:10px;height:10px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg) translateY(-3px);transition:transform .2s var(--ease)}
 details.more-sec[open]>summary::after{transform:rotate(-135deg)}
 details.more-sec .ins-grid{padding:0 var(--sp-3) var(--sp-3)}
+.notice-sm{display:flex;gap:8px;align-items:baseline;font-size:12.5px;line-height:1.45;color:var(--muted);margin:var(--sp-3) 0}.notice-sm .pill{flex:none}
+/* studio look picker: chip row + one grid; palette and darkness tucked away */
+.look-cats{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 -4px 10px;padding:2px 4px 6px;-webkit-overflow-scrolling:touch}
+.look-cats::-webkit-scrollbar{display:none}
+.look-cats .thm-chip{flex:none}
+details.fine{margin-top:var(--sp-4);border-top:1px solid var(--line);padding-top:var(--sp-2)}
+details.fine>summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font:600 14px var(--sans);color:var(--ink-2)}
+.look-cats .thm-chip{min-height:38px;padding:6px 14px;border-radius:999px;border:1px solid rgba(29,27,34,.12);background:#fff;font:500 14px var(--sans);white-space:nowrap;color:var(--ink-2);cursor:pointer}.look-cats .thm-chip[aria-pressed=true]{background:var(--midnight-2);border-color:var(--midnight-2);color:#fff}
+/* studio share sheet on phones: two compact rows (Copy link lives in More ways) */
+@media (max-width:899px){
+  .st-actions .st-linkonly{display:none}
+  .st-actions .st-ready{font-size:12.5px;margin:0 0 6px;min-height:0}
+  .st-actions .st-mode button{min-height:34px;padding:4px 10px;font-size:13.5px}
+  .st-actions .st-mode{margin-bottom:8px}
+}
+/* calmer, quicker entrance: content is readable within ~0.6s */
+.hero .display{animation-duration:.9s;animation-delay:.05s}
+.tagline{animation-duration:.9s!important;animation-delay:.15s!important}
+.hero-actions{animation-duration:.8s!important;animation-delay:.25s!important}
+.countdown{animation-duration:.8s!important;animation-delay:.35s!important}
+.cd-fill{animation-duration:1.2s!important;animation-delay:.5s!important}
+.card::after,.tile::after{animation:none!important;opacity:0}
+.entry{animation:rise .7s var(--ease) .3s both}
