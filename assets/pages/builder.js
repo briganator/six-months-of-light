@@ -266,25 +266,9 @@ const shareUrl = () => { const x = ins(), t = talk();
   if (st.src === "promo") return promoObj(null).url;
   if (x) return SHARE_I.includes(x.id) ? CONF.site_url + "i/" + x.id + ".html" : opts().url;
   return CONF.site_url + "q/" + t.id + "-" + (st.q + 1) + ".html"; };
-// Per-card share links: the rendered card (1200×630) is stored so a LINK post previews this exact card.
-// Served by the 'card' function: people are redirected to the quote on the site; link-preview crawlers get og:image.
-const CARD_FN = (window.CONF_CONFIG || {}).supabaseUrl ? CONF_CONFIG.supabaseUrl + "/functions/v1/card" : null, linkCache = new Map();
+// Link posts use the static share pages above (served as real HTML by GitHub Pages, each with its own card preview image),
+// which every link-preview crawler reads reliably. Phones share the exact card image itself through the share sheet.
 const BAD_NOTE = /\b(f+u+c+k+\w*|sh[i1]+t+\w*|b[i1]tch\w*|c+u+n+t+\w*|asshole\w*|bastard\w*|d[i1]ck\w*|cock\w*|puss(y|ies)|wh[o0]re\w*|slut\w*|n[i1]gg\w*|fag\w*|retard\w*|porn\w*|sex\w*|nude\w*|kys)\b/i;
-function cardLink() {
-  const key = keyFor("link", false); if (linkCache.has(key)) return linkCache.get(key);
-  const p = (async () => { if (!CARD_FN || location.protocol === "file:") return shareUrl();
-    try { const f = await renderFile("link", false), fd = new FormData(), x = ins(); fd.append("file", f, "card.png");
-      if (st.src === "promo") { const o = promoObj(null); fd.append("kind", "promo"); fd.append("title", o.title || "Six Months of Light"); fd.append("target", o.url); }
-      else if (x) { fd.append("kind", "insight"); fd.append("title", x.title); fd.append("target", opts().url); }
-      else { fd.append("kind", "quote"); fd.append("t", st.t); fd.append("q", st.q); if (st.note) fd.append("note", st.note); }
-      const r = await fetch(CARD_FN, { method: "POST", body: fd }), j = await r.json();
-      if (!r.ok || !j.url) throw new Error(j.error || "upload"); return j.url;
-    } catch (e) { linkCache.delete(key); return shareUrl(); } })();
-  linkCache.set(key, p); return p; }
-// Copy a link that is still being made: Safari keeps the tap's permission when given a promise (ClipboardItem).
-async function copyLater(promise, label) {
-  try { if (window.ClipboardItem && navigator.clipboard?.write) { await navigator.clipboard.write([new ClipboardItem({ "text/plain": promise.then(t => new Blob([t], { type: "text/plain" })) })]); return await promise; } } catch (e) {}
-  const t = await promise; await copyText(t, label); return t; }
 const pinMedia = () => { const x = ins(), t = talk(); if (st.src === "promo") return CONF.site_url + "assets/og/site.jpg";
   if (x) return CONF.site_url + (SHARE_I.includes(x.id) ? "assets/og/i/" + x.id + ".jpg" : "assets/og/site.jpg"); return CONF.site_url + "assets/og/pin/" + t.id + "-" + (st.q + 1) + ".jpg"; };
 const baseText = () => { const x = ins(), t = talk(); if (st.src === "promo") return promoObj(null).share; if (x) return x.share;
@@ -357,15 +341,12 @@ const enc = encodeURIComponent, popup = u => window.open(u, "_blank", "noopener,
 async function platform(k) {
   const url = shareUrl(), cap = caption(), noUrl = cap.replace(url, "").trim(), def = PLAT.find(p => p[0] === k);
   // intent pages open right away (inside the tap) so popup blockers allow them
-  if (k === "facebook" && !isPhone) { const w = window.open("", "_blank", "width=680,height=640"); if (w) { try { w.opener = null; w.document.title = "Preparing your card…"; w.document.body.innerHTML = '<p style="font:16px system-ui;padding:24px">Preparing your card for Facebook…</p>'; } catch (e) {} }
-    setSize("link"); setSticker(false); draw(true);
-    cardLink().then(u => { const fb = `https://www.facebook.com/sharer/sharer.php?u=${enc(u)}`; if (w && !w.closed) w.location.href = fb; else popup(fb); });
-    toast("Opening Facebook · your link post will show this card"); return; }
+  if (k === "facebook" && !isPhone) { popup(`https://www.facebook.com/sharer/sharer.php?u=${enc(url)}`); toast("Opening Facebook · the link post previews this quote's card"); return; }
   if (k === "x") popup(`https://x.com/intent/tweet?text=${enc(cap)}`);
   if (k === "pinterest") popup(`https://www.pinterest.com/pin/create/button/?url=${enc(url)}&media=${enc(pinMedia())}&description=${enc(noUrl)}`);
   if (k === "threads") popup(`https://www.threads.net/intent/post?text=${enc(cap)}`);
   if (k === "email") { location.href = `mailto:?subject=${enc(st.src === "promo" ? "Six Months of Light" : "A line from general conference")}&body=${enc(cap)}`; }
-  if (k === "copy") { toast("Making your card link…"); const u = await copyLater(cardLink(), "Copy this link:"); toast(u === url ? "Link copied ✓" : "Card link copied ✓ · its preview shows this card"); return; }
+  if (k === "copy") { await copyText(url, "Copy this link:"); toast("Link copied ✓ · its preview shows this quote's card"); return; }
   if (!isPhone && k === "whatsapp") { popup(`https://wa.me/?text=${enc(cap)}`); toast("Opened WhatsApp ✓"); return; }
   if (!isPhone && k === "sms") { location.href = `sms:?&body=${enc(cap)}`; return; }
   if (["x", "pinterest", "threads", "email"].includes(k)) { if (def[2]) { setSize(def[2]); setSticker(false); draw(true); } toast(`Opened ${def[1]} · the card is sized for it if you want to add the image`); return; }
