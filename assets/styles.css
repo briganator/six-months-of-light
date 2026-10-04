@@ -1010,3 +1010,8 @@ details.fine>summary{cursor:pointer;min-height:44px;display:flex;align-items:cen
 .cd-fill{animation-duration:1.2s!important;animation-delay:.5s!important}
 .card::after,.tile::after{animation:none!important;opacity:0}
 .entry{animation:rise .7s var(--ease) .3s both}
+/* study/speaker rows: Make a card sits inside the card, bottom right */
+.lib-list li{position:relative}
+.lib-list li .lib-make{position:absolute;right:12px;bottom:18px;margin:0;display:inline-flex;align-items:center;min-height:34px;padding:0 14px;border-radius:999px;background:linear-gradient(180deg,#f6dfa6,#d8a95b);color:#1a1530;text-decoration:none;font:600 13px var(--sans);box-shadow:0 2px 6px -2px rgba(168,122,53,.5)}
+.lib-list li:has(.lib-make) .lib-talk{padding-bottom:52px}
+.lib-list li .lib-make{background:#fff;color:var(--gold-deep);box-shadow:none;border:1px solid rgba(216,169,91,.6);bottom:16px;min-height:32px}.lib-list li .lib-make:hover{background:#fdf6e6}

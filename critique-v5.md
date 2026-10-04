@@ -57,3 +57,47 @@ All share, print and clipboard calls were stubbed, and Supabase calls were faked
 ## Known limits
 - Native share sheets, the camera roll and the system print dialog can't be driven by automated tests; their calls were stubbed and the payloads checked (file type, size, dimensions, user-gesture timing).
 - Lighthouse scores come from simulated slow 4G; the main cost is the 199 KB compressed study library, which loads only when needed.
+
+---
+
+# Design review and changes (master-designer pass)
+
+Reviewed every page at 390×844 (iPhone WebKit) first, then at 1440×900.
+
+## What was wrong
+| Area | Problem |
+|---|---|
+| Home | About 9,400 px tall on a phone. It had two hero buttons, a three-step strip, an insights banner, a section nav, a "Keep studying" list, a search box, talk of the week, four tiles, and every talk of every session listed in full. About ten competing calls to action before the talks. |
+| Inner pages | My Conference, Quiz, Challenge and Insights all reused the full home hero (title, two buttons, countdown), so the page's own content started below the fold. |
+| Navigation | 8 desktop links (Home, Study, Card Studio, Insights, Quiz, My Conference, Lesson helps, Share the site). Mixed names for one feature (Card Studio / Studio / Make a card). |
+| Notice strip | Took 2 lines on every phone page. |
+| Insights | About 10,800 px tall on a phone: about 10 shareable cards stacked vertically, then a quiz, spotlight, word cloud, four chart cards and a "coming later" stub. |
+| Insights wording | Still said "Saturday" ("What Saturday kept saying", "Saturday sessions only. Sunday pending.") although the numbers already included Sunday talks. The quiz page and explorer said the same. |
+| Studio | The Look step listed about 90 backgrounds in 12 headed sections (several screens of scrolling) before color and darkness. The phone share sheet had 4 rows. |
+| Talk page | Two dashed placeholder boxes ("Official video will be embedded…", "Full talk text… reserved") plus a full-width recap box above the title. |
+| Study rows | "Make a card" floated below each card as a loose link. |
+| Motion | The hero copy took about 2.3 s to finish appearing, and every card had a looping sheen. |
+| Session pill | "Sunday Morning Session · Coming soon" even though talks were already listed. |
+
+## What changed
+- **Home:** one hero action (**Make a card**) plus a quiet "or browse the talks ↓" link. Then 4 entry points: **Make a card, Study, Insights, Live**. Live shows "Live now" during a session, otherwise the next session time.
+  - Below that: today's quote (one button), search, talk of the week (one button plus a text link), and talks by session as collapsible rows with the newest session open.
+  - A small "More" row: Reading plan, Lesson helps, Quiz, My Conference, Challenge, Share this site.
+  - Phone height: about 9,400 → about 6,300 px.
+- **Inner pages** use the small header, so each page's own title is the first thing you see.
+- **Navigation:** Home · Study · Make a card · Insights · Live · My Conference. The phone tab bar is Home · Study · **Create** · Insights · Me.
+- **Notice strip:** "Not an official Church site" on one line on phones. The full wording stays on larger screens and in the footer.
+- **Insights:**
+  - Shareable cards swipe sideways on phones.
+  - Top themes, scriptures and who spoke sit behind one "More charts" row; the stub was removed.
+  - The section nav went from 8 to 7 short labels.
+  - Phone height: about 10,800 → about 5,400 px.
+- **Wording follows the data:** "Saturday" while only Saturday talks exist, "so far" while Sunday is being added, then "all N talks". This covers card titles, captions, footers, the quiz and the explorer.
+- **Studio:**
+  - Look step: "Background" first, with one swipeable row of style chips (Popular, Light, Temple art, Temple photos, Christ in art…) filtering a single grid. Popular holds the first look of each style.
+  - Layout comes next. Color palette and darkness sit under "Fine-tune".
+  - Phone share sheet: 3 compact rows. "Share link only" is now under More ways → Copy link.
+- **Talk page:** placeholders removed (one plain sentence about full text). The recap notice is a one-line note with a "Recap" pill.
+- **Study and speaker rows:** "Make a card" is a small outlined button inside each card. It no longer competes with the gold header button.
+- **Spacing and type:** one spacing scale (4/8/12/16/24/32/48). Section headings are 26–36 px and section gaps 40–48 px. Pills don't wrap.
+- **Motion:** hero content is in place within about 0.6–0.9 s, the entry cards rise once, the card sheen loop is gone, and reduced-motion is respected.
