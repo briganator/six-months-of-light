@@ -4,7 +4,7 @@ const APRIL = new Date("2027-04-03T00:00:00-06:00"), DAY = 864e5, main = documen
 const monday = d => { const x = new Date(d); x.setHours(0, 0, 0, 0); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return x; };
 const fmt = d => d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
 const talks = CONF.talks.slice().sort((a, b) => CONF.sessions.findIndex(s => s.id === a.session) - CONF.sessions.findIndex(s => s.id === b.session) || a.order - b.order);
-const PACE = { april: "Finish by April", christmas: "Finish by Christmas", weekly: "One talk a week" };
+const PACE = { april: "By April", christmas: "By Christmas", weekly: "Weekly" };
 function render() {
   const pace = PACE[Store.get("plan-pace")] ? Store.get("plan-pace") : "april", start = monday(Store.get("plan-start") || Date.now() + DAY), done = new Set(Store.get("plan-done", []));
   const end = pace === "christmas" ? new Date("2026-12-21T00:00:00-07:00") : APRIL, weeks = Math.max(1, Math.round((monday(end) - start) / (7 * DAY)));
