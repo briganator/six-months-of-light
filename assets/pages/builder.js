@@ -12,6 +12,7 @@ const st = {
   size: S[P.get("size")] ? P.get("size") : (isPhone ? "story" : "portrait"), ov: P.has("ov") ? Math.min(.85, Math.max(0, +P.get("ov") / 100)) : null,
   anim: K.ANIMS[P.get("anim")] ? P.get("anim") : P.get("anim") === "1" ? "fade" : "none", sticker: P.get("ig") === "1", note: "", tab: ["quote", "look", "size", "text", "share"].includes(P.get("tab")) ? P.get("tab") : (P.has("t") ? "look" : "quote"), src: P.get("src") === "promo" || P.has("promo") ? "promo" : P.get("ins") ? "ins" : "quote", filter: "", theme: THEMES3.get(P.get("theme")) ? P.get("theme") : "all",
 };
+{ const nq = (talkById(st.t).quotes || []).length; if (!(st.q >= 0 && st.q < nq && Number.isInteger(st.q))) st.q = 0; }
 const T3 = THEMES3, inTheme = (x, th = st.theme) => th === "all" || T3.tagsFor(x.t.id, x.i).includes(th);
 const resolveLooks = th => { const out = []; (T3.looks[th] || []).forEach(k => { if (k.startsWith("photo:")) Object.entries(L).filter(([, l]) => l.photo && l.credit.group === k.slice(6)).forEach(([id]) => out.push(id)); else if (L[k]) out.push(k); }); return [...new Set(out)]; };
 if (!P.has("t") && !P.has("ins")) { const d = INSIGHTS.daily; st.t = d.t.id; st.q = d.i; }

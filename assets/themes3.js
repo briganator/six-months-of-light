@@ -31,7 +31,7 @@ var LOOKS={
  'youth':['path','aurora','mountains','night','sunrise'],
  'scripture-study':['book','candle','paper','hymn','stained'],
  'holy-ghost':['dove','candle','aurora','night','morning'],
- 'gratitude':['wheat','morning','watercolor','hymn','nature']
+ 'gratitude':['wheat','photo:nature','morning','watercolor','hymn','nature']
 };
 var Q={
  'sat-am-1-gong#0':['temple','gratitude'],'sat-am-1-gong#1':['temple','covenants'],'sat-am-1-gong#2':['temple'],

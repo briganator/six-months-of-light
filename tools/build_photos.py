@@ -3,7 +3,7 @@ import json, pathlib
 root = pathlib.Path(__file__).resolve().parent.parent
 cred = json.loads((root / "assets/photos/credits.json").read_text())
 # focal point (fx, fy as 0..1) and default overlay per photo, tuned so text stays readable
-TUNE = {"slc": {"fy": .3}, "provo-night": {"ov": .35}, "dc-lights": {"ov": .35}, "dc-dusk": {"ov": .4}, "oakland": {"ov": .4, "fy": .8, "fx": .25}, "st-george": {"ov": .45, "fy": .4}, "gethsemane": {"ov": .5}, "gethsemane-tree": {"ov": .5, "fx": .4}, "laie": {"fy": .5}, "manti": {"fy": .4}, "slc-vintage": {"ov": .45}, "van-gogh-olives": {"ov": .5}}
+TUNE = {"slc": {"fy": .3}, "provo-night": {"ov": .35}, "dc-lights": {"ov": .35}, "dc-dusk": {"ov": .4}, "oakland": {"ov": .4, "fy": .8, "fx": .25}, "st-george": {"ov": .45, "fy": .4}, "gethsemane": {"ov": .5}, "gethsemane-tree": {"ov": .5, "fx": .4}, "laie": {"fy": .5}, "manti": {"fy": .4}, "slc-vintage": {"ov": .45}, "van-gogh-olives": {"ov": .5}, "logan": {"ov": .4}, "nauvoo-night": {"ov": .3}, "idaho-falls": {"ov": .4, "fy": .35}, "bern": {"ov": .4, "fy": .4}, "tokyo": {"ov": .45}, "kirtland": {"ov": .4}, "mesa": {"ov": .4}, "wheat-sunset": {"ov": .4, "fy": .5}}
 out = []
 for c in cred:
     c = {k: c[k] for k in ("id", "name", "group", "file", "thumb", "w", "h", "author", "license", "license_url", "source")}
