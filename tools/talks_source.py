@@ -19,7 +19,7 @@ sessions = [
   {"id": "sun-am", "color": "sky", "name": "Sunday Morning Session", "when": "Sun, Oct 4 · 10:00am–noon MDT", "url": SUN_AM, "status": "complete",
    "note": "Conducted by President D. Todd Christofferson. Music by The Tabernacle Choir at Temple Square (opening hymn: How Firm a Foundation; includes Music & the Spoken Word). Closed by President Dallin H. Oaks."},
   {"id": "sun-pm", "color": "violet", "name": "Sunday Afternoon Session", "when": "Sun, Oct 4 · 2:00–4:00pm MDT", "url": SUN_PM, "status": "pending",
-   "note": "In progress. Conducted by Elder Gérald Caussé. Music by The Tabernacle Choir at Temple Square (opening hymn: Let Zion in Her Beauty Rise). First talks added from Church News recaps; more as they post."},
+   "note": "In progress. Conducted by Elder Gérald Caussé. Music by The Tabernacle Choir at Temple Square (opening hymn: Let Zion in Her Beauty Rise). Talks added from Church News recaps as they post."},
 ]
 
 def t(id, session, order, speaker, calling, title, recap, summary, scriptures, quotes, invitation, ponder, official_url=None):
@@ -290,6 +290,15 @@ talks = [
     "Always put Him first and remain faithful to the covenants you made at your baptism. Angels can minister to you. The Father, Jesus Christ and the Holy Ghost are at your side."],
    "Choose one of her seven helps to focus on; study the 13th article of faith and create your own list of aspirations; put the Lord first.",
    "Which one of her seven invitations will I focus on for the next few weeks?"),
+ t("sun-pm-3-villanueva", "sun-pm", 3, "Elder Moisés Villanueva", "General Authority Seventy", "Prove Me Now Herewith",
+   "https://www.thechurchnews.com/general-conference/2026/10/04/elder-moises-villanueva-october-2026-general-conference-prove-me-now-herewith/",
+   "Speaking about the blessings the Lord promises to those who faithfully pay tithing. When his family was baptized into the Church, perhaps the change that required the greatest faith and sacrifice was paying a full tithe, and he is grateful his mother trusted the Lord's promises and lived the law of tithing despite difficult circumstances. Blessings he has received through faithful tithing include steady employment, good health, his home and temporal possessions being preserved, the ability to manage time and resources to get an education, the gift of gratitude, and learning to recognize the influence of the Holy Ghost in important decisions. These temporal and spiritual blessings are evidence that the Lord opens the windows of heaven (Malachi 3:10). God gives commandments because He wants us to receive His blessings; He knows each of us and our needs even before we ask.",
+   ["Malachi 3:10"],
+   ["By living the law of tithing, the Lord indeed opens the windows of heaven and pours out a blessing ‘that there shall not be room enough to receive it’ (Malachi 3:10).",
+    "These blessings, both temporal and spiritual — and many others — are evidence that the Lord has indeed opened the windows of heaven and poured out His promised blessings in abundance.",
+    "I bear my testimony that God is our loving Heavenly Father. He knows each of us and is aware of our needs even before we ask."],
+   "Trust the Lord's promises and live the law of tithing faithfully, then watch for the temporal and spiritual blessings He pours out.",
+   "What blessings — temporal or spiritual — have come into my life through paying tithing, and have I recognized them?"),
 ]
 
 # 60-second recap "big idea" — a one-line condensation of the doc's summary (NOT a quote).
@@ -323,6 +332,7 @@ BIG_IDEAS = {
  "sun-am-9-oaks": "The gospel of Jesus Christ is for all — overcome by getting closer to the Savior, and help others come unto Him.",
  "sun-pm-1-uchtdorf": "Jesus Christ unites His covenant people — the closer we come to Him, the closer we come to each other.",
  "sun-pm-2-spannaus": "Heavenly Father knows you and is at your side — put Him first, and He will guide your righteous desires.",
+ "sun-pm-3-villanueva": "Live the law of tithing and the Lord opens the windows of heaven — blessings both temporal and spiritual.",
 }
 for _t in talks:
     _t["big_idea"] = BIG_IDEAS[_t["id"]]

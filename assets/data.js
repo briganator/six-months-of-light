@@ -49,7 +49,7 @@ window.CONF = {
    "when": "Sun, Oct 4 · 2:00–4:00pm MDT",
    "url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/sunday-afternoon-session?lang=eng",
    "status": "pending",
-   "note": "In progress. Conducted by Elder Gérald Caussé. Music by The Tabernacle Choir at Temple Square (opening hymn: Let Zion in Her Beauty Rise). First talks added from Church News recaps; more as they post."
+   "note": "In progress. Conducted by Elder Gérald Caussé. Music by The Tabernacle Choir at Temple Square (opening hymn: Let Zion in Her Beauty Rise). Talks added from Church News recaps as they post."
   }
  ],
  "talks": [
@@ -752,6 +752,30 @@ window.CONF = {
    "invitation": "Choose one of her seven helps to focus on; study the 13th article of faith and create your own list of aspirations; put the Lord first.",
    "ponder": "Which one of her seven invitations will I focus on for the next few weeks?",
    "big_idea": "Heavenly Father knows you and is at your side — put Him first, and He will guide your righteous desires.",
+   "video_embed": null,
+   "full_text_permitted": false
+  },
+  {
+   "id": "sun-pm-3-villanueva",
+   "session": "sun-pm",
+   "order": 3,
+   "speaker": "Elder Moisés Villanueva",
+   "calling": "General Authority Seventy",
+   "title": "Prove Me Now Herewith",
+   "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/elder-moises-villanueva-october-2026-general-conference-prove-me-now-herewith/",
+   "official_url": null,
+   "summary": "Speaking about the blessings the Lord promises to those who faithfully pay tithing. When his family was baptized into the Church, perhaps the change that required the greatest faith and sacrifice was paying a full tithe, and he is grateful his mother trusted the Lord's promises and lived the law of tithing despite difficult circumstances. Blessings he has received through faithful tithing include steady employment, good health, his home and temporal possessions being preserved, the ability to manage time and resources to get an education, the gift of gratitude, and learning to recognize the influence of the Holy Ghost in important decisions. These temporal and spiritual blessings are evidence that the Lord opens the windows of heaven (Malachi 3:10). God gives commandments because He wants us to receive His blessings; He knows each of us and our needs even before we ask.",
+   "scriptures": [
+    "Malachi 3:10"
+   ],
+   "quotes": [
+    "By living the law of tithing, the Lord indeed opens the windows of heaven and pours out a blessing ‘that there shall not be room enough to receive it’ (Malachi 3:10).",
+    "These blessings, both temporal and spiritual — and many others — are evidence that the Lord has indeed opened the windows of heaven and poured out His promised blessings in abundance.",
+    "I bear my testimony that God is our loving Heavenly Father. He knows each of us and is aware of our needs even before we ask."
+   ],
+   "invitation": "Trust the Lord's promises and live the law of tithing faithfully, then watch for the temporal and spiritual blessings He pours out.",
+   "ponder": "What blessings — temporal or spiritual — have come into my life through paying tithing, and have I recognized them?",
+   "big_idea": "Live the law of tithing and the Lord opens the windows of heaven — blessings both temporal and spiritual.",
    "video_embed": null,
    "full_text_permitted": false
   }

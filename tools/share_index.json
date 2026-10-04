@@ -434,13 +434,28 @@
    "t": "sun-pm-2-spannaus",
    "n": 3,
    "look": "watercolor"
+  },
+  {
+   "t": "sun-pm-3-villanueva",
+   "n": 1,
+   "look": "watercolor"
+  },
+  {
+   "t": "sun-pm-3-villanueva",
+   "n": 2,
+   "look": "sunrise"
+  },
+  {
+   "t": "sun-pm-3-villanueva",
+   "n": 3,
+   "look": "temple_dusk"
   }
  ],
  "insights": [
   {
    "id": "ten-words",
    "title": "The conference in 10 words",
-   "sub": "Most-used meaningful words in the recaps of the first 29 talks",
+   "sub": "Most-used meaningful words in the recaps of the first 30 talks",
    "share": "October 2026 General Conference so far in 10 words."
   },
   {
@@ -453,7 +468,7 @@
    "id": "christ",
    "title": "He was named again and again",
    "sub": "",
-   "share": "Jesus Christ was named 141 times in recaps of 24 of 29 talks."
+   "share": "Jesus Christ was named 141 times in recaps of 24 of 30 talks."
   },
   {
    "id": "themes",
@@ -471,11 +486,11 @@
    "id": "scriptures",
    "title": "Back to the scriptures",
    "sub": "",
-   "share": "20 scripture references in recaps of the first 29 talks."
+   "share": "21 scripture references in recaps of the first 30 talks."
   },
   {
    "id": "who-spoke",
-   "title": "29 talks so far",
+   "title": "30 talks so far",
    "sub": "",
    "share": "Who spoke at General Conference so far."
   }
