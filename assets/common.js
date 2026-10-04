@@ -59,9 +59,10 @@ window.downloadReminder = (talk, text) => {
 window.LOGO_RAYS = [[17.73, 39.36, 13.45, 37.97, 0.38, 1.6], [21.73, 33.07, 16.87, 27.89, 0.5, 1.78], [28.27, 29.47, 25.86, 20.08, 0.63, 1.96], [35.73, 29.47, 38.79, 17.56, 0.75, 2.14], [42.27, 33.07, 52.47, 22.2, 0.88, 2.32], [46.27, 39.36, 62.91, 33.96, 1.0, 2.5]];
 window.LOGO_MARK = (size = 40) => `<svg class="mark" width="${size}" height="${size}" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lmg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3a693"/><stop offset=".55" stop-color="#f1d394"/><stop offset="1" stop-color="#fff3d1"/></linearGradient></defs><g stroke="url(#lmg)" stroke-linecap="round">${LOGO_RAYS.map(([a,b,c,d,o,w],i) => `<line class="ray r${i}" x1="${a}" y1="${b}" x2="${c}" y2="${d}" stroke-opacity="${o}" stroke-width="${w}"/>`).join("")}</g><path d="M21 44a11 11 0 0 1 22 0z" fill="url(#lmg)"/><line x1="6" y1="44" x2="58" y2="44" stroke="url(#lmg)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="50" x2="46" y2="50" stroke="url(#lmg)" stroke-width="1.3" stroke-linecap="round" opacity=".55"/></svg>`;
 window.WORDMARK = () => `<span class="wordmark">${LOGO_MARK(36)}<span class="wm-text">Six Months <em>of</em> Light</span></span>`;
-const NAV = [["index.html","Home"],["study.html","Study"],["builder.html","Card Studio"],["insights.html","Insights"],["quiz.html","Quiz"],["my.html","My Conference"],["lessons.html","Lesson helps"],["builder.html?src=promo","Share the site"]];
+const NAV = [["index.html","Home"],["study.html","Study"],["builder.html","Make a card"],["insights.html","Insights"],["live.html","Live"],["my.html","My Conference"]];
 const ICON = { study: '<path d="M4 5.5C6.5 4 9.5 4 12 5.8 14.5 4 17.5 4 20 5.5V19c-2.5-1.4-5.5-1.4-8 .4-2.5-1.8-5.5-1.8-8-.4zM12 5.8v13.6"/>', home: '<path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/>', talks: '<path d="M5 4h10l4 4v12H5zM8 11h8M8 15h8M8 7h5"/>', studio: '<path d="M12 3v3M5.6 5.6l2.1 2.1M3 12h3M18.4 5.6l-2.1 2.1M21 12h-3M7 16a5 5 0 0 1 10 0zM3 19h18"/>', insights: '<path d="M5 20V10M10 20V4M15 20v-7M20 20v-11"/>', me: '<path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/>' };
-const TABS = [["index.html","Home","home"],["study.html","Study","study"],["builder.html","Studio","studio"],["insights.html","Insights","insights"],["my.html","Me","me"]];
+const TABS = [["index.html","Home","home"],["study.html","Study","study"],["builder.html","Create","studio"],["insights.html","Insights","insights"],["my.html","Me","me"]];
+window.TAB_ICON = ICON;
 window.tabbarHTML = (active) => `<nav class="tabbar" aria-label="Quick">${TABS.map(([h,l,i]) => `<a href="${h}" class="${i === "studio" ? "tb-main" : ""}" ${active === h ? 'aria-current="page"' : ""}><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICON[i]}</svg><span>${l}</span></a>`).join("")}</nav>`;
 // ---- Live now: session windows (MDT = UTC-6), from 10 minutes before a session until 15 minutes after ----
 window.LIVE_WATCH = "https://www.churchofjesuschrist.org/broadcasts?lang=eng";
@@ -76,7 +77,7 @@ window.liveBarHTML = active => { const s = LIVE.now(); if (!s || active === "liv
 // Pages that hide the bottom tab bar on phones get a visible Home button in the header.
 const NOTABS = ["builder.html", "live.html"];
 window.headerHTML = (active, small) => `
-  <div class="unofficial" role="note">Not an official Church site · Personal study page · Quotes from recaps; confirm with official text</div>
+  <div class="unofficial" role="note">Not an official Church site<span class="uo-more"> · Personal study page · Quotes from recaps; confirm with official text</span></div>
   ${liveBarHTML(active)}
   <div class="sitebar" id="sitebar"><nav class="topbar wrap" aria-label="Main">
       ${NOTABS.includes(active) ? `<a class="sb-home" href="index.html"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg><span>Home</span></a>` : ""}
@@ -92,7 +93,7 @@ window.headerHTML = (active, small) => `
       <p class="tagline">${esc(CONF.tagline)}</p>
       ${LIVE.now() ? `<div class="hero-live"><p class="hl-on"><span class="live-dot" aria-hidden="true"></span>Live now · ${esc(LIVE.now().name)}</p><p class="hero-how">Conference is live, share a line you just heard.</p>
       <div class="hero-actions"><a class="btn gold big" href="live.html">Share a line you heard</a><a class="btn glass" href="${LIVE_WATCH}" target="_blank" rel="noopener">Watch live ↗</a></div></div>` : `<p class="hero-how">Find a line from conference. Make it beautiful. Share it.</p>
-      <div class="hero-actions"><a class="btn gold big" href="builder.html">Make a card</a><a class="btn glass" href="${active === "index.html" ? "" : "index.html"}#sessions">Browse the talks</a></div>`}
+      <div class="hero-actions"><a class="btn gold big" href="builder.html">Make a card</a><a class="hero-link" href="${active === "index.html" ? "" : "index.html"}#sessions">or browse the talks ↓</a></div>`}
       ${countdownHTML()}
     </div>`}
     ${GROUP ? `<p class="grouptag wrap">Group: <strong>${esc(GROUP)}</strong> · <a href="?g=">leave group</a></p>` : ""}

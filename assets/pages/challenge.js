@@ -1,4 +1,4 @@
-mount("challenge.html");
+mount("challenge.html", true);
 const C = CONF.challenge, CFG = window.CONF_CONFIG;
 document.getElementById("main").innerHTML = `
   <h1 style="margin-top:38px">🌱 ${esc(C.title)}</h1>

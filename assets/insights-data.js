@@ -17,7 +17,12 @@
   const ALLQ = T.flatMap(t => t.quotes.map((q, i) => ({ t, q, i })));
   const day0 = new Date("2026-10-04T00:00:00-06:00"), dayIdx = Math.max(0, Math.floor((Date.now() - day0) / 864e5));
   const daily = ALLQ[dayIdx % ALLQ.length];
-  const FOOT = `Based on recaps of Saturday's ${N} talks · confirm with official text`;
+  // Scope wording follows the data: "Saturday" while only Saturday talks exist, then "so far", then the whole conference.
+  const hasSun = T.some(t => /^sun/.test(t.session)), allDone = CONF.sessions.every(x => x.status !== "pending");
+  const SC = window.SCOPE = !hasSun ? { of: n => `Saturday's ${n} talks`, adj: "Saturday ", kick: "Saturday sessions", who: "Saturday", on: "on Saturday", tail: "Saturday sessions only. Sunday pending.", gc: "Saturday of General Conference", gc26: "Saturday of October 2026 General Conference", ses: "Saturday session" }
+    : allDone ? { of: n => `all ${n} talks`, adj: "", kick: "The whole conference", who: "the conference", on: "in all", tail: "All four sessions.", gc: "General Conference", gc26: "October 2026 General Conference", ses: "session" }
+    : { of: n => `the first ${n} talks`, adj: "", kick: "Conference so far", who: "the conference", on: "so far", tail: "Sessions so far; more as talks are added.", gc: "General Conference so far", gc26: "October 2026 General Conference so far", ses: "session so far" };
+  const FOOT = `Based on recaps of ${SC.of(N)} · confirm with official text`;
   const sessShort = id => ({ "sat-am": "Sat morning", "sat-pm": "Sat afternoon", "sun-am": "Sun morning", "sun-pm": "Sun afternoon" }[id] || id);
   const bySession = CONF.sessions.filter(s => T.some(t => t.session === s.id)).flatMap(s => {
     const ts = T.filter(t => t.session === s.id);
@@ -29,19 +34,19 @@
     const ts = T.filter(t => talkThemes(t).includes(name)), ks = THEMES[name];
     let pick = null; for (const t of ts) { const i = t.quotes.findIndex(q => ks.some(k => q.toLowerCase().includes(k))); if (i >= 0) { pick = { t, i }; break; } }
     if (!pick && ts[0]) pick = { t: ts[0], i: 0 };
-    return { id: "theme-" + themeSlug(name), kicker: "The theme that speaks to me", title: name, sub: `${ts.length} of ${N} Saturday talks touched this theme`,
+    return { id: "theme-" + themeSlug(name), kicker: "The theme that speaks to me", title: name, sub: `${ts.length} of ${N} ${SC.adj}talks touched this theme`,
       body: { type: "list", items: ts.slice(0, 3).map(t => `${t.title} (${t.speaker.replace(/^(Elder|Sister|President|Bishop) /, "")})`) },
       quote: pick ? { text: pick.t.quotes[pick.i], by: pick.t.speaker } : null, foot: FOOT, share: `The conference theme that speaks to me: ${name}.` };
   }
   const daysLeft = (typeof COUNTDOWN !== "undefined") ? COUNTDOWN.days : null;
   const list = [
-    { id: "ten-words", kicker: "Saturday sessions", title: "The conference in 10 words", sub: "Most-used meaningful words in Saturday's recaps", body: { type: "words", items: topWords.slice(0, 10).map(([w]) => w[0].toUpperCase() + w.slice(1)) }, foot: FOOT, share: "Saturday of October 2026 General Conference in 10 words." },
-    { id: "top-words", kicker: "Most-used words", title: "What Saturday kept saying", body: { type: "bars", items: topWords.slice(0, 6).map(([w, n]) => ({ label: w, value: n })) }, foot: FOOT + " · counts of each word", share: "The words Saturday of General Conference kept coming back to." },
-    { id: "christ", kicker: "Christ at the center", title: "He was named again and again", body: { type: "big", value: christMentions, caption: `mentions of Jesus Christ by name or title (Jesus, Christ, Savior, Redeemer), in ${christTalks} of ${N} talks` }, foot: FOOT, share: `Jesus Christ was named ${christMentions} times in recaps of ${christTalks} of ${N} Saturday talks.` },
-    { id: "themes", kicker: "Top themes", title: "What the talks were about", body: { type: "bars", items: themeCounts.filter(x => x[1]).slice(0, 6).map(([n, c]) => ({ label: n, value: c })) }, foot: FOOT + " · talks per theme (keyword-based)", share: "The top themes from Saturday of General Conference." },
-    { id: "themes-by-session", kicker: "Themes by session", title: "Each session's focus", body: { type: "bars", items: bySession }, foot: FOOT + " · talks per theme", share: "The leading themes in each Saturday session." },
-    { id: "scriptures", kicker: "Scriptures cited", title: "Back to the scriptures", body: { type: "big", value: refs.length, caption: "scripture references reported in recaps. Most cited: " + Object.entries(books).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([b, n]) => `${b} (${n})`).join(", ") }, foot: FOOT, share: `${refs.length} scripture references in recaps of Saturday's talks.` },
-    { id: "who-spoke", kicker: "Who spoke", title: `${N} talks on Saturday`, body: { type: "bars", items: Object.entries(callings).sort((a, b) => b[1] - a[1]).map(([l, v]) => ({ label: l, value: v })) }, foot: FOOT, share: `Who spoke on Saturday of General Conference.` },
+    { id: "ten-words", kicker: SC.kick, title: "The conference in 10 words", sub: `Most-used meaningful words in the recaps of ${SC.of(N)}`, body: { type: "words", items: topWords.slice(0, 10).map(([w]) => w[0].toUpperCase() + w.slice(1)) }, foot: FOOT, share: `${SC.gc26} in 10 words.` },
+    { id: "top-words", kicker: "Most-used words", title: `What ${SC.who} kept saying`, body: { type: "bars", items: topWords.slice(0, 6).map(([w, n]) => ({ label: w, value: n })) }, foot: FOOT + " · counts of each word", share: `The words ${SC.gc} kept coming back to.` },
+    { id: "christ", kicker: "Christ at the center", title: "He was named again and again", body: { type: "big", value: christMentions, caption: `mentions of Jesus Christ by name or title (Jesus, Christ, Savior, Redeemer), in ${christTalks} of ${N} talks` }, foot: FOOT, share: `Jesus Christ was named ${christMentions} times in recaps of ${christTalks} of ${N} ${SC.adj}talks.` },
+    { id: "themes", kicker: "Top themes", title: "What the talks were about", body: { type: "bars", items: themeCounts.filter(x => x[1]).slice(0, 6).map(([n, c]) => ({ label: n, value: c })) }, foot: FOOT + " · talks per theme (keyword-based)", share: `The top themes from ${SC.gc}.` },
+    { id: "themes-by-session", kicker: "Themes by session", title: "Each session's focus", body: { type: "bars", items: bySession }, foot: FOOT + " · talks per theme", share: `The leading themes in each ${SC.ses}.` },
+    { id: "scriptures", kicker: "Scriptures cited", title: "Back to the scriptures", body: { type: "big", value: refs.length, caption: "scripture references reported in recaps. Most cited: " + Object.entries(books).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([b, n]) => `${b} (${n})`).join(", ") }, foot: FOOT, share: `${refs.length} scripture references in recaps of ${SC.of(N)}.` },
+    { id: "who-spoke", kicker: "Who spoke", title: `${N} talks ${SC.on}`, body: { type: "bars", items: Object.entries(callings).sort((a, b) => b[1] - a[1]).map(([l, v]) => ({ label: l, value: v })) }, foot: FOOT, share: SC.on === "on Saturday" ? "Who spoke on Saturday of General Conference." : `Who spoke at ${SC.gc}.` },
     { id: "daily", kicker: daysLeft != null ? `${daysLeft} days to April conference` : "Quote of the day", title: "Today's light", sub: `Day ${dayIdx + 1} of six months between conferences`, body: { type: "text", text: "“" + daily.q + "”" }, quote: null, foot: `— ${daily.t.speaker}, “${daily.t.title}” · quoted from recap`, share: `Today's light from General Conference: “${daily.q}” — ${daily.t.speaker}` },
   ];
   const spot = t => ({ id: "spot-" + t.id, kicker: "Speaker spotlight", title: t.speaker, sub: `“${t.title}” · ${t.calling}`, body: { type: "text", text: t.big_idea }, foot: "Big idea summarized from recaps · confirm with official text", share: `${t.speaker}: “${t.title}”` });

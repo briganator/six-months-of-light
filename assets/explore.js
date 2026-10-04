@@ -1,7 +1,7 @@
 // Insights explorer: one sentence-style tool. "Show me [measure] for [subject] in [when], compared with [vs]."
 // Subjects: everyone, a speaker, a calling group, a session type, a conference, a topic, a book of scripture, or music.
 // Verified data only: official talk pages (metadata, footnotes, derived counts) and official session music listings.
-// October 2026 comes from recaps (Saturday only): shown on its own, and as "pending" in comparisons and trends.
+// October 2026 comes from recaps (talks added so far): shown on its own, and as "pending" in comparisons and trends.
 (function () {
   const esc = window.esc, SITE = CONF.site_url;
   const short = l => l.replace("October", "Oct").replace("April", "Apr");
@@ -108,7 +108,7 @@
       Object.values(beh).forEach(a => a.sort((x, y) => y.v - x.v));
       return { rows: Object.entries(out).sort((a, b) => b[1] - a[1]), beh, n: ts.length, nLabel: talkN(B), recapOnly: B.recapOnly, dropped: B.dropped, norm, unit, normUnit, empty: !ts.length };
     }
-    const talkN = B => `${B.ts.length} talk${B.ts.length === 1 ? "" : "s"}${B.recapOnly ? " · from recaps (Saturday only), official text pending" : ""}${B.dropped ? ` · October 2026 pending (${B.dropped} recap talk${B.dropped === 1 ? "" : "s"} not counted)` : ""}`;
+    const talkN = B => `${B.ts.length} talk${B.ts.length === 1 ? "" : "s"}${B.recapOnly ? " · from recaps so far, official text pending" : ""}${B.dropped ? ` · October 2026 pending (${B.dropped} recap talk${B.dropped === 1 ? "" : "s"} not counted)` : ""}`;
     const fmt = v => v >= 100 ? Math.round(v).toLocaleString() : v >= 10 ? (Math.round(v * 10) / 10).toString() : (Math.round(v * 100) / 100).toString().replace(/^0\./, "0.");
     // ---- state ----
     let st = readState(); fix();
@@ -146,7 +146,7 @@
         return compareView(out, A, B, md, subjShort(st.s), subjShort(Bs), st.w.k === "all" ? "" : short(whenLabel(st.w)) + ": "); }
       singleView(out, A, md);
     }
-    const pending = (A) => A.recapOnly ? `<p class="z-note"><span class="pill pending">Pending</span> October 2026 uses this site's recaps (Saturday talks only) until the official text is posted.</p>` : "";
+    const pending = (A) => A.recapOnly ? `<p class="z-note"><span class="pill pending">Pending</span> October 2026 uses this site's recaps (talks added so far) until the official text is posted.</p>` : "";
     const head = (title, sub) => `<div class="xp-head"><h3>${esc(title)}</h3><p class="speaker">${sub}</p></div>`;
     const title = (A) => `${A && A.recapOnly && st.m === "themes" ? "Topics tagged in verified quotes" : MEAS[family(st.s)][st.m][1]} · ${st.w.k === "t" ? whenLabel(st.w) : subjShort(st.s) + (st.s.k === "c" || st.w.k === "all" ? "" : " · " + whenLabel(st.w))}`;
     function singleView(out, A, md) {
@@ -215,7 +215,7 @@
         ${onlyFamily && onlyFamily !== "talk" ? "" : LB.GROUP_ORDER.map(g => { const list = LB.speakers.filter(x => x.g === g); return list.length ? `<div class="xp-sec" data-sec data-spgroup><h4>${esc(GROUPS[g][0])} · ${list.length}</h4>${list.map(x => spBtn(x, "sp")).join("")}</div>` : ""; }).join("")}
         ${sec("talk", "Groups (by calling)", Object.entries(GROUPS).map(([k, g]) => opt(`data-s="g:${k}" data-find="${esc(g[0].toLowerCase())}"`, g[0], "From official speaker titles")).join(""))}
         ${sec("talk", "Sessions", Object.entries(SESS).map(([k, x]) => opt(`data-s="se:${k}" data-find="${esc(x[0].toLowerCase())}"`, x[0], k === "3" ? "Evening, women's or priesthood session" : "")).join(""))}
-        ${sec("talk", "Conferences", LB.confs.map(c => opt(`data-s="c:${c.c}" data-find="${esc(c.label.toLowerCase())}"`, c.label, c.recap ? "From recaps, Saturday only (pending)" : c.n + " talks")).join(""))}
+        ${sec("talk", "Conferences", LB.confs.map(c => opt(`data-s="c:${c.c}" data-find="${esc(c.label.toLowerCase())}"`, c.label, c.recap ? "From recaps so far (pending)" : c.n + " talks")).join(""))}
         ${sec("topic", "Topics", LB.THEME_KEYS.map(k => opt(`data-s="tp:${k}" data-find="${esc(LB.themeName(k).toLowerCase())}"`, LB.themeName(k), "")).join(""))}
         ${sec("book", "Scriptures", WORKS.map(W => opt(`data-s="bk:${W}" data-find="${esc(W.toLowerCase())}"`, W, "Citations in talk footnotes")).join(""))}
         ${sec("music", "Music", Object.entries(MUSIC).map(([k, x]) => opt(`data-s="mu:${k}" data-find="${esc(x[0].toLowerCase())} music"`, x[0], "Official session music listings")).join(""))}</div>`;

@@ -1,4 +1,4 @@
-mount("my.html");
+mount("my.html", true);
 function render() {
   const saved = Store.savedQuotes().map(k => { const [id, i] = k.split("#"); const t = talkById(id); return t && { t, i: +i, q: t.quotes[+i] }; }).filter(Boolean);
   const notes = Object.entries(Store.get("notes", {})).map(([id, n]) => ({ t: talkById(id), n })).filter(x => x.t);
