@@ -227,6 +227,15 @@ talks = [
     "When we genuinely take upon ourselves the name of Jesus Christ by losing ourselves in the service of others, something miraculous happens."],
    "Take upon the name of Jesus Christ by covenant — lose yourself in serving others with all your heart, might, mind and strength.",
    "Where am I merely wearing His name as a badge, instead of serving Him by lifting and loving others?"),
+ t("sun-am-5-dube", "sun-am", 5, "Elder Edward Dube", "Presidency of the Seventy", "Come Unto Christ",
+   "https://www.thechurchnews.com/general-conference/2026/10/04/elder-edward-dube-october-2026-general-conference-come-unto-christ/",
+   "Elder Edward Dube of the Presidency of the Seventy spoke about coming unto Christ. Moroni’s invitation — “Come unto Christ and be perfected in him … deny yourselves of all ungodliness” (Moroni 10:32) — holds three key truths: come (an action; choose to move from our current place to a better place), deny yourselves (surrender; let go of what holds us back), and be perfected in Him (come as we are with a willing heart; He will give us a new heart). People do not need to be perfect to come unto Christ — “We come to Christ to be perfected.” As a young missionary in 1987, he saw a mission-office gate sign reading “Trespassers will be prosecuted”; President Dallin H. Oaks asked that it be removed to avoid any impression of exclusion. The adversary wants to hang that sign on the gate of our heart — addiction, doubt, pride, pain, grief, guilt, materialism — telling us we are unworthy to come unto Christ. Elder Dube invited all to come unto Christ through faith in Him and His Atonement.",
+   ["Moroni 10:32"],
+   ["We invite all to come unto Christ through faith in Him and His Atonement.",
+    "[Jesus Christ’s] suffering and atoning sacrifice show us how completely devoted He is to all of us. He invites us to come unto Him.",
+    "We do not need to perfect ourselves to come to Christ. We come to Christ to be perfected."],
+   "Come unto Christ through faith in Him and His Atonement — you do not need to perfect yourself first.",
+   "What “trespassers” sign has the adversary hung on the gate of my heart that I need to let go of?"),
 ]
 
 # 60-second recap "big idea" — a one-line condensation of the doc's summary (NOT a quote).
@@ -253,6 +262,7 @@ BIG_IDEAS = {
  "sun-am-2-chibota": "See others as children of God — pray to see as He sees, and lift labels with His grace.",
  "sun-am-3-andersen": "Faith in Christ gives spiritual courage to choose the right — and courage in turn strengthens that faith.",
  "sun-am-4-fantone": "Take His name by covenant — lose yourself in serving others, and find Him (and yourself).",
+ "sun-am-5-dube": "Come unto Christ as you are — He perfects us; we do not perfect ourselves first.",
 }
 for _t in talks:
     _t["big_idea"] = BIG_IDEAS[_t["id"]]

@@ -329,6 +329,21 @@
    "t": "sun-am-4-fantone",
    "n": 3,
    "look": "mountains"
+  },
+  {
+   "t": "sun-am-5-dube",
+   "n": 1,
+   "look": "temple_dusk"
+  },
+  {
+   "t": "sun-am-5-dube",
+   "n": 2,
+   "look": "mountains"
+  },
+  {
+   "t": "sun-am-5-dube",
+   "n": 3,
+   "look": "watercolor"
   }
  ],
  "insights": [
@@ -348,7 +363,7 @@
    "id": "christ",
    "title": "He was named again and again",
    "sub": "",
-   "share": "Jesus Christ was named 79 times in recaps of 18 of 22 Saturday talks."
+   "share": "Jesus Christ was named 90 times in recaps of 19 of 23 Saturday talks."
   },
   {
    "id": "themes",
@@ -370,7 +385,7 @@
   },
   {
    "id": "who-spoke",
-   "title": "22 talks on Saturday",
+   "title": "23 talks on Saturday",
    "sub": "",
    "share": "Who spoke on Saturday of General Conference."
   }

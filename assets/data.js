@@ -586,6 +586,30 @@ window.CONF = {
    "big_idea": "Take His name by covenant — lose yourself in serving others, and find Him (and yourself).",
    "video_embed": null,
    "full_text_permitted": false
+  },
+  {
+   "id": "sun-am-5-dube",
+   "session": "sun-am",
+   "order": 5,
+   "speaker": "Elder Edward Dube",
+   "calling": "Presidency of the Seventy",
+   "title": "Come Unto Christ",
+   "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/elder-edward-dube-october-2026-general-conference-come-unto-christ/",
+   "official_url": null,
+   "summary": "Elder Edward Dube of the Presidency of the Seventy spoke about coming unto Christ. Moroni’s invitation — “Come unto Christ and be perfected in him … deny yourselves of all ungodliness” (Moroni 10:32) — holds three key truths: come (an action; choose to move from our current place to a better place), deny yourselves (surrender; let go of what holds us back), and be perfected in Him (come as we are with a willing heart; He will give us a new heart). People do not need to be perfect to come unto Christ — “We come to Christ to be perfected.” As a young missionary in 1987, he saw a mission-office gate sign reading “Trespassers will be prosecuted”; President Dallin H. Oaks asked that it be removed to avoid any impression of exclusion. The adversary wants to hang that sign on the gate of our heart — addiction, doubt, pride, pain, grief, guilt, materialism — telling us we are unworthy to come unto Christ. Elder Dube invited all to come unto Christ through faith in Him and His Atonement.",
+   "scriptures": [
+    "Moroni 10:32"
+   ],
+   "quotes": [
+    "We invite all to come unto Christ through faith in Him and His Atonement.",
+    "[Jesus Christ’s] suffering and atoning sacrifice show us how completely devoted He is to all of us. He invites us to come unto Him.",
+    "We do not need to perfect ourselves to come to Christ. We come to Christ to be perfected."
+   ],
+   "invitation": "Come unto Christ through faith in Him and His Atonement — you do not need to perfect yourself first.",
+   "ponder": "What “trespassers” sign has the adversary hung on the gate of my heart that I need to let go of?",
+   "big_idea": "Come unto Christ as you are — He perfects us; we do not perfect ourselves first.",
+   "video_embed": null,
+   "full_text_permitted": false
   }
  ],
  "challenge": {
