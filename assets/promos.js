@@ -17,14 +17,14 @@
     { id: "countdown", headlines: ["Carry the light to April", "Six months of light", "Until we meet again in April"], kicker: "APRIL 3–4, 2027",
       sub: () => "Days until April general conference", body: () => ({ type: "big", value: daysTo(), caption: "Let these words carry you there." }) },
     { id: "showcase", headlines: ["Six Months of Light", "A home for October 2026 conference"], kicker: "WHAT YOU'LL FIND", carousel: 1,
-      sub: () => "October 2026 General Conference, to carry you to April", body: () => ({ type: "list", items: ["Talk recaps", "Quote cards", "Insights", "Quiz", "Ask the Talks"] }) },
+      sub: () => "October 2026 General Conference, to carry you to April", body: () => ({ type: "list", items: ["Talk recaps", "Quote cards", "Insights", "Quiz", "Insight search"] }) },
   ];
   const SLIDES = [
     { title: "Talk recaps", sub: () => `${nTalks} talks · 60-second recaps, scriptures and ponder questions`, url: "index.html#sessions" },
     { title: "Quote cards", sub: () => `${nQuotes} verified quotes · ${nLooks} looks · ${nLayouts} layouts`, url: "builder.html" },
     { title: "Insights", sub: () => "Themes, top words, scriptures and comparisons with past conferences", url: "insights.html" },
     { title: "Who said it?", sub: () => "A quote quiz for families and classes", url: "quiz.html" },
-    { title: "Ask the Talks", sub: () => "Bring a question, find what the speakers taught", url: "index.html" },
+    { title: "What insight do you want to search?", sub: () => "Type a question or key word and see what the talks taught", url: "index.html#search" },
   ];
   const build = (p, hi, note, slide) => {
     const site = C.site_url, url = site + (p.url || "");

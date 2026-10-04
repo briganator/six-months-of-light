@@ -35,7 +35,7 @@ A personal study and sharing site for the 196th Semiannual General Conference (i
 **Understand**
 - Conference Insights (`insights.html`): word cloud, top words, top themes, most-cited scriptures and speakers by calling. It's computed in the browser from the recap data and labeled "based on recaps." The comparison with past conferences is a labeled stub with no numbers.
 - Speaker pages (`speaker.html?s=…`): calling (from the doc only), talks at this conference, recurring themes and links to the official bio and speaker index. No invented biographical facts.
-- **Ask the Talks** panel on talk, speaker, session and insights pages: “Bring a question, find what the speakers taught.” Tap a question; the answer is assembled from this site's recap data and always cites and links the talk (plus its recap or official source). Nothing is generated or invented.
+- **“What insight do you want to search?”** panel (home, talk, speaker, session and insights pages): type a question or key word; searches talks, verified quotes, topics, speakers and scriptures across all 12 conferences, with a quick insight (count, speakers, trend) that can become a card (`assets/search.js`). Page-specific quick questions remain under it. Tap a question; the answer is assembled from this site's recap data and always cites and links the talk (plus its recap or official source). Nothing is generated or invented.
 
 **Apply** (stored only on the device, in localStorage)
 - Commit to an invitation for 7 days, with day check-ins and a downloadable `.ics` reminder that repeats daily for 7 days
@@ -59,7 +59,7 @@ moderate.html            admin moderation queue (noindex, password)
 assets/data.js           GENERATED content (from tools/talks_source.py)
 assets/config.js         backend config (Supabase URL + publishable key; ?mock=1 = local mock)
 assets/api.js            backend adapter (Supabase REST, or localStorage mock)
-assets/common.js         header/footer, device storage, Ask the Talks panel, themes, motion
+assets/common.js         header/footer, device storage, insight search panel, themes, motion
 assets/cardkit.js        canvas renderer: cards (backgrounds, fonts, takeaway line), animation, OG images
 assets/logo-mark.svg     logo mark (favicon too)
 assets/pages/*.js        page logic
@@ -106,7 +106,7 @@ cd /workspace/projects/conference-share && python3 -m http.server 8765 --bind 12
 - Free-tier note: Supabase pauses free projects after about a week with no activity. Restore them from the dashboard.
 - Supabase advisors flag the definer view and the anon-callable definer functions. That's intentional: this is the safe gateway design described above.
 
-## Ask the Talks: rules for a future free-text version (not built)
+## Insight search: rules (keyword search is built; no generated answers)
 Answer **only** from official talk text on ChurchofJesusChrist.org. Cite the talk and paragraph for every claim. Say "I don't know" when the text doesn't answer the question. Never speak for the Church or give doctrinal rulings. Show the "not an official Church site" notice. No paid API is wired in. If it's added later, use a free or self-hosted option behind a rate limit.
 
 ## Publishing (done Oct 2026)
@@ -118,7 +118,7 @@ Answer **only** from official talk text on ChurchofJesusChrist.org. Cite the tal
 ## Launch plan
 - **This week:** Card Studio (still and animated), 60-second recaps, talk pages, quiz, insights (labeled "based on recaps"), What stuck with me plus moderation, challenge, group links.
 - **When official text posts (Mon/Tue):** replace recap quotes with official wording, set `official_url` and `video_embed`, remove the recap banners, recompute insights, add Sunday talks, rerender cards and OG images.
-- **After official text posts:** consider letting Ask the Talks take free-text questions under the rules above (free-tier or self-hosted only), add the past-conference comparisons, and fill in speakers' recent talks from official listings.
+- **After official text posts:** consider letting insight search take free-text questions under the rules above (free-tier or self-hosted only), add the past-conference comparisons, and fill in speakers' recent talks from official listings.
 
 ## Test data
 The preview test comments and admin-attempt rows were deleted before launch.

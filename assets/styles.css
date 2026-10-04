@@ -206,7 +206,7 @@ ul.scriptures{margin:4px 0;padding-left:20px}
 .comment:first-child{border-top:0}
 .comment .who{font-size:12.5px;color:var(--muted);margin-top:2px}
 
-/* ---------- ask the talks ---------- */
+/* ---------- search panel (base) ---------- */
 .ask{border:1px solid rgba(42,45,92,.14);background:linear-gradient(160deg,rgba(246,247,253,.85),rgba(253,248,244,.85))}
 .ask-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}.ask-head h2{margin:0}
 .chips{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
@@ -760,3 +760,26 @@ table.cmp td:first-child,table.cmp th:first-child{text-align:left}
   .outline .ls-refs a{color:#000}
 }
 @media print{.outline::after{content:"From sixmonthsoflight.com · Not an official Church site · Read the full talk at ChurchofJesusChrist.org";display:block;margin-top:12pt;font-size:9pt;color:#444;border-top:.5pt solid #bbb;padding-top:4pt}}
+/* Insight search */
+.ask.search .ask-title{margin:0 0 12px;font-size:clamp(26px,5vw,34px)}
+.srch-form{display:flex;gap:8px;align-items:stretch}
+.srch-form input{flex:1;min-width:0;font:17px var(--sans);padding:15px 18px;border:1.5px solid rgba(42,45,92,.28);border-radius:16px;background:#fff;color:var(--ink);box-shadow:0 2px 10px rgba(42,45,92,.08)}
+.srch-form input:focus{outline:none;border-color:var(--gold-deep);box-shadow:0 0 0 4px rgba(216,169,91,.25)}
+.srch-form input::placeholder{color:#6f7287}
+.srch-form .btn{border-radius:16px;padding:0 20px}
+@media (max-width:560px){.srch-form{flex-direction:column}.srch-form .btn{padding:13px}}
+.srch-help{font-size:13px;margin:4px 0 0}.srch-scope{margin:4px 0 -6px}
+.srch-res{margin-top:16px;display:grid;gap:16px}
+.srch-ins{background:#fff;border:1px solid #e3e5ef;border-radius:var(--r-sm);padding:16px}
+.srch-ins h3{margin:2px 0 4px;font-size:22px}
+.srch-spark{display:flex;align-items:flex-end;gap:4px;height:64px;margin:12px 0 2px}
+.srch-spark span{flex:1;background:#c9cbe0;border-radius:3px 3px 0 0;min-height:4px}.srch-spark span.pk{background:var(--gold)}
+.srch-axis{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted)}
+.srch-h{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#86601f;margin:0 0 6px;font-family:var(--sans);font-weight:600}
+.srch-quotes,.srch-talks,.srch-refs{margin:0;padding-left:0;list-style:none;display:grid;gap:10px}
+.srch-talks{counter-reset:n}.srch-talks li{padding-bottom:8px;border-bottom:1px solid rgba(29,27,34,.07)}
+.srch-talks a{font-weight:600}.srch-why{color:#86601f}
+.srch-k{font-size:14px;color:var(--ink-2);margin-top:2px}
+.srch-quotes blockquote{margin:0;font:500 18px/1.4 var(--serif);border-left:3px solid var(--gold);padding-left:10px}
+.srch-cols{display:grid;gap:14px}@media (min-width:760px){.srch-cols{grid-template-columns:repeat(3,1fr)}}
+.srch-cols .pill{display:inline-block;margin:0 4px 6px 0}

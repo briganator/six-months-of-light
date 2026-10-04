@@ -1,4 +1,4 @@
-// Shared helpers, header/footer, device storage, and the "Ask the Talks" panel.
+// Shared helpers, header/footer, device storage, and the insight search panel.
 window.esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 window.talkById = id => CONF.talks.find(t => t.id === id);
 window.sessionById = id => CONF.sessions.find(s => s.id === id);
@@ -7,7 +7,7 @@ window.slug = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, 
 window.speakerTalks = sl => CONF.talks.filter(t => slug(t.speaker) === sl);
 window.fmtDate = iso => new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" });
 // Lazy-load the multi-conference library (only where it's used).
-window.loadLib = () => window.__libP || (window.__libP = ["themes3.js", "library-data.js", "library.js"].filter(f => !(f === "themes3.js" && window.THEMES3) && !(f === "library-data.js" && window.LIB) && !(f === "library.js" && window.Library))
+window.loadLib = () => window.__libP || (window.__libP = ["themes3.js", "library-data.js", "library.js", "scripref.js", "search.js"].filter(f => !(f === "themes3.js" && window.THEMES3) && !(f === "library-data.js" && window.LIB) && !(f === "library.js" && window.Library) && !(f === "scripref.js" && window.ScripRef) && !(f === "search.js" && window.InsightSearch))
   .reduce((p, f) => p.then(() => new Promise((ok, no) => { const s = document.createElement("script"); s.src = (document.querySelector('script[src*="assets/common.js"]')?.getAttribute("src") || "assets/common.js").replace("common.js", "") + f; s.onload = ok; s.onerror = no; document.head.appendChild(s); })), Promise.resolve()).then(() => window.Library));
 window.QS = new URLSearchParams(location.search);
 // Group links: ?g=smith-family is carried across pages and tags shared posts.
@@ -124,20 +124,32 @@ window.initSubnav = () => { const links = [...document.querySelectorAll(".subnav
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) links.forEach(a => { const on = a.getAttribute("href") === "#" + e.target.id; a.toggleAttribute("aria-current", on); if (on) a.scrollIntoView({ block: "nearest", inline: "center" }); }); }), { rootMargin: "-30% 0px -60% 0px" });
   links.forEach(a => { const t = document.getElementById(a.getAttribute("href").slice(1)); t && io.observe(t); }); };
 
-// ---- "Ask the Talks": question chips answered from this site's talk data. Every answer cites and links the talk. ----
-// Answers are assembled from recap data on this site (official text pending); nothing is generated or invented.
-window.askTalksPanel = (scope) => {
+// ---- "What insight do you want to search?": keyword/question search across every conference (assets/search.js),
+// plus optional quick questions about this page. Every answer cites and links its talk; nothing is generated or invented.
+window.SEARCH_EXAMPLES = ["hope", "temples", "How do I feel the Spirit?", "Alma 32", "ministering", "forgiveness"];
+window.askTalksPanel = (scope = {}) => {
   const id = "ask" + Math.random().toString(36).slice(2, 7);
   setTimeout(() => {
-    document.querySelectorAll(`#${id} .chip`).forEach((b, i) => b.addEventListener("click", () => {
-      document.querySelectorAll(`#${id} .chip`).forEach(x => x.setAttribute("aria-pressed", x === b));
-      document.querySelector(`#${id} .ask-answer`).innerHTML = scope.answer(i);
-    }));
+    const root = document.getElementById(id); if (!root) return;
+    const out = root.querySelector(".ask-answer"), inp = root.querySelector("input");
+    const run = q => { q = (q || "").trim(); if (!q) { inp.focus(); return; } inp.value = q; out.innerHTML = `<p class="speaker">Searching every conference…</p>`;
+      loadLib().then(() => { InsightSearch.render(out, q); out.querySelector(".srch-res")?.scrollIntoView?.({ block: "nearest" }); })
+        .catch(() => out.innerHTML = `<p class="speaker">Search couldn't load. Check your connection and try again.</p>`); };
+    inp.addEventListener("focus", () => loadLib().catch(() => {}), { once: true });
+    root.querySelector("form").addEventListener("submit", e => { e.preventDefault(); root.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", "false")); run(inp.value); });
+    root.querySelectorAll(".chip[data-ex]").forEach(b => b.addEventListener("click", () => run(b.dataset.ex)));
+    root.querySelectorAll(".chip[data-qi]").forEach(b => b.addEventListener("click", () => {
+      root.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", x === b)); out.innerHTML = scope.answer(+b.dataset.qi); }));
+    const pre = QS.get("find"); if (pre && !document.querySelector(".ask[data-ran]")) { root.dataset.ran = 1; run(pre); }
   });
-  return `<section class="card ask" id="${id}" aria-labelledby="${id}-h">
-    <div class="ask-head"><h2 id="${id}-h">Ask the Talks</h2></div>
-    <p class="speaker">Bring a question, find what the speakers taught. Tap a question about ${esc(scope.label)}; every answer cites and links the talk.</p>
-    <div class="chips">${scope.questions.map(q => `<button class="chip" type="button" aria-pressed="false">${esc(q)}</button>`).join("")}</div>
+  return `<section class="card ask search" id="${id}" aria-labelledby="${id}-h">
+    <h2 id="${id}-h" class="ask-title">What insight do you want to search?</h2>
+    <form class="srch-form" role="search"><label class="sr-only" for="${id}-q">Search talks, quotes, topics, speakers and scriptures</label>
+      <input id="${id}-q" type="search" enterkeyhint="search" autocomplete="off" placeholder="Type a question or key word, e.g. hope, temples, how do I feel the Spirit?">
+      <button class="btn gold" type="submit">Search</button></form>
+    <div class="chips" aria-label="Examples">${SEARCH_EXAMPLES.map(q => `<button class="chip" type="button" data-ex="${esc(q)}">${esc(q)}</button>`).join("")}</div>
+    ${scope.questions ? `<p class="speaker srch-scope">Or ask about ${esc(scope.label)}:</p><div class="chips">${scope.questions.map((q, i) => `<button class="chip" type="button" data-qi="${i}" aria-pressed="false">${esc(q)}</button>`).join("")}</div>` : ""}
+    <p class="speaker srch-help">Searches talks, verified quotes, topics, speakers and scriptures from all 12 conferences since April 2021. Every result links its talk.</p>
     <div class="ask-answer" aria-live="polite"></div>
   </section>`;
 };
