@@ -7,7 +7,7 @@ window.CONF_CONFIG = {
   supabaseKey: "sb_publishable_CTdJCpH-2P34ANI0Qq3SrQ_9ZbQ-KqB",
   maxLength: 280,
   nameMaxLength: 40,
-  // "Get a talk" subscriptions: public endpoints and the public half of the push key (the private half stays on the server)
+  // "Keep the Light" reminders: public endpoints and the public half of the push key (the private half stays on the server)
   feedUrl: "https://yrofrjdmhnudqbuvukqm.supabase.co/functions/v1/feed",
   deliverUrl: "https://yrofrjdmhnudqbuvukqm.supabase.co/functions/v1/deliver",
   vapidPublicKey: "BO0uJtuNeJTb878dpP1bjjd9UFrmB6X1Bld_FjONpeUq_0naw3wPFKIqsACU6rIzHtvLLxcHweq40aCKPksUe_o",

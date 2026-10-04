@@ -14,7 +14,12 @@ const LN = LIVE.now(), NX = LIVE.next();
 const liveSub = LN ? "Live now · share a line you heard" : POSTCONF ? "Lines people heard this weekend" : NX ? `Next session ${NX.at.toLocaleString([], { weekday: "short", hour: "numeric", minute: "2-digit" })}` : "Share a line during each session";
 const ENTRY = [["builder.html", "Make a card", "Turn a line into a card for your story or feed", "studio"], ["study.html", "Study", "Every talk, by session, topic or speaker", "study"], ["insights.html", "Insights", "Themes, words and scriptures at a glance", "insights"], ["live.html", "Live", liveSub, "live"]];
 html = `<nav class="entry" aria-label="Start here">${ENTRY.map(([h, t, d, i]) => `<a class="entry-i ${i === "live" && LN ? "is-live" : ""}" href="${h}"><span class="entry-ic" aria-hidden="true">${i === "live" ? '<span class="live-dot"></span>' : `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${TAB_ICON[i]}</svg>`}</span><b>${t}</b><span>${esc(d)}</span></a>`).join("")}</nav>` + html;
-html += `<a class="gat-card" href="subscribe.html"><span class="gat-ic" aria-hidden="true">🔔</span><span><strong>Get a talk</strong><small>A talk, quote card, insight or lesson outline each day or week, on your calendar or phone.</small></span><span class="gat-go">Choose →</span></a>`;
+const KEEP_ON = Store.get("keep-on", null);
+html += KEEP_ON ? `<a class="keep-band keep-on" href="subscribe.html"><span class="kb-ic">${KEEP_ICON(22)}</span><span class="kb-copy"><strong>You're keeping the light</strong><small>Your ${esc(KEEP_ON.how || "reminder")} is on until April.</small></span><span class="kb-go">Change</span></a>`
+  : `<section class="keep-band" aria-labelledby="kb-h"><div class="kb-glow" aria-hidden="true"></div><span class="kb-ic">${KEEP_ICON(26)}</span>
+  <div class="kb-copy"><div class="kb-k">Keep the Light</div><h2 id="kb-h">Stay close to conference until April</h2>
+  <p>A gentle reminder, daily or weekly: an insight, a talk, a quote card, a summary or a lesson outline. By email, on your phone or in your calendar.</p>
+  <a class="btn gold kb-btn" href="subscribe.html">Set up my reminder</a></div></section>`;
 html += `<div id="search"></div>${askTalksPanel()}`;
 html += `<div class="section-label" id="totw">Talk of the week</div><h2 class="sr-only">Talk of the Week</h2>
 <article class="card totw">

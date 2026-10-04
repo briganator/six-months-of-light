@@ -1,4 +1,4 @@
-// Six Months of Light: service worker for "Get a talk" notifications only. It doesn't cache pages, so the site
+// Six Months of Light: service worker for Keep the Light reminder notifications only. It doesn't cache pages, so the site
 // always loads fresh from the network.
 const SB = "https://yrofrjdmhnudqbuvukqm.supabase.co", KEY = "sb_publishable_CTdJCpH-2P34ANI0Qq3SrQ_9ZbQ-KqB";
 self.addEventListener("install", () => self.skipWaiting());
@@ -17,7 +17,7 @@ self.addEventListener("notificationclick", e => {
   if (e.action === "stop") {
     e.waitUntil((async () => { const sub = await self.registration.pushManager.getSubscription();
       if (sub) { await fetch(SB + "/rest/v1/rpc/push_unsubscribe", { method: "POST", headers: { apikey: KEY, "Content-Type": "application/json" }, body: JSON.stringify({ p_endpoint: sub.endpoint }) }).catch(() => {}); await sub.unsubscribe(); }
-      await self.registration.showNotification("Notifications stopped", { body: "You won't get any more from Six Months of Light. Turn them back on any time on the Get a talk page.", icon: "assets/icon-192.png", tag: "sml-stopped", data: { url: manage } });
+      await self.registration.showNotification("Notifications stopped", { body: "You won't get any more from Six Months of Light. Turn them back on any time on the Keep the Light page.", icon: "assets/icon-192.png", tag: "sml-stopped", data: { url: manage } });
     })()); return;
   }
   e.waitUntil((async () => { const all = await self.clients.matchAll({ type: "window", includeUncontrolled: true });

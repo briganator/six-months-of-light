@@ -20,7 +20,7 @@ pages = {
  "plan": ("Reading plan to April · Six Months of Light", [], []),
  "study": ("Study library · Six Months of Light", [], ["themes3.js", "library-data.js", "library.js"]),
  "topic": ("Topic across conferences · Six Months of Light", [], ["themes3.js", "library-data.js", "library.js"]),
- "subscribe": ("Get a talk · Six Months of Light", [], ["themes3.js"]),
+ "subscribe": ("Keep the Light: conference reminders until April · Six Months of Light", [], ["themes3.js"]),
  "privacy": ("Privacy · Six Months of Light", [], []),
 }
 for name, (title, pre, libs) in pages.items():

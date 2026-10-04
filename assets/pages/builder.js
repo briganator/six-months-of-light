@@ -369,7 +369,7 @@ const baseText = () => { const x = ins(), t = talk(); if (st.src === "promo") re
 const defaultCaption = () => `${baseText()}\n\n${st.src === "promo" ? "Take a look" : ins() ? "See more" : "Read the recap and make your own card"}: ${shareUrl()}\n#GeneralConference`;
 const caption = () => { const c = $("caption").value.trim(); return c.includes(shareUrl()) ? c : `${c}\n${shareUrl()}`; };
 const shareInfo = () => ({ url: shareUrl(), text: caption().replace(shareUrl(), "").replace(/\n{3,}/g, "\n\n").trim() });
-const toast = msg => { $("readyTxt").innerHTML = msg; clearTimeout(readyT); readyT = setTimeout(() => $("readyTxt").innerHTML = "Your card is ready. Tap <b>Share</b>.", 4000); };
+const toast = msg => { window.keepAfterShare?.(msg); $("readyTxt").innerHTML = msg; clearTimeout(readyT); readyT = setTimeout(() => $("readyTxt").innerHTML = "Your card is ready. Tap <b>Share</b>.", 4000); };
 // Share = the image file ONLY (no text/url: many share targets keep the text and drop the image).
 // The caption + link go to the clipboard in the same tap. If the device can't share files, show the image full screen
 // (press and hold to save/share works reliably on iPhone). Never silently fall back to text only.
@@ -478,3 +478,16 @@ if (P.get("lt") && /^\d{4}-\d{2}\/[\w-]{1,80}$/.test(P.get("lt"))) loadLib().the
   st.libT = { c, id, t: T.t, s: T.s, r: T.r }; st.libNote = cleanNote(P.get("ln") || ""); st.scope = "all"; $("qscope").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.k === "all")); qview = { c, id }; renderQuotes(); draw(true); }).catch(() => {});
 setSrc(st.src); setTab(st.src === "promo" && !P.has("tab") ? "quote" : st.tab); pickTheme(st.theme, true);
 Promise.all(['500 40px "Cormorant Garamond"', 'italic 500 40px "Cormorant Garamond"', '600 20px Inter', '400 20px Inter'].map(f => document.fonts.load(f))).then(() => draw()).catch(() => draw());
+// Keep the Light: after a card is shared or saved, a gentle, dismissible invitation to get a reminder (at most once a week).
+(() => {
+  const show = () => {
+    if (Store.get("keep-on", null) || Date.now() - (Store.get("keep-prompt-at", 0) || 0) < 7 * 864e5 || document.getElementById("keepPrompt")) return;
+    Store.set("keep-prompt-at", Date.now());
+    document.body.insertAdjacentHTML("beforeend", `<aside class="keep-prompt" id="keepPrompt" role="dialog" aria-labelledby="kp-h">
+      <span class="kb-ic">${KEEP_ICON(22)}</span><div><strong id="kp-h">Keep the light going</strong><p>Get a gentle reminder of conference, daily or weekly, until April.</p>
+      <div class="kp-acts"><a class="btn gold small" href="subscribe.html?k=quote">Remind me</a><button type="button" class="btn secondary small" id="kpNo">Not now</button></div></div></aside>`);
+    const el = document.getElementById("keepPrompt"); requestAnimationFrame(() => el.classList.add("in"));
+    document.getElementById("kpNo").onclick = () => { el.classList.remove("in"); setTimeout(() => el.remove(), 400); };
+  };
+  window.keepAfterShare = msg => { if (/(shared|saved) ✓/i.test(String(msg))) setTimeout(show, 2600); };
+})();

@@ -81,12 +81,18 @@ window.liveBarHTML = active => { const s = LIVE.now(); if (!s || active === "liv
   return `<div class="live-bar" role="region" aria-label="Conference is live"><span class="live-dot" aria-hidden="true"></span><a class="lb-main" href="live.html"><b>Conference is live</b> · share a line you just heard →</a><a class="lb-watch" href="${LIVE_WATCH}" target="_blank" rel="noopener">Watch ↗</a></div>`; };
 // Pages that hide the bottom tab bar on phones get a visible Home button in the header.
 const NOTABS = ["builder.html", "live.html"];
+// Keep the Light icon: a small bell giving off three rays of dawn light. Line style to match the tab icons.
+window.KEEP_ICON = (size = 22, cls = "") => `<svg class="keep-ic ${cls}" viewBox="0 0 24 24" width="${size}" height="${size}" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.6v2.1M6.3 4.9l1.3 1.5M17.7 4.9l-1.3 1.5"/><path d="M7.4 16.2v-4.6a4.6 4.6 0 0 1 9.2 0v4.6l1.6 2.1H5.8z"/><path d="M10.4 20.6a1.7 1.7 0 0 0 3.2 0"/></svg>`;
+// Small status message for any page (pages with their own message area, like the Card Studio, keep theirs).
+if (!window.toast) window.toast = msg => { let t = document.getElementById("siteToast");
+  if (!t) { t = document.createElement("div"); t.id = "siteToast"; t.className = "site-toast"; t.setAttribute("role", "status"); t.setAttribute("aria-live", "polite"); document.body.appendChild(t); }
+  t.textContent = msg; t.classList.add("in"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("in"), 4200); };
 window.postHeroHTML = () => `<div class="post-hero">
       <div class="eyebrow">October 2026 General Conference</div>
       <h1 class="display post-h"><span class="ph1">The Lord has spoken.</span> <span class="ph2">Now, let’s live it.</span></h1>
       <figure class="post-scrip"><blockquote>“${esc(DC138.text)}”</blockquote><figcaption><a href="${DC138.url}" rel="noopener" target="_blank">${DC138.ref} ↗</a></figcaption></figure>
       <p class="hero-how">Six months to study, apply and share these words before April.</p>
-      <div class="post-actions"><a class="btn gold big" href="plan.html">Start studying</a><button type="button" class="btn glass" id="pickInvite">Choose one invitation</button><a class="btn glass" href="builder.html">Make a card</a></div>
+      <div class="post-actions"><a class="btn gold big" href="plan.html">Start studying</a><button type="button" class="btn glass" id="pickInvite">Choose one invitation</button><a class="btn glass btn-keep" href="subscribe.html">${KEEP_ICON(18)}Remind me until April</a></div>
       ${countdownHTML()}
       <a class="hero-link post-share" href="builder.html?ins=spoken">Share this as a card →</a></div>`;
 window.headerHTML = (active, small) => `
@@ -96,6 +102,7 @@ window.headerHTML = (active, small) => `
       ${NOTABS.includes(active) ? `<a class="sb-home" href="index.html"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg><span>Home</span></a>` : ""}
       <a class="brand" href="index.html" aria-label="Six Months of Light home">${WORDMARK()}</a>
       <div class="navlinks">${NAV.map(([h,l]) => `<a href="${h}" ${active===h?'aria-current="page"':""}>${l}</a>`).join("")}</div>
+      ${active === "subscribe.html" ? "" : `<a class="sb-keep" href="subscribe.html" aria-label="Keep the Light: conference reminders">${KEEP_ICON(18)}<span>Keep the Light</span></a>`}
       ${active === "builder.html" ? "" : `<a class="btn gold small sb-cta" href="builder.html">Make a card</a>`}
     </nav></div>
   <header class="hero ${small ? "hero-sm" : "hero-lg"}">
@@ -136,7 +143,7 @@ window.footerHTML = () => `
     <p class="big"><strong>This is not an official website of The Church of Jesus Christ of Latter-day Saints.</strong></p>
     <p>Six Months of Light is a personal study page. It is not affiliated with or endorsed by the Church. For official talks, audio and video, visit <a href="${esc(CONF.conference_url)}" rel="noopener">ChurchofJesusChrist.org</a>.</p>
     <p>Summaries and quotes come from Church News / Church Newsroom recaps; confirm with official text. Full talk text is not reproduced. Your saved quotes, notes and commitments stay on this device.</p>
-    <p class="foot-links"><a href="builder.html?src=promo"><strong>Share this site</strong></a> · <a href="quiz.html">Who said it? quiz</a> · <a href="lessons.html">Lesson helps</a> · <a href="challenge.html">Challenge</a> · <a href="groups.html">Family &amp; ward group links</a> · <a href="subscribe.html"><strong>Get a talk</strong></a> · <a href="credits.html">Photo credits</a> · <a href="privacy.html">Privacy</a></p>
+    <p class="foot-links"><a href="builder.html?src=promo"><strong>Share this site</strong></a> · <a href="quiz.html">Who said it? quiz</a> · <a href="lessons.html">Lesson helps</a> · <a href="challenge.html">Challenge</a> · <a href="groups.html">Family &amp; ward group links</a> · <a href="subscribe.html"><strong>Keep the Light</strong> (reminders)</a> · <a href="credits.html">Photo credits</a> · <a href="privacy.html">Privacy</a></p>
   </div></footer>`;
 window.recapNotice = compact => compact ? `<p class="notice-sm" role="note"><span class="pill pending">Recap</span> Quotes and summary from Church News / Newsroom recaps; confirm with official text.</p>` : `<div class="notice" role="note"><strong>Quotes from recaps; confirm with official text.</strong> Official talk text isn't posted yet. Summaries and quotes here come from Church News and Church Newsroom recaps.</div>`;
 window.mount = (active, small) => {
