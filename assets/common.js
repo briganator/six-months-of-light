@@ -53,7 +53,7 @@ window.downloadReminder = (talk, text) => {
 window.LOGO_RAYS = [[17.73, 39.36, 13.45, 37.97, 0.38, 1.6], [21.73, 33.07, 16.87, 27.89, 0.5, 1.78], [28.27, 29.47, 25.86, 20.08, 0.63, 1.96], [35.73, 29.47, 38.79, 17.56, 0.75, 2.14], [42.27, 33.07, 52.47, 22.2, 0.88, 2.32], [46.27, 39.36, 62.91, 33.96, 1.0, 2.5]];
 window.LOGO_MARK = (size = 40) => `<svg class="mark" width="${size}" height="${size}" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lmg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3a693"/><stop offset=".55" stop-color="#f1d394"/><stop offset="1" stop-color="#fff3d1"/></linearGradient></defs><g stroke="url(#lmg)" stroke-linecap="round">${LOGO_RAYS.map(([a,b,c,d,o,w],i) => `<line class="ray r${i}" x1="${a}" y1="${b}" x2="${c}" y2="${d}" stroke-opacity="${o}" stroke-width="${w}"/>`).join("")}</g><path d="M21 44a11 11 0 0 1 22 0z" fill="url(#lmg)"/><line x1="6" y1="44" x2="58" y2="44" stroke="url(#lmg)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="50" x2="46" y2="50" stroke="url(#lmg)" stroke-width="1.3" stroke-linecap="round" opacity=".55"/></svg>`;
 window.WORDMARK = () => `<span class="wordmark">${LOGO_MARK(36)}<span class="wm-text">Six Months <em>of</em> Light</span></span>`;
-const NAV = [["index.html","Home"],["builder.html","Card Studio"],["insights.html","Insights"],["quiz.html","Quiz"],["my.html","My Conference"],["challenge.html","Challenge"],["lessons.html","Lesson helps"]];
+const NAV = [["index.html","Home"],["builder.html","Card Studio"],["insights.html","Insights"],["quiz.html","Quiz"],["my.html","My Conference"],["challenge.html","Challenge"],["lessons.html","Lesson helps"],["builder.html?src=promo","Share the site"]];
 const ICON = { home: '<path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/>', talks: '<path d="M5 4h10l4 4v12H5zM8 11h8M8 15h8M8 7h5"/>', studio: '<path d="M12 3v3M5.6 5.6l2.1 2.1M3 12h3M18.4 5.6l-2.1 2.1M21 12h-3M7 16a5 5 0 0 1 10 0zM3 19h18"/>', insights: '<path d="M5 20V10M10 20V4M15 20v-7M20 20v-11"/>', me: '<path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/>' };
 const TABS = [["index.html","Home","home"],["index.html#sessions","Talks","talks"],["builder.html","Studio","studio"],["insights.html","Insights","insights"],["my.html","Me","me"]];
 window.tabbarHTML = (active) => `<nav class="tabbar" aria-label="Quick">${TABS.map(([h,l,i]) => `<a href="${h}" class="${i === "studio" ? "tb-main" : ""}" ${active === h && i !== "talks" ? 'aria-current="page"' : ""}><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICON[i]}</svg><span>${l}</span></a>`).join("")}</nav>`;
@@ -86,7 +86,7 @@ window.LANDSCAPE = () => `<svg class="land" viewBox="0 0 1440 320" preserveAspec
   <path d="M0 190 C120 150 220 120 330 140 S540 90 660 120 S880 70 1000 110 S1250 100 1440 140" fill="none" stroke="url(#rim)" stroke-width="1.4"/>
   <path class="ridge r2" d="M0 240 C160 200 260 215 380 190 S600 220 740 180 S960 210 1100 175 S1320 200 1440 185 V320 H0Z" fill="url(#l2)"/>
   <path class="ridge r3" d="M0 290 C200 260 340 280 520 255 S860 285 1040 260 S1300 280 1440 265 V320 H0Z" fill="url(#l3)"/></svg>`;
-// Six-month progress: October 2026 conference → April 2027 conference (date estimated; confirm when announced).
+// Six-month progress: October 2026 conference → April 3–4, 2027 conference (dates announced on the Church Newsroom calendar).
 window.COUNTDOWN = (() => { const start = new Date("2026-10-04T16:00:00-06:00"), end = new Date("2027-04-03T10:00:00-06:00"), now = new Date();
   const p = Math.max(0, Math.min(1, (now - start) / (end - start))), days = Math.max(0, Math.ceil((end - now) / 864e5)), month = Math.min(6, Math.max(1, Math.ceil(p * 6) || 1));
   return { p, days, month }; })();
@@ -94,14 +94,14 @@ window.countdownHTML = () => `<div class="countdown" role="group" aria-label="Si
   <div class="cd-top"><span class="cd-days"><b data-count="${COUNTDOWN.days}">${COUNTDOWN.days}</b> days until April conference</span><span class="cd-month">Month ${COUNTDOWN.month} of 6</span></div>
   <div class="cd-track"><span class="cd-fill" style="--p:${Math.max(.015, COUNTDOWN.p)}"></span>${[1,2,3,4,5].map(i => `<i style="left:${i/6*100}%"></i>`).join("")}</div>
   <div class="cd-labels"><span>Oct</span><span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span></div>
-  <div class="cd-note">April date estimated; confirm when announced.</div></div>`;
+  <div class="cd-note">April conference: April 3–4, 2027 (announced by the Church).</div></div>`;
 window.footerHTML = () => `
   <footer class="site"><div class="wrap">
     <div class="foot-brand">${WORDMARK()}<p>${esc(CONF.tagline)}</p></div>
     <p class="big"><strong>This is not an official website of The Church of Jesus Christ of Latter-day Saints.</strong></p>
     <p>Six Months of Light is a personal study page. It is not affiliated with or endorsed by the Church. For official talks, audio and video, visit <a href="${esc(CONF.conference_url)}" rel="noopener">ChurchofJesusChrist.org</a>.</p>
     <p>Summaries and quotes come from Church News / Church Newsroom recaps; confirm with official text. Full talk text is not reproduced. Your saved quotes, notes and commitments stay on this device.</p>
-    <p class="foot-links"><a href="quiz.html">Who said it? quiz</a> · <a href="lessons.html">Lesson helps</a> · <a href="challenge.html">Challenge</a> · <a href="groups.html">Family &amp; ward group links</a> · <a href="credits.html">Photo credits</a></p>
+    <p class="foot-links"><a href="builder.html?src=promo"><strong>Share this site</strong></a> · <a href="quiz.html">Who said it? quiz</a> · <a href="lessons.html">Lesson helps</a> · <a href="challenge.html">Challenge</a> · <a href="groups.html">Family &amp; ward group links</a> · <a href="credits.html">Photo credits</a></p>
   </div></footer>`;
 window.recapNotice = () => `<div class="notice" role="note"><strong>Quotes from recaps; confirm with official text.</strong> Official talk text isn't posted yet. Summaries and quotes here come from Church News and Church Newsroom recaps.</div>`;
 window.mount = (active, small) => {

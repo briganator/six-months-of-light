@@ -2,12 +2,12 @@
 <link rel="stylesheet" href="../assets/fonts.css"><style>body{margin:0;background:#222}</style></head>
 <body><canvas id="cv"></canvas>
 <script>window.CARDKIT_BASE = "../";</script>
-<script src="../assets/data.js"></script><script src="../assets/common.js"></script><script src="../assets/insights-data.js"></script>
-<script src="../assets/photos.js"></script><script src="../assets/vendor/qrcode.js"></script><script src="../assets/cardkit.js"></script>
+<script src="../assets/data.js"></script><script src="../assets/common.js"></script><script src="../assets/themes3.js"></script><script src="../assets/insights-data.js"></script>
+<script src="../assets/photos.js"></script><script src="../assets/vendor/qrcode.js"></script><script src="../assets/cardkit.js"></script><script src="../assets/promos.js"></script>
 <script>
 // Internal render surface for tools/render_assets.py (not part of the public site).
 const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
-window.ready = Promise.all(['500 40px "Cormorant Garamond"', 'italic 500 40px "Cormorant Garamond"', '600 20px "Cormorant Garamond"', '600 20px Inter', '400 20px Inter'].map(f => document.fonts.load(f)));
+window.ready = Promise.all(['500 40px "Caveat"', '800 40px Inter', '500 40px "Cormorant Garamond"', 'italic 500 40px "Cormorant Garamond"', '600 20px "Cormorant Garamond"', '600 20px Inter', '400 20px Inter'].map(f => document.fonts.load(f)));
 window.og = id => { const t = talkById(id); cv.width = 1200; cv.height = 630;
   CardKit.drawOG(ctx, 1200, 630, { title: t.title, speaker: t.speaker, bigIdea: t.big_idea, url: talkUrl(t) }); return cv.toDataURL("image/jpeg", .9); };
 window.ogSite = () => { cv.width = 1200; cv.height = 630;
@@ -20,4 +20,14 @@ window.card = async (s, size, time, fmt, scale) => { const o = opts(s), [W, H] =
   if (scale) { const c2 = document.createElement("canvas"); c2.width = Math.round(W * scale); c2.height = Math.round(H * scale); c2.getContext("2d").drawImage(cv, 0, 0, c2.width, c2.height); return c2.toDataURL("image/jpeg", .8); }
   return cv.toDataURL(fmt || (time == null ? "image/png" : "image/jpeg"), .95); };
 window.looks = () => Object.keys(CardKit.LOOKS);
+// Share-page images: theme-matched look per quote (photo looks preferred for the split link preview)
+const themeLooks = (tid, qi, photoFirst) => { const tags = THEMES3.tagsFor(tid, qi), th = tags[0] || "all", out = [];
+  (THEMES3.looks[th] || []).forEach(k => { if (k.startsWith("photo:")) Object.entries(CardKit.LOOKS).filter(([, l]) => l.photo && l.credit.group === k.slice(6)).forEach(([id]) => out.push(id)); else if (CardKit.LOOKS[k]) out.push(k); });
+  const ph = out.filter(k => k.startsWith("photo-")); return (photoFirst && ph.length ? ph : out)[(tid.length + qi) % Math.max(1, (photoFirst && ph.length ? ph : out).length)] || "sunrise"; };
+window.shareImg = async (tid, qi, kind) => { const t = talkById(tid), o = { kind: "quote", quote: t.quotes[qi], speaker: t.speaker, title: t.title, url: talkUrl(t) + "#q" + (qi + 1),
+    look: themeLooks(tid, qi, kind === "og"), layout: kind === "og" ? "split" : "classic", palette: "gold" }; const [W, H] = kind === "og" ? [1200, 630] : [1000, 1500];
+  await CardKit.prepare(o); if (o.layout === "split") await document.fonts.load('500 40px "Cormorant Garamond"'); cv.width = W; cv.height = H; CardKit.drawCard(ctx, W, H, o, Infinity); return [cv.toDataURL("image/jpeg", kind === "og" ? .86 : .8), o.look]; };
+window.shareIns = () => INSIGHTS.list.filter(x => x.id !== "daily").map(x => ({ id: x.id, title: x.title, sub: x.sub || "", share: x.share || "" }));
+window.insImg = async id => { const x = INSIGHTS.get(id), o = { kind: "insight", ins: x, eyebrow: "OCTOBER 2026 · CONFERENCE INSIGHT", url: CONF.site_url + "insights.html#" + id, look: "sunrise", palette: "gold" };
+  cv.width = 1200; cv.height = 630; CardKit.drawCard(ctx, 1200, 630, o, Infinity); return cv.toDataURL("image/jpeg", .86); };
 </script></body></html>

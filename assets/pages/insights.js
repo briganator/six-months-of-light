@@ -17,7 +17,7 @@ function mini(x) {
   if (B.type === "words") body = `<ol class="ins-words">${B.items.map(w => `<li>${esc(w)}</li>`).join("")}</ol>`;
   if (B.type === "bars") { const m = Math.max(...B.items.map(i => i.value)); body = B.items.slice(0, 4).map(i => bar(i.label, i.value, m)).join(""); }
   if (B.type === "text") body = `<p class="ins-text">${esc(B.text)}</p>`;
-  return `<article class="ins-card">
+  return `<article class="ins-card" id="${esc(x.id)}">
     <div class="ins-kicker">${esc(x.kicker)}</div><h3>${esc(x.title)}</h3>${body}
     <div class="ins-actions"><a class="btn gold small" href="builder.html?ins=${esc(x.id)}">Share this card</a></div></article>`;
 }

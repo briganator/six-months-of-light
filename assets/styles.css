@@ -555,3 +555,12 @@ main [id]{scroll-margin-top:calc(var(--hdrH,52px) + 64px)}
 .igpreset[aria-pressed=true]{border-style:solid}
 .chk{display:flex;gap:8px;align-items:center;font-size:13.5px;margin:0 0 12px}
 .chk input{width:18px;height:18px;accent-color:#b8862f}
+.plats{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin:6px 0 14px}
+.plat{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:11px 12px;border-radius:14px;border:1px solid rgba(29,27,34,.12);background:#fff;color:var(--ink);cursor:pointer;text-align:left;min-height:56px;font:inherit;touch-action:manipulation;border-left:4px solid var(--pc,#d8a95b)}
+.plat b{font:600 14px/1.2 var(--sans)}.plat small{font-size:11.5px;color:var(--muted)}
+.plat:hover{box-shadow:0 0 0 3px rgba(216,169,91,.2)}.plat:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.plat-igstory,.plat-igpost{--pc:#d6457a}.plat-facebook{--pc:#1877f2}.plat-whatsapp{--pc:#25d366}.plat-sms{--pc:#34c759}.plat-x{--pc:#111}.plat-pinterest{--pc:#e60023}.plat-threads{--pc:#333}.plat-email{--pc:#8a6d3b}.plat-copy{--pc:#b9b4c8}
+.caption{width:100%;min-height:118px;resize:vertical;font:400 14px/1.45 var(--sans)}
+.cap-row{display:flex;gap:8px;margin:8px 0 6px;flex-wrap:wrap}
+.car-btn{margin-top:12px}
+.ins-card{scroll-margin-top:calc(var(--hdrH,64px) + 60px)}
