@@ -11,7 +11,7 @@ window.CONF_CONFIG = {
   feedUrl: "https://yrofrjdmhnudqbuvukqm.supabase.co/functions/v1/feed",
   deliverUrl: "https://yrofrjdmhnudqbuvukqm.supabase.co/functions/v1/deliver",
   vapidPublicKey: "BO0uJtuNeJTb878dpP1bjjd9UFrmB6X1Bld_FjONpeUq_0naw3wPFKIqsACU6rIzHtvLLxcHweq40aCKPksUe_o",
-  emailOpen: false                 // true once email sending is set up (see supabase/functions/_shared/email-config.ts)
+  emailOpen: true                  // email sending is on (Resend); set false to hide the email form (see supabase/functions/_shared/email-config.ts)
 };
 // Add ?mock=1 to any URL to use the local (browser-only) mock backend instead.
 if (new URLSearchParams(location.search).get("mock") === "1") window.CONF_CONFIG.backend = "local";

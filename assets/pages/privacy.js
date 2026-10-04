@@ -10,7 +10,7 @@ document.getElementById("main").innerHTML = `
     <h2>Get a talk</h2>
     <p><strong>Calendar:</strong> your choices live only in the calendar link. We don't store anything, and your calendar app fetches the feed on its own schedule. To stop, remove the calendar.</p>
     <p><strong>Phone notifications:</strong> we store your browser's push address (a long random web address your browser gives us), your choices, your time zone and the hour you picked, only to send the notification. “Stop notifications” on the Get a talk page deletes it right away, and addresses that stop working are deleted automatically.</p>
-    <p><strong>Email</strong> (coming soon): we'll store your email address, your choices, time zone and hour. Nothing is sent until you confirm, and every email has a one-click unsubscribe that deletes your address.</p>
+    <p><strong>Email:</strong> we store your email address, your choices, time zone and hour. Nothing is sent until you confirm, and every email has a one-click unsubscribe that deletes your address.</p>
     <h2>What we don't do</h2>
     <p>No ads, no tracking pixels, no selling or sharing your information, and no accounts. The site is hosted on GitHub Pages; subscriptions and comments are stored with Supabase.</p>
     <p class="src">Six Months of Light is a personal study site. It is not an official website of The Church of Jesus Christ of Latter-day Saints.</p>

@@ -1,5 +1,5 @@
 // ============================================================================================================
-//  EMAIL CONFIG: SENDING IS OFF.
+//  EMAIL CONFIG: SENDING IS ON (since Oct 4, 2026). To pause: set email_enabled = 'false' and emailOpen: false in assets/config.js.
 //  Turn on only after the Resend account is set up and sixmonthsoflight.com is verified there:
 //    1. Supabase → Edge Functions → Secrets: add RESEND_API_KEY.
 //    2. SQL: update private.app_config set value = 'true' where key = 'email_enabled';
