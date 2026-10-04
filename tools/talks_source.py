@@ -335,6 +335,15 @@ talks = [
     "Consider how your family, friends and loved ones will be blessed to partake of the fruit that blesses you."],
    "Love, share and invite — with words and actions — so others can taste the fruit that blesses you.",
    "Which gospel truth has become sweetest to me as I've lived it — and whom could I invite to taste it?"),
+ t("sun-pm-8-reid", "sun-pm", 8, "Brother Gabriel W. Reid", "Second Counselor in the Sunday School General Presidency", "You Are Good Enough To Teach",
+   "https://www.thechurchnews.com/general-conference/2026/10/04/brother-reid-october-2026-general-conference-you-are-good-enough-to-teach/",
+   "Speaking about teaching in the Church. The Lord invites all to teach His gospel, and wherever we teach — in classrooms, in the mission field, in our homes or one by one — He promises to help us do His work; we were never meant to do it alone. Before the Savior taught His disciples where to go and what to teach, He taught them who to become: His first lesson was about discipleship, and at the heart of discipleship is love. For the Master Teacher, every lesson was inspired by love for those He taught. Christ-centered teaching is rooted in relationships, and the inspired new Sunday schedule offers weekly opportunities to know and love those we teach, helping them come closer to the Savior and deepen their conversion — His pattern for every gospel lesson, even shorter ones. He invited all to come unto the Master Teacher, learn of Him and love Him, and He will help us love those we teach.",
+   [],
+   ["To teach like the Savior, we must love like the Savior.",
+    "The impact of a gospel teacher is not just the message — it is the love of the messenger.",
+    "Learn of Him. Love Him. And as you do, He will help you love those you teach — and that love will make your teaching more like His."],
+   "Come unto the Master Teacher — learn of Him and love Him, and let that love shape how you teach those around you.",
+   "Whom do I teach — at church, at home or one by one — and how could I come to know and love them better?"),
 ]
 
 # 60-second recap "big idea" — a one-line condensation of the doc's summary (NOT a quote).
@@ -373,6 +382,7 @@ BIG_IDEAS = {
  "sun-pm-5-lebethoa": "Whatever we face, the answer is always Jesus Christ — faith, daily scripture study and daily repentance let in His light.",
  "sun-pm-6-sinclair": "Be quick to help and slow to judge — like Christ at the well, look to a person's possible, not only their past.",
  "sun-pm-7-stevenson": "Gospel truths are like a favorite fruit — they grow sweet as we live them; love, share and invite others to taste them.",
+ "sun-pm-8-reid": "You are good enough to teach — the Lord will help you, and teaching like the Savior begins with loving like the Savior.",
 }
 for _t in talks:
     _t["big_idea"] = BIG_IDEAS[_t["id"]]

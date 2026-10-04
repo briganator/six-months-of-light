@@ -873,6 +873,28 @@ window.CONF = {
    "big_idea": "Gospel truths are like a favorite fruit — they grow sweet as we live them; love, share and invite others to taste them.",
    "video_embed": null,
    "full_text_permitted": false
+  },
+  {
+   "id": "sun-pm-8-reid",
+   "session": "sun-pm",
+   "order": 8,
+   "speaker": "Brother Gabriel W. Reid",
+   "calling": "Second Counselor in the Sunday School General Presidency",
+   "title": "You Are Good Enough To Teach",
+   "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/brother-reid-october-2026-general-conference-you-are-good-enough-to-teach/",
+   "official_url": null,
+   "summary": "Speaking about teaching in the Church. The Lord invites all to teach His gospel, and wherever we teach — in classrooms, in the mission field, in our homes or one by one — He promises to help us do His work; we were never meant to do it alone. Before the Savior taught His disciples where to go and what to teach, He taught them who to become: His first lesson was about discipleship, and at the heart of discipleship is love. For the Master Teacher, every lesson was inspired by love for those He taught. Christ-centered teaching is rooted in relationships, and the inspired new Sunday schedule offers weekly opportunities to know and love those we teach, helping them come closer to the Savior and deepen their conversion — His pattern for every gospel lesson, even shorter ones. He invited all to come unto the Master Teacher, learn of Him and love Him, and He will help us love those we teach.",
+   "scriptures": [],
+   "quotes": [
+    "To teach like the Savior, we must love like the Savior.",
+    "The impact of a gospel teacher is not just the message — it is the love of the messenger.",
+    "Learn of Him. Love Him. And as you do, He will help you love those you teach — and that love will make your teaching more like His."
+   ],
+   "invitation": "Come unto the Master Teacher — learn of Him and love Him, and let that love shape how you teach those around you.",
+   "ponder": "Whom do I teach — at church, at home or one by one — and how could I come to know and love them better?",
+   "big_idea": "You are good enough to teach — the Lord will help you, and teaching like the Savior begins with loving like the Savior.",
+   "video_embed": null,
+   "full_text_permitted": false
   }
  ],
  "challenge": {
