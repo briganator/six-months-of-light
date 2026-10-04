@@ -58,8 +58,8 @@
   // Every speaker with a talk in the library: latest name/calling (talks are newest first), talk count, first and last conference
   // Older official pages list some auxiliary leaders without a title; add the conventional one to the search text only
   const implied = x => /^(President|Elder|Sister|Bishop|Brother)\s/.test(x.s) ? "" : /Relief Society|Young Women|Primary/i.test(x.r) ? "sister " : /Young Men|Sunday School/i.test(x.r) ? "brother " : "";
-  const speakers = (() => { const m = new Map(); talks.forEach(t => { const x = m.get(t.sp) || { sp: t.sp, s: t.s, r: t.r, n: 0, last: t.c, first: t.c }; x.n++; if (t.c < x.first) x.first = t.c; if (t.c > x.last) Object.assign(x, { last: t.c, s: t.s, r: t.r }); m.set(t.sp, x); });
-    return [...m.values()].map(x => ({ ...x, g: groupOf(x.r), find: (implied(x) + x.s + " " + x.r).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") }))
+  const speakers = (() => { const m = new Map(); talks.forEach(t => { const x = m.get(t.sp) || { sp: t.sp, s: t.s, r: t.r, n: 0, last: t.c, first: t.c }; x.n++; (x.ti = x.ti || new Set()).add((t.s.match(/^(President|Elder|Sister|Bishop|Brother)\s/) || [""])[0]); if (t.c < x.first) x.first = t.c; if (t.c > x.last) Object.assign(x, { last: t.c, s: t.s, r: t.r }); m.set(t.sp, x); });
+    return [...m.values()].map(x => ({ ...x, g: groupOf(x.r), find: (implied(x) + [...(x.ti || [])].join(" ") + " " + x.s + " " + x.r).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") }))
       .sort((a, b) => GROUP_ORDER.indexOf(a.g) - GROUP_ORDER.indexOf(b.g) || surname(a.s).localeCompare(surname(b.s)) || a.s.localeCompare(b.s)); })();
   // Type-ahead: every word typed must appear (partial names, "elder", "sister", "president", calling words)
   const findSpeakers = q => { const w = q.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").split(/\s+/).filter(Boolean); return w.length ? speakers.filter(x => w.every(t => x.find.includes(t))) : speakers; };
