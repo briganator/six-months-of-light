@@ -29,3 +29,8 @@ Reviewed on a 390×844 phone (Chromium, touch) and desktop at 1024 and 1280 px.
 ## Next ideas (not done)
 - Per-talk official word counts for October 2026 once posted (rebuild with `tools/build_library.py`).
 - Offline caching of the library file for study on the go.
+
+## Results after fixes (Oct 4, 2026)
+- Test suite: qa.py 18 pages x 2 viewports, 0 problems; share flows (WebKit iPhone 13, Chromium Pixel 5) no errors; QR 91 checks 0 fails; Facebook desktop sharer opens with the q-page URL; studio and extras tests pass.
+- Lighthouse, live, mobile (Perf / A11y / BP / SEO): home 89/100/100/92 (canonical flag only because /index.html was tested; it correctly points to /), study 89/100/100/100, insights 92/100/100/100, talk 80/100/100/100, builder 82/100/100/100, plan 95/100/100/100.
+- Late fixes: compare table row/column headers, icon contrast, plan pace labels shortened for phones, thousands separator on scripture refs.
