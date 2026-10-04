@@ -53,6 +53,9 @@
   function get(id) {
     if (!id) return null;
     if (id.startsWith("z-")) { try { return JSON.parse(localStorage.getItem("zcard:" + id)); } catch (e) { return null; } }
+    if (id === "spoken") return { id, kicker: "October 2026 General Conference", title: "The Lord has spoken. Now, let\u2019s live it.", sub: "Six months to study, apply and share these words before April.", body: { type: "text", text: "\u201c" + DC138.text + "\u201d" }, foot: DC138.ref, share: `The Lord has spoken. Now, let\u2019s live it. \u201c${DC138.text}\u201d (${DC138.ref}) #GeneralConference` };
+    if (id === "invite") { let v = null; try { v = JSON.parse(localStorage.getItem("conf-my-six-month-invite")); } catch (e) {} const t = v && talkById(v.id); if (!t) return null;
+      return { id, kicker: "My invitation for the next six months", title: "I\u2019m choosing to act", sub: `From ${t.speaker}, \u201c${t.title}\u201d`, body: { type: "text", text: t.invitation }, foot: "Invitation summarized from recaps \u00b7 until April conference", share: `My invitation from General Conference for the next six months: ${t.invitation} (${t.speaker}, \u201c${t.title}\u201d)` }; }
     if (id.startsWith("spot-")) { const t = talkById(id.slice(5)); return t ? spot(t) : null; }
     if (id.startsWith("theme-")) { const n = themeByslug(id.slice(6)); return n ? themeCard(n) : null; }
     return list.find(x => x.id === id) || null;

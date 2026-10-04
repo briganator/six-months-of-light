@@ -1044,3 +1044,53 @@ details.fine>summary{cursor:pointer;min-height:44px;display:flex;align-items:cen
 @media (max-width:899px){body.st-picking .qs-ver{display:none}body.st-picking .qs-note:has(#thmNote:empty){display:none}}
 .lib-list li .lib-make{color:#7a5420;border-color:rgba(168,122,53,.55)}
 .qs-sess~.qs-sess{content-visibility:auto;contain-intrinsic-size:auto 300px}
+
+/* =================== After conference: "The Lord has spoken" hero =================== */
+.post-hero{max-width:640px;margin:0 auto}
+.post-h{font-size:clamp(42px,8.4vw,84px);line-height:1.02;margin:12px 0 0}
+.post-h span{display:block}
+.post-h .ph2{font-style:italic;background:linear-gradient(180deg,#fff3d1,#f1d394 55%,#e3a693);-webkit-background-clip:text;background-clip:text;color:transparent;padding-bottom:.08em}
+.post-scrip{margin:22px auto 0;max-width:34em}
+.post-scrip blockquote{margin:0;font:italic 400 clamp(18px,2.6vw,22px)/1.5 var(--serif);color:rgba(251,243,227,.9)}
+.post-scrip figcaption{margin-top:8px;font:600 11.5px var(--sans);letter-spacing:.18em;text-transform:uppercase}
+.post-scrip figcaption a{color:var(--gold-hi);text-decoration:none;border-bottom:1px solid rgba(246,223,166,.35);padding:6px 0}
+.post-hero .hero-how{margin-top:18px}
+.post-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:22px;animation:rise .8s var(--ease) .3s both}
+.post-actions .btn{min-height:48px}
+.post-share{margin-top:8px}
+body.post .hero-copy{padding-bottom:clamp(90px,14vw,170px)}
+/* dawn light: a slow sunrise glow behind the words, then a gentle breathe */
+body.post .hero-sky::after{content:"";position:absolute;left:50%;bottom:-10%;width:150%;height:90%;transform:translateX(-50%);pointer-events:none;
+  background:radial-gradient(closest-side,rgba(255,226,170,.42),rgba(241,170,120,.18) 45%,transparent 72%);animation:dawnrise 5s var(--ease) both,dawnbreathe 9s ease-in-out 5s infinite alternate}
+@keyframes dawnrise{from{opacity:0;transform:translate(-50%,22%)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes dawnbreathe{from{opacity:1}to{opacity:.72}}
+body.post .hero-sky .rays{opacity:.75}
+@media (prefers-reduced-motion:reduce){body.post .hero-sky::after,.post-actions{animation:none}}
+@media (max-width:899px){
+  body.home.post .hero .countdown{display:block;margin-top:20px}
+  body.home.post .hero-how{display:block;font-size:14.5px}
+  body.home.post .hero-lg .hero-copy{padding-bottom:80px}
+  .post-h{font-size:clamp(38px,11vw,52px)}
+  .post-actions{flex-direction:column;align-items:stretch;max-width:340px;margin-left:auto;margin-right:auto}
+  .post-actions .btn{justify-content:center;width:100%}
+}
+/* six-month invitation reminder */
+.inv-card{position:relative;margin:var(--sp-5) 0;padding:20px 20px 16px;border-radius:var(--r-lg);background:linear-gradient(160deg,#fffaf0,#f7ead3);border:1px solid rgba(216,169,91,.35);box-shadow:var(--shadow-2)}
+.inv-card.inv-new{animation:rise .6s var(--ease) both}
+.inv-k{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font:600 11px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--gold-deep)}
+.inv-text{font:500 clamp(21px,3.4vw,26px)/1.3 var(--serif);color:var(--midnight-2);margin:10px 0 6px}
+.inv-by{font-size:13.5px;color:var(--muted);margin:0 0 12px}
+.inv-track{height:6px;border-radius:9px;background:rgba(168,122,53,.15);overflow:hidden}
+.inv-track span{display:block;height:100%;width:calc(var(--p)*100%);min-width:4%;border-radius:9px;background:linear-gradient(90deg,#e3a693,#d8a95b)}
+.inv-actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.inv-note{font-size:12px;color:var(--muted);margin:10px 0 0}
+.inv-sheet{max-height:86vh;overflow:auto;-webkit-overflow-scrolling:touch}
+.inv-list{display:flex;flex-direction:column;gap:8px}
+.inv-opt{display:flex;flex-direction:column;gap:4px;text-align:left;width:100%;padding:12px 14px;border-radius:16px;border:1px solid rgba(29,27,34,.1);background:#fff;cursor:pointer;font:inherit;color:var(--ink)}
+.inv-opt[aria-pressed=true]{border-color:var(--gold);box-shadow:0 0 0 2px rgba(216,169,91,.35)}
+.inv-o-t{font:500 16px/1.4 var(--sans);color:var(--midnight-2)}
+.inv-o-s{font-size:12.5px;color:var(--muted)}
+.post-scrip blockquote{border:0;padding:0;background:none}
+.post-scrip blockquote::before,.post-scrip blockquote::after{display:none}
+#invsheet{z-index:1300}
+@media (max-width:899px){.post-scrip{margin-top:16px}.post-scrip blockquote{font-size:17.5px}}

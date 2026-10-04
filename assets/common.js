@@ -68,9 +68,12 @@ window.TAB_ICON = ICON;
 window.tabbarHTML = (active) => `<nav class="tabbar" aria-label="Quick">${TABS.map(([h,l,i]) => `<a href="${h}" class="${i === "studio" ? "tb-main" : ""}" ${active === h ? 'aria-current="page"' : ""}><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICON[i]}</svg><span>${l}</span></a>`).join("")}</nav>`;
 // ---- Live now: session windows (MDT = UTC-6), from 10 minutes before a session until 15 minutes after ----
 window.LIVE_WATCH = "https://www.churchofjesuschrist.org/broadcasts?lang=eng";
+// After conference: from 4:15 pm MDT on Oct 4, 2026 (when Live mode turns off). ?post=1 / ?post=0 force it for testing.
+window.POSTCONF = (() => { const f = new URLSearchParams(location.search).get("post"); if (f === "1") return true; if (f === "0") return false; return Date.now() >= Date.parse("2026-10-04T22:15:00Z"); })();
+window.DC138 = { text: "What I the Lord have spoken, I have spoken… whether by mine own voice or by the voice of my servants, it is the same.", ref: "Doctrine and Covenants 1:38", url: "https://www.churchofjesuschrist.org/study/scriptures/dc-testament/dc/1?lang=eng&id=p38#p38" };
 window.LIVE = (() => { const W = { "sat-am": "2026-10-03T16:00:00Z", "sat-pm": "2026-10-03T20:00:00Z", "sun-am": "2026-10-04T16:00:00Z", "sun-pm": "2026-10-04T20:00:00Z" };
   const force = new URLSearchParams(location.search).get("live");
-  const now = () => { if (force && W[force]) return CONF.sessions.find(s => s.id === force) || null; if (force === "0") return null;
+  const now = () => { if (new URLSearchParams(location.search).get("post") === "1") return null; if (force && W[force]) return CONF.sessions.find(s => s.id === force) || null; if (force === "0") return null;
     const t = Date.now(); const id = Object.keys(W).find(k => { const s = Date.parse(W[k]); return t >= s - 6e5 && t <= s + 2 * 36e5 + 9e5; }); return id ? CONF.sessions.find(s => s.id === id) || null : null; };
   const next = () => { const t = Date.now(), id = Object.keys(W).find(k => Date.parse(W[k]) > t); return id ? { s: CONF.sessions.find(x => x.id === id), at: new Date(W[id]) } : null; };
   return { now, next, W }; })();
@@ -78,6 +81,14 @@ window.liveBarHTML = active => { const s = LIVE.now(); if (!s || active === "liv
   return `<div class="live-bar" role="region" aria-label="Conference is live"><span class="live-dot" aria-hidden="true"></span><a class="lb-main" href="live.html"><b>Conference is live</b> · share a line you just heard →</a><a class="lb-watch" href="${LIVE_WATCH}" target="_blank" rel="noopener">Watch ↗</a></div>`; };
 // Pages that hide the bottom tab bar on phones get a visible Home button in the header.
 const NOTABS = ["builder.html", "live.html"];
+window.postHeroHTML = () => `<div class="post-hero">
+      <div class="eyebrow">October 2026 General Conference</div>
+      <h1 class="display post-h"><span class="ph1">The Lord has spoken.</span> <span class="ph2">Now, let’s live it.</span></h1>
+      <figure class="post-scrip"><blockquote>“${esc(DC138.text)}”</blockquote><figcaption><a href="${DC138.url}" rel="noopener" target="_blank">${DC138.ref} ↗</a></figcaption></figure>
+      <p class="hero-how">Six months to study, apply and share these words before April.</p>
+      <div class="post-actions"><a class="btn gold big" href="plan.html">Start studying</a><button type="button" class="btn glass" id="pickInvite">Choose one invitation</button><a class="btn glass" href="builder.html">Make a card</a></div>
+      ${countdownHTML()}
+      <a class="hero-link post-share" href="builder.html?ins=spoken">Share this as a card →</a></div>`;
 window.headerHTML = (active, small) => `
   <div class="unofficial" role="note">Not an official Church site<span class="uo-more"> · Personal study page · Quotes from recaps; confirm with official text</span></div>
   ${liveBarHTML(active)}
@@ -90,13 +101,13 @@ window.headerHTML = (active, small) => `
   <header class="hero ${small ? "hero-sm" : "hero-lg"}">
     <div class="hero-sky" aria-hidden="true"><span class="rays"></span><span class="glow g1"></span><span class="glow g2"></span><span class="sun"></span>${LANDSCAPE()}<span class="motes"></span><span class="horizon"></span></div>
     ${small ? "" : `<div class="hero-copy wrap">
-      <div class="eyebrow">${esc(CONF.title)} · October 3–4</div>
+      ${active === "index.html" && POSTCONF && !LIVE.now() ? "" : `<div class="eyebrow">${esc(CONF.title)} · October 3–4</div>
       <h1 class="display"><span class="d1">Six Months</span> <em>of</em> <span class="d2">Light</span></h1>
-      <p class="tagline">${esc(CONF.tagline)}</p>
-      ${LIVE.now() ? `<div class="hero-live"><p class="hl-on"><span class="live-dot" aria-hidden="true"></span>Live now · ${esc(LIVE.now().name)}</p><p class="hero-how">Conference is live, share a line you just heard.</p>
+      <p class="tagline">${esc(CONF.tagline)}</p>`}
+      ${active === "index.html" && POSTCONF && !LIVE.now() ? postHeroHTML() : LIVE.now() ? `<div class="hero-live"><p class="hl-on"><span class="live-dot" aria-hidden="true"></span>Live now · ${esc(LIVE.now().name)}</p><p class="hero-how">Conference is live, share a line you just heard.</p>
       <div class="hero-actions"><a class="btn gold big" href="live.html">Share a line you heard</a><a class="btn glass" href="${LIVE_WATCH}" target="_blank" rel="noopener">Watch live ↗</a></div></div>` : `<p class="hero-how">Find a line from conference. Make it beautiful. Share it.</p>
       <div class="hero-actions"><a class="btn gold big" href="builder.html">Make a card</a><a class="hero-link" href="${active === "index.html" ? "" : "index.html"}#sessions">or browse the talks ↓</a></div>`}
-      ${countdownHTML()}
+      ${active === "index.html" && POSTCONF && !LIVE.now() ? "" : countdownHTML()}
     </div>`}
     ${GROUP ? `<p class="grouptag wrap">Group: <strong>${esc(GROUP)}</strong> · <a href="?g=">leave group</a></p>` : ""}
   </header>`;
@@ -129,7 +140,7 @@ window.footerHTML = () => `
   </div></footer>`;
 window.recapNotice = compact => compact ? `<p class="notice-sm" role="note"><span class="pill pending">Recap</span> Quotes and summary from Church News / Newsroom recaps; confirm with official text.</p>` : `<div class="notice" role="note"><strong>Quotes from recaps; confirm with official text.</strong> Official talk text isn't posted yet. Summaries and quotes here come from Church News and Church Newsroom recaps.</div>`;
 window.mount = (active, small) => {
-  document.body.insertAdjacentHTML("afterbegin", headerHTML(active, small)); if (NOTABS.includes(active)) document.body.classList.add("no-tabs"); if (active === "index.html") document.body.classList.add("home");
+  document.body.insertAdjacentHTML("afterbegin", headerHTML(active, small)); if (NOTABS.includes(active)) document.body.classList.add("no-tabs"); if (active === "index.html") document.body.classList.add("home"); if (active === "index.html" && POSTCONF && !LIVE.now()) document.body.classList.add("post");
   document.body.insertAdjacentHTML("beforeend", footerHTML());
   if (active !== "builder.html") { document.body.insertAdjacentHTML("beforeend", tabbarHTML(active)); document.body.classList.add("has-tabbar"); }
   // Sticky header: publish its height (for sticky sub-navs below it) and compact it on scroll (with hysteresis).
