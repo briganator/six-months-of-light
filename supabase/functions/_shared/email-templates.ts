@@ -17,14 +17,15 @@ Six Months of Light is not an official website of The Church of Jesus Christ of 
 
 export function deliveryEmail(it: Item, unsub: string, manage: string) {
   const subject = it.kind === "quote" ? `Quote card · ${it.text.split(" · ")[0]}` : `${it.label}: ${it.title}`.slice(0, 120);
-  const lines = it.lines.map(l => `<p style="font-size:17px;line-height:1.55;margin:0 0 12px">${h(l)}</p>`).join("");
+  const body = it.kind === "quote" && !it.title.endsWith("…”") ? it.lines.slice(1) : it.lines;
+  const lines = body.map(l => `<p style="font-size:17px;line-height:1.55;margin:0 0 12px">${h(l)}</p>`).join("");
   const img = it.image ? `<a href="${h(it.card || it.url)}"><img src="${h(it.image)}" width="512" alt="${h(it.kind === "quote" ? "Quote card: " + it.title : it.title)}" style="display:block;width:100%;max-width:512px;height:auto;border-radius:10px;margin:0 0 18px"></a>` : "";
   const inner = `<p style="font:600 12px Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#9a7a2e;margin:0 0 6px">${h(it.label)}</p>
 <h1 style="font-size:26px;line-height:1.25;margin:0 0 4px;font-weight:600">${h(it.title)}</h1><p style="font:14px Arial,sans-serif;color:#6b6457;margin:0 0 18px">${h(it.text)}</p>
 ${img}${lines}
 <div style="background:#f6efe0;border-radius:10px;padding:14px 16px;margin:18px 0"><p style="font:600 12px Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#9a7a2e;margin:0 0 4px">Reflect</p><p style="font-size:17px;line-height:1.5;margin:0">${h(it.reflect)}</p></div>
 ${btn(it.url, it.kind === "lesson" ? "Open the full outline" : it.kind === "quote" ? "Open the quote" : "Read more")}${it.card && it.card !== it.url ? btn(it.card, "Make it a card", false) : ""}`;
-  const text = [it.label.toUpperCase(), it.title, it.text, "", ...it.lines, "", "Reflect: " + it.reflect, "", "Open: " + it.url, ...(it.card && it.card !== it.url ? ["Make it a card: " + it.card] : []), "", "---", "Unsubscribe (one click): " + unsub, "Change what you get: " + manage, "Not an official Church site.", EMAIL.mailingAddress].join("\n");
+  const text = [it.label.toUpperCase(), it.title, it.text, "", ...body, "", "Reflect: " + it.reflect, "", "Open: " + it.url, ...(it.card && it.card !== it.url ? ["Make it a card: " + it.card] : []), "", "---", "Unsubscribe (one click): " + unsub, "Change what you get: " + manage, "Not an official Church site.", EMAIL.mailingAddress].join("\n");
   return { subject, html: shell(it.reflect, inner, foot(unsub, manage)), text };
 }
 export function confirmEmail(confirmUrl: string, summary: string) {
