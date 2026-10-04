@@ -562,6 +562,30 @@ window.CONF = {
    "big_idea": "Faith in Christ gives spiritual courage to choose the right — and courage in turn strengthens that faith.",
    "video_embed": null,
    "full_text_permitted": false
+  },
+  {
+   "id": "sun-am-4-fantone",
+   "session": "sun-am",
+   "order": 4,
+   "speaker": "Elder James G.O. Fantone",
+   "calling": "General Authority Seventy",
+   "title": "Take Upon Us His Name",
+   "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/elder-james-fantone-october-2026-general-conference-take-upon-us-his-name/",
+   "official_url": null,
+   "summary": "Elder James G.O. Fantone, General Authority Seventy, spoke about taking upon the name of Jesus Christ. Jesus Christ invites all to take upon us His name and become more like Him by making and keeping covenants and serving others. Book of Mormon prophets taught that following baptism, taking upon oneself the name of Jesus Christ requires a lifelong commitment to serve Him. Latter-day Saints can learn from righteous, charitable examples of family members and full-time missionaries who demonstrate courageous service. When we genuinely take upon ourselves His name by losing ourselves in the service of others, something miraculous happens — a mighty change of heart that leads to true conversion. Taking upon the Savior’s name means more than a badge of religious affiliation; His invitation is to take His name by covenant and serve Him with all heart, might, mind and strength — by lifting, loving and serving others. As we lose our lives in His service, we will find Him, and we will find ourselves.",
+   "scriptures": [
+    "Alma the Younger on a “mighty change” of heart (no specific verse cited in recaps)"
+   ],
+   "quotes": [
+    "The Savior’s invitation is not merely for us to add His name to our name like a badge of religious affiliation.",
+    "Taking upon us His name requires a lifelong determination to serve Him.",
+    "When we genuinely take upon ourselves the name of Jesus Christ by losing ourselves in the service of others, something miraculous happens."
+   ],
+   "invitation": "Take upon the name of Jesus Christ by covenant — lose yourself in serving others with all your heart, might, mind and strength.",
+   "ponder": "Where am I merely wearing His name as a badge, instead of serving Him by lifting and loving others?",
+   "big_idea": "Take His name by covenant — lose yourself in serving others, and find Him (and yourself).",
+   "video_embed": null,
+   "full_text_permitted": false
   }
  ],
  "challenge": {

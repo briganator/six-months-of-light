@@ -218,6 +218,15 @@ talks = [
     "I promise you that as you strengthen your faith in Jesus Christ by believing and following Him and keeping His commandments, your answers will come, your spiritual power will increase, and your courage in following Christ will define your eternal soul."],
    "Strengthen your faith in Jesus Christ by believing, following Him, and keeping His commandments.",
    "Where do I need spiritual courage right now — and how will I strengthen my faith in Christ to receive it?"),
+ t("sun-am-4-fantone", "sun-am", 4, "Elder James G.O. Fantone", "General Authority Seventy", "Take Upon Us His Name",
+   "https://www.thechurchnews.com/general-conference/2026/10/04/elder-james-fantone-october-2026-general-conference-take-upon-us-his-name/",
+   "Elder James G.O. Fantone, General Authority Seventy, spoke about taking upon the name of Jesus Christ. Jesus Christ invites all to take upon us His name and become more like Him by making and keeping covenants and serving others. Book of Mormon prophets taught that following baptism, taking upon oneself the name of Jesus Christ requires a lifelong commitment to serve Him. Latter-day Saints can learn from righteous, charitable examples of family members and full-time missionaries who demonstrate courageous service. When we genuinely take upon ourselves His name by losing ourselves in the service of others, something miraculous happens — a mighty change of heart that leads to true conversion. Taking upon the Savior’s name means more than a badge of religious affiliation; His invitation is to take His name by covenant and serve Him with all heart, might, mind and strength — by lifting, loving and serving others. As we lose our lives in His service, we will find Him, and we will find ourselves.",
+   ["Alma the Younger on a “mighty change” of heart (no specific verse cited in recaps)"],
+   ["The Savior’s invitation is not merely for us to add His name to our name like a badge of religious affiliation.",
+    "Taking upon us His name requires a lifelong determination to serve Him.",
+    "When we genuinely take upon ourselves the name of Jesus Christ by losing ourselves in the service of others, something miraculous happens."],
+   "Take upon the name of Jesus Christ by covenant — lose yourself in serving others with all your heart, might, mind and strength.",
+   "Where am I merely wearing His name as a badge, instead of serving Him by lifting and loving others?"),
 ]
 
 # 60-second recap "big idea" — a one-line condensation of the doc's summary (NOT a quote).
@@ -243,6 +252,7 @@ BIG_IDEAS = {
  "sun-am-1-eyring": "The Lord keeps His promise ‘Fear not, I am with thee’ — and trusts us to help comfort others.",
  "sun-am-2-chibota": "See others as children of God — pray to see as He sees, and lift labels with His grace.",
  "sun-am-3-andersen": "Faith in Christ gives spiritual courage to choose the right — and courage in turn strengthens that faith.",
+ "sun-am-4-fantone": "Take His name by covenant — lose yourself in serving others, and find Him (and yourself).",
 }
 for _t in talks:
     _t["big_idea"] = BIG_IDEAS[_t["id"]]

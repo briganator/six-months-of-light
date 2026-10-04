@@ -132,7 +132,7 @@
     function draw() {
       fix(); const F = family(st.s);
       $("xpS").innerHTML = `Show me ${pill("m", MEAS[F][st.m][0])}${st.w.k === "t" ? "" : ` for ${pill("s", subjLabel(st.s))}`}${st.s.k === "c" ? "" : ` in ${pill("w", whenLabel(st.w))}`}, ${st.vs === "time" ? "shown" : "compared with"} ${pill("vs", vsLabel())}`;
-      history.replaceState(null, "", url());
+      setURL(url());
       el.querySelectorAll("[data-preset]").forEach(b => b.setAttribute("aria-pressed", JSON.stringify(PRESETS[b.dataset.preset].st()) === JSON.stringify({ m: st.m, s: st.s, w: st.w, vs: st.vs })));
       results();
     }

@@ -63,7 +63,7 @@ function questions(n, m) {
 }
 function gen() {
   const n = norm(), m = MODES[mode], out = $("out");
-  history.replaceState(null, "", `?mode=${mode}&c=${encodeURIComponent(conf)}&t=${encodeURIComponent(tid || "")}`);
+  setURL(`?mode=${mode}&c=${encodeURIComponent(conf)}&t=${encodeURIComponent(tid || "")}`);
   if (!n) { out.innerHTML = `<p class="empty">Loading talks…</p>`; return; }
   const qs = m.nq ? questions(n, mode) : [], quotes = n.quotes.slice(0, mode === "eqrs" ? 3 : 2), refs = n.refs.slice(0, 8);
   const refList = refs.map(r => `<li>${ScripRef.linkify(r)}</li>`).join("") + (n.refs.length > refs.length ? `<li class="speaker">and ${n.refs.length - refs.length} more in the official footnotes</li>` : "");

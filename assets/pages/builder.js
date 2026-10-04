@@ -288,7 +288,7 @@ async function draw(changed) {
   $("layHelp").textContent = st.src === "quote" ? (st.layout !== "classic" && st.note ? "· your takeaway shows on the Classic layout" : "") : "· layouts apply to quote cards";
   $("carQ").hidden = !!st.libT; $("carQh").hidden = !!st.libT; $("carQh").textContent = `${talk().quotes.length + 2} slides: a cover, ${talk().quotes.length} quotes in your layout, and a closing slide.`;
   if (!st.capEdited) $("caption").value = defaultCaption();
-  history.replaceState(null, "", "builder.html?" + q);
+  setURL("builder.html?" + q);
   if (["note", "margin", "polaroid"].includes(st.layout)) await document.fonts.load('500 40px "Caveat"').catch(() => {});
   await K.prepare(opts());
   an && !reduce ? play() : (cancelAnimationFrame(raf), render(Infinity));

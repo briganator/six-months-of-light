@@ -1,4 +1,7 @@
 // Shared helpers, header/footer, device storage, and the insight search panel.
+// Safari throws after 100 replaceState calls in 10 s (fast slider drags): throttle and never throw.
+window.setURL = (() => { let last = 0, t = 0, pend = null; const go = () => { t = 0; last = Date.now(); try { history.replaceState(history.state, "", pend); } catch (e) {} };
+  return u => { pend = u; if (t) return; const w = 250 - (Date.now() - last); if (w <= 0) go(); else t = setTimeout(go, w); }; })();
 window.esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 window.talkById = id => CONF.talks.find(t => t.id === id);
 window.sessionById = id => CONF.sessions.find(s => s.id === id);
@@ -70,10 +73,13 @@ window.LIVE = (() => { const W = { "sat-am": "2026-10-03T16:00:00Z", "sat-pm": "
   return { now, next, W }; })();
 window.liveBarHTML = active => { const s = LIVE.now(); if (!s || active === "live.html") return "";
   return `<div class="live-bar" role="region" aria-label="Conference is live"><span class="live-dot" aria-hidden="true"></span><a class="lb-main" href="live.html"><b>Conference is live</b> · share a line you just heard →</a><a class="lb-watch" href="${LIVE_WATCH}" target="_blank" rel="noopener">Watch ↗</a></div>`; };
+// Pages that hide the bottom tab bar on phones get a visible Home button in the header.
+const NOTABS = ["builder.html", "live.html"];
 window.headerHTML = (active, small) => `
   <div class="unofficial" role="note">Not an official Church site · Personal study page · Quotes from recaps; confirm with official text</div>
   ${liveBarHTML(active)}
   <div class="sitebar" id="sitebar"><nav class="topbar wrap" aria-label="Main">
+      ${NOTABS.includes(active) ? `<a class="sb-home" href="index.html"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg><span>Home</span></a>` : ""}
       <a class="brand" href="index.html" aria-label="Six Months of Light home">${WORDMARK()}</a>
       <div class="navlinks">${NAV.map(([h,l]) => `<a href="${h}" ${active===h?'aria-current="page"':""}>${l}</a>`).join("")}</div>
       ${active === "builder.html" ? "" : `<a class="btn gold small sb-cta" href="builder.html">Make a card</a>`}
@@ -120,7 +126,7 @@ window.footerHTML = () => `
   </div></footer>`;
 window.recapNotice = () => `<div class="notice" role="note"><strong>Quotes from recaps; confirm with official text.</strong> Official talk text isn't posted yet. Summaries and quotes here come from Church News and Church Newsroom recaps.</div>`;
 window.mount = (active, small) => {
-  document.body.insertAdjacentHTML("afterbegin", headerHTML(active, small));
+  document.body.insertAdjacentHTML("afterbegin", headerHTML(active, small)); if (NOTABS.includes(active)) document.body.classList.add("no-tabs");
   document.body.insertAdjacentHTML("beforeend", footerHTML());
   if (active !== "builder.html") { document.body.insertAdjacentHTML("beforeend", tabbarHTML(active)); document.body.classList.add("has-tabbar"); }
   // Sticky header: publish its height (for sticky sub-navs below it) and compact it on scroll (with hysteresis).

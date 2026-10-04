@@ -28,7 +28,7 @@ main.innerHTML = `
   <p class="lib-note">Official talks link to ChurchofJesusChrist.org. Topics come from counting topic words in each talk (a rough guide, not a judgment). October 2026 entries use this site's recap until the official text is posted. <a href="credits.html">About the data</a>.</p>`;
 const $ = id => document.getElementById(id);
 function sync() { const q = new URLSearchParams(); if (st.view !== "talks") q.set("view", st.view); if (st.c !== "2026-10") q.set("c", st.c); if (st.topic) q.set("topic", st.topic); if (st.sp) q.set("sp", st.sp); if (st.q) q.set("q", st.q);
-  history.replaceState(null, "", "study.html" + (q.toString() ? "?" + q : "")); }
+  setURL("study.html" + (q.toString() ? "?" + q : "")); }
 const confLabel = c => c === "all" ? "All conferences" : LB.confOf(c).label;
 function chips() { const a = [];
   if (st.c !== "2026-10") a.push(["c", confLabel(st.c)]); if (st.topic) a.push(["topic", LB.themeName(st.topic)]); if (st.sp) a.push(["sp", LB.speakers.find(x => x.sp === st.sp).s]); if (st.q) a.push(["q", "“" + st.q + "”"]);
