@@ -696,3 +696,35 @@ table.cmp td:first-child,table.cmp th:first-child{text-align:left}
   h1{font-size:22pt;margin:0 0 4pt} h2{font-size:14pt}
   .study-panel::after{content:"Six Months of Light · sixmonthsoflight.com · Quotes from recaps; confirm with the official text on ChurchofJesusChrist.org. Not an official Church site.";display:block;margin-top:10pt;font-size:8.5pt;color:#555}
 }
+/* ---- reading plan ---- */
+.plan-top{margin:14px 0}
+.plan-prog{height:12px;border-radius:99px;background:rgba(29,27,34,.08);overflow:hidden}
+.plan-prog i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--rose));border-radius:99px;transition:width .4s var(--ease)}
+.plan-behind{color:#9a4634;font-weight:600}
+.plan-now a{font-weight:600}
+.plan-list{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.plan-list>li{background:rgba(255,255,255,.8);border:1px solid rgba(29,27,34,.08);border-radius:16px;padding:12px 14px}
+.plan-list>li.now{border-color:var(--gold);box-shadow:0 0 0 3px rgba(216,169,91,.2)}
+.plan-list>li.past{opacity:.85}
+.plan-wk{font:600 12px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--gold-deep);margin-bottom:4px}
+.plan-item{display:flex;gap:12px;align-items:flex-start;padding:6px 0;min-height:44px;cursor:pointer}
+.plan-item input{width:22px;height:22px;margin-top:2px;accent-color:#a87a35;flex:none}
+.plan-item span{display:flex;flex-direction:column}
+.plan-item a{font-weight:600}
+.plan-item small{color:var(--muted);font-size:13px}
+.plan-item:has(input:checked) a:first-child{text-decoration:line-through;text-decoration-color:rgba(29,27,34,.35)}
+.plan-cta{display:flex;flex-direction:column;gap:4px;text-decoration:none;color:inherit;border:1px solid rgba(216,169,91,.45)!important}
+.plan-cta b{font:600 18px var(--sans);color:var(--midnight-2)}
+.plan-cta span{color:var(--muted)}
+/* ---- present mode (family home evening) ---- */
+.present{position:fixed;inset:0;z-index:1000;background:radial-gradient(1200px 700px at 50% 0,#2a2d5c,#0d1326);color:#fbf3e3;display:flex;flex-direction:column;justify-content:center;padding:max(24px,env(safe-area-inset-top)) 6vw max(24px,env(safe-area-inset-bottom))}
+.pr-slide{max-width:1100px;margin:0 auto;text-align:center}
+.pr-k{font:600 clamp(13px,1.6vw,18px) var(--sans);letter-spacing:.3em;text-transform:uppercase;color:#f1d394;margin-bottom:2vh}
+.pr-big{font:500 clamp(30px,5.6vw,72px)/1.2 var(--serif)}
+.pr-big.long{font-size:clamp(24px,4vw,52px)}
+.pr-small{margin-top:3vh;font:400 clamp(16px,2vw,24px)/1.4 var(--sans);color:#d9d2e8}
+.pr-nav{position:absolute;left:0;right:0;bottom:max(18px,env(safe-area-inset-bottom));display:flex;justify-content:center;align-items:center;gap:24px}
+.pr-nav button,.pr-x{width:56px;height:56px;border-radius:50%;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;font-size:28px;cursor:pointer}
+.pr-nav button:disabled{opacity:.3}
+.pr-n{font:500 14px var(--sans);color:#cfc6e2;min-width:60px;text-align:center}
+.pr-x{position:absolute;top:max(14px,env(safe-area-inset-top));right:14px;font-size:30px}

@@ -7,6 +7,7 @@ function render() {
   document.getElementById("main").innerHTML = `
   <h1 style="margin-top:38px">My Conference</h1>
   <div class="notice" style="background:#eef3f8;border-color:#d3deea;color:#2f3e55">🔒 Everything here is stored <strong>only on this device</strong> (browser storage). It isn't sent anywhere, and clearing your browser data erases it.</div>
+  <a class="plan-cta card" href="plan.html"><b>Reading plan to April</b><span>${(() => { const d = Store.get("plan-done", []).filter(id => talkById(id)).length; return d ? `${d} of ${CONF.talks.length} talks read` : `One talk at a time until April conference`; })()} →</span></a>
   <section class="card"><h2 style="margin-top:0">My invitations</h2>
     ${cs.length ? cs.map(c => `<div class="comment"><b><a href="talks/${c.t.id}.html">${esc(c.t.title)}</a></b>
       <div>${esc(c.text)}</div><div class="who">Day ${dayOf(c)} of 7 · tap each day you acted</div>
@@ -24,7 +25,7 @@ function render() {
   document.querySelectorAll("[data-rm]").forEach(b => b.addEventListener("click", () => { Store.removeCommit(b.dataset.rm); render(); }));
   document.querySelectorAll("[data-ics]").forEach(b => b.addEventListener("click", () => { const c = cs.find(x => x.t.id === b.dataset.ics); downloadReminder(c.t, c.text); }));
   document.getElementById("exp").addEventListener("click", () => { const a = document.createElement("a");
-    a.href = URL.createObjectURL(new Blob([JSON.stringify({ quotes: Store.savedQuotes(), notes: Store.get("notes", {}), commitments: Store.commitments() }, null, 2)], { type: "application/json" }));
+    a.href = URL.createObjectURL(new Blob([JSON.stringify({ quotes: Store.savedQuotes(), notes: Store.get("notes", {}), commitments: Store.commitments(), plan: { pace: Store.get("plan-pace"), start: Store.get("plan-start"), done: Store.get("plan-done", []) }, flashcardsLearned: Store.get("flash-known", []) }, null, 2)], { type: "application/json" }));
     a.download = "my-conference.json"; a.click(); });
 }
 render();

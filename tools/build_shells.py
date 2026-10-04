@@ -16,6 +16,7 @@ pages = {
  "lessons": ("Lesson helps · Six Months of Light", [], []),
  "challenge": ("Conference challenge · Six Months of Light", ["share"], []),
  "groups": ("Group links · Six Months of Light", [], []),
+ "plan": ("Reading plan to April · Six Months of Light", [], []),
  "study": ("Study library · Six Months of Light", [], ["themes3.js", "library-data.js", "library.js"]),
  "topic": ("Topic across conferences · Six Months of Light", [], ["themes3.js", "library-data.js", "library.js"]),
 }

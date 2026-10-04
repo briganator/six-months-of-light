@@ -11,7 +11,7 @@ const cov = LB.coverage;
 main.innerHTML = `
   <div class="section-label">Study</div>
   <h1 class="lib-h1">Study library</h1>
-  <p class="lib-sub">${cov.talks + CONF.talks.length} talks from ${cov.conferences + 1} general conferences, April 2021 to October 2026. Find a talk by conference, topic, speaker or a word.</p>
+  <p class="lib-sub">${cov.talks + CONF.talks.length} talks from ${cov.conferences + 1} general conferences, April 2021 to October 2026. Find a talk by conference, topic, speaker or a word. New here? Try the <a href="plan.html">reading plan to April</a>.</p>
   <div class="lib-views seg" role="tablist" aria-label="Browse by">${[["talks", "Talks"], ["topics", "Topics"], ["speakers", "Speakers"]].map(([k, v]) => `<button type="button" role="tab" data-v="${k}" aria-selected="${st.view === k}" aria-pressed="${st.view === k}">${v}</button>`).join("")}</div>
   <div class="lib-bar" id="bar">
     <label class="lib-search"><span class="sr-only">Search talks</span><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" d="M11 4a7 7 0 1 1 0 14 7 7 0 0 1 0-14zM16 16l5 5"/></svg>

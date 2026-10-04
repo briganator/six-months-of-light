@@ -28,8 +28,25 @@ function gen() {
     <h3>4. Quotes to discuss</h3><ul>${t.quotes.slice(0,2).map(q => `<li>“${esc(q)}” <span class="speaker">(recap)</span></li>`).join("")}</ul>
     <h3>5. Activity</h3><p>${esc(a.act)}</p>
     <h3>6. Invitation</h3><p>${esc(t.invitation)} ${esc(a.close)}</p>
-    <div class="links"><button class="btn secondary small" id="cp">Copy outline</button><a class="btn secondary small" href="${esc(officialUrl(t))}">Official text ↗</a></div>`;
+    <div class="links"><button class="btn gold small" id="present">▶ Present${aud === "fhe" ? " to the family" : ""}</button><button class="btn secondary small" id="cp">Copy outline</button><button class="btn secondary small" onclick="print()">Print</button><a class="btn secondary small" href="${esc(officialUrl(t))}">Official text ↗</a></div>`;
   document.getElementById("cp").addEventListener("click", () => navigator.clipboard.writeText(document.getElementById("out").innerText));
+  document.getElementById("present").addEventListener("click", () => present([
+    ["Tonight's talk", t.title, t.speaker], ["Let's think", t.ponder, a.open.replace(/:$/, "")], ["The big idea", t.big_idea, ""], ["Scripture", scr, "Read it together from your scriptures."],
+    ...t.quotes.slice(0, 2).map(q => ["Read aloud", "“" + q + "”", t.speaker + " (from the recap)"]), ["Activity", a.act, ""], ["This week", t.invitation, a.close]]));
+}
+// Big-type slides for a TV or a phone passed around the room. Arrow keys, swipe or tap the sides; Esc closes.
+function present(slides) {
+  let i = 0; const ov = document.createElement("div"); ov.className = "present"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true"); ov.setAttribute("aria-label", "Lesson slides");
+  ov.innerHTML = `<button class="pr-x" aria-label="Close">×</button><div class="pr-slide" aria-live="polite"></div><div class="pr-nav"><button class="pr-prev" aria-label="Previous">‹</button><span class="pr-n"></span><button class="pr-next" aria-label="Next">›</button></div>`;
+  document.body.appendChild(ov); document.body.style.overflow = "hidden";
+  const show = () => { const [k, big, small] = slides[i]; ov.querySelector(".pr-slide").innerHTML = `<div class="pr-k">${esc(k)}</div><div class="pr-big ${big.length > 140 ? "long" : ""}">${esc(big)}</div>${small ? `<div class="pr-small">${esc(small)}</div>` : ""}`;
+    ov.querySelector(".pr-n").textContent = `${i + 1} / ${slides.length}`; ov.querySelector(".pr-prev").disabled = i === 0; ov.querySelector(".pr-next").textContent = i === slides.length - 1 ? "✓" : "›"; };
+  const go = d => { if (i + d >= slides.length) return close(); i = Math.max(0, i + d); show(); };
+  const close = () => { ov.remove(); document.body.style.overflow = ""; document.removeEventListener("keydown", key); document.getElementById("present")?.focus(); };
+  const key = e => { if (e.key === "Escape") close(); if (["ArrowRight", " ", "PageDown"].includes(e.key)) { e.preventDefault(); go(1); } if (["ArrowLeft", "PageUp"].includes(e.key)) go(-1); };
+  document.addEventListener("keydown", key); ov.querySelector(".pr-x").onclick = close; ov.querySelector(".pr-prev").onclick = () => go(-1); ov.querySelector(".pr-next").onclick = () => go(1);
+  let x0 = null; ov.addEventListener("touchstart", e => x0 = e.touches[0].clientX, { passive: true }); ov.addEventListener("touchend", e => { if (x0 == null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1); x0 = null; });
+  ov.requestFullscreen?.().catch(() => {}); show(); ov.querySelector(".pr-next").focus();
 }
 document.getElementById("lt").addEventListener("change", gen);
 document.querySelectorAll("#aud button").forEach(b => b.addEventListener("click", () => { aud = b.dataset.k;
