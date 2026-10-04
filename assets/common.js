@@ -127,7 +127,7 @@ window.footerHTML = () => `
   </div></footer>`;
 window.recapNotice = compact => compact ? `<p class="notice-sm" role="note"><span class="pill pending">Recap</span> Quotes and summary from Church News / Newsroom recaps; confirm with official text.</p>` : `<div class="notice" role="note"><strong>Quotes from recaps; confirm with official text.</strong> Official talk text isn't posted yet. Summaries and quotes here come from Church News and Church Newsroom recaps.</div>`;
 window.mount = (active, small) => {
-  document.body.insertAdjacentHTML("afterbegin", headerHTML(active, small)); if (NOTABS.includes(active)) document.body.classList.add("no-tabs");
+  document.body.insertAdjacentHTML("afterbegin", headerHTML(active, small)); if (NOTABS.includes(active)) document.body.classList.add("no-tabs"); if (active === "index.html") document.body.classList.add("home");
   document.body.insertAdjacentHTML("beforeend", footerHTML());
   if (active !== "builder.html") { document.body.insertAdjacentHTML("beforeend", tabbarHTML(active)); document.body.classList.add("has-tabbar"); }
   // Sticky header: publish its height (for sticky sub-navs below it) and compact it on scroll (with hysteresis).

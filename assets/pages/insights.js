@@ -1,3 +1,4 @@
+const HASH0 = location.hash; // the hash the page was opened with (the explorer later writes #zoom into the URL)
 mount("insights.html", true);
 const T = CONF.talks, I = INSIGHTS;
 const topWords = I.topWords.slice(0, 45), max = topWords[0][1], min = topWords[topWords.length - 1][1];
@@ -82,6 +83,6 @@ document.getElementById("tq").addEventListener("change", () => {
 });
 
 loadLib().then(LB => { Explore.make(document.getElementById("zoomBox"), LB);
-  if (location.hash && ["#zoom", "#compare", "#music"].includes(location.hash)) document.getElementById("zoom").scrollIntoView(); })
+  if (["#zoom", "#compare", "#music"].includes(HASH0)) document.getElementById("zoom").scrollIntoView(); })
   .catch(() => { document.getElementById("zoomBox").innerHTML = `<p class="empty">The library didn't load. Check your connection and refresh.</p>`; });
 openCharts();

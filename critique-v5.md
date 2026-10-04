@@ -77,13 +77,16 @@ Reviewed every page at 390×844 (iPhone WebKit) first, then at 1440×900.
 | Talk page | Two dashed placeholder boxes ("Official video will be embedded…", "Full talk text… reserved") plus a full-width recap box above the title. |
 | Study rows | "Make a card" floated below each card as a loose link. |
 | Motion | The hero copy took about 2.3 s to finish appearing, and every card had a looping sheen. |
+| Insights scroll | The page opened already scrolled past its own title. The explorer writes `#zoom` into the address, and the page then jumped to that anchor. |
 | Session pill | "Sunday Morning Session · Coming soon" even though talks were already listed. |
 
 ## What changed
 - **Home:** one hero action (**Make a card**) plus a quiet "or browse the talks ↓" link. Then 4 entry points: **Make a card, Study, Insights, Live**. Live shows "Live now" during a session, otherwise the next session time.
   - Below that: today's quote (one button), search, talk of the week (one button plus a text link), and talks by session as collapsible rows with the newest session open.
   - A small "More" row: Reading plan, Lesson helps, Quiz, My Conference, Challenge, Share this site.
-  - Phone height: about 9,400 → about 6,300 px.
+  - Phone height: about 9,400 → about 4,900 px.
+- **Insights opens at the top.** It only jumps to the explorer when the link asked for it.
+- **Home on phones:** the hero fits on the first screen with the entry points in view. The countdown moves into the Today's quote card ("181 days to April"), and the duplicate header button is hidden on Home.
 - **Inner pages** use the small header, so each page's own title is the first thing you see.
 - **Navigation:** Home · Study · Make a card · Insights · Live · My Conference. The phone tab bar is Home · Study · **Create** · Insights · Me.
 - **Notice strip:** "Not an official Church site" on one line on phones. The full wording stays on larger screens and in the footer.
