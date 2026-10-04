@@ -1,0 +1,136 @@
+# Six Months of Light (LOCAL PREVIEW)
+*The words of October 2026 General Conference, to carry you to April.*
+
+Live URL: **https://sixmonthsoflight.com/** (GitHub Pages from `briganator/six-months-of-light`, custom domain via `CNAME`). QR codes, canonical URLs, Open Graph tags and card text all point there.
+
+A personal study and sharing site for the 196th Semiannual General Conference (internal folder name: `conference-share`). It is a static site (HTML, CSS and vanilla JS) with no build step, so visitors don't install anything. It's meant for free GitHub Pages hosting. **Nothing has been published.**
+
+> **Not an official Church site.** Every page has a top banner and a footer that say so.
+> **Quotes come from Church News / Newsroom recaps; confirm them with the official text.** Official text wasn't posted when this was built.
+> Full talk text is Church copyright and is **not** reproduced. The site uses only summaries and short quotes, and each talk page has an empty slot in case permission is ever granted.
+
+## Look and motion
+- Palette: midnight, warm gold, dawn rose and cream. Type: Cormorant Garamond for display and Inter for text, both self-hosted under the OFL.
+- Logo (`assets/logo-mark.svg`): six rays of dawn light, each longer and brighter than the last, for six months of light growing toward April. In the header the rays draw in one by one.
+- Cinematic hero: a rising sun, slowly turning light rays, drifting glows, floating light motes, and generated SVG ridgelines with parallax on scroll. A six-month progress bar runs from Oct 2026 to April 2027, with a count-up of days left (the April date is an estimate, labeled as such).
+- Scroll-driven reveals, a soft light sheen across every card, hover lift, a button shine, and fade page transitions (View Transitions where supported).
+- `prefers-reduced-motion` turns all of this off. Nothing is loaded from third parties. Everything is CSS, SVG and canvas.
+- No Church photos or speaker portraits are used (copyright). Speakers get an initials monogram with painted light, plus an empty portrait slot in case the Church grants permission.
+
+## Features
+**Card Builder** (`builder.html`; `quote.html` redirects here)
+- Pick a talk, then a quote. You can **only** choose from verified quotes in `assets/data.js`. The quote can't be typed or edited.
+- Choose a background (light rays, dawn mountains, aurora, soft glow), a theme (dusk, midnight, dawn), a font (classic serif, italic serif, modern sans), a size (1:1, 4:5, 9:16), and still or animated.
+- Optional personal line, up to 90 characters with links stripped. It's drawn in a separate box labeled "MY TAKEAWAY · ADDED BY THE SHARER, NOT A QUOTE".
+- Every card carries the Six Months of Light logo, the site URL, a QR code to the talk, and "Quoted from recap · Not an official Church site".
+- Export: PNG in the browser. Animated cards record as **MP4** where the browser's MediaRecorder supports it (recent Chrome/Edge/Safari) or **WebM** otherwise. Where video isn't supported, it falls back to PNG plus a share link. Web Share is used on phones.
+- Offline MP4 rendering (frame-accurate, H.264): `python tools/render_assets.py`
+
+**Remember**
+- Home: hero, Talk of the Week (one ponder question and one invitation), sessions, feature tiles
+- 60-second recap card on each talk (big idea, quote, invitation)
+- Animated cards (10 s): light rises, the quote appears line by line with a soft glow, and the card ends on the logo (its rays grow in), the tagline, the URL and a QR code.
+- "Who said it?" quiz and flashcards (`quiz.html`)
+
+**Understand**
+- Conference Insights (`insights.html`): word cloud, top words, top themes, most-cited scriptures and speakers by calling. It's computed in the browser from the recap data and labeled "based on recaps." The comparison with past conferences is a labeled stub with no numbers.
+- Speaker pages (`speaker.html?s=…`): calling (from the doc only), talks at this conference, recurring themes and links to the official bio and speaker index. No invented biographical facts.
+- **Ask AI** panel on talk, speaker, session and insights pages: **UI mockup only**, not connected to any AI service. The sample answers are assembled from this site's recap data and labeled "Mock answer."
+
+**Apply** (stored only on the device, in localStorage)
+- Commit to an invitation for 7 days, with day check-ins and a downloadable `.ics` reminder that repeats daily for 7 days
+- My Conference (`my.html`): saved quotes, private notes per talk, commitments and a JSON export
+- Lesson helps (`lessons.html`): a template-based outline **stub** for FHE, youth classes and sacrament talks, built only from the talk data. No AI.
+
+**Share**
+- "What stuck with me" under each talk: optional name and one line (up to 280 characters), moderated
+- Conference challenge (`challenge.html`): 7-day invitation plus shared stories, moderated
+- Group links (`groups.html`): `?g=smith-family` tags posts so they show only on that group's view. These links are unlisted, **not private**.
+- Each talk has a static page (`talks/<id>.html`) with Open Graph and Twitter tags and a 1200×630 preview image (`assets/og/<id>.jpg`), so links unfurl properly in Messages, Facebook and WhatsApp.
+- Official video: embedded **only** when `video_embed` is set to an embed URL the Church allows (for example, the official General Conference YouTube video). Until then the page shows the official link.
+
+## Structure
+```
+index.html, builder.html, quiz.html, insights.html, speaker.html, session.html,
+my.html, lessons.html, challenge.html, groups.html   pages (thin shells)
+talks/<id>.html          generated per-talk pages with OG tags (<base href="../">)
+talk.html                redirects ?t=<id> to talks/<id>.html
+moderate.html            admin moderation queue (noindex, password)
+assets/data.js           GENERATED content (from tools/talks_source.py)
+assets/config.js         backend config (Supabase URL + publishable key; ?mock=1 = local mock)
+assets/api.js            backend adapter (Supabase REST, or localStorage mock)
+assets/common.js         header/footer, device storage, Ask-AI mock, themes, motion
+assets/cardkit.js        canvas renderer: cards (backgrounds, fonts, takeaway line), animation, OG images
+assets/logo-mark.svg     logo mark (favicon too)
+assets/pages/*.js        page logic
+assets/styles.css, assets/fonts.css, assets/fonts/   Cormorant Garamond + Inter (OFL, self-hosted)
+assets/vendor/qrcode.js  QR generator (MIT, Kazuhiko Arase)
+assets/og/*.jpg          generated link-preview images
+supabase/001_schema.sql, 002_group_links.sql   database (already applied)
+tools/talks_source.py    SOURCE OF TRUTH for talk content -> assets/data.js
+tools/build_pages.py     -> talks/<id>.html
+tools/build_shells.py    -> page shells (titles, canonical, OG)
+tools/render_assets.py   -> OG images, sample stills, sample MP4s (headless Chrome + ffmpeg)
+tools/screenshots.py     -> screenshots/*.png
+tools/render.html        internal render surface (not linked from the site)
+```
+
+## Content rules
+- Content is transcribed from the Google Doc "October 2026 General Conference — Study Guide," Saturday sessions. **Personal application sections, private notes and the personal-lens section are excluded.** Ponder questions that named family members or the stake were not used.
+- All 54 quotes were checked to be verbatim substrings of the doc. The one editorial bracket is "[Fasting and prayer]" in Elder Soares's second quote.
+- The official talk URLs weren't posted yet, so each talk links to its **official session page**. When the URLs post, set `official_url` in `tools/talks_source.py`.
+- Updating: edit `tools/talks_source.py`, then run
+  `python3 tools/talks_source.py && python3 tools/build_shells.py && python3 tools/build_pages.py && python tools/render_assets.py`
+
+## Preview locally
+```
+cd /workspace/projects/conference-share && python3 -m http.server 8765 --bind 127.0.0.1
+# open http://127.0.0.1:8765/   (add ?mock=1 for a browser-only backend; mock admin password: "preview")
+```
+
+## Backend and moderation (Supabase free tier, $0)
+- New project **`conference-share`** (ref `yrofrjdmhnudqbuvukqm`, us-west-1) in the "Momentum Development" org. Creation cost was checked as **$0/month** before creating it. The existing Momentum Development project was not touched.
+- Tables live in a non-exposed `private` schema with RLS on and no policies, so the public key can't read or write them directly. The public API exposes only:
+  - `approved_comments` view: approved posts only (no status or IP data)
+  - `submit_comment()`: honeypot field (plus a client check that rejects submissions under 2 s), 3–280 characters, name up to 40, no links, rate limit of **3 per 10 min and 15 per day per hashed IP** (raw IPs are never stored), and a cap of 300 pending posts
+  - `admin_list_comments()` / `admin_set_status()`: check a bcrypt-hashed admin password server-side and lock out after 10 failed tries in 15 min per IP
+- **How moderation works:** every post starts as `pending` and stays invisible. Open `moderate.html`, enter the admin password, and **Approve** (it goes live), **Hide**, or move it back to pending. The password is kept only in that browser tab's sessionStorage.
+- Change the admin password in the Supabase SQL editor (never commit it):
+  ```sql
+  insert into private.settings (key, value)
+  values ('admin_password_hash', extensions.crypt('NEW-PASSWORD', extensions.gen_salt('bf')))
+  on conflict (key) do update set value = excluded.value;
+  ```
+- Optionally rename `moderate.html` to a secret slug (for example `moderate-7f3k.html`) for a secret URL as well as the password.
+- The publishable key in `assets/config.js` is safe to publish. **Never** put a service_role key in the site.
+- Free-tier note: Supabase pauses free projects after about a week with no activity. Restore them from the dashboard.
+- Supabase advisors flag the definer view and the anon-callable definer functions. That's intentional: this is the safe gateway design described above.
+
+## Ask AI: rules for a future live version (not built)
+Answer **only** from official talk text on ChurchofJesusChrist.org. Cite the talk and paragraph for every claim. Say "I don't know" when the text doesn't answer the question. Never speak for the Church or give doctrinal rulings. Show the "not an official Church site" notice. No paid API is wired in. If it's added later, use a free or self-hosted option behind a rate limit.
+
+## Publishing (done Oct 2026)
+- Repo: `briganator/six-months-of-light` (public). Pages deploys from `main` / root. `CNAME` = `sixmonthsoflight.com`; `.nojekyll` is present.
+- To update: edit, rebuild (`python3 tools/talks_source.py && python3 tools/build_shells.py && python3 tools/build_pages.py`, then `tools/render_assets.py` for cards/OG), commit, push.
+- The admin password lives only in `.admin-password.txt` on the build machine (gitignored); its bcrypt hash is in `private.settings`.
+- DNS at Porkbun: apex A records 185.199.108.153 / 109.153 / 110.153 / 111.153 (optional AAAA 2606:50c0:8000::153 / 8001::153 / 8002::153 / 8003::153) and `www` CNAME `briganator.github.io`.
+
+## Launch plan
+- **This week:** Card Builder (still and animated), 60-second recaps, talk pages, quiz, insights (labeled "based on recaps"), What stuck with me plus moderation, challenge, group links.
+- **When official text posts (Mon/Tue):** replace recap quotes with official wording, set `official_url` and `video_embed`, remove the recap banners, recompute insights, add Sunday talks, rerender cards and OG images.
+- **After official text posts:** consider making Ask AI live under the rules above (free-tier or self-hosted only), add the past-conference comparisons, and fill in speakers' recent talks from official listings.
+
+## Test data
+The preview test comments and admin-attempt rows were deleted before launch.
+
+## Screenshots
+`screenshots/` holds the current version. Older versions are in `screenshots/archive-v1-study-and-share/`.
+- `00-home-hero-*`, `01-home-*`, `02-talk-*`, `03-card-builder-*`, `04-insights-*`, `05-quiz-*`, `06-my-conference-*`, `07-speaker-*`, `08-lesson-helps-*`, `09-challenge-*`, `10-admin-queue-*`. Each comes in `-mobile-390` and `-desktop-1280`.
+- `screenshots/cards/`: sample stills at 1:1, 4:5 and 9:16 across backgrounds and themes, including one with a takeaway line, plus two animated MP4s.
+
+## Domain, cards and sharing (update)
+
+- **Domain is one setting.** In `tools/talks_source.py`: `DOMAIN = "sixmonthsoflight.com"` and `DOMAIN_LIVE = True` (live). If it were `False`, cards show the wordmark plus "Find it at Six Months of Light", and no URL text appears on any card. After the domain is bought: set `DOMAIN_LIVE = True`, run `python3 tools/talks_source.py && python3 tools/build_shells.py && python3 tools/build_pages.py`, then `/workspace/.venv-pw/bin/python tools/render_assets.py`. Cards will then print `sixmonthsoflight.com`, and canonical, OG and QR links will move to the domain.
+- **QR code** is small and secondary on every card (bottom corner on 1:1 and 4:5, below the link zone on 9:16).
+- **9:16 story cards** have a subtle dashed "Tap the link ↗" zone where the Instagram link sticker goes. The animated MP4/WebM ends on that zone.
+- **Share flow** (Card Builder and talk pages): "Share card" uses the Web Share API to send the PNG file plus text with a tappable deep link to the talk (`talks/<id>.html`). If file sharing isn't supported, it shares the text and link. "More options" opens a sheet with Copy link, Download card, Facebook, X and Text message (sms:).

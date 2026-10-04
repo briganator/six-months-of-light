@@ -1,0 +1,4 @@
+.admin-password*.txt
+screenshots/
+*.mp4
+.DS_Store

@@ -1,0 +1,17 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="robots" content="noindex">
+<link rel="stylesheet" href="../assets/fonts.css"><style>body{margin:0;background:#222}</style></head>
+<body><canvas id="cv"></canvas>
+<script src="../assets/data.js"></script><script src="../assets/common.js"></script>
+<script src="../assets/vendor/qrcode.js"></script><script src="../assets/cardkit.js"></script>
+<script>
+// Internal render surface for tools/render_assets.py (not part of the public site).
+const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
+window.ready = document.fonts.load('500 40px "Cormorant Garamond"').then(() => document.fonts.load('italic 500 40px "Cormorant Garamond"')).then(() => document.fonts.load('600 20px Inter'));
+window.og = id => { const t = talkById(id); cv.width = 1200; cv.height = 630;
+  CardKit.drawOG(ctx, 1200, 630, { title: t.title, speaker: t.speaker, bigIdea: t.big_idea, url: talkUrl(t) }); return cv.toDataURL("image/jpeg", .9); };
+window.ogSite = () => { cv.width = 1200; cv.height = 630;
+  CardKit.drawOG(ctx, 1200, 630, { title: "Six Months of Light", speaker: "October 3–4, 2026 · to April 2027", bigIdea: "The words of October 2026 General Conference, to carry you to April. Summaries, quote cards and ponder questions.", url: CONF.site_url }); return cv.toDataURL("image/jpeg", .9); };
+window.card = (id, q, size, theme, time, extra) => { const t = talkById(id), [W, H] = CardKit.SIZES[size]; cv.width = W; cv.height = H;
+  CardKit.drawCard(ctx, W, H, Object.assign({ quote: t.quotes[q], speaker: t.speaker, title: t.title, theme, url: talkUrl(t) }, extra || {}), time ?? Infinity);
+  return cv.toDataURL(time == null ? "image/png" : "image/jpeg", .95); };
+</script></body></html>

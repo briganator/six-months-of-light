@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Moderation · Six Months of Light</title>
+<link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body class="admin">
+<div class="unofficial">Not an official Church site · Admin view (keep this URL private)</div>
+<header class="hero hero-sm"><div class="hero-sky" aria-hidden="true"><span class="rays"></span><span class="glow g1"></span><span class="sun"></span><span class="horizon"></span></div>
+  <nav class="topbar wrap"><a class="brand" href="index.html" id="brand"></a><div class="navlinks"><a aria-current="page">Moderation</a></div></nav></header>
+<main class="wrap" style="padding-top:8px">
+  <div class="section-label">Admin</div><h1 style="margin-top:0">Moderation queue</h1>
+  <p class="speaker">Approve or hide “What stuck with me” posts and challenge stories. Nothing appears publicly until approved.</p>
+  <section class="card" id="login">
+    <form id="lf">
+      <label for="pw" style="font-weight:600">Admin password</label>
+      <input type="password" id="pw" autocomplete="current-password" style="margin:6px 0 10px">
+      <button class="btn" type="submit">Open queue</button>
+      <div class="msg err" id="lmsg"></div>
+    </form>
+  </section>
+  <section id="queue" hidden>
+    <div class="tabs" role="toolbar" aria-label="Filter">
+      <button data-s="pending" aria-pressed="true">Pending</button>
+      <button data-s="approved" aria-pressed="false">Approved</button>
+      <button data-s="hidden" aria-pressed="false">Hidden</button>
+      <button data-s="all" aria-pressed="false">All</button>
+      <button id="logout" style="margin-left:auto">Lock</button>
+    </div>
+    <div id="list"></div>
+  </section>
+</main>
+<script src="assets/config.js"></script>
+<script src="assets/api.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/common.js"></script>
+<script>
+document.getElementById('brand').innerHTML = WORDMARK();
+let pw = sessionStorage.getItem("conf-admin-pw") || "", filter = "pending";
+const $ = id => document.getElementById(id);
+async function refresh() {
+  const r = await ConfAPI.adminList(pw, filter).catch(e => ({ ok:false, error:e.message }));
+  if (!r.ok) { sessionStorage.removeItem("conf-admin-pw"); $("queue").hidden = true; $("login").hidden = false; $("lmsg").textContent = r.error || "Error"; return; }
+  $("login").hidden = true; $("queue").hidden = false;
+  const items = r.items || [];
+  $("list").innerHTML = items.length ? items.map(c => {
+    const t = talkById(c.talk_id);
+    return `<article class="card qitem">
+      <div class="meta"><span class="status ${esc(c.status)}">${esc(c.status)}</span> · ${t ? esc(t.speaker + " — " + t.title) : c.talk_id === CONF.challenge.id ? "Challenge story" : esc(c.talk_id)}${c.group_tag ? " · group: " + esc(c.group_tag) : ""} · ${new Date(c.created_at).toLocaleString()}</div>
+      <div style="font-size:17px">${esc(c.body)}</div>
+      <div class="meta">— ${esc(c.name || "Anonymous")}</div>
+      <div class="actions">
+        ${c.status !== "approved" ? `<button class="btn ok small" data-id="${c.id}" data-to="approved">Approve</button>` : ""}
+        ${c.status !== "hidden" ? `<button class="btn warn small" data-id="${c.id}" data-to="hidden">Hide</button>` : ""}
+        ${c.status !== "pending" ? `<button class="btn secondary small" data-id="${c.id}" data-to="pending">Back to pending</button>` : ""}
+      </div></article>`;
+  }).join("") : `<p class="empty">Nothing ${filter === "all" ? "" : filter} right now.</p>`;
+}
+$("lf").addEventListener("submit", e => { e.preventDefault(); pw = $("pw").value; sessionStorage.setItem("conf-admin-pw", pw); $("lmsg").textContent = ""; refresh(); });
+$("logout").addEventListener("click", () => { pw = ""; sessionStorage.removeItem("conf-admin-pw"); location.reload(); });
+document.querySelectorAll(".tabs button[data-s]").forEach(b => b.addEventListener("click", () => {
+  filter = b.dataset.s; document.querySelectorAll(".tabs button[data-s]").forEach(x => x.setAttribute("aria-pressed", x === b)); refresh();
+}));
+$("list").addEventListener("click", async e => {
+  const b = e.target.closest("button[data-id]"); if (!b) return;
+  b.disabled = true;
+  const r = await ConfAPI.adminSet(pw, Number(b.dataset.id), b.dataset.to).catch(e => ({ ok:false, error:e.message }));
+  if (!r.ok) alert(r.error || "Could not update");
+  refresh();
+});
+if (pw) refresh();
+</script>
+</body>
+</html>
