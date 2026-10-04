@@ -8,7 +8,7 @@ pages = {
  "index": ("Six Months of Light · October 2026 General Conference", ["share"], ["insights-data.js"]),
  "builder": ("Card Studio · Six Months of Light", [], ["themes3.js", "insights-data.js", "photos.js", "vendor/qrcode.js", "cardkit.js", "cardkit-plus.js", "promos.js", "share-pages.js"]),
  "quiz": ("Who said it? · Six Months of Light", [], []),
- "insights": ("Conference Insights · Six Months of Light", [], ["insights-data.js"]),
+ "insights": ("Conference Insights · Six Months of Light", [], ["insights-data.js", "zoom.js"]),
  "credits": ("Credits & licenses · Six Months of Light", [], ["photos.js"]),
  "speaker": ("Speakers · Six Months of Light", [], []),
  "session": ("Session · Six Months of Light", [], []),
@@ -16,6 +16,8 @@ pages = {
  "lessons": ("Lesson helps · Six Months of Light", [], []),
  "challenge": ("Conference challenge · Six Months of Light", ["share"], []),
  "groups": ("Group links · Six Months of Light", [], []),
+ "study": ("Study library · Six Months of Light", [], ["themes3.js", "library-data.js", "library.js"]),
+ "topic": ("Topic across conferences · Six Months of Light", [], ["themes3.js", "library-data.js", "library.js"]),
 }
 for name, (title, pre, libs) in pages.items():
     scripts = ["assets/config.js", "assets/api.js", "assets/data.js", "assets/common.js"] + [f"assets/{l}" for l in libs] + [f"assets/pages/{e}.js" for e in pre] + [f"assets/pages/{name}.js"]

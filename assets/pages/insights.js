@@ -35,7 +35,10 @@ document.getElementById("main").innerHTML = `
     <div class="stat"><b data-count="${T.length}">${T.length}</b><span>talks so far</span></div>
     <div class="stat"><b data-count="${I.christMentions}">${I.christMentions}</b><span>mentions of Christ</span></div>
     <div class="stat"><b data-count="${I.refs.length}">${I.refs.length}</b><span>scripture refs</span></div></div>
-  ${subnavHTML([["cards", "Cards"], ["theme-quiz", "Theme quiz"], ["spotlight", "Spotlight"], ["words", "Word cloud"], ["themes", "Themes"], ["scriptures", "Scriptures"], ["ask", "Ask the Talks"]], "Insights sections")}
+  ${subnavHTML([["zoom", "Zoom"], ["compare", "Compare"], ["music", "Music"], ["cards", "Cards"], ["theme-quiz", "Theme quiz"], ["spotlight", "Spotlight"], ["words", "Word cloud"], ["themes", "Themes"], ["scriptures", "Scriptures"], ["ask", "Ask the Talks"]], "Insights sections")}
+  <section class="zoom-sec" id="zoom"><h2>Zoom in or out</h2><p class="b-help">Every conference since April 2021, then one conference, one session or one talk. Each finding can become a card.</p><div id="zoomBox"><p class="empty">Loading the library…</p></div></section>
+  <section class="zoom-sec" id="compare"><h2>Compare two conferences</h2><div id="cmpBox"></div></section>
+  <section class="zoom-sec" id="music"><h2>Music at conference</h2><div id="musBox"></div></section>
   <h2 id="cards">Shareable insight cards</h2>
   <div class="ins-grid2">${I.list.map(mini).join("")}</div>
   <section class="card quizbox" id="theme-quiz"><div class="ins-kicker">Quick quiz · 3 taps</div><h2 style="margin-top:4px">Which theme speaks to you?</h2>
@@ -78,3 +81,7 @@ document.getElementById("tq").addEventListener("change", () => {
     <ul>${ts.slice(0, 3).map(t => `<li><a href="talks/${t.id}.html">${esc(t.title)}</a> · ${esc(t.speaker)}</li>`).join("")}</ul>
     <a class="btn gold" href="builder.html?ins=${esc(card.id)}">Share my result card</a></div>`;
 });
+
+loadLib().then(LB => { Zoom.render(document.getElementById("zoomBox"), LB); Zoom.compare(document.getElementById("cmpBox"), LB); Zoom.music(document.getElementById("musBox"), LB);
+  if (location.hash && ["#zoom", "#compare", "#music"].includes(location.hash)) document.querySelector(location.hash).scrollIntoView(); })
+  .catch(() => { document.getElementById("zoomBox").innerHTML = `<p class="empty">The library didn't load. Check your connection and refresh.</p>`; });

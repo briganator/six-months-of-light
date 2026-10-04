@@ -40,6 +40,7 @@ else {
       : `<div class="slot">🎬 <strong>Official video</strong> — will be embedded here only where the Church permits embedding (e.g., the official General Conference YouTube video). Until then, use the official link above.</div>`}
     ${t.full_text_permitted ? `<div id="fulltext"></div>` : `<div class="slot">📄 <strong>Full talk text</strong> — not reproduced here (Church copyright). This space is reserved in case permission is granted; read the full talk on ChurchofJesusChrist.org.</div>`}
   </article>
+  <section class="card study-panel" id="studyPanel" aria-labelledby="sp-h"><h2 id="sp-h" style="margin-top:0">Study this talk</h2><p class="empty">Loading…</p></section>
   <section class="card"><h2 style="margin-top:0">Share this talk</h2>
     <p class="speaker">Quote cards include a QR code that links back to this page.</p>
     <div class="links" style="margin-bottom:0">
@@ -88,3 +89,22 @@ else {
   const hm = /^#q(\d)$/.exec(location.hash), qa = hm && document.getElementById("q" + hm[1]);
   if (qa) { qa.classList.add("qhit"); requestAnimationFrame(() => { qa.scrollIntoView({ block: "center" }); qa.focus({ preventScroll: true }); }); }
 }
+
+// ---- Study panel: topics, scriptures with Come, Follow Me tie-in, structure, taught before, print summary ----
+if (t) loadLib().then(LB => {
+  const me = LB.talks.find(x => x.recap && x.id === t.id), el = document.getElementById("studyPanel"); if (!me || !el) return;
+  const cfm = r => { const w = LB.work(r); return w === "Old Testament" ? `<span class="pill">In Come, Follow Me 2026</span>` : w === "New Testament" ? `<span class="pill pending">Come, Follow Me 2027</span>` : ""; };
+  const rel = LB.related(me, 4).filter(x => !x.t.recap), before = LB.talks.filter(x => x.sp === me.sp && !x.recap).slice(0, 3);
+  const dens = Object.entries(me.d).sort((a, b) => b[1] - a[1]).slice(0, 4);
+  el.innerHTML = `<h2 id="sp-h" style="margin-top:0">Study this talk</h2>
+    <div class="sp-grid">
+      <div><h3>Topics</h3><p>${(me.tg.length ? me.tg : dens.map(x => x[0])).map(k => LB.THEME_KEYS.includes(k) ? `<a class="pill" href="topic.html?k=${k}">${esc(LB.themeName(k))}</a>` : `<span class="pill">${esc(LB.themeName(k))}</span>`).join(" ") || "None tagged yet."}</p>
+        <h3>Structure</h3><ul class="sp-facts"><li>${t.quotes.length} verified quote${t.quotes.length === 1 ? "" : "s"}</li><li>${t.scriptures.length} key scripture${t.scriptures.length === 1 ? "" : "s"} in the recap</li><li>1 invitation · 1 ponder question</li></ul></div>
+      <div><h3>Scriptures to study</h3><ul class="sp-refs">${t.scriptures.map(r => `<li><span>${esc(r)}</span> ${cfm(r)}</li>`).join("")}</ul>
+        <p class="z-note">This year's Come, Follow Me is the ${esc(LB.CFM[2026][0])}; 2027 is the ${esc(LB.CFM[2027][0])}. <a href="${esc(LB.CFM[2026][1])}" rel="noopener">Manual ↗</a></p></div>
+    </div>
+    ${rel.length ? `<h3>Taught before</h3><ul class="sp-rel">${rel.map(x => `<li><a href="${esc(LB.href(x.t))}" rel="noopener" target="_blank">${esc(x.t.t)} ↗</a> <span class="speaker">${esc(x.t.s)} · ${esc(LB.confOf(x.t.c).label)}${x.sharedRefs.length ? " · also cites " + esc(x.sharedRefs.slice(0, 2).join(", ")) : ""}</span></li>`).join("")}</ul>` : ""}
+    ${before.length ? `<h3>Earlier from ${esc(t.speaker.replace(/^(President|Elder|Sister|Bishop)\s+/, ""))}</h3><ul class="sp-rel">${before.map(x => `<li><a href="${esc(LB.href(x))}" rel="noopener" target="_blank">${esc(x.t)} ↗</a> <span class="speaker">${esc(LB.confOf(x.c).label)}</span></li>`).join("")}</ul><a class="linkish" href="speaker.html?s=${me.sp}">All talks by this speaker</a>` : ""}
+    <div class="links no-print"><button type="button" class="btn secondary small" id="printBtn">Print a one-page summary</button>${(() => { const k = me.tg.find(x => LB.THEME_KEYS.includes(x)) || (dens[0] || [])[0]; return k ? `<a class="btn secondary small" href="study.html?c=all&topic=${k}">More talks on ${esc(LB.themeName(k))}</a>` : ""; })()}</div>`;
+  document.getElementById("printBtn").addEventListener("click", () => window.print());
+}).catch(() => { const el = document.getElementById("studyPanel"); if (el) el.remove(); });
