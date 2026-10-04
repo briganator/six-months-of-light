@@ -224,7 +224,7 @@
         const norm = x => x.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         const apply = () => { const words = norm(inp.value).split(/\s+/).filter(Boolean), q = words.length > 0;
           b.querySelectorAll(".opt").forEach(o => { const f = norm(o.dataset.find || o.textContent);
-            o.hidden = q ? !(words.every(w => f.includes(w)) && !o.classList.contains("top")) : o.classList.contains("sp") && !all; });
+            o.hidden = o.classList.contains("top") ? q || all : q ? !words.every(w => f.includes(w)) : o.classList.contains("sp") && !all; });
           b.querySelectorAll("[data-sec]").forEach(sc => sc.hidden = ![...sc.querySelectorAll(".opt")].some(o => !o.hidden));
           const ts = b.querySelector("[data-topsec]"); if (ts) ts.hidden = q || all; };
         inp.addEventListener("input", apply);

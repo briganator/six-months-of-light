@@ -10,7 +10,7 @@ const st = {
   look: L[P.get("look")] ? P.get("look") : "sunrise", pal: K.PALETTES[P.get("pal")] ? P.get("pal") : "gold",
   font: K.FONTS[P.get("font")] ? P.get("font") : "classic", align: P.get("align") === "left" ? "left" : "center",
   size: S[P.get("size")] ? P.get("size") : (isPhone ? "story" : "portrait"), ov: P.has("ov") ? Math.min(.85, Math.max(0, +P.get("ov") / 100)) : null,
-  anim: K.ANIMS[P.get("anim")] ? P.get("anim") : P.get("anim") === "1" ? "fade" : "none", sticker: P.get("ig") === "1", note: "", tab: ["quote", "look", "size", "text", "share"].includes(P.get("tab")) ? P.get("tab") : (P.has("t") ? "look" : "quote"), src: P.get("src") === "promo" || P.has("promo") ? "promo" : P.get("ins") ? "ins" : "quote", filter: "", theme: THEMES3.get(P.get("theme")) ? THEMES3.get(P.get("theme")).slug : "all",
+  anim: K.ANIMS[P.get("anim")] ? P.get("anim") : P.get("anim") === "1" ? "fade" : "none", sticker: P.get("ig") === "1", note: "", tab: ["quote", "look", "size", "text", "share"].includes(P.get("tab")) ? P.get("tab") : (P.has("t") ? "look" : "quote"), src: P.get("src") === "promo" || P.has("promo") ? "promo" : P.get("ins") ? "ins" : "quote", filter: "", scope: "conf", mode: "still", libT: null, libNote: "", theme: THEMES3.get(P.get("theme")) ? THEMES3.get(P.get("theme")).slug : "all",
 };
 // Advanced formatting: fx=size:1.1;ls:0.05;box:glass ... (whitelisted keys and values)
 const FMT_NUM = { size: [.6, 1.5], lh: [.8, 1.6], ls: [0, .25], vig: [0, 1], grain: [0, 1], blur: [0, 6], dx: [-.3, .3], dy: [-.3, .3] };
@@ -18,7 +18,7 @@ const FMT_OPT = { weight: ["300", "400", "500", "600", "700", "800"], cs: ["uppe
 const parseFmt = v => { const f = {}; String(v || "").split(";").forEach(kv => { const [k, x] = kv.split(":"); if (FMT_NUM[k]) { const n = +x; if (isFinite(n)) f[k] = Math.min(FMT_NUM[k][1], Math.max(FMT_NUM[k][0], n)); }
   else if (FMT_OPT[k] && FMT_OPT[k].includes(x)) f[k] = x; else if ((k === "ink" || k === "acc") && /^[0-9a-f]{6}$/i.test(x)) f[k] = "#" + x.toLowerCase(); }); return f; };
 const encFmt = f => Object.entries(f).filter(([, v]) => v !== undefined && v !== "" && v !== null).map(([k, v]) => k + ":" + (typeof v === "number" ? +v.toFixed(3) : String(v).replace("#", ""))).join(";");
-st.fmt = parseFmt(P.get("fx"));
+st.fmt = parseFmt(P.get("fx")); st.mode = st.anim !== "none" ? "anim" : "still";
 const PRESETS = [
   ["Classic", "classic", {}], ["Elegant", "playfair_i", { border: "double" }], ["Bold statement", "abril", { size: 1.08, box: "band", border: "none" }],
   ["Modern clean", "montserrat", { weight: "600", ls: .02, border: "none", qm: "bar" }], ["Script", "greatvibes", { size: 1.1, border: "rounded" }],
@@ -42,7 +42,7 @@ document.getElementById("main").innerHTML = `
         <div class="st-ready" id="ready" role="status"><span class="dot"></span><span id="readyTxt">Your card is ready. Tap <b>Share</b>.</span>
           <button type="button" class="linkish" id="igBtn" aria-expanded="false" aria-controls="igTip">Instagram Stories?</button></div>
         <div class="st-tip" id="igTip" hidden><b>To post to Instagram Stories:</b> tap <b>Save image</b> (on iPhone you can also tap Share → <i>Save Image</i>). Open Instagram → <b>+</b> → <b>Story</b> and pick the card from your photos. Add a <b>Link</b> sticker with the copied link so friends can open the quote. Tip: the <b>Instagram Story preset</b> (Size tab) marks the sticker spot and copies the link when you save.</div>
-        <div class="st-btns"><button class="btn gold st-share" id="share"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3l4.5 4.5-1.4 1.4L13 6.8V15h-2V6.8L8.9 8.9 7.5 7.5zM5 13h2v6h10v-6h2v8H5z"/></svg>Share</button>
+        <div class="st-btns"><div class="seg st-mode" id="shMode" role="group" aria-label="Share as"><button type="button" data-k="still" aria-pressed="${st.anim === "none"}">Still</button><button type="button" data-k="anim" aria-pressed="${st.anim !== "none"}">Animated</button></div><button class="btn gold st-share" id="share"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3l4.5 4.5-1.4 1.4L13 6.8V15h-2V6.8L8.9 8.9 7.5 7.5zM5 13h2v6h10v-6h2v8H5z"/></svg><span id="shareTxt">Share</span></button>
           <button class="btn secondary" id="save">Save image</button><button class="btn secondary" id="copy">More ways</button></div>
         <button type="button" class="linkish st-linkonly" id="shareLink">Share link only</button>
       </div>
@@ -51,11 +51,12 @@ document.getElementById("main").innerHTML = `
       <div class="st-tabs" role="tablist" id="tabs">${[["quote", "Quote"], ["look", "Look"], ["size", "Size"], ["text", "Motion"], ["share", "Share"]].map(([k, v]) => `<button role="tab" type="button" id="tab-${k}" aria-controls="p-${k}" aria-selected="${st.tab === k}">${v}</button>`).join("")}</div>
       <section class="st-pane" id="p-quote" role="tabpanel" aria-labelledby="tab-quote">
         ${seg("src", { quote: "Quotes", ins: "Insights", promo: "Share the site" }, st.src, "Card type")}
-        <div id="srcQuote"><div class="b-label step-l"><span class="stepn">1</span> Choose a theme</div>
-          <div class="themegrid" id="qthemes" role="group" aria-label="Choose a theme">${T3.list.map(th => { const n = th.slug === "all" ? ALLQ.length : T3.count(th.slug); return `${th.slug === T3.list.find(x => x.style).slug ? `<div class="thm-sep">Latter-day Saint topics &amp; seasons</div>` : ""}<button type="button" class="thm" data-th="${th.slug}" aria-pressed="${th.slug === st.theme}"><i aria-hidden="true">${th.icon}</i><b>${esc(th.name)}</b><small>${th.style && !n ? "backgrounds · all quotes" : `${n} quote${n === 1 ? "" : "s"}`}</small></button>`; }).join("")}</div>
-          <div class="b-label step-l"><span class="stepn">2</span> Pick a quote <span class="b-help" id="thmNote"></span></div><div class="q-tools"><input class="field" id="qsearch" type="search" placeholder="Search quotes, speakers, words…" aria-label="Search quotes"><button type="button" class="btn secondary small" id="shuffle">Shuffle</button></div>
-          <p class="b-help">Verified quotes only · from recaps; confirm with official text</p>
-          <div id="qlist" class="qlist"></div>
+        <div id="srcQuote">
+          <div class="qs-top"><input class="field qs-find" id="qsearch" type="search" placeholder="Search quotes, talks or speakers" aria-label="Search quotes, talks or speakers" enterkeyhint="search" autocomplete="off">
+            ${seg("qscope", { conf: "This conference", all: "All conferences" }, "conf", "Search in")}</div>
+          <div class="qs-chips" id="qthemes" role="group" aria-label="Theme">${T3.list.map(th => `<button type="button" class="thm thm-chip" data-th="${th.slug}" aria-pressed="${th.slug === st.theme}"><i aria-hidden="true">${th.icon}</i>${esc(th.slug === "all" ? "All themes" : th.name)}</button>`).join("")}</div>
+          <p class="b-help qs-note"><span id="thmNote"></span> Verified quotes only (from recaps; confirm with official text).</p>
+          <div id="qbrowse"></div><div id="qresults" hidden></div>
           <button type="button" class="btn secondary small car-btn" id="carQ">Save this talk as a carousel</button><p class="b-help" id="carQh"></p></div>
         <div id="srcPromo" hidden><p class="b-help">Invite friends to Six Months of Light. Each card links to the site with a QR code.</p>
           <div id="promolist" class="qlist"></div>
@@ -125,29 +126,79 @@ document.getElementById("main").innerHTML = `
     </div>
   </div>`;
 const $ = id => document.getElementById(id), cv = $("cv"), ctx = cv.getContext("2d");
-const talk = () => talkById(st.t), ins = () => st.ins && INSIGHTS.get(st.ins);
+const talk = () => talkById(st.t);
+// Older talks have no verified quotes on this site: the card shows the official title and speaker, plus an optional personal takeaway.
+const libLabel = T => (window.Library && Library.confOf(T.c)?.label) || T.c;
+const libIns = () => { const T = st.libT, lab = libLabel(T);
+  return { id: "lib-" + T.c + "-" + T.id, eyebrow: lab.toUpperCase() + " · GENERAL CONFERENCE", kicker: T.s, title: T.t, sub: T.r || "",
+    body: st.libNote ? { type: "text", text: "My takeaway: " + st.libNote } : undefined,
+    basis: st.libNote ? "Official title · takeaway is personal" : "Official talk title and speaker",
+    url: `https://www.churchofjesuschrist.org/study/general-conference/${T.c.slice(0, 4)}/${T.c.slice(5)}/${T.id}?lang=eng`,
+    share: `“${T.t}” by ${T.s} (${lab} General Conference)${st.libNote ? ". My takeaway: " + st.libNote : ""}` }; };
+const ins = () => st.libT ? libIns() : st.ins && INSIGHTS.get(st.ins);
 // ---- quote list ----
+const norm = x => String(x || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[’']/g, "'");
+const SESS_ORDER = CONF.sessions.map(x => x.id);
+const isOn = (t, i) => !st.ins && !st.libT && t.id === st.t && i === st.q;
+const qcard = x => `<article class="qcard ${isOn(x.t, x.i) ? "on" : ""}" role="listitem"><p class="qq">“${esc(x.q)}”</p><p class="qs"><b>${esc(x.t.speaker)}</b> · ${esc(x.t.title)}</p>
+  <button type="button" class="btn ${isOn(x.t, x.i) ? "secondary" : "gold"} small qs-use" data-t="${x.t.id}" data-q="${x.i}" aria-pressed="${isOn(x.t, x.i)}">${isOn(x.t, x.i) ? "✓ On your card" : "Use this"}</button></article>`;
+let qview = null; // null = results list; {c, id} = one talk
 function renderQuotes() {
-  const f = st.filter.toLowerCase();
-  const items = ALLQ.filter(x => inTheme(x) && (!f || (x.q + " " + x.t.speaker + " " + x.t.title).toLowerCase().includes(f)));
-  $("qlist").innerHTML = items.length ? items.map(x => `<button type="button" class="qitem" data-t="${x.t.id}" data-q="${x.i}" aria-pressed="${!st.ins && x.t.id === st.t && x.i === st.q}"><span class="qq">“${esc(x.q)}”</span><span class="qs">${esc(x.t.speaker)} · ${esc(x.t.title)}</span></button>`).join("") : `<p class="empty">No quotes match. Try another word.</p>`;
+  const words = norm(st.filter).split(/\s+/).filter(w => w.length > 1), q = words.length > 0;
+  $("qbrowse").hidden = q || !!qview; $("qresults").hidden = !q && !qview;
+  if (!q && !qview) { // browse: newest session first, newest talks first, swipe sideways
+    const bySess = SESS_ORDER.slice().reverse().map(sid => ({ s: CONF.sessions.find(x => x.id === sid), items: ALLQ.filter(x => x.t.session === sid && inTheme(x)) })).filter(g => g.items.length);
+    bySess.forEach(g => { const ord = [...new Set(g.items.map(x => x.t.id))].reverse(); g.items.sort((a, b) => ord.indexOf(a.t.id) - ord.indexOf(b.t.id) || a.i - b.i); });
+    $("qbrowse").innerHTML = (st.scope === "all" ? `<p class="b-help">Type above to search every conference since ${window.Library ? Library.coverage.from : "April 2015"}.</p>` : "") +
+      (bySess.length ? bySess.map(g => `<section class="qs-sess"><h3>${esc(g.s.name)} <small>${g.items.length} quote${g.items.length === 1 ? "" : "s"} · swipe →</small></h3><div class="qcar" role="list">${g.items.map(qcard).join("")}</div></section>`).join("") : `<p class="empty">No quotes for this theme yet. Try All themes.</p>`);
+    return; }
+  if (qview) return renderTalkView();
+  const has = s => words.every(w => norm(s).includes(w));
+  const qs = ALLQ.filter(x => inTheme(x) && has(x.q + " " + x.t.speaker + " " + x.t.title)).slice(0, 40);
+  let talks = CONF.talks.filter(t => has(t.title + " " + t.speaker)).map(t => ({ c: "2026-10", id: t.id, t: t.title, s: t.speaker, n: t.quotes.length, recap: 1 }));
+  let more = "";
+  if (st.scope === "all") { if (window.Library) talks = talks.concat(Library.talks.filter(t => !t.recap && has(t.t + " " + t.s + " " + t.r + " " + (t.k || "") + " " + (t.tw || []).join(" ") + " " + libLabel(t))).slice(0, 60).map(t => ({ c: t.c, id: t.id, t: t.t, s: t.s, n: 0 })));
+    else { more = `<p class="b-help">Loading all conferences…</p>`; loadLib().then(() => renderQuotes()).catch(() => {}); } }
+  const tRow = t => `<button type="button" class="qs-talk" data-ct="${t.c}|${esc(t.id)}"><b>${esc(t.t)}</b><span>${esc(t.s)} · ${t.recap ? "October 2026" : esc(window.Library ? libLabel(t) : t.c)} · ${t.recap ? `${t.n} verified quote${t.n === 1 ? "" : "s"}` : "official summary"}</span></button>`;
+  $("qresults").innerHTML = `<h3 class="qs-h">Quotes <small>${qs.length}${qs.length === 40 ? "+" : ""}</small></h3>${qs.length ? `<div class="qlistv" role="list">${qs.map(qcard).join("")}</div>` : `<p class="empty">No verified quotes match${st.theme !== "all" ? " in this theme" : ""}.</p>`}
+    <h3 class="qs-h">Talks <small>${talks.length}${st.scope === "conf" ? " · this conference" : ""}</small></h3>${more}${talks.length ? `<div class="qs-talks">${talks.map(tRow).join("")}</div>` : more ? "" : `<p class="empty">No talks match.${st.scope === "conf" ? ` <button type="button" class="linkish" data-scope-all>Search all conferences</button>` : ""}</p>`}`;
 }
+function renderTalkView() { const { c, id } = qview, back = `<button type="button" class="linkish qs-back" data-back>← Back to results</button>`;
+  if (c === "2026-10") { const t = talkById(id); $("qresults").innerHTML = `${back}<h3 class="qs-h">${esc(t.title)} <small>${esc(t.speaker)}</small></h3><div class="qlistv" role="list">${t.quotes.map((q, i) => qcard({ t, i, q })).join("")}</div>`; return; }
+  const T = Library.talks.find(x => x.c === c && x.id === id); if (!T) { qview = null; return renderQuotes(); }
+  const on = st.libT && st.libT.id === T.id && st.libT.c === T.c;
+  $("qresults").innerHTML = `${back}<div class="qs-old"><p class="eyebrow-s">${esc(libLabel(T))} · General Conference</p><h3>${esc(T.t)}</h3><p class="qs-by">${esc(T.s)}${T.r ? " · " + esc(T.r) : ""}</p>
+    ${T.k ? `<p class="qs-sum">${esc(T.k)}</p><p class="b-help">Official summary line</p>` : ""}<p><a href="${esc(Library.official(T))}" target="_blank" rel="noopener">Read the talk on churchofjesuschrist.org ↗</a></p>
+    <p class="b-help">This site has no verified quotes for this talk, so its words don't go on cards. You can still make a card:</p>
+    <div class="qs-old-btns"><button type="button" class="btn ${on && !st.libNote ? "secondary" : "gold"}" data-lib="title">${on && !st.libNote ? "✓ Title card" : "Use the title"}</button><button type="button" class="btn secondary" data-lib="note">Add your own takeaway</button></div>
+    <div class="qs-note-box" id="libNoteBox" ${on && st.libNote ? "" : "hidden"}><label class="b-label" for="libNote">Your takeaway <span class="b-help">labeled “My takeaway” on the card, so it's clearly personal</span></label>
+      <textarea class="field" id="libNote" maxlength="90" rows="2" placeholder="What you want to remember from this talk">${esc(st.libNote)}</textarea></div></div>`; }
+$("qresults").addEventListener("click", e => {
+  if (e.target.closest("[data-back]")) { qview = null; renderQuotes(); return; }
+  if (e.target.closest("[data-scope-all]")) { setScope("all"); return; }
+  const tb = e.target.closest(".qs-talk"); if (tb) { const [c, id] = tb.dataset.ct.split("|"); qview = { c, id }; renderQuotes(); $("qresults").scrollIntoView({ block: "nearest" }); return; }
+  const lb = e.target.closest("[data-lib]"); if (lb) { const T = Library.talks.find(x => x.c === qview.c && x.id === qview.id);
+    st.ins = null; st.libT = { c: T.c, id: T.id, t: T.t, s: T.s, r: T.r }; if (lb.dataset.lib === "title") st.libNote = "";
+    renderTalkView(); if (lb.dataset.lib === "note") { $("libNoteBox").hidden = false; $("libNote").focus(); } draw(true); } });
+let lnT; $("qresults").addEventListener("input", e => { if (e.target.id !== "libNote") return; clearTimeout(lnT); lnT = setTimeout(() => { st.libNote = cleanNote(e.target.value); draw(true); }, 250); });
+const setScope = v => { st.scope = v; $("qscope").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.k === v)); if (v === "all") loadLib().then(() => renderQuotes()).catch(() => {}); renderQuotes(); };
+$("qscope").addEventListener("click", e => { const b = e.target.closest("button[data-k]"); if (b) setScope(b.dataset.k); });
+const useQuote = (t, q) => { st.ins = null; st.libT = null; st.t = t; st.q = q; renderQuotes(); draw(true); };
 function renderIns() { $("inslist").innerHTML = INSIGHTS.list.map(x => `<button type="button" class="qitem" data-ins="${x.id}" aria-pressed="${st.ins === x.id}"><span class="qq">${esc(x.title)}</span><span class="qs">${esc(x.kicker)}</span></button>`).join(""); }
-$("qlist").addEventListener("click", e => { const b = e.target.closest(".qitem"); if (!b) return; st.ins = null; st.t = b.dataset.t; st.q = +b.dataset.q; renderQuotes(); draw(true); });
-$("inslist").addEventListener("click", e => { const b = e.target.closest(".qitem"); if (!b) return; st.ins = b.dataset.ins; renderIns(); draw(true); });
+document.getElementById("srcQuote").addEventListener("click", e => { const b = e.target.closest(".qs-use"); if (b) useQuote(b.dataset.t, +b.dataset.q); });
+$("inslist").addEventListener("click", e => { const b = e.target.closest(".qitem"); if (!b) return; st.libT = null; st.ins = b.dataset.ins; renderIns(); draw(true); });
 ["spotSel", "themeSel"].forEach(id => $(id).addEventListener("change", e => { if (e.target.value) { st.ins = e.target.value; renderIns(); draw(true); } }));
-let qt; $("qsearch").addEventListener("input", e => { clearTimeout(qt); qt = setTimeout(() => { st.filter = e.target.value; renderQuotes(); }, 120); });
+let qt; $("qsearch").addEventListener("input", e => { clearTimeout(qt); qt = setTimeout(() => { st.filter = e.target.value; qview = null; renderQuotes(); }, 150); });
 function renderSug() { const ids = resolveLooks(st.theme), th = T3.get(st.theme);
   $("lookSug").innerHTML = st.theme === "all" ? "" : `<div class="b-label">Suggested for ${esc(th.name)}</div><div class="looks sug">${ids.map(lookBtn).join("")}</div>`;
   $("lookSug").querySelectorAll("canvas[data-thumb]").forEach(c => K.drawThumb(c.getContext("2d"), c.width, c.height, c.dataset.thumb, st.pal));
-  $("thmNote").textContent = st.theme === "all" ? "" : `· ${th.name}`; }
+  $("thmNote").textContent = st.theme === "all" ? "" : `${th.name}:`; }
 function pickTheme(slug, auto) { st.theme = slug; $("qthemes").querySelectorAll(".thm").forEach(c => c.setAttribute("aria-pressed", c.dataset.th === slug)); renderSug();
   if (slug !== "all" && (!auto || !P.has("look"))) { const ids = resolveLooks(slug); if (ids.length && (auto ? !ids.includes(st.look) : ids[0] !== st.look)) { st.look = ids[0]; st.ov = null; }
     const cur = ALLQ.find(x => x.t.id === st.t && x.i === st.q); if (!st.ins && (!cur || !inTheme(cur)) && (!auto || !P.has("t"))) { const f = ALLQ.find(x => inTheme(x)); if (f) { st.t = f.t.id; st.q = f.i; } } syncLooks(); }
   renderQuotes(); if (!auto) draw(true); }
 $("qthemes").addEventListener("click", e => { const b = e.target.closest(".thm"); if (b) pickTheme(b.dataset.th); });
 const syncLooks = () => document.querySelectorAll(".look").forEach(x => x.setAttribute("aria-pressed", x.dataset.look === st.look));
-$("shuffle").addEventListener("click", () => { const pool = ALLQ.filter(x => inTheme(x)); const x = pool[Math.floor(Math.random() * pool.length)]; st.ins = null; st.t = x.t.id; st.q = x.i; renderQuotes(); draw(true); document.querySelector(".qitem[aria-pressed=true]")?.scrollIntoView({ block: "nearest" }); });
 // ---- tabs ----
 function setTab(k) { st.tab = k; document.querySelectorAll("#tabs [role=tab]").forEach(b => b.setAttribute("aria-selected", b.id === "tab-" + k)); document.querySelectorAll(".st-pane").forEach(p => p.hidden = p.id !== "p-" + k); if (k === "look") thumbs();
   const panel = document.querySelector(".st-panel"), ph = isPhone ? $("stPrev").offsetHeight + $("sitebar").offsetHeight : 0, top = panel.getBoundingClientRect().top;
@@ -155,7 +206,7 @@ function setTab(k) { st.tab = k; document.querySelectorAll("#tabs [role=tab]").f
 document.querySelectorAll("#tabs [role=tab]").forEach(b => b.addEventListener("click", () => setTab(b.id.slice(4))));
 $("tabs").addEventListener("keydown", e => { if (!["ArrowLeft", "ArrowRight"].includes(e.key)) return; const ks = ["quote", "look", "size", "text", "share"], i = (ks.indexOf(st.tab) + (e.key === "ArrowRight" ? 1 : 4)) % 5; setTab(ks[i]); $("tab-" + ks[i]).focus(); });
 // ---- segmented controls ----
-const setSrc = v => { st.src = v; $("srcQuote").hidden = v !== "quote"; $("srcIns").hidden = v !== "ins"; $("srcPromo").hidden = v !== "promo"; if (v === "ins" && !st.ins) st.ins = INSIGHTS.list[0].id; if (v !== "ins") st.ins = null; renderIns(); renderQuotes(); renderPromo(); };
+const setSrc = v => { st.src = v; $("srcQuote").hidden = v !== "quote"; $("srcIns").hidden = v !== "ins"; $("srcPromo").hidden = v !== "promo"; if (v === "ins" && !st.ins) st.ins = INSIGHTS.list[0].id; if (v !== "ins") st.ins = null; if (v !== "quote") st.libT = null; renderIns(); renderQuotes(); renderPromo(); };
 function renderPromo() { $("promolist").innerHTML = PROMOS.list.map(p => `<button type="button" class="qitem" data-promo="${p.id}" aria-pressed="${st.promo === p.id}"><span class="qq">${esc(p.headlines[0])}</span><span class="qs">${esc(p.kicker)}${p.carousel ? " · carousel" : ""}</span></button>`).join("");
   const pr = PROMOS.get(st.promo); $("hlSel").innerHTML = pr.headlines.map((h, i) => `<option value="${i}" ${i === st.hl ? "selected" : ""}>${esc(h)}</option>`).join(""); $("carP").hidden = !pr.carousel; }
 $("promolist").addEventListener("click", e => { const b = e.target.closest(".qitem"); if (!b) return; st.promo = b.dataset.promo; st.hl = 0; renderPromo(); draw(true); });
@@ -184,7 +235,13 @@ syncFmt();
   document.querySelectorAll(`#${id} button`).forEach(x => x.setAttribute("aria-pressed", x === b));
   if (id === "src") { setSrc(b.dataset.k); return draw(true); }
   if (id === "size") setSticker(false);
-  st[id] = b.dataset.k; draw(true); })));
+  st[id] = b.dataset.k; if (id === "anim") { st.mode = st.anim === "none" ? "still" : "anim"; syncMode(); } draw(true); })));
+// Still / Animated: what Share and Save send. Animated = a looping 8-second MP4 made on this device.
+function syncMode() { $("shMode").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.k === st.mode));
+  $("shareTxt").textContent = st.mode === "anim" ? "Share video" : "Share"; $("save").textContent = st.mode === "anim" ? "Save video" : "Save image"; }
+$("shMode").addEventListener("click", e => { const b = e.target.closest("button[data-k]"); if (!b) return; st.mode = b.dataset.k;
+  if (st.mode === "anim" && st.anim === "none") { st.anim = "fade"; document.querySelectorAll("#anim button").forEach(x => x.setAttribute("aria-pressed", x.dataset.k === "fade")); }
+  syncMode(); draw(true); });
 function setSticker(on) { st.sticker = on; $("igPreset").setAttribute("aria-pressed", on); $("stickRow").hidden = !on; $("sticker").checked = on; }
 $("igPreset").addEventListener("click", () => { const on = $("igPreset").getAttribute("aria-pressed") !== "true"; setSticker(on); if (on) { st.size = "story"; document.querySelectorAll("#size button").forEach(x => x.setAttribute("aria-pressed", x.dataset.k === "story")); } draw(true); });
 $("sticker").addEventListener("change", e => { st.sticker = e.target.checked; draw(); });
@@ -222,20 +279,20 @@ async function draw(changed) {
   const look = L[st.look]; $("ov").value = Math.round((st.ov ?? look.ov ?? 0) * 100); $("ovv").textContent = $("ov").value + "%";
   const vt = videoType();
   const an = st.anim !== "none";
-  $("replay").hidden = !an; $("save").textContent = an && vt ? "Save video" : "Save image";
-  $("hint").innerHTML = an ? (vt ? `${K.ANIMS[st.anim]}: a 10-second ${vt.includes("mp4") ? "MP4" : "WebM"} video that loops cleanly. It ends on the site name and a QR code that opens this quote. <b>Share</b> sends the still card; <b>Save video</b> records the animation.${reduce ? " The preview stays still because your device asks for reduced motion; tap Replay to watch once." : ""}` : "This browser can't record video; Save will download a still image.") : "Saves a still image. Choose an animation above for a video.";
+  $("replay").hidden = !an; syncMode();
+  $("hint").innerHTML = an ? (vt || window.VideoEncoder ? `${K.ANIMS[st.anim]}: with <b>Animated</b> on (next to Share), <b>Share video</b> sends an 8-second MP4 that loops cleanly, made on your device. It ends on the site name and a QR code that opens this quote. Choose <b>Still</b> to share the image instead.${reduce ? " The preview stays still because your device asks for reduced motion; tap Replay to watch once." : ""}` : "This browser can't record video; Save will download a still image.") : "Saves a still image. Choose an animation above for a video.";
   const x = ins(), t = talk();
   if (st.src === "promo") cv.setAttribute("aria-label", `Card preview: ${promoObj(null).title}. ${look.name}, ${S[st.size][2]}.`); else cv.setAttribute("aria-label", x ? `Card preview: ${x.title}. ${look.name}, ${S[st.size][2]}.` : `Card preview: “${t.quotes[st.q]}” by ${t.speaker}. ${look.name}, ${S[st.size][2]}.`);
-  const q = new URLSearchParams(x ? { ins: st.ins } : { t: st.t, q: st.q }); q.set("look", st.look); if (st.pal !== "gold") q.set("pal", st.pal); if (st.font !== "classic") q.set("font", st.font); if (st.align !== "center") q.set("align", "left"); q.set("size", st.size); if (st.ov != null) q.set("ov", Math.round(st.ov * 100)); if (st.anim !== "none") q.set("anim", st.anim); if (st.sticker && st.size === "story") q.set("ig", "1"); if (st.theme !== "all") q.set("theme", st.theme); if (st.layout !== "classic") q.set("layout", st.layout); { const fx = encFmt(st.fmt); if (fx) q.set("fx", fx); }
+  const q = new URLSearchParams(st.libT ? { lt: st.libT.c + "/" + st.libT.id } : x ? { ins: st.ins } : { t: st.t, q: st.q }); if (st.libT && st.libNote) q.set("ln", st.libNote); q.set("look", st.look); if (st.pal !== "gold") q.set("pal", st.pal); if (st.font !== "classic") q.set("font", st.font); if (st.align !== "center") q.set("align", "left"); q.set("size", st.size); if (st.ov != null) q.set("ov", Math.round(st.ov * 100)); if (st.anim !== "none") q.set("anim", st.anim); if (st.sticker && st.size === "story") q.set("ig", "1"); if (st.theme !== "all") q.set("theme", st.theme); if (st.layout !== "classic") q.set("layout", st.layout); { const fx = encFmt(st.fmt); if (fx) q.set("fx", fx); }
   if (st.src === "promo") { q.delete("t"); q.delete("q"); q.set("promo", st.promo); if (st.hl) q.set("hl", st.hl); }
   $("layHelp").textContent = st.src === "quote" ? (st.layout !== "classic" && st.note ? "· your takeaway shows on the Classic layout" : "") : "· layouts apply to quote cards";
-  $("carQh").textContent = `${talk().quotes.length + 2} slides: a cover, ${talk().quotes.length} quotes in your layout, and a closing slide.`;
+  $("carQ").hidden = !!st.libT; $("carQh").hidden = !!st.libT; $("carQh").textContent = `${talk().quotes.length + 2} slides: a cover, ${talk().quotes.length} quotes in your layout, and a closing slide.`;
   if (!st.capEdited) $("caption").value = defaultCaption();
   history.replaceState(null, "", "builder.html?" + q);
   if (["note", "margin", "polaroid"].includes(st.layout)) await document.fonts.load('500 40px "Caveat"').catch(() => {});
   await K.prepare(opts());
   an && !reduce ? play() : (cancelAnimationFrame(raf), render(Infinity));
-  prerender(); if (changed) document.getElementById("shReady")?.remove();
+  prerender(); prerenderVideo(); if (changed) document.getElementById("shReady")?.remove();
   if (changed) { const r = $("ready"); r.classList.remove("pulse"); void r.offsetWidth; r.classList.add("pulse"); }
 }
 window.__renderAt = s => { render(s); return true; };
@@ -260,6 +317,29 @@ function prerender() { clearTimeout(preT); const g = ++gen; preT = setTimeout(as
     if (isPhone) for (const [sz, stk] of [["story", true], ["portrait", false]]) { if (g !== gen) return; await new Promise(r => (window.requestIdleCallback || setTimeout)(r, 50)); await renderFile(sz, stk); }
   } catch (e) {} }, 250); }
 const cardFile = () => renderFile();
+// ---- video (Animated): made in the background when possible, so the Share tap is instant ----
+const vcache = new Map(); let vbusy = null, vT;
+async function makeVideo(onP) { const sz = st.size, stk = st.sticker, key = keyFor(sz, stk); if (vcache.has(key)) return vcache.get(key);
+  if (vbusy && vbusy.key === key) { if (onP) vbusy.onP = onP; return vbusy.p; }
+  if (vbusy) vbusy.ac.abort();
+  const o = optsFor(sz, stk), [W, H] = S[sz], ac = new AbortController(), job = { key, ac, onP };
+  job.p = (async () => { await K.prepare(o);
+    const b = await VideoKit.make({ W, H, draw: (c, w, h, t) => K.drawCard(c, w, h, o, t), onProgress: p => job.onP && job.onP(p), signal: ac.signal });
+    const f = new File([b], fnameFor(sz, VideoKit.ext(b)), { type: b.type }); vcache.set(key, f); while (vcache.size > 3) vcache.delete(vcache.keys().next().value); window.__video = { name: f.name, type: f.type, size: f.size }; return f; })()
+    .finally(() => { if (vbusy === job) vbusy = null; });
+  vbusy = job; return job.p; }
+function prerenderVideo() { clearTimeout(vT); if (st.mode !== "anim" || (navigator.connection && navigator.connection.saveData)) return;
+  vT = setTimeout(async () => { const [W, H] = S[st.size]; if (await VideoKit.fast(W, H)) makeVideo().catch(() => {}); }, 1800); }
+async function shareVideo(copy, ok = "Video shared ✓ · Link copied, paste it in your caption") {
+  const ready = vcache.get(keyFor(st.size, st.sticker)); if (ready) return shareFiles([ready], { copy, ok });
+  const [W, H] = S[st.size];
+  if (!(await VideoKit.supported(W, H))) { toast("This browser can't make videos, so here's the still card."); return shareFiles([await renderFile()], { copy }); }
+  const ui = VideoKit.progress(document.querySelector(".st-canvas")), t0 = performance.now(); $("share").disabled = true;
+  try { const f = await makeVideo(p => ui.set(p)); ui.done();
+    // the tap's permission usually runs out while encoding: one more tap shares it
+    if (performance.now() - t0 > 3000) readyPrompt([f], { copy, ok }); else shareFiles([f], { copy, ok }); }
+  catch (e) { ui.done(); if (!e || e.name !== "AbortError") toast("Couldn't make the video here. Choose Still to share the image."); }
+  finally { $("share").disabled = false; } }
 // Share links: per-quote / per-insight pages carry their own link-preview image (generated at build time).
 const SHARE_I = window.SHARE_PAGES || [];
 const shareUrl = () => { const x = ins(), t = talk();
@@ -290,14 +370,16 @@ function shareFiles(files, { copy, ok } = {}) {
 }
 // When the tap's permission ran out (e.g. a new size had to be drawn first), one more tap shares it.
 function readyPrompt(files, o) { document.getElementById("shReady")?.remove(); const d = document.createElement("div"); d.id = "shReady"; d.className = "sh-ready"; d.setAttribute("role", "dialog"); d.setAttribute("aria-label", "Card ready");
-  d.innerHTML = `<img alt="" src="${URL.createObjectURL(files[0])}"><div><b>${files.length > 1 ? files.length + " slides ready" : "Your card is ready"}</b><button type="button" class="btn gold" data-go>Share ${files.length > 1 ? "slides" : "card"}</button><button type="button" class="linkish" data-x>Cancel</button></div>`;
+  const vid = files[0].type.startsWith("video"), src = URL.createObjectURL(files[0]);
+  d.innerHTML = `${vid ? `<video src="${src}" muted autoplay loop playsinline></video>` : `<img alt="" src="${src}">`}<div><b>${files.length > 1 ? files.length + " slides ready" : vid ? "Your video is ready, tap to share" : "Your card is ready"}</b><button type="button" class="btn gold" data-go>Share ${files.length > 1 ? "slides" : vid ? "video" : "card"}</button><button type="button" class="linkish" data-x>Cancel</button></div>`;
   document.body.appendChild(d); d.querySelector("[data-go]").focus();
   d.addEventListener("click", e => { if (e.target.closest("[data-go]")) { d.remove(); shareFiles(files, o); } else if (e.target.closest("[data-x]")) d.remove(); }); }
 function viewer(files, copy) { document.getElementById("shView")?.remove(); const v = document.createElement("div"); v.id = "shView"; v.className = "sh-view"; v.setAttribute("role", "dialog"); v.setAttribute("aria-modal", "true"); v.setAttribute("aria-label", "Save your card");
   const urls = files.map(f => URL.createObjectURL(f)), touch = matchMedia("(pointer: coarse)").matches;
-  v.innerHTML = `<div class="shv-top"><b>${touch ? "Press and hold the image to save or share it" : "Right-click the image to copy it, or download"}</b><button type="button" class="shv-x" data-x aria-label="Close">✕</button></div>
-    <div class="shv-imgs">${urls.map((u, i) => `<img src="${u}" alt="Your card${files.length > 1 ? `, slide ${i + 1} of ${files.length}` : ""}">`).join("")}</div>
-    <div class="shv-acts"><button type="button" class="btn gold small" data-link>Copy link</button>${copy ? `<button type="button" class="btn secondary small" data-cap>Copy caption</button>` : ""}<button type="button" class="btn secondary small" data-dl>Download${files.length > 1 ? " all" : ""}</button></div>
+  const vid = files[0].type.startsWith("video");
+  v.innerHTML = `<div class="shv-top"><b>${vid ? (touch ? "Tap Save video, then post it from your photos or files" : "Save the video, then upload it to your post") : touch ? "Press and hold the image to save or share it" : "Right-click the image to copy it, or download"}</b><button type="button" class="shv-x" data-x aria-label="Close">✕</button></div>
+    <div class="shv-imgs">${urls.map((u, i) => vid ? `<video src="${u}" controls autoplay muted loop playsinline aria-label="Your card video"></video>` : `<img src="${u}" alt="Your card${files.length > 1 ? `, slide ${i + 1} of ${files.length}` : ""}">`).join("")}</div>
+    <div class="shv-acts"><button type="button" class="btn gold small" data-link>Copy link</button>${copy ? `<button type="button" class="btn secondary small" data-cap>Copy caption</button>` : ""}<button type="button" class="btn secondary small" data-dl>${vid ? "Save video" : "Download" + (files.length > 1 ? " all" : "")}</button></div>
     ${copy ? `<p class="shv-note">Caption and link are already copied: paste them into your post.</p>` : ""}`;
   document.body.appendChild(v); const prev = document.activeElement; v.querySelector("[data-x]").focus();
   const close = () => { v.remove(); urls.forEach(u => setTimeout(() => URL.revokeObjectURL(u), 1000)); prev?.focus?.(); };
@@ -310,6 +392,7 @@ function viewer(files, copy) { document.getElementById("shView")?.remove(); cons
 const download = (blob, name) => { const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); };
 // Share: uses the pre-rendered file synchronously inside the tap.
 async function shareCurrent(sz = st.size, sticker = st.sticker, copy = caption(), ok) {
+  if (st.mode === "anim" && sz === st.size) return shareVideo(copy);
   const f = readyFile(sz, sticker);
   if (f) return shareFiles([f], { copy, ok });
   const file = await renderFile(sz, sticker); shareFiles([file], { copy, ok }); }   // not ready yet: NotAllowedError -> one-more-tap prompt
@@ -318,18 +401,15 @@ $("shareLink").addEventListener("click", async () => { const url = shareUrl(), t
   if (navigator.share) { try { await navigator.share({ text, url }); return; } catch (e) { if (e && e.name === "AbortError") return; } }
   await copyText(url, "Copy this link:"); toast("Link copied ✓"); });
 $("save").addEventListener("click", async () => {
-  const vt = videoType(), btn = $("save");
-  const ig = st.sticker && st.size === "story";
+  const btn = $("save"), ig = st.sticker && st.size === "story";
   if (ig) { try { await navigator.clipboard.writeText(shareInfo().url); } catch {} }
   const done = what => toast(ig ? `${what} saved ✓ · Link copied — paste it in a Link sticker` : `${what} saved ✓ · now add it to your post or Story`);
-  if (st.anim === "none" || !vt) { download(await cardFile(), fname("png")); done("Image"); if (st.anim !== "none") draw(); return; }
-  const rec = new MediaRecorder(cv.captureStream(30), { mimeType: vt, videoBitsPerSecond: 8e6 }), chunks = [];
-  btn.disabled = true; btn.textContent = "Recording… 10s";
-  rec.ondataavailable = e => chunks.push(e.data);
-  rec.onstop = () => { const vf = new File([new Blob(chunks, { type: vt })], fname(vt.includes("mp4") ? "mp4" : "webm"), { type: vt.split(";")[0] }); btn.disabled = false; draw();
-    if (isPhone && canShareFiles([vf])) return readyPrompt([vf], { copy: ig ? shareInfo().url : caption(), ok: "Video shared ✓ · Link copied" });
-    download(vf, vf.name); done("Video"); };
-  rec.start(); play(true); setTimeout(() => rec.stop(), K.TL.total * 1000 + 120);
+  const [W, H] = S[st.size];
+  if (st.mode !== "anim" || !(await VideoKit.supported(W, H))) { download(await cardFile(), fname("png")); done("Image"); return; }
+  const ui = VideoKit.progress(document.querySelector(".st-canvas")); btn.disabled = true;
+  try { const vf = await makeVideo(p => ui.set(p)); ui.done(); download(vf, vf.name); done("Video"); }
+  catch (e) { ui.done(); if (!e || e.name !== "AbortError") toast("Couldn't make the video here. Saving the still image instead."), download(await cardFile(), fname("png")); }
+  finally { btn.disabled = false; }
 });
 $("copy").addEventListener("click", () => { setTab("share"); $("plats").querySelector("button").focus({ preventScroll: true }); });
 const copyText = async (txt, label) => { try { await navigator.clipboard.writeText(txt); return true; } catch { prompt(label || "Copy this:", txt); return false; } };
@@ -381,5 +461,7 @@ $("igBtn").addEventListener("click", () => { const tip = $("igTip"), open = tip.
 // keep the tab bar pinned just under the sticky preview on phones
 const setPrevH = () => document.documentElement.style.setProperty("--prevH", $("stPrev").offsetHeight + "px");
 new ResizeObserver(setPrevH).observe($("stPrev"));
+if (P.get("lt") && /^\d{4}-\d{2}\/[\w-]{1,80}$/.test(P.get("lt"))) loadLib().then(LB => { const [c, id] = P.get("lt").split("/"), T = LB.talks.find(x => x.c === c && x.id === id && !x.recap); if (!T) return;
+  st.libT = { c, id, t: T.t, s: T.s, r: T.r }; st.libNote = cleanNote(P.get("ln") || ""); st.scope = "all"; $("qscope").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.k === "all")); qview = { c, id }; renderQuotes(); draw(true); }).catch(() => {});
 setSrc(st.src); setTab(st.src === "promo" && !P.has("tab") ? "quote" : st.tab); pickTheme(st.theme, true);
 Promise.all(['500 40px "Cormorant Garamond"', 'italic 500 40px "Cormorant Garamond"', '600 20px Inter', '400 20px Inter'].map(f => document.fonts.load(f))).then(() => draw()).catch(() => draw());

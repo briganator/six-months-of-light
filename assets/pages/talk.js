@@ -25,7 +25,7 @@ else {
       <dt>Quotes <span style="text-transform:none;letter-spacing:0;font-weight:400;color:var(--muted)">(from recaps; confirm with official text)</span></dt>
       <dd>${t.quotes.map((q,qi)=>`<blockquote id="q${qi+1}" class="qanchor" tabindex="-1">“${esc(q)}”</blockquote>
         <div class="qrow"><button type="button" data-save="${qi}" aria-pressed="${Store.isSaved(t.id,qi)}">${Store.isSaved(t.id,qi)?"★ Saved":"☆ Save"}</button>
-        <a href="builder.html?t=${t.id}&q=${qi}">Make a card</a></div>`).join("")}</dd>
+        <a class="qmake" href="builder.html?t=${t.id}&q=${qi}">Make a card</a></div>`).join("")}</dd>
     </dl>
     <div class="invite"><div class="label">Invitation</div>${esc(t.invitation)}
       <div id="commitbox" style="margin-top:8px">${committed ? `✓ You committed on ${fmtDate(committed.start)}. <a href="my.html">Track your 7 days</a>`
@@ -91,7 +91,11 @@ else {
 }
 
 // ---- Study panel: topics, scriptures with Come, Follow Me tie-in, structure, taught before, print summary ----
-if (t) loadLib().then(LB => {
+// Loaded after first paint (idle, or when the panel nears the screen) so the talk itself shows right away.
+const whenNear = (id, fn) => { const el = document.getElementById(id); let done = false; const go = () => { if (!done) { done = true; fn(); } };
+  if (el && "IntersectionObserver" in window) { const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); go(); } }, { rootMargin: "600px" }); io.observe(el); }
+  (window.requestIdleCallback || (f => setTimeout(f, 1500)))(go, { timeout: 4000 }); if (!el) go(); };
+if (t) whenNear("studyPanel", () => loadLib().then(LB => {
   const me = LB.talks.find(x => x.recap && x.id === t.id), el = document.getElementById("studyPanel"); if (!me || !el) return;
   const cfm = r => { const w = LB.work(r); return w === "Old Testament" ? `<span class="pill">In Come, Follow Me 2026</span>` : w === "New Testament" ? `<span class="pill pending">Come, Follow Me 2027</span>` : ""; };
   const rel = LB.related(me, 4).filter(x => !x.t.recap), before = LB.talks.filter(x => x.sp === me.sp && !x.recap).slice(0, 3);
@@ -107,4 +111,4 @@ if (t) loadLib().then(LB => {
     ${before.length ? `<h3>Earlier from ${esc(t.speaker.replace(/^(President|Elder|Sister|Bishop)\s+/, ""))}</h3><ul class="sp-rel">${before.map(x => `<li><a href="${esc(LB.href(x))}" rel="noopener" target="_blank">${esc(x.t)} ↗</a> <span class="speaker">${esc(LB.confOf(x.c).label)}</span></li>`).join("")}</ul><a class="linkish" href="speaker.html?s=${me.sp}">All talks by this speaker</a>` : ""}
     <div class="links no-print"><a class="btn secondary small" href="lessons.html?mode=eqrs&c=2026-10&t=${esc(t.id)}">Lesson helps: EQ & RS, youth, family</a><button type="button" class="btn secondary small" id="printBtn">Print a one-page summary</button>${(() => { const k = me.tg.find(x => LB.THEME_KEYS.includes(x)) || (dens[0] || [])[0]; return k ? `<a class="btn secondary small" href="study.html?c=all&topic=${k}">More talks on ${esc(LB.themeName(k))}</a>` : ""; })()}</div>`;
   document.getElementById("printBtn").addEventListener("click", () => window.print());
-}).catch(() => { const el = document.getElementById("studyPanel"); if (el) el.remove(); });
+}).catch(() => { const el = document.getElementById("studyPanel"); if (el) el.remove(); }));
