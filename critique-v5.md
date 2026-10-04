@@ -118,3 +118,18 @@ Reviewed every page at 390×844 (iPhone WebKit) first, then at 1440×900.
 | Talk page | 68 | 77 | Study panel deferred until after first paint. |
 
 Accessibility and best practices are 100 everywhere else.
+
+## Final QA on the live site (Oct 4, 12:15–12:30 MDT)
+| Suite | Result |
+|---|---|
+| Crawl: 461 pages (all talks, `/q/` and `/i/` share pages, speakers 2015–2026, topics, study per conference), Android + iPhone + desktop | 0 issues |
+| Click fuzz: 25 pages × 3 engines | 0 errors |
+| Flows (search, study filters, notes, comments, quiz, plan, lessons and print, groups, insights, moderation mocked, live wall) | 0 errors (one 400 for a fake card image in the mocked moderation run) |
+| Video share (Studio + Heard it live), Pixel 7 Chromium and iPhone 13 WebKit | Pass: `video/mp4`, H.264 1080×1920, 240 frames, 8.0 s, shared inside the tap (instant and second share), Still PNG also passes |
+| Path home at 390×844 | Every page type has a labeled Home on screen, except the admin-only moderation page (logo link) |
+
+## Counts by severity (this pass)
+- **Critical 2, fixed:** animated share broken on the live site (missing `videokit.js`); Studio freezing on iPhone after quick edits (Safari `replaceState` limit).
+- **High 5, fixed:** no Home control in Studio / Heard it live; older-talk card Save/Share error; quote picker squeezed to about 60 px on phones; insights opening scrolled past its title; stale "Saturday" labels on numbers that included Sunday.
+- **Medium 7, fixed:** no 404 page; see-through share bars; unlabeled notes box (219 talk pages); unlabeled live inputs; "Coming soon" on a session with talks; contrast on row "Make a card"; unnamed "Use this" buttons in off-screen rows.
+- **Open:** Card Studio Lighthouse performance 69 (TBT 690 ms, mostly layout of a large picker). The next step would be rendering session rows only when first scrolled into view.
