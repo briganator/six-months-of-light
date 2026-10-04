@@ -17,14 +17,15 @@ sessions = [
   {"id": "sat-pm", "color": "amber", "name": "Saturday Afternoon Session", "when": "Sat, Oct 3 · 2:00–4:00pm MDT", "url": SAT_PM, "status": "complete",
    "note": "Conducted by Elder Neil L. Andersen. Music by a choir from Northern Utah."},
   {"id": "sun-am", "color": "sky", "name": "Sunday Morning Session", "when": "Sun, Oct 4 · 10:00am–noon MDT", "url": SUN_AM, "status": "pending",
-   "note": "Talks will be added after the session."},
+   "note": "Conducted by President D. Todd Christofferson. Music by The Tabernacle Choir at Temple Square (opening hymn: How Firm a Foundation). Talks are being added as Church News recaps post."},
   {"id": "sun-pm", "color": "violet", "name": "Sunday Afternoon Session", "when": "Sun, Oct 4 · 2:00–4:00pm MDT", "url": SUN_PM, "status": "pending",
    "note": "Talks will be added after the session."},
 ]
 
 def t(id, session, order, speaker, calling, title, recap, summary, scriptures, quotes, invitation, ponder, official_url=None):
+    recap_url = recap if recap.startswith("http") else CN + recap
     return dict(id=id, session=session, order=order, speaker=speaker, calling=calling, title=title,
-                recap_url=CN + recap, official_url=official_url, summary=summary, scriptures=scriptures,
+                recap_url=recap_url, official_url=official_url, summary=summary, scriptures=scriptures,
                 quotes=quotes, invitation=invitation, ponder=ponder)
 
 talks = [
@@ -190,6 +191,15 @@ talks = [
     "He knows them. He knows their hearts; He loves them. He gave His very life to bring them home, all the way home."],
    "Turn your despair over to Christ; let go of guilt; keep loving and praying.",
    "Whom am I carrying guilt or despair for that I need to give to Christ?"),
+ t("sun-am-1-eyring", "sun-am", 1, "President Henry B. Eyring", "First Counselor in the First Presidency", "Fear Not, I Am With Thee",
+   "https://www.thechurchnews.com/general-conference/2026/10/04/president-henry-b-eyring-october-2026-general-conference-fear-not-i-am-with-thee/",
+   "President Eyring spoke about helping give the Lord's comfort to others. The Lord's promised comfort in Isaiah 41 and the hymn “How Firm a Foundation” (“Hymns,” No. 85) will become more important and more precious. Mortal tests are hard because we must grow in spiritual cleanliness and stature to live in God's presence; Heavenly Father gave us a Savior and the power to choose by faith to keep commandments, repent and come unto Him. The promise is not for the removal of challenges. The Lord sends faithful disciples to help Him keep His promise to succor others; we are invited to join Him in that work.",
+   ["Isaiah 41:10", "Hymn “How Firm a Foundation” (Hymns, no. 85)"],
+   ["It is because He knows that we must grow in spiritual cleanliness and stature to be able to live in His presence. To make that possible, Heavenly Father gave us a Savior and the power to choose for ourselves by faith to keep His commandments and to repent and to come unto Him.",
+    "The Lord sends faithful disciples to help Him keep his promise to succor others in their distress.",
+    "We shed tears of joy and take courage whenever we hear the words, ‘Fear not, I am with thee,’ and we are touched that He offers us the trust of helping and loving others."],
+   "Join the Lord in keeping His promise — help Him comfort and succor those in distress.",
+   "Whom is the Lord inviting me to comfort for Him today?"),
 ]
 
 # 60-second recap "big idea" — a one-line condensation of the doc's summary (NOT a quote).
@@ -212,6 +222,7 @@ BIG_IDEAS = {
  "sat-pm-8-dunn": "Give your 90%; the Savior helps with the final 10% by lengthening our stride.",
  "sat-pm-9-eyring": "In turbulent times, the Holy Ghost is the true source of comfort and hope.",
  "sat-pm-10-rasband": "Give your despair for wayward loved ones to Christ, and keep loving like Jesus.",
+ "sun-am-1-eyring": "The Lord keeps His promise ‘Fear not, I am with thee’ — and trusts us to help comfort others.",
 }
 for _t in talks:
     _t["big_idea"] = BIG_IDEAS[_t["id"]]
@@ -237,7 +248,7 @@ site = {
   "domain": DOMAIN,
   "domain_live": DOMAIN_LIVE,
   "subtitle": "196th Semiannual General Conference · October 3–4, 2026",
-  "updated": "Saturday, October 3, 2026",
+  "updated": "Sunday, October 4, 2026",
   "conference_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10?lang=eng",
   "talk_of_the_week": {"talk_id": "sat-pm-7-kearon",
      "ponder": "What are the subtle signs of “sink” in my week?",

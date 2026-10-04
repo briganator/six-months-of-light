@@ -3,17 +3,17 @@
   {
    "t": "sat-am-1-gong",
    "n": 1,
-   "look": "photo-slc-vintage"
+   "look": "photo-nauvoo-night"
   },
   {
    "t": "sat-am-1-gong",
    "n": 2,
-   "look": "photo-provo-night"
+   "look": "photo-idaho-falls"
   },
   {
    "t": "sat-am-1-gong",
    "n": 3,
-   "look": "photo-provo"
+   "look": "photo-bern"
   },
   {
    "t": "sat-am-2-runia",
@@ -23,7 +23,7 @@
   {
    "t": "sat-am-2-runia",
    "n": 2,
-   "look": "photo-gethsemane"
+   "look": "photo-art-consolator"
   },
   {
    "t": "sat-am-2-runia",
@@ -48,12 +48,12 @@
   {
    "t": "sat-am-4-sikahema",
    "n": 1,
-   "look": "watercolor"
+   "look": "photo-wheat-sunset"
   },
   {
    "t": "sat-am-4-sikahema",
    "n": 2,
-   "look": "hymn"
+   "look": "photo-wheat-sunset"
   },
   {
    "t": "sat-am-4-sikahema",
@@ -63,7 +63,7 @@
   {
    "t": "sat-am-5-hathaway",
    "n": 1,
-   "look": "photo-gethsemane-tree"
+   "look": "photo-art-resurrection"
   },
   {
    "t": "sat-am-5-hathaway",
@@ -128,12 +128,12 @@
   {
    "t": "sat-pm-1-renlund",
    "n": 2,
-   "look": "photo-gethsemane-tree"
+   "look": "photo-art-resurrection"
   },
   {
    "t": "sat-pm-1-renlund",
    "n": 3,
-   "look": "hymn"
+   "look": "photo-wheat-sunset"
   },
   {
    "t": "sat-pm-2-farnes",
@@ -158,17 +158,17 @@
   {
    "t": "sat-pm-3-chigbundu",
    "n": 2,
-   "look": "photo-dc-dusk"
+   "look": "photo-slc"
   },
   {
    "t": "sat-pm-3-chigbundu",
    "n": 3,
-   "look": "photo-dc-lights"
+   "look": "photo-slc-vintage"
   },
   {
    "t": "sat-pm-4-giuffra",
    "n": 1,
-   "look": "photo-van-gogh-olives"
+   "look": "photo-art-gethsemane"
   },
   {
    "t": "sat-pm-4-giuffra",
@@ -178,7 +178,7 @@
   {
    "t": "sat-pm-4-giuffra",
    "n": 3,
-   "look": "mountains"
+   "look": "secondcoming"
   },
   {
    "t": "sat-pm-5-morgan",
@@ -188,7 +188,7 @@
   {
    "t": "sat-pm-5-morgan",
    "n": 2,
-   "look": "photo-bountiful"
+   "look": "photo-tokyo"
   },
   {
    "t": "sat-pm-5-morgan",
@@ -198,7 +198,7 @@
   {
    "t": "sat-pm-6-fale",
    "n": 1,
-   "look": "temple_dusk"
+   "look": "blossoms"
   },
   {
    "t": "sat-pm-6-fale",
@@ -213,22 +213,22 @@
   {
    "t": "sat-pm-7-kearon",
    "n": 1,
-   "look": "photo-gethsemane"
+   "look": "photo-art-consolator"
   },
   {
    "t": "sat-pm-7-kearon",
    "n": 2,
-   "look": "photo-van-gogh-olives"
+   "look": "photo-art-gethsemane"
   },
   {
    "t": "sat-pm-7-kearon",
    "n": 3,
-   "look": "photo-gethsemane-tree"
+   "look": "photo-art-resurrection"
   },
   {
    "t": "sat-pm-8-dunn",
    "n": 1,
-   "look": "photo-van-gogh-olives"
+   "look": "photo-art-consolator"
   },
   {
    "t": "sat-pm-8-dunn",
@@ -243,12 +243,12 @@
   {
    "t": "sat-pm-9-eyring",
    "n": 1,
-   "look": "photo-gethsemane"
+   "look": "photo-art-consolator"
   },
   {
    "t": "sat-pm-9-eyring",
    "n": 2,
-   "look": "morning"
+   "look": "photo-wheat-sunset"
   },
   {
    "t": "sat-pm-9-eyring",
@@ -258,7 +258,7 @@
   {
    "t": "sat-pm-10-rasband",
    "n": 1,
-   "look": "photo-gethsemane-tree"
+   "look": "photo-art-resurrection"
   },
   {
    "t": "sat-pm-10-rasband",
@@ -268,7 +268,22 @@
   {
    "t": "sat-pm-10-rasband",
    "n": 3,
-   "look": "photo-van-gogh-olives"
+   "look": "photo-art-well"
+  },
+  {
+   "t": "sun-am-1-eyring",
+   "n": 1,
+   "look": "watercolor"
+  },
+  {
+   "t": "sun-am-1-eyring",
+   "n": 2,
+   "look": "sunrise"
+  },
+  {
+   "t": "sun-am-1-eyring",
+   "n": 3,
+   "look": "temple_dusk"
   }
  ],
  "insights": [
@@ -288,7 +303,7 @@
    "id": "christ",
    "title": "He was named again and again",
    "sub": "",
-   "share": "Jesus Christ was named 43 times in recaps of 14 of 18 Saturday talks."
+   "share": "Jesus Christ was named 45 times in recaps of 15 of 19 Saturday talks."
   },
   {
    "id": "themes",
@@ -306,11 +321,11 @@
    "id": "scriptures",
    "title": "Back to the scriptures",
    "sub": "",
-   "share": "17 scripture references in recaps of Saturday's talks."
+   "share": "19 scripture references in recaps of Saturday's talks."
   },
   {
    "id": "who-spoke",
-   "title": "18 talks on Saturday",
+   "title": "19 talks on Saturday",
    "sub": "",
    "share": "Who spoke on Saturday of General Conference."
   }

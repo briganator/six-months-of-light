@@ -7,7 +7,7 @@ window.CONF = {
  "domain": "sixmonthsoflight.com",
  "domain_live": true,
  "subtitle": "196th Semiannual General Conference · October 3–4, 2026",
- "updated": "Saturday, October 3, 2026",
+ "updated": "Sunday, October 4, 2026",
  "conference_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10?lang=eng",
  "talk_of_the_week": {
   "talk_id": "sat-pm-7-kearon",
@@ -40,7 +40,7 @@ window.CONF = {
    "when": "Sun, Oct 4 · 10:00am–noon MDT",
    "url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/sunday-morning-session?lang=eng",
    "status": "pending",
-   "note": "Talks will be added after the session."
+   "note": "Conducted by President D. Todd Christofferson. Music by The Tabernacle Choir at Temple Square (opening hymn: How Firm a Foundation). Talks are being added as Church News recaps post."
   },
   {
    "id": "sun-pm",
@@ -487,6 +487,31 @@ window.CONF = {
    "invitation": "Turn your despair over to Christ; let go of guilt; keep loving and praying.",
    "ponder": "Whom am I carrying guilt or despair for that I need to give to Christ?",
    "big_idea": "Give your despair for wayward loved ones to Christ, and keep loving like Jesus.",
+   "video_embed": null,
+   "full_text_permitted": false
+  },
+  {
+   "id": "sun-am-1-eyring",
+   "session": "sun-am",
+   "order": 1,
+   "speaker": "President Henry B. Eyring",
+   "calling": "First Counselor in the First Presidency",
+   "title": "Fear Not, I Am With Thee",
+   "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/president-henry-b-eyring-october-2026-general-conference-fear-not-i-am-with-thee/",
+   "official_url": null,
+   "summary": "President Eyring spoke about helping give the Lord's comfort to others. The Lord's promised comfort in Isaiah 41 and the hymn “How Firm a Foundation” (“Hymns,” No. 85) will become more important and more precious. Mortal tests are hard because we must grow in spiritual cleanliness and stature to live in God's presence; Heavenly Father gave us a Savior and the power to choose by faith to keep commandments, repent and come unto Him. The promise is not for the removal of challenges. The Lord sends faithful disciples to help Him keep His promise to succor others; we are invited to join Him in that work.",
+   "scriptures": [
+    "Isaiah 41:10",
+    "Hymn “How Firm a Foundation” (Hymns, no. 85)"
+   ],
+   "quotes": [
+    "It is because He knows that we must grow in spiritual cleanliness and stature to be able to live in His presence. To make that possible, Heavenly Father gave us a Savior and the power to choose for ourselves by faith to keep His commandments and to repent and to come unto Him.",
+    "The Lord sends faithful disciples to help Him keep his promise to succor others in their distress.",
+    "We shed tears of joy and take courage whenever we hear the words, ‘Fear not, I am with thee,’ and we are touched that He offers us the trust of helping and loving others."
+   ],
+   "invitation": "Join the Lord in keeping His promise — help Him comfort and succor those in distress.",
+   "ponder": "Whom is the Lord inviting me to comfort for Him today?",
+   "big_idea": "The Lord keeps His promise ‘Fear not, I am with thee’ — and trusts us to help comfort others.",
    "video_embed": null,
    "full_text_permitted": false
   }
