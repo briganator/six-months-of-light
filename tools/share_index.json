@@ -539,50 +539,65 @@
    "t": "sun-pm-9-gilbert",
    "n": 3,
    "look": "mountains"
+  },
+  {
+   "t": "sun-pm-10-oaks",
+   "n": 1,
+   "look": "mountains"
+  },
+  {
+   "t": "sun-pm-10-oaks",
+   "n": 2,
+   "look": "watercolor"
+  },
+  {
+   "t": "sun-pm-10-oaks",
+   "n": 3,
+   "look": "sunrise"
   }
  ],
  "insights": [
   {
    "id": "ten-words",
    "title": "The conference in 10 words",
-   "sub": "Most-used meaningful words in the recaps of the first 36 talks",
-   "share": "October 2026 General Conference so far in 10 words."
+   "sub": "Most-used meaningful words in the recaps of all 37 talks",
+   "share": "October 2026 General Conference in 10 words."
   },
   {
    "id": "top-words",
    "title": "What the conference kept saying",
    "sub": "",
-   "share": "The words General Conference so far kept coming back to."
+   "share": "The words General Conference kept coming back to."
   },
   {
    "id": "christ",
    "title": "He was named again and again",
    "sub": "",
-   "share": "Jesus Christ was named 182 times in recaps of 30 of 36 talks."
+   "share": "Jesus Christ was named 188 times in recaps of 31 of 37 talks."
   },
   {
    "id": "themes",
    "title": "What the talks were about",
    "sub": "",
-   "share": "The top themes from General Conference so far."
+   "share": "The top themes from General Conference."
   },
   {
    "id": "themes-by-session",
    "title": "Each session's focus",
    "sub": "",
-   "share": "The leading themes in each session so far."
+   "share": "The leading themes in each session."
   },
   {
    "id": "scriptures",
    "title": "Back to the scriptures",
    "sub": "",
-   "share": "23 scripture references in recaps of the first 36 talks."
+   "share": "23 scripture references in recaps of all 37 talks."
   },
   {
    "id": "who-spoke",
-   "title": "36 talks so far",
+   "title": "37 talks in all",
    "sub": "",
-   "share": "Who spoke at General Conference so far."
+   "share": "Who spoke at General Conference."
   }
  ]
 }

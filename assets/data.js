@@ -48,8 +48,8 @@ window.CONF = {
    "name": "Sunday Afternoon Session",
    "when": "Sun, Oct 4 · 2:00–4:00pm MDT",
    "url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/sunday-afternoon-session?lang=eng",
-   "status": "pending",
-   "note": "In progress. Conducted by Elder Gérald Caussé. Music by The Tabernacle Choir at Temple Square (opening hymn: Let Zion in Her Beauty Rise; choir: Love Will Bless Our Home). Talks added from Church News recaps as they post."
+   "status": "complete",
+   "note": "Conducted by Elder Gérald Caussé. Prayers by Elder John D. Amos of the Seventy and Brother Chad H. Webb. Music by The Tabernacle Choir at Temple Square under Mack Wilberg and Ryan Murphy, with Richard Elliott and Joseph Peeples at the organ (opening hymn: Let Zion in Her Beauty Rise; choir: Love Will Bless Our Home). Closed by President Dallin H. Oaks."
   }
  ],
  "talks": [
@@ -917,6 +917,30 @@ window.CONF = {
    "invitation": "Stand for truth with love — avoid contention, find common ground, be a light, hold to truth, and stay anchored in Jesus Christ.",
    "ponder": "Do I need greater conviction or greater charity to teach truth with love — and where can I start this week?",
    "big_idea": "Stand for truth with love — for disciples of Jesus Christ, truth and love always walk together.",
+   "video_embed": null,
+   "full_text_permitted": false
+  },
+  {
+   "id": "sun-pm-10-oaks",
+   "session": "sun-pm",
+   "order": 10,
+   "speaker": "President Dallin H. Oaks",
+   "calling": "President of the Church",
+   "title": "Concluding Remarks",
+   "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/president-dallin-oaks-october-2026-general-conference-concluding-remarks/",
+   "official_url": null,
+   "summary": "President Dallin H. Oaks, President of the Church, closed the conference. He said the messages of the conference and the Spirit of the Lord had inspired all to concentrate their worship, focus their learning and unite their testimonies on the teachings of the Lord Jesus Christ and His Father’s plan. He invited everyone to revisit the conference messages, prayerfully ponder them and act on the principles taught, reminding listeners of the Lord’s promise, “Unto him that receiveth I will give more” (2 Nephi 28:30). He invited the world, in person or virtually, to the Salt Lake Temple Celebration, when the renovated temple’s doors open to the public on April 5, 2027, the first such opening since 1893, and announced “Dedicate,” a new video series about the Salt Lake Temple premiering after the session, with more episodes and a virtual temple tour to come. He closed with a blessing of peace and contentment and his testimony that truth is to be found in the restored gospel of Jesus Christ.",
+   "scriptures": [
+    "2 Nephi 28:30"
+   ],
+   "quotes": [
+    "The great messages of this conference and the Spirit of the Lord have inspired all of us to concentrate our worship, focus our learning, and unite our testimonies on the teachings of the Lord Jesus Christ and His Father’s plan for our eternal increase and joy.",
+    "As we now go forward, we invoke the blessings of the Lord on you and your families — blessings of peace and contentment.",
+    "Truth is to be found here — truth about the teachings of the Lord and truth about the covenant path that will lead us to our destiny — the destiny desired by our Heavenly Father."
+   ],
+   "invitation": "Revisit the messages of this conference, prayerfully ponder them, and act on the principles taught.",
+   "ponder": "Which conference message will I go back to first, and what one principle from it will I act on?",
+   "big_idea": "Revisit, ponder and act on what was taught — unto him that receiveth, the Lord will give more.",
    "video_embed": null,
    "full_text_permitted": false
   }
