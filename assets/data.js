@@ -827,6 +827,30 @@ window.CONF = {
    "big_idea": "Whatever we face, the answer is always Jesus Christ — faith, daily scripture study and daily repentance let in His light.",
    "video_embed": null,
    "full_text_permitted": false
+  },
+  {
+   "id": "sun-pm-6-sinclair",
+   "session": "sun-pm",
+   "order": 6,
+   "speaker": "Elder Paul H. Sinclair",
+   "calling": "General Authority Seventy",
+   "title": "Quick to Help, Slow to Judge",
+   "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/elder-paul-h-sinclair-october-2026-general-conference-quick-to-help-slow-to-judge/",
+   "official_url": null,
+   "summary": "Speaking about helping more and judging less. In the Gospel of John, Jesus Christ ministers to the Samaritan woman at the well. She may have endured much judgment because of her history of broken relationships and her circumstances at the time, but no one then or now knew the full truth of her situation. In contrast, Christ knew everything about her and offered her living water. He spoke to her with dignity, listened earnestly to her questions, answered with teaching, did not hold her hostage to her history, and trusted her with truth. Every day, missionaries meet people at modern-day wells around the world, finding, teaching, baptizing and confirming those who may fear judgment but need help. Disciples of Jesus Christ are invited to reorient their souls to help friends and new members in more Christlike ways, looking not only to a person's past but to their possible. Helping people rather than judging them, one by one in small and simple ways, prepares the world for the Second Coming.",
+   "scriptures": [
+    "The Samaritan woman at the well, Gospel of John (no verse cited in recaps)"
+   ],
+   "quotes": [
+    "He spoke to the woman with dignity, not shame. He earnestly listened to her questions and responded with teaching, not ridicule. He did not hold her hostage to her history. He trusted her with truth.",
+    "Jesus Christ reminds us that to help people transform their lives; we must look not only to ‘their past’ — we must look to ‘their possible.’",
+    "Being quick to help and slow to judge is a simple and deeply encouraging way for each of us to be more holy, to be more like our Savior, to be His true disciples."
+   ],
+   "invitation": "Be quick to help and slow to judge — look to a person's possible, not only their past, especially friends and new members.",
+   "ponder": "Whom am I holding hostage to their history — and how could I help them instead of judging them?",
+   "big_idea": "Be quick to help and slow to judge — like Christ at the well, look to a person's possible, not only their past.",
+   "video_embed": null,
+   "full_text_permitted": false
   }
  ],
  "challenge": {

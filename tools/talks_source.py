@@ -317,6 +317,15 @@ talks = [
     "I testify that today can be a new day, and tomorrow will be a better day, for all who come unto Jesus Christ and receive His light in their lives."],
    "Receive more of His light: increase faith in Christ, study the scriptures daily (especially the Book of Mormon), and practice daily repentance.",
    "What change — in how I use my time, what I watch or listen to, or how I speak to others — would let more of the Savior’s light into my life?"),
+ t("sun-pm-6-sinclair", "sun-pm", 6, "Elder Paul H. Sinclair", "General Authority Seventy", "Quick to Help, Slow to Judge",
+   "https://www.thechurchnews.com/general-conference/2026/10/04/elder-paul-h-sinclair-october-2026-general-conference-quick-to-help-slow-to-judge/",
+   "Speaking about helping more and judging less. In the Gospel of John, Jesus Christ ministers to the Samaritan woman at the well. She may have endured much judgment because of her history of broken relationships and her circumstances at the time, but no one then or now knew the full truth of her situation. In contrast, Christ knew everything about her and offered her living water. He spoke to her with dignity, listened earnestly to her questions, answered with teaching, did not hold her hostage to her history, and trusted her with truth. Every day, missionaries meet people at modern-day wells around the world, finding, teaching, baptizing and confirming those who may fear judgment but need help. Disciples of Jesus Christ are invited to reorient their souls to help friends and new members in more Christlike ways, looking not only to a person's past but to their possible. Helping people rather than judging them, one by one in small and simple ways, prepares the world for the Second Coming.",
+   ["The Samaritan woman at the well, Gospel of John (no verse cited in recaps)"],
+   ["He spoke to the woman with dignity, not shame. He earnestly listened to her questions and responded with teaching, not ridicule. He did not hold her hostage to her history. He trusted her with truth.",
+    "Jesus Christ reminds us that to help people transform their lives; we must look not only to ‘their past’ — we must look to ‘their possible.’",
+    "Being quick to help and slow to judge is a simple and deeply encouraging way for each of us to be more holy, to be more like our Savior, to be His true disciples."],
+   "Be quick to help and slow to judge — look to a person's possible, not only their past, especially friends and new members.",
+   "Whom am I holding hostage to their history — and how could I help them instead of judging them?"),
 ]
 
 # 60-second recap "big idea" — a one-line condensation of the doc's summary (NOT a quote).
@@ -353,6 +362,7 @@ BIG_IDEAS = {
  "sun-pm-3-villanueva": "Live the law of tithing and the Lord opens the windows of heaven — blessings both temporal and spiritual.",
  "sun-pm-4-bednar": "Ordinances and covenants are spiritual credentials — kept faithfully, they are sealed by the Holy Spirit of Promise.",
  "sun-pm-5-lebethoa": "Whatever we face, the answer is always Jesus Christ — faith, daily scripture study and daily repentance let in His light.",
+ "sun-pm-6-sinclair": "Be quick to help and slow to judge — like Christ at the well, look to a person's possible, not only their past.",
 }
 for _t in talks:
     _t["big_idea"] = BIG_IDEAS[_t["id"]]
