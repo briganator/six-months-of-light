@@ -1,0 +1,15 @@
+{
+  "name": "Six Months of Light",
+  "short_name": "Six Months",
+  "description": "The words of October 2026 General Conference, to carry you to April. Not an official Church site.",
+  "start_url": "./?src=home-screen",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0d1326",
+  "theme_color": "#0d1326",
+  "icons": [
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

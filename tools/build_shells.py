@@ -20,6 +20,8 @@ pages = {
  "plan": ("Reading plan to April · Six Months of Light", [], []),
  "study": ("Study library · Six Months of Light", [], ["themes3.js", "library-data.js", "library.js"]),
  "topic": ("Topic across conferences · Six Months of Light", [], ["themes3.js", "library-data.js", "library.js"]),
+ "subscribe": ("Get a talk · Six Months of Light", [], ["themes3.js"]),
+ "privacy": ("Privacy · Six Months of Light", [], []),
 }
 for name, (title, pre, libs) in pages.items():
     scripts = ["assets/config.js", "assets/api.js", "assets/data.js", "assets/common.js"] + [f"assets/{l}" for l in libs] + [f"assets/pages/{e}.js" for e in pre] + [f"assets/pages/{name}.js"]
@@ -42,6 +44,7 @@ for name, (title, pre, libs) in pages.items():
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0d1326">
 <link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="assets/icon-180.png"><meta name="apple-mobile-web-app-title" content="Six Months">
 <link rel="preload" href="assets/fonts/CormorantGaramond.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/styles.css">
 </head>
