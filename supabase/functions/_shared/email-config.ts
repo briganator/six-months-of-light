@@ -18,5 +18,5 @@ export async function sendEmail(to: string, subject: string, html: string, text:
   const r = await fetch("https://api.resend.com/emails", { method: "POST", headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
     body: JSON.stringify({ from: EMAIL.from, to: [to], reply_to: EMAIL.replyTo, subject, html, text, headers }) });
   if (!r.ok) throw new Error("Resend " + r.status + " " + (await r.text()).slice(0, 200));
-  return true;
+  return ((await r.json()) as { id?: string }).id || "sent";
 }

@@ -11,6 +11,7 @@ import { newVapidKeys, sendPush } from "../_shared/webpush.ts";
 import { EMAIL, sendEmail } from "../_shared/email-config.ts";
 import { deliveryEmail, confirmEmail } from "../_shared/email-templates.ts";
 const sql = postgres(Deno.env.get("SUPABASE_DB_URL")!, { max: 3, prepare: false });
+const TEST_TO = "brighamr@gmail.com";   // admin test sends go only here
 const FN = (Deno.env.get("SUPABASE_URL") || "https://yrofrjdmhnudqbuvukqm.supabase.co") + "/functions/v1/deliver";
 const CORS = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "GET, POST, OPTIONS", "Access-Control-Allow-Headers": "content-type, x-cron-key, apikey, authorization" };
 const json = (o: unknown, status = 200) => new Response(JSON.stringify(o), { status, headers: { ...CORS, "content-type": "application/json" } });
@@ -69,7 +70,16 @@ Deno.serve(async (req) => {
       return go("subscribe.html?email=" + (r.length ? "confirmed" : "link-used")); }
     if (req.method !== "POST") return json({ error: "Not found" }, 404);
     const key = req.headers.get("x-cron-key");
-    if (key) { if (key !== (await cfg("cron_key"))) return json({ error: "no" }, 403); return json(await runDue()); }
+    if (key) { if (key !== (await cfg("cron_key"))) return json({ error: "no" }, 403);
+      // Admin-only check of the email path (works while public email is off). Fixed recipient; triggered from SQL so the key never leaves the DB.
+      const b0 = await req.clone().json().catch(() => ({}));
+      if (b0.action === "email_test") {
+        const it = await itemFor(parsePrefs({ k: "quote" }), localNow("America/Denver").date), unsub = `${FN}?unsub=00000000-0000-0000-0000-000000000000`;
+        const m = deliveryEmail(it, unsub, SITE + "subscribe.html?k=quote");
+        const id = await sendEmail(TEST_TO, "[TEST] (server) " + m.subject, m.html, m.text, { "List-Unsubscribe": `<${unsub}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" });
+        return json({ ok: true, id, to: TEST_TO });
+      }
+      return json(await runDue()); }
     const b = await req.json().catch(() => ({}));
     if (b.action === "test") {
       const r = (await sql`select endpoint, p256dh, auth, prefs, tz, hour from private.push_subs where endpoint = ${String(b.endpoint || "")}`)[0];
