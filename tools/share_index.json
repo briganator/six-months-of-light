@@ -344,50 +344,95 @@
    "t": "sun-am-5-dube",
    "n": 3,
    "look": "watercolor"
+  },
+  {
+   "t": "sun-am-6-cook",
+   "n": 1,
+   "look": "temple_dusk"
+  },
+  {
+   "t": "sun-am-6-cook",
+   "n": 2,
+   "look": "mountains"
+  },
+  {
+   "t": "sun-am-6-cook",
+   "n": 3,
+   "look": "watercolor"
+  },
+  {
+   "t": "sun-am-7-kyungu",
+   "n": 1,
+   "look": "watercolor"
+  },
+  {
+   "t": "sun-am-7-kyungu",
+   "n": 2,
+   "look": "sunrise"
+  },
+  {
+   "t": "sun-am-7-kyungu",
+   "n": 3,
+   "look": "temple_dusk"
+  },
+  {
+   "t": "sun-am-8-schmeil",
+   "n": 1,
+   "look": "sunrise"
+  },
+  {
+   "t": "sun-am-8-schmeil",
+   "n": 2,
+   "look": "temple_dusk"
+  },
+  {
+   "t": "sun-am-8-schmeil",
+   "n": 3,
+   "look": "mountains"
   }
  ],
  "insights": [
   {
    "id": "ten-words",
    "title": "The conference in 10 words",
-   "sub": "Most-used meaningful words in Saturday's recaps",
-   "share": "Saturday of October 2026 General Conference in 10 words."
+   "sub": "Most-used meaningful words in the recaps of the first 26 talks",
+   "share": "October 2026 General Conference so far in 10 words."
   },
   {
    "id": "top-words",
-   "title": "What Saturday kept saying",
+   "title": "What the conference kept saying",
    "sub": "",
-   "share": "The words Saturday of General Conference kept coming back to."
+   "share": "The words General Conference so far kept coming back to."
   },
   {
    "id": "christ",
    "title": "He was named again and again",
    "sub": "",
-   "share": "Jesus Christ was named 90 times in recaps of 19 of 23 Saturday talks."
+   "share": "Jesus Christ was named 104 times in recaps of 21 of 26 talks."
   },
   {
    "id": "themes",
    "title": "What the talks were about",
    "sub": "",
-   "share": "The top themes from Saturday of General Conference."
+   "share": "The top themes from General Conference so far."
   },
   {
    "id": "themes-by-session",
    "title": "Each session's focus",
    "sub": "",
-   "share": "The leading themes in each Saturday session."
+   "share": "The leading themes in each session so far."
   },
   {
    "id": "scriptures",
    "title": "Back to the scriptures",
    "sub": "",
-   "share": "19 scripture references in recaps of Saturday's talks."
+   "share": "20 scripture references in recaps of the first 26 talks."
   },
   {
    "id": "who-spoke",
-   "title": "23 talks on Saturday",
+   "title": "26 talks so far",
    "sub": "",
-   "share": "Who spoke on Saturday of General Conference."
+   "share": "Who spoke at General Conference so far."
   }
  ]
 }

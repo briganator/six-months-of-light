@@ -1034,3 +1034,11 @@ details.fine>summary{cursor:pointer;min-height:44px;display:flex;align-items:cen
   body.home .entry{margin-top:-44px}
 }
 @media (max-width:899px){body.home .hero .countdown{display:none}body.home .hero-lg .hero-copy{padding-bottom:64px}}
+/* Quote step on phones: smaller preview and a one-row share bar, so the picker gets the screen */
+@media (max-width:899px){
+  body.st-picking .st-canvas canvas,body.st-picking.compact .st-canvas canvas{max-height:18vh}
+  body.st-picking .st-actions .st-ready,body.st-picking .st-actions .st-mode,body.st-picking .st-actions #igTip{display:none}
+  body.st-picking .st-actions{padding-top:8px}
+  body.st-picking .st-btns .btn{min-height:44px;padding-top:8px;padding-bottom:8px}
+}
+@media (max-width:899px){body.st-picking .qs-ver{display:none}body.st-picking .qs-note:has(#thmNote:empty){display:none}}

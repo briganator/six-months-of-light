@@ -73,6 +73,7 @@ Reviewed every page at 390×844 (iPhone WebKit) first, then at 1440×900.
 | Notice strip | Took 2 lines on every phone page. |
 | Insights | About 10,800 px tall on a phone: about 10 shareable cards stacked vertically, then a quiz, spotlight, word cloud, four chart cards and a "coming later" stub. |
 | Insights wording | Still said "Saturday" ("What Saturday kept saying", "Saturday sessions only. Sunday pending.") although the numbers already included Sunday talks. The quiz page and explorer said the same. |
+| Studio Quote step (phone) | The quote picker got only about 60 px of the screen: the sticky preview (30% of the height), the step tabs and the 4-row share sheet covered the rest. |
 | Studio | The Look step listed about 90 backgrounds in 12 headed sections (several screens of scrolling) before color and darkness. The phone share sheet had 4 rows. |
 | Talk page | Two dashed placeholder boxes ("Official video will be embedded…", "Full talk text… reserved") plus a full-width recap box above the title. |
 | Study rows | "Make a card" floated below each card as a loose link. |
@@ -97,6 +98,7 @@ Reviewed every page at 390×844 (iPhone WebKit) first, then at 1440×900.
   - Phone height: about 10,800 → about 5,400 px.
 - **Wording follows the data:** "Saturday" while only Saturday talks exist, "so far" while Sunday is being added, then "all N talks". This covers card titles, captions, footers, the quiz and the explorer.
 - **Studio:**
+  - Quote step on phones: the preview shrinks to 18% of the screen height and the share sheet to one row. Focusing the search lifts it under the step tabs, so quotes and results show on the first screen.
   - Look step: "Background" first, with one swipeable row of style chips (Popular, Light, Temple art, Temple photos, Christ in art…) filtering a single grid. Popular holds the first look of each style.
   - Layout comes next. Color palette and darkness sit under "Fine-tune".
   - Phone share sheet: 3 compact rows. "Share link only" is now under More ways → Copy link.

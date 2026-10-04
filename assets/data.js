@@ -40,7 +40,7 @@ window.CONF = {
    "when": "Sun, Oct 4 · 10:00am–noon MDT",
    "url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/sunday-morning-session?lang=eng",
    "status": "pending",
-   "note": "Conducted by President D. Todd Christofferson. Music by The Tabernacle Choir at Temple Square (opening hymn: How Firm a Foundation). Talks are being added as Church News recaps post."
+   "note": "Conducted by President D. Todd Christofferson. Music by The Tabernacle Choir at Temple Square (opening hymn: How Firm a Foundation). Talks are being added as Church News recaps post (8 so far; session still in progress through noon MDT)."
   },
   {
    "id": "sun-pm",
@@ -608,6 +608,78 @@ window.CONF = {
    "invitation": "Come unto Christ through faith in Him and His Atonement — you do not need to perfect yourself first.",
    "ponder": "What “trespassers” sign has the adversary hung on the gate of my heart that I need to let go of?",
    "big_idea": "Come unto Christ as you are — He perfects us; we do not perfect ourselves first.",
+   "video_embed": null,
+   "full_text_permitted": false
+  },
+  {
+   "id": "sun-am-6-cook",
+   "session": "sun-am",
+   "order": 6,
+   "speaker": "Elder Quentin L. Cook",
+   "calling": "Quorum of the Twelve Apostles",
+   "title": "Integrity and Virtue Lead to Happiness",
+   "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/elder-quentin-l-cook-october-2026-general-conference-integrity-virtue-lead-happiness/",
+   "official_url": null,
+   "summary": "Elder Quentin L. Cook of the Quorum of the Twelve Apostles spoke about integrity, virtue and happiness. As a new missionary, President David O. McKay passed a building with a stone above the doorway inscribed “What e’er thou art, act well thy part.” In Heavenly Father’s plan, integrity, virtue and happiness are intrinsically linked — true happiness is the outcome of integrity and virtue. That relationship is less well understood today; the founders of the United States emphasized life, liberty and happiness based on living a virtuous life. The Lord wants us to experience the joy of a virtuous life and richly rewards those who make sacrifices in His name. Covenant keepers are expected to live lives of virtue and integrity; the ultimate reward is the constant companionship of the Holy Ghost. Part of integrity is acknowledging faults to the Lord and repenting. When repentance is a constant day-to-day part of our lives, we can approach the Lord with integrity and receive His saving blessings. Integrity, virtue and ongoing repentance are the answer to today’s challenges.",
+   "scriptures": [
+    "Alludes to Doctrine and Covenants 121:45 (“Let virtue garnish thy thoughts unceasingly”) — Liberty Jail guidance referenced in recaps"
+   ],
+   "quotes": [
+    "The virtuous Christlike life necessary to sustain us and propel us along the covenant path has never been more important or challenging.",
+    "In the Father’s plan, integrity, virtue and happiness are intrinsically linked.",
+    "Integrity, virtue and on-going repentance are the answer in a world where coarse language and serious challenges are so prevalent."
+   ],
+   "invitation": "Live with integrity and virtue; make repentance a constant day-to-day part of your life.",
+   "ponder": "Where do I need more integrity and virtue so the Holy Ghost can be my constant companion?",
+   "big_idea": "Integrity, virtue and daily repentance lead to happiness and the Holy Ghost’s companionship.",
+   "video_embed": null,
+   "full_text_permitted": false
+  },
+  {
+   "id": "sun-am-7-kyungu",
+   "session": "sun-am",
+   "order": 7,
+   "speaker": "Elder Alfred Kyungu",
+   "calling": "General Authority Seventy",
+   "title": "Using the Language of Peacemakers",
+   "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/elder-alfred-kyungu-october-2026-general-conference-using-language-of-peacemakers/",
+   "official_url": null,
+   "summary": "Elder Alfred Kyungu, General Authority Seventy, spoke about using the language of peacemakers. The invitation to forgo contention by using the language of peacemakers comes from the living Prophet and is a call to discipleship as individuals follow Jesus Christ. It is a spiritual exercise to identify language and expressions to forgo and replace them with words and phrases that bring peace. Remove words that damage relationships — such as “You are useless,” “Just stop talking” or “What is wrong with you?” — which weaken love, diminish respect and damage relationships. Rather than words that escalate anger, disappointment and frustration, choose words that encourage understanding and peace and that strengthen confidence and preserve relationships — such as “Thank you,” “I’m sorry” and “I forgive you.” The true doctrine of Christ has power to change language. He invited Saints to repent of harsh language that has offended friends, leaders, family members and colleagues; to pray for peaceful communication regardless of differences of opinion; and to use language that uplifts, edifies, comforts and brings people together.",
+   "scriptures": [
+    "No specific verses reported in recaps"
+   ],
+   "quotes": [
+    "It is a spiritual exercise to identify the language and expressions we need to forgo and then replace them with words and phrases that bring peace wherever we are and at all times.",
+    "Rather than choosing words and language that escalate feelings of anger, disappointment and frustration, let us use words that encourage understanding and peace. We must choose language that strengthens confidence and preserves relationships.",
+    "Let us repent of the harsh language and expressions that have offended our friends, leaders, family members and colleagues. Let us pray for peaceful communication among us, regardless of the difference in our opinions. Let us use the language that uplifts, edifies, comforts and brings people together."
+   ],
+   "invitation": "Repent of harsh language; choose peacemaking words that uplift, edify and preserve relationships.",
+   "ponder": "What harsh words do I need to forgo this week — and what peacemaking words will replace them?",
+   "big_idea": "Forgo harsh words; use the language of peacemakers that uplifts and preserves relationships.",
+   "video_embed": null,
+   "full_text_permitted": false
+  },
+  {
+   "id": "sun-am-8-schmeil",
+   "session": "sun-am",
+   "order": 8,
+   "speaker": "Elder Ciro Schmeil",
+   "calling": "General Authority Seventy",
+   "title": "Consider Your Ways, and From This Day Will I Bless You",
+   "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/elder-ciro-schmeil-october-2026-general-conference-covenants-jesus-christ/",
+   "official_url": null,
+   "summary": "Elder Ciro Schmeil, General Authority Seventy, spoke about making covenants with God. God did not leave His children alone on the journey to return to Him — two divine helps are the Savior, Jesus Christ, and covenants. The Savior knows us individually and will help us if we seek Him; we show our faith in Christ by making and keeping covenants with God. Through covenants we become yoked with the Savior and our burdens become lighter. Baptism is the first covenant and is renewed each week by partaking of the sacrament, which is essential to have the Spirit and strength to continue on the covenant path. In Haggai, the Israelites were commanded to rebuild the temple, did not make it a priority, were rebuked, then considered their ways and repented; the Lord said, “from this day will I bless you” (Haggai 2:19). Heavenly Father is not asking us to physically build the temple, but to build a strong relationship with Him and His Son through our covenants; He will magnify our efforts as we make the proper adjustments to make and keep covenants with Him.",
+   "scriptures": [
+    "Haggai 2:19"
+   ],
+   "quotes": [
+    "It is through covenants that we become yoked with the Savior, Jesus Christ, and our burdens become lighter.",
+    "May we also consider our ways. Heavenly Father is not asking us to physically build the temple, but He is asking us to build a strong relationship with Him and His Son, Jesus Christ, through our covenants.",
+    "I know that God keeps His promises. I have seen it in my life. He gave me spiritual and physical strength when I needed it most."
+   ],
+   "invitation": "Consider your ways; build a strong relationship with Heavenly Father and Jesus Christ through making and keeping covenants.",
+   "ponder": "What “proper adjustments” do I need to make so I can better make and keep my covenants?",
+   "big_idea": "Consider your ways — build your relationship with God through covenants, and He will bless you.",
    "video_embed": null,
    "full_text_permitted": false
   }

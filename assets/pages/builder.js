@@ -58,7 +58,7 @@ document.getElementById("main").innerHTML = `
           <div class="qs-top"><input class="field qs-find" id="qsearch" type="search" placeholder="Search quotes, talks or speakers" aria-label="Search quotes, talks or speakers" enterkeyhint="search" autocomplete="off">
             ${seg("qscope", { conf: "This conference", all: "All conferences" }, "conf", "Search in")}</div>
           <div class="qs-chips" id="qthemes" role="group" aria-label="Theme">${T3.list.map(th => `<button type="button" class="thm thm-chip" data-th="${th.slug}" aria-pressed="${th.slug === st.theme}"><i aria-hidden="true">${th.icon}</i>${esc(th.slug === "all" ? "All themes" : th.name)}</button>`).join("")}</div>
-          <p class="b-help qs-note"><span id="thmNote"></span> Verified quotes only (from recaps; confirm with official text).</p>
+          <p class="b-help qs-note"><span id="thmNote"></span><span class="qs-ver"> Verified quotes only (from recaps; confirm with official text).</span></p>
           <div id="qbrowse"></div><div id="qresults" hidden></div>
           <button type="button" class="btn secondary small car-btn" id="carQ">Save this talk as a carousel</button><p class="b-help" id="carQh"></p></div>
         <div id="srcPromo" hidden><p class="b-help">Invite friends to Six Months of Light. Each card links to the site with a QR code.</p>
@@ -208,7 +208,9 @@ function pickTheme(slug, auto) { st.theme = slug; $("qthemes").querySelectorAll(
 $("qthemes").addEventListener("click", e => { const b = e.target.closest(".thm"); if (b) pickTheme(b.dataset.th); });
 const syncLooks = () => document.querySelectorAll(".look").forEach(x => x.setAttribute("aria-pressed", x.dataset.look === st.look));
 // ---- tabs ----
-function setTab(k) { st.tab = k; document.querySelectorAll("#tabs [role=tab]").forEach(b => b.setAttribute("aria-selected", b.id === "tab-" + k)); document.querySelectorAll(".st-pane").forEach(p => p.hidden = p.id !== "p-" + k); if (k === "look") thumbs();
+// Phones: focusing the quote search lifts it to just under the sticky step tabs, so results get the screen.
+$("qsearch")?.addEventListener("focus", () => { if (innerWidth > 899) return; const tb = $("tabs").getBoundingClientRect(), r = $("qsearch").getBoundingClientRect(); const dy = r.top - tb.bottom - 8; if (Math.abs(dy) > 4) scrollBy({ top: dy, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); });
+function setTab(k) { st.tab = k; document.body.classList.toggle("st-picking", k === "quote"); requestAnimationFrame(() => typeof setPrevH === "function" && setPrevH()); document.querySelectorAll("#tabs [role=tab]").forEach(b => b.setAttribute("aria-selected", b.id === "tab-" + k)); document.querySelectorAll(".st-pane").forEach(p => p.hidden = p.id !== "p-" + k); if (k === "look") thumbs();
   const panel = document.querySelector(".st-panel"), ph = isPhone ? $("stPrev").offsetHeight + $("sitebar").offsetHeight : 0, top = panel.getBoundingClientRect().top;
   if (top < ph) window.scrollTo({ top: top + scrollY - ph, behavior: "instant" }); }
 document.querySelectorAll("#tabs [role=tab]").forEach(b => b.addEventListener("click", () => setTab(b.id.slice(4))));
