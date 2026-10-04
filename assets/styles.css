@@ -831,3 +831,4 @@ body.xp-open{overflow:hidden}
 .xp-two{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center}
 @keyframes sheetup{from{transform:translateY(40px);opacity:.6}to{transform:none;opacity:1}}
 @keyframes fadein{from{opacity:0}}
+@media (max-width:560px){#aud{display:grid;grid-template-columns:1fr 1fr;border-radius:16px;width:100%;margin-right:0}#aud button{border-radius:12px;padding:10px 8px;line-height:1.25}}
