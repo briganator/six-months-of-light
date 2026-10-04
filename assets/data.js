@@ -895,6 +895,30 @@ window.CONF = {
    "big_idea": "You are good enough to teach — the Lord will help you, and teaching like the Savior begins with loving like the Savior.",
    "video_embed": null,
    "full_text_permitted": false
+  },
+  {
+   "id": "sun-pm-9-gilbert",
+   "session": "sun-pm",
+   "order": 9,
+   "speaker": "Elder Clark G. Gilbert",
+   "calling": "Quorum of the Twelve Apostles",
+   "title": "Teach Truth With Love",
+   "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/elder-clark-gilbert-october-2026-general-conference-teach-truth-with-love/",
+   "official_url": null,
+   "summary": "Speaking about standing for truth with love. Standing for truth takes courage, and standing for truth with love takes even more. Drawing on teachings of President Dallin H. Oaks, he shared five principles: avoid overly contentious settings, where tense moments make it harder to see what is really causing someone’s protests; find common ground, as the Savior did, for “we love him, because he first loved us”; be a light, which opens more doors than any pointed argument; hold to truth even in outreach, because minimizing God’s laws separates us from the One who loves others most; and stay anchored in Jesus Christ, asking ourselves whether we carry Christlike attributes as we strive to stand for truth with love. For disciples of Jesus Christ, truth and love always walk together — for some this will require greater conviction, for others greater charity, and the Lord will help us.",
+   "scriptures": [
+    "1 John 4:19"
+   ],
+   "quotes": [
+    "It takes courage to stand for truth. It takes even more courage to stand for truth with love.",
+    "The best way to help someone else keep their covenants is to keep your covenants.",
+    "For disciples of Jesus Christ, truth and love always walk together. I believe teaching truth with love will be the hallmark of Christ’s disciples in the last days."
+   ],
+   "invitation": "Stand for truth with love — avoid contention, find common ground, be a light, hold to truth, and stay anchored in Jesus Christ.",
+   "ponder": "Do I need greater conviction or greater charity to teach truth with love — and where can I start this week?",
+   "big_idea": "Stand for truth with love — for disciples of Jesus Christ, truth and love always walk together.",
+   "video_embed": null,
+   "full_text_permitted": false
   }
  ],
  "challenge": {

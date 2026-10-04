@@ -344,6 +344,15 @@ talks = [
     "Learn of Him. Love Him. And as you do, He will help you love those you teach — and that love will make your teaching more like His."],
    "Come unto the Master Teacher — learn of Him and love Him, and let that love shape how you teach those around you.",
    "Whom do I teach — at church, at home or one by one — and how could I come to know and love them better?"),
+ t("sun-pm-9-gilbert", "sun-pm", 9, "Elder Clark G. Gilbert", "Quorum of the Twelve Apostles", "Teach Truth With Love",
+   "https://www.thechurchnews.com/general-conference/2026/10/04/elder-clark-gilbert-october-2026-general-conference-teach-truth-with-love/",
+   "Speaking about standing for truth with love. Standing for truth takes courage, and standing for truth with love takes even more. Drawing on teachings of President Dallin H. Oaks, he shared five principles: avoid overly contentious settings, where tense moments make it harder to see what is really causing someone’s protests; find common ground, as the Savior did, for “we love him, because he first loved us”; be a light, which opens more doors than any pointed argument; hold to truth even in outreach, because minimizing God’s laws separates us from the One who loves others most; and stay anchored in Jesus Christ, asking ourselves whether we carry Christlike attributes as we strive to stand for truth with love. For disciples of Jesus Christ, truth and love always walk together — for some this will require greater conviction, for others greater charity, and the Lord will help us.",
+   ["1 John 4:19"],
+   ["It takes courage to stand for truth. It takes even more courage to stand for truth with love.",
+    "The best way to help someone else keep their covenants is to keep your covenants.",
+    "For disciples of Jesus Christ, truth and love always walk together. I believe teaching truth with love will be the hallmark of Christ’s disciples in the last days."],
+   "Stand for truth with love — avoid contention, find common ground, be a light, hold to truth, and stay anchored in Jesus Christ.",
+   "Do I need greater conviction or greater charity to teach truth with love — and where can I start this week?"),
 ]
 
 # 60-second recap "big idea" — a one-line condensation of the doc's summary (NOT a quote).
@@ -383,6 +392,7 @@ BIG_IDEAS = {
  "sun-pm-6-sinclair": "Be quick to help and slow to judge — like Christ at the well, look to a person's possible, not only their past.",
  "sun-pm-7-stevenson": "Gospel truths are like a favorite fruit — they grow sweet as we live them; love, share and invite others to taste them.",
  "sun-pm-8-reid": "You are good enough to teach — the Lord will help you, and teaching like the Savior begins with loving like the Savior.",
+ "sun-pm-9-gilbert": "Stand for truth with love — for disciples of Jesus Christ, truth and love always walk together.",
 }
 for _t in talks:
     _t["big_idea"] = BIG_IDEAS[_t["id"]]
