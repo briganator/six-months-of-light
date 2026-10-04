@@ -1,0 +1,15 @@
+{
+ "jesus-christ": {"name": "Jesus Christ", "keys": ["jesus", "christ", "christ's", "savior", "savior's", "saviour", "redeemer", "messiah", "atonement", "atoning", "lamb of god", "only begotten", "resurrection", "resurrected"]},
+ "temple": {"name": "Temple", "keys": ["temple", "temples", "house of the lord", "holy house", "endowment", "endowed", "sealing", "sealings", "sealed", "temple recommend"]},
+ "family": {"name": "Family", "keys": ["family", "families", "marriage", "married", "husband", "wife", "wives", "parents", "parent", "mother", "mothers", "children", "grandparents", "grandchildren", "home", "homes", "siblings"]},
+ "prayer": {"name": "Prayer", "keys": ["pray", "prayer", "prayers", "praying", "prayed", "prayerful", "prayerfully", "kneel", "knelt"]},
+ "covenants": {"name": "Covenants", "keys": ["covenant", "covenants", "covenant-keeping", "covenant path", "sacrament", "baptism", "baptized", "baptismal", "ordinance", "ordinances"]},
+ "repentance-grace": {"name": "Repentance & Grace", "keys": ["repent", "repentance", "repenting", "repented", "forgive", "forgiveness", "forgiven", "grace", "mercy", "merciful", "deliverance", "deliver"]},
+ "hope-peace": {"name": "Hope & Peace", "keys": ["hope", "hopeful", "peace", "peaceful", "comfort", "comforted", "joy", "joyful", "healing", "heal", "healed", "rest", "lift", "lifts"]},
+ "missionary": {"name": "Missionary Work", "keys": ["missionary", "missionaries", "mission", "missions", "gather", "gathering", "gathered", "share the gospel", "convert", "converts", "converted"]},
+ "ministering": {"name": "Ministering", "keys": ["minister", "ministering", "ministered", "serve", "service", "serving", "compassion", "compassionate", "neighbor", "neighbors", "kindness", "love one another", "divine appointments"]},
+ "youth": {"name": "Youth", "keys": ["youth", "young men", "young women", "rising generation", "teenagers", "teens", "young people", "primary children", "young adults"]},
+ "scripture-study": {"name": "Scripture Study", "keys": ["scripture", "scriptures", "book of mormon", "bible", "word of god", "study", "studying", "searching", "isaiah's"]},
+ "holy-ghost": {"name": "Holy Ghost", "keys": ["holy ghost", "holy spirit", "the spirit", "revelation", "prompting", "promptings", "inspiration", "personal revelation", "still small voice"]},
+ "gratitude": {"name": "Gratitude", "keys": ["gratitude", "grateful", "thank", "thanks", "thankful", "thanksgiving", "giving thanks"]}
+}

@@ -23,7 +23,7 @@ else {
       <dt>Key scriptures</dt>
       <dd><ul class="scriptures">${t.scriptures.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></dd>
       <dt>Quotes <span style="text-transform:none;letter-spacing:0;font-weight:400;color:var(--muted)">(from recaps; confirm with official text)</span></dt>
-      <dd>${t.quotes.map((q,qi)=>`<blockquote>“${esc(q)}”</blockquote>
+      <dd>${t.quotes.map((q,qi)=>`<blockquote id="q${qi+1}" class="qanchor" tabindex="-1">“${esc(q)}”</blockquote>
         <div class="qrow"><button type="button" data-save="${qi}" aria-pressed="${Store.isSaved(t.id,qi)}">${Store.isSaved(t.id,qi)?"★ Saved":"☆ Save"}</button>
         <a href="builder.html?t=${t.id}&q=${qi}">Make a card</a></div>`).join("")}</dd>
     </dl>
@@ -84,4 +84,7 @@ else {
   let nt; document.getElementById("note").addEventListener("input", e => { clearTimeout(nt); nt = setTimeout(() => { Store.setNote(t.id, e.target.value.trim()); document.getElementById("notemsg").textContent = "Saved on this device."; }, 400); });
   document.getElementById("cplink").addEventListener("click", () => shareCard({ url: talkUrl(t), text: shareText(t) }));
   setupShare(t.id);
+  // deep link from cards / QR codes: talks/<id>.html#q2 highlights that quote
+  const hm = /^#q(\d)$/.exec(location.hash), qa = hm && document.getElementById("q" + hm[1]);
+  if (qa) { qa.classList.add("qhit"); requestAnimationFrame(() => { qa.scrollIntoView({ block: "center" }); qa.focus({ preventScroll: true }); }); }
 }

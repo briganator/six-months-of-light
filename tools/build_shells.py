@@ -6,7 +6,7 @@ SITE = json.loads((root / "assets/data.js").read_text().split("window.CONF = ", 
 NAME, TAG = "Six Months of Light", "The words of October 2026 General Conference, to carry you to April."
 pages = {
  "index": ("Six Months of Light · October 2026 General Conference", ["share"], ["insights-data.js"]),
- "builder": ("Card Studio · Six Months of Light", [], ["insights-data.js", "photos.js", "vendor/qrcode.js", "cardkit.js"]),
+ "builder": ("Card Studio · Six Months of Light", [], ["themes3.js", "insights-data.js", "photos.js", "vendor/qrcode.js", "cardkit.js"]),
  "quiz": ("Who said it? · Six Months of Light", [], []),
  "insights": ("Conference Insights · Six Months of Light", [], ["insights-data.js"]),
  "credits": ("Credits & licenses · Six Months of Light", [], ["photos.js"]),

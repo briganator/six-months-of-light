@@ -533,3 +533,25 @@ main [id]{scroll-margin-top:calc(var(--hdrH,52px) + 64px)}
 @media (min-width:900px){.st-preview{top:calc(var(--hdrH,60px) + 12px)!important}}
 @media (min-width:900px){.st-tabs{top:var(--hdrH,52px)}}
 @media (max-width:899px){.hero-lg .hero-copy{padding-top:28px;padding-bottom:96px}.display{margin:10px 0}.hero-lg .countdown{margin-top:18px}}
+/* v3: quote deep links */
+.qanchor{scroll-margin-top:calc(var(--hdrH,64px) + 24px);border-radius:10px;transition:background .6s,box-shadow .6s}
+.qanchor.qhit{background:rgba(241,211,148,.16);box-shadow:0 0 0 2px rgba(241,211,148,.55);outline:none}
+/* v3 studio: theme step, animation chips, IG preset (light studio surface) */
+.step-l{display:flex;align-items:center;gap:8px}
+.stepn{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#f1d394,#d8a95b);color:#1d1b2e;font:700 12px/1 var(--sans)}
+.themegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px;margin:6px 0 16px}
+.thm,.anims button,.igpreset{border:1px solid rgba(29,27,34,.12);background:#fff;color:var(--ink);border-radius:14px;cursor:pointer;touch-action:manipulation;font:inherit;transition:border-color .2s,box-shadow .2s}
+.thm{display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:10px 11px 9px;text-align:left;min-height:66px}
+.thm i{font-style:normal;font-size:17px;line-height:1;color:#a87a35;font-family:var(--serif)}
+.thm b{font:600 13px/1.2 var(--sans)}
+.thm small{font-size:11.5px;color:var(--muted)}
+.thm[aria-pressed=true],.anims button[aria-pressed=true],.igpreset[aria-pressed=true]{border-color:var(--gold);box-shadow:0 0 0 3px rgba(216,169,91,.25);background:#fffaf0}
+.thm:focus-visible,.anims button:focus-visible,.igpreset:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.looks.sug{padding:8px;border-radius:14px;background:rgba(216,169,91,.1)}
+.anims{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin:6px 0 8px}
+.anims button{padding:10px 12px;font:500 13.5px/1.2 var(--sans);text-align:left;min-height:44px}
+.igpreset{display:flex;flex-direction:column;gap:3px;width:100%;text-align:left;padding:12px 14px;margin:4px 0 10px;border-style:dashed;border-color:rgba(168,122,53,.55)}
+.igpreset b{font:600 14px/1.2 var(--sans)}.igpreset span{font-size:12.5px;color:var(--muted)}
+.igpreset[aria-pressed=true]{border-style:solid}
+.chk{display:flex;gap:8px;align-items:center;font-size:13.5px;margin:0 0 12px}
+.chk input{width:18px;height:18px;accent-color:#b8862f}
