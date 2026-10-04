@@ -1042,3 +1042,5 @@ details.fine>summary{cursor:pointer;min-height:44px;display:flex;align-items:cen
   body.st-picking .st-btns .btn{min-height:44px;padding-top:8px;padding-bottom:8px}
 }
 @media (max-width:899px){body.st-picking .qs-ver{display:none}body.st-picking .qs-note:has(#thmNote:empty){display:none}}
+.lib-list li .lib-make{color:#7a5420;border-color:rgba(168,122,53,.55)}
+.qs-sess~.qs-sess{content-visibility:auto;contain-intrinsic-size:auto 300px}

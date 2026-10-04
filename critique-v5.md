@@ -42,6 +42,7 @@ All share, print and clipboard calls were stubbed, and Supabase calls were faked
 - Links inside closed `<details>` (insights "more", Studio Motion) were reported as unnamed. Hidden elements; the checker now skips them.
 - An earlier "248 speakers" count was the test counting the 8 hidden top-speaker buttons too. The real count is 240 everywhere.
 - Moderation showed a 400 for a fake card image in the mocked run (test data only).
+- Chrome reports "Transition was aborted… ViewTransition opt-in disabled" when the fuzzer taps from a share page (`/i/`, `/q/`) to a site page faster than a person could. This is a browser-internal message with nothing visible. Site pages now swallow these rejections.
 - The local test server was stopped twice by another process mid-run; affected runs were repeated on a private port.
 
 ## Before → after
@@ -106,3 +107,14 @@ Reviewed every page at 390×844 (iPhone WebKit) first, then at 1440×900.
 - **Study and speaker rows:** "Make a card" is a small outlined button inside each card. It no longer competes with the gold header button.
 - **Spacing and type:** one spacing scale (4/8/12/16/24/32/48). Section headings are 26–36 px and section gaps 40–48 px. Pills don't wrap.
 - **Motion:** hero content is in place within about 0.6–0.9 s, the entry cards rise once, the card sheen loop is gone, and reduced-motion is respected.
+
+## Lighthouse (live site, simulated slow 4G, mobile)
+| Page | Before (v4) | After (v5) | Notes |
+|---|---|---|---|
+| Home | 90 | 94 | LCP 2.1 s, TBT 110 ms, CLS 0. SEO 92 is a test artifact: run against `/index.html`, whose canonical correctly points to `/`. |
+| Card Studio | 76 | 69 | TBT improved, 810 → 690 ms. The score moved on FCP/speed index (network-bound on simulated 4G); runs vary by ±5–7. Later sessions' quote rows now skip off-screen rendering (`content-visibility`). |
+| Study | 81 | 81 | Accessibility 96: the new outlined "Make a card" failed contrast; fixed (darker text). |
+| Insights | 81 | 89 | |
+| Talk page | 68 | 77 | Study panel deferred until after first paint. |
+
+Accessibility and best practices are 100 everywhere else.

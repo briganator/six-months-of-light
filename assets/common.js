@@ -2,6 +2,8 @@
 // Safari throws after 100 replaceState calls in 10 s (fast slider drags): throttle and never throw.
 window.setURL = (() => { let last = 0, t = 0, pend = null; const go = () => { t = 0; last = Date.now(); try { history.replaceState(history.state, "", pend); } catch (e) {} };
   return u => { pend = u; if (t) return; const w = 250 - (Date.now() - last); if (w <= 0) go(); else t = setTimeout(go, w); }; })();
+// Cross-page view transitions can be aborted by a quick second tap; swallow those promise rejections (harmless).
+["pageswap", "pagereveal"].forEach(ev => addEventListener(ev, e => { const vt = e.viewTransition; if (vt) [vt.ready, vt.finished, vt.updateCallbackDone].forEach(p => p && p.catch(() => {})); }));
 window.esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 window.talkById = id => CONF.talks.find(t => t.id === id);
 window.sessionById = id => CONF.sessions.find(s => s.id === id);
