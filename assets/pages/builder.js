@@ -299,13 +299,13 @@ window.__renderAt = s => { render(s); return true; };
 window.__studio = st; window.__draw = draw;
 $("replay").addEventListener("click", () => play(true));
 // ---- share / save / copy ----
-const fname = ext => `six-months-of-light-${ins() ? st.ins : slug(talk().speaker)}-${st.size}.${ext}`;
+const fname = ext => `six-months-of-light-${ins() ? ins().id : slug(talk().speaker)}-${st.size}.${ext}`;
 // Cards are PRE-RENDERED whenever they change (debounced), so the file is ready before the tap.
 // iOS Safari only allows navigator.share() inside the tap; generating the PNG after the tap is what used to drop the image.
 const off = document.createElement("canvas"), offCtx = off.getContext("2d"), cache = new Map(); let preT, gen = 0;
 const optsFor = (sz, sticker) => ({ ...opts(), sticker: !!sticker && sz === "story" });
 const keyFor = (sz, sticker) => JSON.stringify([optsFor(sz, sticker), sz]);
-const fnameFor = (sz, ext) => `six-months-of-light-${ins() ? (st.ins.startsWith("z-") ? "insight" : st.ins) : st.src === "promo" ? "promo-" + st.promo : slug(talk().speaker)}-${sz}.${ext}`;
+const fnameFor = (sz, ext) => `six-months-of-light-${ins() ? (ins().id.startsWith("z-") ? "insight" : ins().id) : st.src === "promo" ? "promo-" + st.promo : slug(talk().speaker)}-${sz}.${ext}`;
 async function renderFile(sz = st.size, sticker = st.sticker) {
   const key = keyFor(sz, sticker); if (cache.has(key)) return cache.get(key);
   const o = optsFor(sz, sticker), [W, H] = S[sz]; await K.prepare(o); off.width = W; off.height = H; K.drawCard(offCtx, W, H, o, Infinity);

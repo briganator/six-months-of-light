@@ -50,7 +50,7 @@ else {
 
   <section class="card"><h2 style="margin-top:0">My private note</h2>
     <p class="speaker">Saved only on this device. Never shared.</p>
-    <textarea class="note" id="note" placeholder="Impressions, promptings, what I'll do…">${esc(Store.note(t.id))}</textarea>
+    <textarea class="note" id="note" aria-label="My notes on this talk (saved on this device)" placeholder="Impressions, promptings, what I'll do…">${esc(Store.note(t.id))}</textarea>
     <div class="msg" id="notemsg"></div></section>
 
   <section class="card stuck" aria-labelledby="stuck-h">

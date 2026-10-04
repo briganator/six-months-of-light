@@ -18,12 +18,12 @@ document.getElementById("main").innerHTML = `
   </section>
   <div class="live-grid">
     <form class="live-form" id="lf" autocomplete="off" onsubmit="return false">
-      <div class="b-label"><span class="stepn">1</span> Who said it?</div>
+      <label class="b-label" for="sp"><span class="stepn">1</span> Who said it?</label>
       <div class="live-sp" id="spChips" role="group" aria-label="Speakers in ${esc((sess || lastSess).name)}"></div>
       <input class="field" id="sp" maxlength="60" list="spList" placeholder="Speaker's name, e.g. Elder …" aria-label="Speaker's name" enterkeyhint="next">
       <datalist id="spList"></datalist>
       <p class="b-help">Not sure? Leave it blank and the card says “Speaker”.</p>
-      <div class="b-label"><span class="stepn">2</span> The line you heard <span class="b-help" id="cnt">0/${MAX}</span></div>
+      <label class="b-label" for="line"><span class="stepn">2</span> The line you heard <span class="b-help" id="cnt">0/${MAX}</span></label>
       <textarea class="field live-line" id="line" maxlength="${MAX}" rows="3" placeholder="Type or paste the words you heard"></textarea>
       <p class="msg err" id="err" role="alert"></p>
       <div class="b-label"><span class="stepn">3</span> Pick a look</div>
