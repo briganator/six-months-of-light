@@ -299,6 +299,15 @@ talks = [
     "I bear my testimony that God is our loving Heavenly Father. He knows each of us and is aware of our needs even before we ask."],
    "Trust the Lord's promises and live the law of tithing faithfully, then watch for the temporal and spiritual blessings He pours out.",
    "What blessings — temporal or spiritual — have come into my life through paying tithing, and have I recognized them?"),
+ t("sun-pm-4-bednar", "sun-pm", 4, "Elder David A. Bednar", "Quorum of the Twelve Apostles", "Sealed by the Holy Spirit of Promise",
+   "https://www.thechurchnews.com/general-conference/2026/10/04/elder-david-bednar-october-2026-general-conference-sealed-holy-spirit-promise/",
+   "Speaking about ordinances and covenants, with a focus on the sealing ordinance. A covenant is a solemn promise and enduring commitment between God and His children, received through sacred ordinances — holy acts performed by priesthood authority with spiritual purpose and eternal significance. Understanding ordinances helps us understand our covenants. Covenants and ordinances are spiritual credentials, and faithfulness keeps them valid to receive the promised blessings. The Holy Ghost is the Holy Spirit of Promise, who ratifies righteous acts as acceptable to God; during mortality that seal is conditional and can be forfeited through unrighteousness. The temple sealing of a man and a woman is a crowning covenant and ordinance; a spouse who violates covenants and does not repent loses the ratifying seal, while a faithful spouse who honors covenants and presses forward in faith remains worthy to receive the promised blessings.",
+   ["The Holy Ghost as the “Holy Spirit of Promise” (no verse cited in recaps)"],
+   ["For disciples of Jesus Christ, receiving priesthood ordinances and entering into sacred covenants are essential steps in the quest of a lifetime to align our hearts, minds and lives with God’s will.",
+    "The covenants and ordinances of the Savior’s restored gospel are spiritual credentials that can open wide the heavenly windows of opportunity to receive in our lives divine purpose, direction and strength.",
+    "Ultimately, all gospel ordinances and covenants must be sealed by the Holy Spirit of Promise."],
+   "Honor your covenants and press forward in faith so your ordinances can be sealed by the Holy Spirit of Promise.",
+   "Am I keeping my covenant “credentials” valid — and what would help me honor my temple covenants more faithfully?"),
 ]
 
 # 60-second recap "big idea" — a one-line condensation of the doc's summary (NOT a quote).
@@ -333,6 +342,7 @@ BIG_IDEAS = {
  "sun-pm-1-uchtdorf": "Jesus Christ unites His covenant people — the closer we come to Him, the closer we come to each other.",
  "sun-pm-2-spannaus": "Heavenly Father knows you and is at your side — put Him first, and He will guide your righteous desires.",
  "sun-pm-3-villanueva": "Live the law of tithing and the Lord opens the windows of heaven — blessings both temporal and spiritual.",
+ "sun-pm-4-bednar": "Ordinances and covenants are spiritual credentials — kept faithfully, they are sealed by the Holy Spirit of Promise.",
 }
 for _t in talks:
     _t["big_idea"] = BIG_IDEAS[_t["id"]]

@@ -778,6 +778,30 @@ window.CONF = {
    "big_idea": "Live the law of tithing and the Lord opens the windows of heaven — blessings both temporal and spiritual.",
    "video_embed": null,
    "full_text_permitted": false
+  },
+  {
+   "id": "sun-pm-4-bednar",
+   "session": "sun-pm",
+   "order": 4,
+   "speaker": "Elder David A. Bednar",
+   "calling": "Quorum of the Twelve Apostles",
+   "title": "Sealed by the Holy Spirit of Promise",
+   "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/elder-david-bednar-october-2026-general-conference-sealed-holy-spirit-promise/",
+   "official_url": null,
+   "summary": "Speaking about ordinances and covenants, with a focus on the sealing ordinance. A covenant is a solemn promise and enduring commitment between God and His children, received through sacred ordinances — holy acts performed by priesthood authority with spiritual purpose and eternal significance. Understanding ordinances helps us understand our covenants. Covenants and ordinances are spiritual credentials, and faithfulness keeps them valid to receive the promised blessings. The Holy Ghost is the Holy Spirit of Promise, who ratifies righteous acts as acceptable to God; during mortality that seal is conditional and can be forfeited through unrighteousness. The temple sealing of a man and a woman is a crowning covenant and ordinance; a spouse who violates covenants and does not repent loses the ratifying seal, while a faithful spouse who honors covenants and presses forward in faith remains worthy to receive the promised blessings.",
+   "scriptures": [
+    "The Holy Ghost as the “Holy Spirit of Promise” (no verse cited in recaps)"
+   ],
+   "quotes": [
+    "For disciples of Jesus Christ, receiving priesthood ordinances and entering into sacred covenants are essential steps in the quest of a lifetime to align our hearts, minds and lives with God’s will.",
+    "The covenants and ordinances of the Savior’s restored gospel are spiritual credentials that can open wide the heavenly windows of opportunity to receive in our lives divine purpose, direction and strength.",
+    "Ultimately, all gospel ordinances and covenants must be sealed by the Holy Spirit of Promise."
+   ],
+   "invitation": "Honor your covenants and press forward in faith so your ordinances can be sealed by the Holy Spirit of Promise.",
+   "ponder": "Am I keeping my covenant “credentials” valid — and what would help me honor my temple covenants more faithfully?",
+   "big_idea": "Ordinances and covenants are spiritual credentials — kept faithfully, they are sealed by the Holy Spirit of Promise.",
+   "video_embed": null,
+   "full_text_permitted": false
   }
  ],
  "challenge": {
