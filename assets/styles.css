@@ -1102,7 +1102,8 @@ body.post .hero-sky .rays{opacity:.75}
 .sb-keep{margin-left:auto;display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 13px;border-radius:999px;color:#f3d79c;text-decoration:none;font:500 13.5px var(--sans);border:1px solid rgba(243,215,156,.45);background:rgba(243,215,156,.08);transition:background .3s var(--ease),border-color .3s}
 .sb-keep:hover{background:rgba(243,215,156,.16);border-color:rgba(243,215,156,.7)}
 .sitebar .topbar .sb-keep + .sb-cta{margin-left:0}
-@media (max-width:899px){.sb-keep{width:36px;padding:0;justify-content:center}.sb-keep span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}}
+.sb-keep .ks{display:none}@media (max-width:899px){.sb-keep{padding:0 12px 0 10px;font-size:13px}.sb-keep .kl{display:none}.sb-keep .ks{display:inline}}@media (max-width:899px){.sb-keep.sb-keep-c{width:36px;padding:0;justify-content:center}.sb-keep.sb-keep-c .ks{display:none}}@media (max-width:340px){.sb-keep{width:36px;padding:0;justify-content:center}.sb-keep .ks{display:none}}
+.post-actions .ghost-link{background:none;border:0;box-shadow:none;color:rgba(255,255,255,.82);text-decoration:underline;text-underline-offset:4px;text-decoration-color:rgba(243,215,156,.5);min-height:40px;font-size:15px}
 /* post-conference hero button */
 .btn-keep{display:inline-flex;align-items:center;gap:8px}.btn-keep .keep-ic{color:#f3d79c}
 /* home band */
@@ -1148,7 +1149,7 @@ body.post .hero-sky .rays{opacity:.75}
 .sub-card .seg button{border:1.5px solid rgba(42,45,92,.14);background:#fff;padding:10px 15px;font:500 14px var(--sans);color:var(--ink-2);min-height:42px}
 .sub-card .seg button[aria-pressed=true]{background:linear-gradient(160deg,#f6e3b4,#e7c27a);border-color:rgba(184,134,47,.55);color:#1b1608;box-shadow:none}
 .seg-wide{display:grid!important;grid-template-columns:1fr 1fr}
-.seg-days{display:grid!important;grid-template-columns:repeat(7,1fr);gap:6px!important}.seg-days button{padding:10px 0!important;font-size:13px!important}
+.seg-days{display:grid!important;grid-template-columns:repeat(7,1fr);gap:6px!important}.seg-days[hidden]{display:none!important}.seg-days button{padding:10px 0!important;font-size:13px!important}
 .sub-time{display:flex;align-items:center;gap:10px;margin-top:14px;font:15px var(--sans);color:var(--ink-2)}
 .sub-card select{font:15px var(--sans);padding:10px 12px;border-radius:12px;border:1.5px solid rgba(42,45,92,.14);background:#fff;color:var(--ink);max-width:100%}
 .sub-more{margin-top:16px;border-top:1px solid rgba(42,45,92,.08);padding-top:12px}
@@ -1157,7 +1158,7 @@ body.post .hero-sky .rays{opacity:.75}
 .sub-more summary span{font:400 13px var(--sans);color:var(--ink-2)}
 .sub-row{display:grid;gap:12px;margin-top:12px}@media (min-width:640px){.sub-row{grid-template-columns:1fr 1fr}}
 .sub-row label{display:flex;flex-direction:column}.sub-row .sub-hint{margin:0 0 4px}
-.sub-preview{margin:18px 0;padding:18px;border-radius:22px;background:linear-gradient(160deg,#fffaf0,#f5e6c8);border:1px solid rgba(216,169,91,.35)}
+.sub-preview .txt-link{color:#7a5410;text-decoration-color:rgba(122,84,16,.45);font-weight:600}.sub-preview{margin:18px 0;padding:18px;border-radius:22px;background:linear-gradient(160deg,#fffaf0,#f5e6c8);border:1px solid rgba(216,169,91,.35)}
 .sp-k{font:600 11.5px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:#9a7a2e}
 .sub-pv-when{font:13px var(--sans);color:var(--ink-2);margin:2px 0 12px}
 .sub-pv{display:flex;flex-direction:column;gap:12px}.sub-pv img{width:100%;max-width:420px;height:auto;border-radius:12px;box-shadow:var(--shadow-1)}

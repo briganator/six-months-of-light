@@ -92,7 +92,7 @@ window.postHeroHTML = () => `<div class="post-hero">
       <h1 class="display post-h"><span class="ph1">The Lord has spoken.</span> <span class="ph2">Now, let’s live it.</span></h1>
       <figure class="post-scrip"><blockquote>“${esc(DC138.text)}”</blockquote><figcaption><a href="${DC138.url}" rel="noopener" target="_blank">${DC138.ref} ↗</a></figcaption></figure>
       <p class="hero-how">Six months to study, apply and share these words before April.</p>
-      <div class="post-actions"><a class="btn gold big" href="plan.html">Start studying</a><button type="button" class="btn glass" id="pickInvite">Choose one invitation</button><a class="btn glass btn-keep" href="subscribe.html">${KEEP_ICON(18)}Remind me until April</a></div>
+      <div class="post-actions"><a class="btn gold big" href="plan.html">Start studying</a><a class="btn glass btn-keep" href="subscribe.html">${KEEP_ICON(18)}Remind me until April</a><button type="button" class="btn ghost-link" id="pickInvite">Choose one invitation</button></div>
       ${countdownHTML()}
       <a class="hero-link post-share" href="builder.html?ins=spoken">Share this as a card →</a></div>`;
 window.headerHTML = (active, small) => `
@@ -102,7 +102,7 @@ window.headerHTML = (active, small) => `
       ${NOTABS.includes(active) ? `<a class="sb-home" href="index.html"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg><span>Home</span></a>` : ""}
       <a class="brand" href="index.html" aria-label="Six Months of Light home">${WORDMARK()}</a>
       <div class="navlinks">${NAV.map(([h,l]) => `<a href="${h}" ${active===h?'aria-current="page"':""}>${l}</a>`).join("")}</div>
-      ${active === "subscribe.html" ? "" : `<a class="sb-keep" href="subscribe.html" aria-label="Keep the Light: conference reminders">${KEEP_ICON(18)}<span>Keep the Light</span></a>`}
+      ${active === "subscribe.html" ? "" : `<a class="sb-keep${NOTABS.includes(active) ? " sb-keep-c" : ""}" href="subscribe.html" aria-label="Keep the Light: conference reminders">${KEEP_ICON(18)}<span class="kl">Keep the Light</span><span class="ks">Remind me</span></a>`}
       ${active === "builder.html" ? "" : `<a class="btn gold small sb-cta" href="builder.html">Make a card</a>`}
     </nav></div>
   <header class="hero ${small ? "hero-sm" : "hero-lg"}">
