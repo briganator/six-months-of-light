@@ -70,9 +70,9 @@
     const refs = {}; (R.countTalks.length ? R.countTalks : top.map(h => h.t)).forEach(t => t.rf.forEach(r => refs[r] = (refs[r] || 0) + 1));
     const topRefs = P.ref ? [[P.ref, R.hits.length]] : Object.entries(refs).sort((a, b) => b[1] - a[1]).slice(0, 4);
     const title = P.ref ? P.ref : P.themes.length === 1 && I.theme ? LB.themeName(I.theme) : P.terms.slice(0, 3).join(" ") || q;
-    const card = { title: `“${title}” in general conference`.slice(0, 60), kicker: "Insight search · " + I.confsN + " conferences", eyebrow: "GENERAL CONFERENCE 2021–2026",
-      body: { type: "big", value: I.count, caption: `${I.theme ? "talks leaning on " + LB.themeName(I.theme) : "talks" + (P.ref ? " citing " + P.ref : " matching")} since April 2021${I.peak && I.peak[1] ? " · most in " + LB.confOf(I.peak[0]).label : ""}` },
-      basis: I.basis, share: `How often general conference talks since April 2021 touch “${title}”. #GeneralConference`, url: CONF.site_url + "study.html?c=all&q=" + encodeURIComponent(P.terms[0] || P.ref || "") };
+    const card = { title: `“${title}” in general conference`.slice(0, 60), kicker: "Insight search · " + I.confsN + " conferences", eyebrow: `GENERAL CONFERENCE ${LB.coverage.from.slice(-4)}–2026`,
+      body: { type: "big", value: I.count, caption: `${I.theme ? "talks leaning on " + LB.themeName(I.theme) : "talks" + (P.ref ? " citing " + P.ref : " matching")} since ${LB.coverage.from}${I.peak && I.peak[1] ? " · most in " + LB.confOf(I.peak[0]).label : ""}` },
+      basis: I.basis, share: `How often general conference talks since ${LB.coverage.from} touch “${title}”. #GeneralConference`, url: CONF.site_url + "study.html?c=all&q=" + encodeURIComponent(P.terms[0] || P.ref || "") };
     el.innerHTML = `<div class="srch-res">
       <section class="srch-ins"><div class="ins-kicker">Quick insight</div><h3>${esc(I.label)}${P.ref ? " " + esc(P.ref) : ""}</h3>
         <p class="speaker">${I.confsN} conference${I.confsN === 1 ? "" : "s"}${I.octN ? ` · ${I.octN} from October 2026 recaps` : ""}${I.who.length ? ` · most by ${I.who.map(([s, n]) => `${esc(s.replace(/^(President|Elder|Sister|Bishop|Brother)\s+/, ""))} (${n})`).join(", ")}` : ""}</p>

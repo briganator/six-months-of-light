@@ -6,12 +6,7 @@
   const esc = window.esc, SITE = CONF.site_url;
   const short = l => l.replace("October", "Oct").replace("April", "Apr");
   const plain = s => s.replace(/^(President|Elder|Sister|Bishop|Brother)\s+/, "");
-  const GROUPS = { fp: ["First Presidency", "the First Presidency", /First Presidency|^President of The Church/i], q12: ["Quorum of the Twelve", "the Quorum of the Twelve", /Quorum of the Twelve/i],
-    sev: ["Seventy", "the Seventy", /Seventy/i], pb: ["Presiding Bishopric", "the Presiding Bishopric", /Presiding Bishop/i],
-    rsywp: ["Relief Society, Young Women & Primary", "Relief Society, Young Women and Primary leaders", /Relief Society|Young Women|Primary/i],
-    ymss: ["Young Men & Sunday School", "Young Men and Sunday School leaders", /Young Men|Sunday School/i] };
-  const groupOf = r => (Object.entries(GROUPS).find(([, g]) => g[2].test(r || "")) || ["other"])[0];
-  const SESS = { sat: ["Saturday sessions", ["1", "2", "3"]], sun: ["Sunday sessions", ["4", "5"]], 1: ["Saturday morning", ["1"]], 2: ["Saturday afternoon", ["2"]], 3: ["Saturday evening", ["3"]], 4: ["Sunday morning", ["4"]], 5: ["Sunday afternoon", ["5"]] };
+  const SESS = { sat: ["Saturday sessions", ["1", "2", "3", "6"]], sun: ["Sunday sessions", ["4", "5"]], 1: ["Saturday morning", ["1"]], 2: ["Saturday afternoon", ["2"]], 3: ["Saturday evening", ["3", "6"]], 4: ["Sunday morning", ["4"]], 5: ["Sunday afternoon", ["5"]] };
   const seKey = name => /Saturday Morning/i.test(name) ? "1" : /Saturday Afternoon/i.test(name) ? "2" : /Sunday Morning/i.test(name) ? "4" : /Sunday Afternoon/i.test(name) ? "5" : "3";
   const MUSIC = { all: ["All music", null], hymns: ["Hymns (1985 hymnbook)", "hymns"], hfhc: ["New hymnbook songs", "hfhc"], cs: ["Children's Songbook", "cs"], choirs: ["Choirs", null] };
   const BOOKLAB = { hymns: "Hymns (1985)", hfhc: "Hymns—For Home and Church", cs: "Children's Songbook", other: "Other music" };
@@ -51,6 +46,7 @@
   };
   Object.values(PRESETS).forEach(p => p.st = p[1]);
   function make(el, LB) {
+    const GROUPS = LB.GROUPS, groupOf = LB.groupOf;
     const confsAsc = LB.confs.slice().reverse(), offAsc = confsAsc.filter(c => !c.recap);
     const spName = sp => (LB.speakers.find(x => x.sp === sp) || {}).s || sp;
     const subjLabel = s => s.k === "all" ? "everyone" : s.k === "sp" ? spName(s.a) : s.k === "g" ? (GROUPS[s.a] || [, s.a])[1] : s.k === "se" ? (SESS[s.a] || [s.a])[0] + (s.a === "sat" || s.a === "sun" ? "" : " sessions")
@@ -175,7 +171,7 @@
       cardData = { title: `${pre}${la} vs ${lb}`.slice(0, 60), body: { type: "list", items: rows.slice(0, 5).map(([k, a, b]) => `${k}: ${fmt(a)} vs ${fmt(b)}`) }, note: A.normUnit };
     }
     function timeView(out, A0, md) {
-      const s = st.s, w = st.w, cs = confsAsc.filter(c => inWhen(c.c, w)), off = cs.filter(c => !c.recap);
+      const s = st.s, w = st.w, hasMu = new Set(LB.L.music.map(m => m.c)), cs = confsAsc.filter(c => inWhen(c.c, w) && (family(s) !== "music" || hasMu.has(c.c) || c.recap)), off = cs.filter(c => !c.recap);
       const per = off.map(c => [c, compute(st.m, s, { k: "c", c: c.c })]);
       const keys = (A0.rows.length ? A0.rows : []).slice(0, A0.oneKey ? 1 : family(s) === "music" ? 5 : 6).map(r => r[0]);
       if (!keys.length) { out.innerHTML = head(title(), "") + `<p class="empty">Nothing to chart for this choice.</p>`; return; }
@@ -210,11 +206,13 @@
     const opt = (attrs, label, sub, on) => `<button type="button" class="opt ${on ? "on" : ""}" ${attrs}><b>${esc(label)}</b>${sub ? `<span>${esc(sub)}</span>` : ""}</button>`;
     const confOpts = (cur, offOnly) => LB.confs.filter(c => !offOnly || !c.recap).map(c => `<option value="${c.c}" ${c.c === cur ? "selected" : ""}>${esc(c.label)}${c.recap ? " (recaps, pending)" : ""}</option>`).join("");
     function subjectPicker(onPick, onlyFamily) {
-      const sps = LB.speakers.slice().sort((a, b) => b.n - a.n);
-      const sec = (fam, h, items) => onlyFamily && onlyFamily !== fam ? "" : `<div class="xp-sec" data-sec><h4>${h}</h4>${items}</div>`;
+      const top = LB.speakers.slice().sort((a, b) => b.n - a.n || a.s.localeCompare(b.s)).slice(0, 8);
+      const spBtn = (s, cls) => `<button type="button" class="opt ${cls}" data-s="sp:${esc(s.sp)}" data-find="${esc(s.find)}"><b>${esc(s.s)}</b><span>${s.n} talk${s.n === 1 ? "" : "s"} · ${esc(s.r || "")}</span></button>`;
+      const sec = (fam, h, items, extra = "") => onlyFamily && onlyFamily !== fam ? "" : `<div class="xp-sec" data-sec ${extra}><h4>${h}</h4>${items}</div>`;
       const body = `<input type="search" class="xp-find" placeholder="Search speakers, groups, topics, books…" aria-label="Search subjects" autocomplete="off">
         <div class="xp-opts">${sec("talk", "Everyone", opt('data-s="all"', "Everyone", "All talks"))}
-        ${sec("talk", "Speakers", sps.map((s, i) => `<button type="button" class="opt ${i >= 8 ? "more" : ""}" data-s="sp:${esc(s.sp)}" data-find="${esc(s.s.toLowerCase())}"><b>${esc(s.s)}</b><span>${s.n} talk${s.n === 1 ? "" : "s"}</span></button>`).join(""))}
+        ${sec("talk", "Most talks", top.map(s => spBtn(s, "top")).join("") + `<button type="button" class="btn secondary small xp-all" data-allsp>Browse all ${LB.speakers.length} speakers by calling</button>`, 'data-topsec')}
+        ${onlyFamily && onlyFamily !== "talk" ? "" : LB.GROUP_ORDER.map(g => { const list = LB.speakers.filter(x => x.g === g); return list.length ? `<div class="xp-sec" data-sec data-spgroup><h4>${esc(GROUPS[g][0])} · ${list.length}</h4>${list.map(x => spBtn(x, "sp")).join("")}</div>` : ""; }).join("")}
         ${sec("talk", "Groups (by calling)", Object.entries(GROUPS).map(([k, g]) => opt(`data-s="g:${k}" data-find="${esc(g[0].toLowerCase())}"`, g[0], "From official speaker titles")).join(""))}
         ${sec("talk", "Sessions", Object.entries(SESS).map(([k, x]) => opt(`data-s="se:${k}" data-find="${esc(x[0].toLowerCase())}"`, x[0], k === "3" ? "Evening, women's or priesthood session" : "")).join(""))}
         ${sec("talk", "Conferences", LB.confs.map(c => opt(`data-s="c:${c.c}" data-find="${esc(c.label.toLowerCase())}"`, c.label, c.recap ? "From recaps, Saturday only (pending)" : c.n + " talks")).join(""))}
@@ -222,17 +220,23 @@
         ${sec("book", "Scriptures", WORKS.map(W => opt(`data-s="bk:${W}" data-find="${esc(W.toLowerCase())}"`, W, "Citations in talk footnotes")).join(""))}
         ${sec("music", "Music", Object.entries(MUSIC).map(([k, x]) => opt(`data-s="mu:${k}" data-find="${esc(x[0].toLowerCase())} music"`, x[0], "Official session music listings")).join(""))}</div>`;
       return [body, (b, close) => {
-        const inp = b.querySelector(".xp-find");
-        inp.addEventListener("input", () => { const q = inp.value.trim().toLowerCase(); b.querySelectorAll(".opt").forEach(o => { const f = (o.dataset.find || o.textContent).toLowerCase(); o.hidden = q ? !f.includes(q) : o.classList.contains("more"); });
-          b.querySelectorAll("[data-sec]").forEach(s => s.hidden = ![...s.querySelectorAll(".opt")].some(o => !o.hidden)); });
-        inp.dispatchEvent(new Event("input"));
+        const inp = b.querySelector(".xp-find"); let all = false;
+        const norm = x => x.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        const apply = () => { const words = norm(inp.value).split(/\s+/).filter(Boolean), q = words.length > 0;
+          b.querySelectorAll(".opt").forEach(o => { const f = norm(o.dataset.find || o.textContent);
+            o.hidden = q ? !(words.every(w => f.includes(w)) && !o.classList.contains("top")) : o.classList.contains("sp") && !all; });
+          b.querySelectorAll("[data-sec]").forEach(sc => sc.hidden = ![...sc.querySelectorAll(".opt")].some(o => !o.hidden));
+          const ts = b.querySelector("[data-topsec]"); if (ts) ts.hidden = q || all; };
+        inp.addEventListener("input", apply);
+        b.querySelector("[data-allsp]")?.addEventListener("click", () => { all = true; apply(); b.querySelector("[data-spgroup]")?.scrollIntoView({ block: "start" }); });
+        apply();
         b.addEventListener("click", e => { const o = e.target.closest("[data-s]"); if (o) { close(); onPick(parseSubj(o.dataset.s)); } });
       }];
     }
     function whenPicker(cur, onPick, opts = {}) {
       const r = cur.k === "r" ? cur : { a: offAsc[0].c, b: offAsc[offAsc.length - 1].c }, c1 = cur.k === "c" || cur.k === "t" ? cur.c : LB.confs[1]?.c;
       const tOpts = c => LB.talks.filter(t => t.c === c).map(t => `<option value="${esc(t.id)}" ${cur.id === t.id ? "selected" : ""}>${esc(plain(t.s))}: ${esc(t.t)}</option>`).join("");
-      const body = `${opts.noAll ? "" : opt('data-w="all"', "All conferences", "April 2021 – October 2026", cur.k === "all")}
+      const body = `${opts.noAll ? "" : opt('data-w="all"', "All conferences", `${offAsc[0].label} – October 2026`, cur.k === "all")}
         <div class="xp-sec"><h4>One conference</h4><select class="xp-sel" data-c1>${confOpts(c1)}</select><button type="button" class="btn secondary small" data-go="c">Use this conference</button></div>
         <div class="xp-sec"><h4>A range</h4><div class="xp-two"><select class="xp-sel" data-ra>${confOpts(r.a, true)}</select><span>to</span><select class="xp-sel" data-rb>${confOpts(r.b, true)}</select></div><button type="button" class="btn secondary small" data-go="r">Use this range</button></div>
         ${opts.talk ? `<div class="xp-sec"><h4>One talk</h4><select class="xp-sel" data-tc>${confOpts(c1)}</select><select class="xp-sel" data-tt>${tOpts(c1)}</select><button type="button" class="btn secondary small" data-go="t">Use this talk</button></div>` : ""}`;
@@ -264,10 +268,10 @@
       const pr = e.target.closest("[data-preset]"); if (pr) { const P = PRESETS[pr.dataset.preset].st(); st = { ...P }; focusKey = null; return draw(); }
       const r = e.target.closest("[data-key]"); if (r) { focusKey = r.dataset.key; results(); el.querySelector(".xp-why")?.scrollIntoView({ block: "nearest", behavior: "smooth" }); return; }
       if (e.target.closest("[data-xlink]")) { navigator.clipboard?.writeText(SITE + url()).then(() => { e.target.textContent = "Link copied ✓"; }).catch(() => {}); return; }
-      if (e.target.closest("[data-xcard]") && cardData) location.href = LB.zcard({ title: cardData.title, kicker: "Insights explorer", eyebrow: "GENERAL CONFERENCE 2021–2026", body: cardData.body,
+      if (e.target.closest("[data-xcard]") && cardData) location.href = LB.zcard({ title: cardData.title, kicker: "Insights explorer", eyebrow: `GENERAL CONFERENCE ${offAsc[0].c.slice(0, 4)}–2026`, body: cardData.body,
         basis: family(st.s) === "music" ? "From official session music listings" : "Counted from official talk pages" + (cardData.note ? " · " + cardData.note : ""), share: `${cardData.title}. #GeneralConference`, url: SITE + url() });
     });
     draw();
   }
-  window.Explore = { make, groupOf, GROUPS };
+  window.Explore = { make };
 })();

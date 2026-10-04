@@ -125,7 +125,7 @@ $("lt").onchange = e => { tid = e.target.value; gen(); };
 document.querySelectorAll("#aud button").forEach(b => b.addEventListener("click", () => { mode = b.dataset.k;
   document.querySelectorAll("#aud button").forEach(x => x.setAttribute("aria-pressed", x === b)); gen(); }));
 if (conf === "2026-10") { talkOptions(); gen(); } else gen();
-// Every official conference since April 2021 (loaded after first paint)
+// Every official conference in the study library (loaded after first paint)
 loadLib().then(() => {
   if (!conf) { const t = Library.talks.find(x => x.id === tid && !x.recap); conf = t ? t.c : "2026-10"; if (!t) tid = CONF.talks[0].id; }
   $("lc").innerHTML = Library.confs.map(c => `<option value="${c.c}" ${c.c === conf ? "selected" : ""}>${esc(c.label)}${c.recap ? " (recaps)" : ""}</option>`).join("");

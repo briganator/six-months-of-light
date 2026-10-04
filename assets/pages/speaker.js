@@ -13,7 +13,7 @@ function libSection(LB, sp, name) {
   if (!all.length) return "";
   const add = (o, x) => (o[x] = (o[x] || 0) + 1, o), tg = {}, rf = {}; all.forEach(t => { t.tg.forEach(k => add(tg, k)); t.rf.forEach(r => add(rf, r)); });
   const sort = o => Object.entries(o).sort((a, b) => b[1] - a[1]);
-  return `<section class="card"><h2>Talks across conferences</h2><p class="b-help">${all.length} talk${all.length === 1 ? "" : "s"} from April 2021 to October 2026.</p>
+  return `<section class="card"><h2>Talks across conferences</h2><p class="b-help">${all.length} talk${all.length === 1 ? "" : "s"} from ${LB.coverage.from} to October 2026.</p>
     <ol class="lib-list">${all.map(t => `<li><a class="lib-talk" href="${esc(LB.href(t))}" ${t.local ? "" : 'rel="noopener" target="_blank"'}><span class="lt-title">${esc(t.t)}${t.local ? "" : ' <span class="ext" aria-label="opens ChurchofJesusChrist.org">↗</span>'}</span><span class="lt-meta">${esc(LB.confOf(t.c).label)}${LB.sessName(t) ? " · " + esc(LB.sessName(t).replace(/ Session$/, "")) : ""}${LB.minutes(t) ? " · " + LB.minutes(t) + " min read" : ""}</span></a></li>`).join("")}</ol></section>
   <div class="tp-two"><section class="card"><h2>Recurring topics</h2>${sort(tg).length ? `<ol class="tp-rank">${sort(tg).slice(0, 6).map(([k, n]) => `<li><a href="topic.html?k=${k}">${esc(LB.themeName(k))}</a><b>${n}</b></li>`).join("")}</ol>` : "<p>None counted.</p>"}<p class="b-help">Counted from topic words in each talk; a rough guide.</p></section>
   <section class="card"><h2>Scriptures cited most</h2>${sort(rf).length ? `<ol class="tp-rank">${sort(rf).slice(0, 6).map(([r, n]) => `<li><span>${esc(r)}</span><b>${n}</b></li>`).join("")}</ol>` : "<p>None counted.</p>"}<p class="b-help">From the talks' footnotes.</p></section></div>`;
@@ -21,7 +21,7 @@ function libSection(LB, sp, name) {
 if (!sl) {
   main.innerHTML = `<div class="section-label">Understand</div><h1 style="margin-top:0">Speakers</h1><ol class="talks">${
     [...new Map(CONF.talks.map(t => [slug(t.speaker), t])).values()].map(t => `<li><a class="talkcard s-${sessionById(t.session).color}" href="speaker.html?s=${slug(t.speaker)}">${monogram(t.speaker)}<span class="tc-body"><span class="t-title">${esc(t.speaker)}</span><span class="t-speaker">${esc(t.calling)}</span></span><span class="tc-arrow">→</span></a></li>`).join("")}</ol>`;
-  main.insertAdjacentHTML("beforeend", `<p class="lib-note">Looking for past conferences? <a href="study.html?view=speakers&c=all">Browse every speaker since April 2021</a>.</p>`);
+  main.insertAdjacentHTML("beforeend", `<p class="lib-note">Looking for past conferences? <a href="study.html?view=speakers&c=all">Browse every speaker in the study library</a>.</p>`);
 } else if (!ts.length) {
   main.innerHTML = `<p class="crumbs"><a href="speaker.html">← All speakers</a></p><p class="empty" id="ld">Loading…</p>`;
   loadLib().then(LB => { const x = LB.speakers.find(y => y.sp === sl);
@@ -45,6 +45,6 @@ if (!sl) {
   <div id="lib"><p class="empty">Loading past talks…</p></div>
   ${askTalksPanel({ label: s.speaker, questions: ["What did this speaker teach this weekend?"],
     answer: () => talkAnswer(ts.map(t => esc(t.big_idea)).join(" "), ts) })}`;
-  loadLib().then(LB => { document.getElementById("lib").innerHTML = libSection(LB, sl, s.speaker) || `<p class="b-help">No earlier talks from April 2021 on. See the <a href="${SPEAKER_INDEX}" rel="noopener">speaker index ↗</a>.</p>`; })
+  loadLib().then(LB => { document.getElementById("lib").innerHTML = libSection(LB, sl, s.speaker) || `<p class="b-help">No other talks from ${LB.coverage.from} on. See the <a href="${SPEAKER_INDEX}" rel="noopener">speaker index ↗</a>.</p>`; })
     .catch(() => { document.getElementById("lib").innerHTML = `<p class="b-help">Past talks didn't load. <a href="${SPEAKER_INDEX}" rel="noopener">Speaker index on ChurchofJesusChrist.org ↗</a></p>`; });
 }

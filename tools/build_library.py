@@ -13,6 +13,10 @@ exec(src.split("# ---- taxonomy")[0].split("def get(")[0] + "\n# ---- taxonomy" 
 THEMES, THEME_RE, STOP, REF_RE, TITLE_RE, PLACE_RE = ns["THEMES"], ns["THEME_RE"], ns["STOP"], ns["REF_RE"], ns["TITLE_RE"], ns["PLACE_RE"]
 strip = lambda s: html.unescape(re.sub(r"<[^>]+>", " ", s)).replace("\xa0", " ")
 MONTH = {"04": "April", "10": "October"}
+# Same person, different official name forms across years
+ALIAS = {"Becky Craven": "Rebecca L. Craven"}
+
+
 def slug(s):
     s = unicodedata.normalize("NFD", s.lower()); s = "".join(c for c in s if unicodedata.category(c) != "Mn")
     s = re.sub(r"^(elder|sister|president|bishop|brother)\s+", "", s); return re.sub(r"[^a-z0-9]+", "-", s).strip("-")
@@ -30,16 +34,22 @@ def sessions_for(conf):
 talks, confs = [], []
 for idx in sorted(RAW.glob("index-*.html")):
     conf = idx.stem[6:]; y, m = conf.split("-")
-    files = sorted(RAW.glob(f"{conf}-*.json"))
+    files = sorted(f for f in RAW.glob(f"{conf}-*.json"))
     if not files: continue
-    sess = sessions_for(conf); n0 = len(talks)
+    smf = RAW / f"sessions-{conf}.json"   # older conferences (slug URLs): slug -> session key, written by the harvester
+    smap = json.loads(smf.read_text()) if smf.exists() else None
+    if smap:
+        pretty = lambda sl: {"womens-session": "Women’s Session", "general-womens-session": "General Women’s Session"}.get(sl, " ".join(w.capitalize() for w in sl.split("-")))
+        sess = {k: pretty(v) for k, v in smap["sessions"].items()}
+    else: sess = sessions_for(conf)
+    n0 = len(talks)
     for f in files:
         tid = f.stem[len(conf) + 1:]
         try: d = json.loads(f.read_text())
         except Exception: continue
         meta, body = d["meta"], d["content"].get("body", "")
         title = html.unescape(meta.get("title", "")).strip()
-        mm = re.search(r'class="author-name"[^>]*>(.*?)</p>', body, re.S); speaker = re.sub(r"^\s*By\s+", "", strip(mm.group(1))).strip() if mm else ""
+        mm = re.search(r'class="author-name"[^>]*>(.*?)</p>', body, re.S); speaker = re.sub(r"^\s*(By|Presented by)\s+", "", strip(mm.group(1))).strip() if mm else ""
         mm = re.search(r'class="author-role"[^>]*>(.*?)</p>', body, re.S); role = strip(mm.group(1)).strip() if mm else ""
         mm = re.search(r'<p class="kicker"[^>]*>(.*?)</p>', body, re.S); kicker = re.sub(r"\s+", " ", strip(mm.group(1))).strip() if mm else ""
         main = re.sub(r"<header>.*?</header>", " ", body, flags=re.S); main = re.sub(r"<(figure|video|aside)[^>]*>.*?</\1>", " ", main, flags=re.S)
@@ -68,7 +78,7 @@ for idx in sorted(RAW.glob("index-*.html")):
                 if h not in hymns: hymns.append(h)
         sentences = re.split(r"(?<=[.?!])\s+", text)
         dens = {k: round(len(r.findall(low)) * 1000 / len(words), 1) for k, r in THEME_RE.items()}
-        talks.append({"c": conf, "id": tid, "t": title, "s": speaker, "sp": slug(speaker), "r": role, "se": tid[0], "w": len(words), "k": kicker,
+        talks.append({"c": conf, "id": tid, "t": title, "s": speaker, "sp": slug(ALIAS.get(speaker, speaker)), "r": role, "se": (smap["talks"].get(tid) if smap else None) or tid[0], "w": len(words), "k": kicker,
                       "d": {k: v for k, v in dens.items() if v}, "rf": refs[:30], "h": hymns,
                       "inv": len(re.findall(r"\bi (?:invite|extend an invitation|encourage you)", low)), "pro": len(re.findall(r"\bi promise", low)),
                       "q": sum(1 for s in sentences if s.strip().endswith("?")),

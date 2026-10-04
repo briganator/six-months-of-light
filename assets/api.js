@@ -21,6 +21,11 @@
     // shared card images (per-card share links)
     adminCards: async (password) => { try { return { ok: true, items: await rpc("admin_list_cards", { p_password: password, p_limit: 120 }) }; } catch (e) { return { ok: false, error: "Wrong password or network error." }; } },
     adminDeleteCard: async (password, id) => { const r = await fetch(`${C.supabaseUrl}/functions/v1/card`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "delete", id, password }) }); return { ok: r.ok }; },
+    // "Heard it live" wall (moderated; anon can only submit and read approved rows)
+    liveSubmit: (session, talkId, speaker, body, website) => rpc("submit_live_quote", { p_session: session, p_talk_id: talkId || null, p_speaker: speaker, p_body: body, p_website: website || "" }),
+    liveApproved: async () => { const r = await fetch(`${C.supabaseUrl}/rest/v1/approved_live_quotes?select=id,session_id,talk_id,speaker,body,created_at&conf=eq.2026-10&order=created_at.desc&limit=300`, { headers }); if (!r.ok) throw new Error("Could not load"); return r.json(); },
+    adminLive: (password, status) => rpc("admin_list_live", { p_password: password, p_status: status }),
+    adminLiveSet: (password, id, status) => rpc("admin_set_live_status", { p_password: password, p_id: id, p_status: status }),
     cardImage: id => `${C.supabaseUrl}/storage/v1/object/public/cards/${id}.png`,
   };
   // ---- Local mock (same rules, stored in this browser only) ----

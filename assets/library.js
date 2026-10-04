@@ -47,7 +47,22 @@
     return talks.filter(t => (!c || c === "all" || t.c === c) && (!se || t.se === se) && (!topic || t.tg.includes(topic)) && (!sp || t.sp === sp) &&
       (!terms.length || terms.every(w => [t.t, t.s, t.k, t.r, t.rf.join(" "), t.tg.map(themeName).join(" "), confOf(t.c).label].join(" ").toLowerCase().includes(w))));
   };
-  const speakers = (() => { const m = new Map(); talks.forEach(t => { const x = m.get(t.sp) || { sp: t.sp, s: t.s, r: t.r, n: 0, last: t.c }; x.n++; m.set(t.sp, x); }); return [...m.values()].sort((a, b) => a.s.replace(/^\S+\s/, "").localeCompare(b.s.replace(/^\S+\s/, ""))); })();
+  // Calling groups from official speaker titles (the calling shown on each talk page at the time of the talk)
+  const GROUPS = { fp: ["First Presidency", "the First Presidency", /First Presidency|^President of The Church/i], q12: ["Quorum of the Twelve", "the Quorum of the Twelve", /Quorum of the Twelve/i],
+    sev: ["Seventy", "the Seventy", /Seventy/i], pb: ["Presiding Bishopric", "the Presiding Bishopric", /Presiding Bishop/i],
+    rsywp: ["Relief Society, Young Women & Primary", "Relief Society, Young Women and Primary leaders", /Relief Society|Young Women|Primary/i],
+    ymss: ["Young Men & Sunday School", "Young Men and Sunday School leaders", /Young Men|Sunday School/i], other: ["Other speakers", "other speakers", /$^/] };
+  const groupOf = r => (Object.entries(GROUPS).find(([k, g]) => k !== "other" && g[2].test(r || "")) || ["other"])[0];
+  const GROUP_ORDER = Object.keys(GROUPS);
+  const surname = n => n.replace(/,?\s+(Jr\.|Sr\.|II|III)$/, "").split(/\s+/).pop();
+  // Every speaker with a talk in the library: latest name/calling (talks are newest first), talk count, first and last conference
+  // Older official pages list some auxiliary leaders without a title; add the conventional one to the search text only
+  const implied = x => /^(President|Elder|Sister|Bishop|Brother)\s/.test(x.s) ? "" : /Relief Society|Young Women|Primary/i.test(x.r) ? "sister " : /Young Men|Sunday School/i.test(x.r) ? "brother " : "";
+  const speakers = (() => { const m = new Map(); talks.forEach(t => { const x = m.get(t.sp) || { sp: t.sp, s: t.s, r: t.r, n: 0, last: t.c, first: t.c }; x.n++; if (t.c < x.first) x.first = t.c; if (t.c > x.last) Object.assign(x, { last: t.c, s: t.s, r: t.r }); m.set(t.sp, x); });
+    return [...m.values()].map(x => ({ ...x, g: groupOf(x.r), find: (implied(x) + x.s + " " + x.r).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") }))
+      .sort((a, b) => GROUP_ORDER.indexOf(a.g) - GROUP_ORDER.indexOf(b.g) || surname(a.s).localeCompare(surname(b.s)) || a.s.localeCompare(b.s)); })();
+  // Type-ahead: every word typed must appear (partial names, "elder", "sister", "president", calling words)
+  const findSpeakers = q => { const w = q.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").split(/\s+/).filter(Boolean); return w.length ? speakers.filter(x => w.every(t => x.find.includes(t))) : speakers; };
   // Related talks: shared tags + shared scripture refs, different talk, newest first among ties
   const related = (t, n = 5) => talks.filter(x => x !== t && !(x.c === t.c && x.id === t.id)).map(x => {
     const tagS = x.tg.filter(k => t.tg.includes(k)).length * 2, refS = x.rf.filter(r => t.rf.includes(r)).length * 3, spS = x.sp === t.sp ? 1 : 0;
@@ -69,5 +84,5 @@
   const zcard = card => { const id = "z-" + Date.now().toString(36); card.id = id;
     try { Object.keys(localStorage).filter(k => k.startsWith("zcard:")).sort().slice(0, -20).forEach(k => localStorage.removeItem(k)); localStorage.setItem("zcard:" + id, JSON.stringify(card)); } catch (e) {}
     return "builder.html?ins=" + id; };
-  window.Library = { zcard, L, talks, confs, confOf, official, href, sessName, minutes, spoken, themeName, themeIcon, THEME_KEYS, filter, speakers, related, stats, music, hymnLink, work, book, CFM, coverage: L.coverage };
+  window.Library = { zcard, L, talks, confs, confOf, official, href, sessName, minutes, spoken, themeName, themeIcon, THEME_KEYS, filter, speakers, findSpeakers, GROUPS, GROUP_ORDER, groupOf, surname, related, stats, music, hymnLink, work, book, CFM, coverage: L.coverage };
 })();

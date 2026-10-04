@@ -60,8 +60,19 @@ const NAV = [["index.html","Home"],["study.html","Study"],["builder.html","Card 
 const ICON = { study: '<path d="M4 5.5C6.5 4 9.5 4 12 5.8 14.5 4 17.5 4 20 5.5V19c-2.5-1.4-5.5-1.4-8 .4-2.5-1.8-5.5-1.8-8-.4zM12 5.8v13.6"/>', home: '<path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/>', talks: '<path d="M5 4h10l4 4v12H5zM8 11h8M8 15h8M8 7h5"/>', studio: '<path d="M12 3v3M5.6 5.6l2.1 2.1M3 12h3M18.4 5.6l-2.1 2.1M21 12h-3M7 16a5 5 0 0 1 10 0zM3 19h18"/>', insights: '<path d="M5 20V10M10 20V4M15 20v-7M20 20v-11"/>', me: '<path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/>' };
 const TABS = [["index.html","Home","home"],["study.html","Study","study"],["builder.html","Studio","studio"],["insights.html","Insights","insights"],["my.html","Me","me"]];
 window.tabbarHTML = (active) => `<nav class="tabbar" aria-label="Quick">${TABS.map(([h,l,i]) => `<a href="${h}" class="${i === "studio" ? "tb-main" : ""}" ${active === h ? 'aria-current="page"' : ""}><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICON[i]}</svg><span>${l}</span></a>`).join("")}</nav>`;
+// ---- Live now: session windows (MDT = UTC-6), from 10 minutes before a session until 15 minutes after ----
+window.LIVE_WATCH = "https://www.churchofjesuschrist.org/broadcasts?lang=eng";
+window.LIVE = (() => { const W = { "sat-am": "2026-10-03T16:00:00Z", "sat-pm": "2026-10-03T20:00:00Z", "sun-am": "2026-10-04T16:00:00Z", "sun-pm": "2026-10-04T20:00:00Z" };
+  const force = new URLSearchParams(location.search).get("live");
+  const now = () => { if (force && W[force]) return CONF.sessions.find(s => s.id === force) || null; if (force === "0") return null;
+    const t = Date.now(); const id = Object.keys(W).find(k => { const s = Date.parse(W[k]); return t >= s - 6e5 && t <= s + 2 * 36e5 + 9e5; }); return id ? CONF.sessions.find(s => s.id === id) || null : null; };
+  const next = () => { const t = Date.now(), id = Object.keys(W).find(k => Date.parse(W[k]) > t); return id ? { s: CONF.sessions.find(x => x.id === id), at: new Date(W[id]) } : null; };
+  return { now, next, W }; })();
+window.liveBarHTML = active => { const s = LIVE.now(); if (!s || active === "live.html") return "";
+  return `<div class="live-bar" role="region" aria-label="Conference is live"><span class="live-dot" aria-hidden="true"></span><a class="lb-main" href="live.html"><b>Conference is live</b> · share a line you just heard →</a><a class="lb-watch" href="${LIVE_WATCH}" target="_blank" rel="noopener">Watch ↗</a></div>`; };
 window.headerHTML = (active, small) => `
   <div class="unofficial" role="note">Not an official Church site · Personal study page · Quotes from recaps; confirm with official text</div>
+  ${liveBarHTML(active)}
   <div class="sitebar" id="sitebar"><nav class="topbar wrap" aria-label="Main">
       <a class="brand" href="index.html" aria-label="Six Months of Light home">${WORDMARK()}</a>
       <div class="navlinks">${NAV.map(([h,l]) => `<a href="${h}" ${active===h?'aria-current="page"':""}>${l}</a>`).join("")}</div>
@@ -73,8 +84,9 @@ window.headerHTML = (active, small) => `
       <div class="eyebrow">${esc(CONF.title)} · October 3–4</div>
       <h1 class="display"><span class="d1">Six Months</span> <em>of</em> <span class="d2">Light</span></h1>
       <p class="tagline">${esc(CONF.tagline)}</p>
-      <p class="hero-how">Find a line from conference. Make it beautiful. Share it.</p>
-      <div class="hero-actions"><a class="btn gold big" href="builder.html">Make a card</a><a class="btn glass" href="${active === "index.html" ? "" : "index.html"}#sessions">Browse the talks</a></div>
+      ${LIVE.now() ? `<div class="hero-live"><p class="hl-on"><span class="live-dot" aria-hidden="true"></span>Live now · ${esc(LIVE.now().name)}</p><p class="hero-how">Conference is live, share a line you just heard.</p>
+      <div class="hero-actions"><a class="btn gold big" href="live.html">Share a line you heard</a><a class="btn glass" href="${LIVE_WATCH}" target="_blank" rel="noopener">Watch live ↗</a></div></div>` : `<p class="hero-how">Find a line from conference. Make it beautiful. Share it.</p>
+      <div class="hero-actions"><a class="btn gold big" href="builder.html">Make a card</a><a class="btn glass" href="${active === "index.html" ? "" : "index.html"}#sessions">Browse the talks</a></div>`}
       ${countdownHTML()}
     </div>`}
     ${GROUP ? `<p class="grouptag wrap">Group: <strong>${esc(GROUP)}</strong> · <a href="?g=">leave group</a></p>` : ""}
@@ -149,7 +161,7 @@ window.askTalksPanel = (scope = {}) => {
       <button class="btn gold" type="submit">Search</button></form>
     <div class="chips" aria-label="Examples">${SEARCH_EXAMPLES.map(q => `<button class="chip" type="button" data-ex="${esc(q)}">${esc(q)}</button>`).join("")}</div>
     ${scope.questions ? `<p class="speaker srch-scope">Or ask about ${esc(scope.label)}:</p><div class="chips">${scope.questions.map((q, i) => `<button class="chip" type="button" data-qi="${i}" aria-pressed="false">${esc(q)}</button>`).join("")}</div>` : ""}
-    <p class="speaker srch-help">Searches talks, verified quotes, topics, speakers and scriptures from all 12 conferences since April 2021. Every result links its talk.</p>
+    <p class="speaker srch-help">Searches talks, verified quotes, topics, speakers and scriptures from every general conference in the study library (2015 to today). Every result links its talk.</p>
     <div class="ask-answer" aria-live="polite"></div>
   </section>`;
 };

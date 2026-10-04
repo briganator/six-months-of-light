@@ -14,7 +14,7 @@
   <nav class="topbar wrap"><a class="brand" href="index.html" id="brand"></a><div class="navlinks"><a aria-current="page">Moderation</a></div></nav></header>
 <main class="wrap" style="padding-top:8px">
   <div class="section-label">Admin</div><h1 style="margin-top:0">Moderation queue</h1>
-  <p class="speaker">Approve or hide “What stuck with me” posts and challenge stories. Nothing appears publicly until approved.</p>
+  <p class="speaker">Approve or hide “What stuck with me” posts, challenge stories and “Heard it live” lines for the Live wall. Nothing appears publicly until approved.</p>
   <section class="card" id="login">
     <form id="lf">
       <label for="pw" style="font-weight:600">Admin password</label>
@@ -30,6 +30,7 @@
       <button data-s="hidden" aria-pressed="false">Hidden</button>
       <button data-s="all" aria-pressed="false">All</button>
       <button data-s="cards" aria-pressed="false">Shared cards</button>
+      <button data-s="live" aria-pressed="false">Live wall</button>
       <button id="logout" style="margin-left:auto">Lock</button>
     </div>
     <div id="list"></div>
@@ -51,7 +52,21 @@ async function refreshCards() {
       <div style="flex:1"><div class="meta">${esc(c.kind)} · ${new Date(c.created_at).toLocaleString()}</div><div>${esc(c.title)}</div>${c.note ? `<div class="meta">Personal line: “${esc(c.note)}”</div>` : ""}
       <div class="actions"><button class="btn warn small" data-card="${esc(c.id)}">Delete card</button></div></div></article>`).join("") : `<p class="empty">No shared cards yet.</p>`);
 }
+let liveStatus = "pending";
+async function refreshLive() {
+  const r = ConfAPI.adminLive ? await ConfAPI.adminLive(pw, liveStatus).catch(e => ({ ok: false, error: e.message })) : { ok: false, error: "Not available in preview mode" };
+  if (!r.ok) { $("list").innerHTML = `<p class="empty">${esc(r.error || "Error")}</p>`; return; }
+  const items = r.items || [], ses = id => (CONF.sessions.find(s => s.id === id) || {}).name || id;
+  $("list").innerHTML = `<p class="speaker">Lines people heard during a live session. They are not verified text: approve only lines that sound right and are kind. Approved lines show on the Live wall (live.html).</p>
+    <label class="speaker">Show <select id="liveSt">${["pending", "approved", "hidden", "all"].map(s => `<option ${s === liveStatus ? "selected" : ""}>${s}</option>`).join("")}</select></label>` +
+    (items.length ? items.map(c => { const t = c.talk_id && talkById(c.talk_id); return `<article class="card qitem">
+      <div class="meta"><span class="status ${esc(c.status)}">${esc(c.status)}</span> · ${esc(ses(c.session_id))}${t ? " · " + esc(t.title) : ""} · ${new Date(c.created_at).toLocaleString()}</div>
+      <div style="font-size:17px">“${esc(c.body)}”</div><div class="meta">— heard from ${esc(c.speaker)}</div>
+      <div class="actions">${c.status !== "approved" ? `<button class="btn ok small" data-live="${c.id}" data-to="approved">Approve</button>` : ""}${c.status !== "hidden" ? `<button class="btn warn small" data-live="${c.id}" data-to="hidden">Hide</button>` : ""}${c.status !== "pending" ? `<button class="btn secondary small" data-live="${c.id}" data-to="pending">Back to pending</button>` : ""}</div></article>`; }).join("") : `<p class="empty">Nothing ${liveStatus === "all" ? "" : liveStatus} right now.</p>`);
+  $("liveSt").onchange = e => { liveStatus = e.target.value; refreshLive(); };
+}
 async function refresh() {
+  if (filter === "live") { $("login").hidden = true; $("queue").hidden = false; return refreshLive(); }
   if (filter === "cards") { $("login").hidden = true; $("queue").hidden = false; return refreshCards(); }
   const r = await ConfAPI.adminList(pw, filter).catch(e => ({ ok:false, error:e.message }));
   if (!r.ok) { sessionStorage.removeItem("conf-admin-pw"); $("queue").hidden = true; $("login").hidden = false; $("lmsg").textContent = r.error || "Error"; return; }
@@ -78,6 +93,8 @@ document.querySelectorAll(".tabs button[data-s]").forEach(b => b.addEventListene
 $("list").addEventListener("click", async e => {
   const cb = e.target.closest("button[data-card]");
   if (cb) { if (!confirm("Delete this card image?")) return; cb.disabled = true; const r = await ConfAPI.adminDeleteCard(pw, cb.dataset.card); if (!r.ok) alert("Could not delete (check the password)."); return refreshCards(); }
+  const lb = e.target.closest("button[data-live]");
+  if (lb) { lb.disabled = true; const r = await ConfAPI.adminLiveSet(pw, Number(lb.dataset.live), lb.dataset.to).catch(e => ({ ok: false, error: e.message })); if (!r.ok) alert(r.error || "Could not update"); return refreshLive(); }
   const b = e.target.closest("button[data-id]"); if (!b) return;
   b.disabled = true;
   const r = await ConfAPI.adminSet(pw, Number(b.dataset.id), b.dataset.to).catch(e => ({ ok:false, error:e.message }));

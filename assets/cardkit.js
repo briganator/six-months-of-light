@@ -714,7 +714,7 @@
     // disclaimer + photo credit (credit sits under the frame line)
     ctx.save(); ctx.globalAlpha = .9; ctx.textAlign = "center"; ctx.fillStyle = th.sub; ctx.font = `${u * .0175}px ${SANS}`;
     if (look.photo || look.ov) { ctx.shadowColor = "rgba(0,0,0,.6)"; ctx.shadowBlur = u * .01; }
-    ctx.fillText((o.kind === "insight" ? (o.ins && o.ins.basis) || "Based on recaps" : "Quoted from recap") + " · Personal study site · Not an official Church site", W / 2, H - u * .068);
+    ctx.fillText((o.kind === "insight" ? (o.ins && o.ins.basis) || "Based on recaps" : o.foot || "Quoted from recap") + " · Personal study site · Not an official Church site", W / 2, H - u * .068);
     if (look.credit) { ctx.font = `${u * .0145}px ${SANS}`; ctx.fillText(creditLine(look.credit), W / 2, H - u * .018); }
     ctx.restore(); grain(ctx, W, H, fm.grain);
     if (FXA && FXA.post && !still) { ctx.save(); FXA.post(ctx, W, H, t, u, th, P, look); ctx.restore(); }
@@ -744,7 +744,7 @@
     border(ctx, W, H, th2, !still && A !== "none" ? ease(c01(t / 1.2)) : 1, o);
     const fp = still || A === "none" ? 1 : ease(c01((t - 3.2) / 1)); if (fp > 0) brand(ctx, W, H, u, th2, o, fp, LY.own ? null : look);
     ctx.save(); ctx.globalAlpha = .9; ctx.textAlign = "center"; ctx.fillStyle = th2.sub; ctx.font = `${u * .0175}px ${SANS}`;
-    const dx = LY === LAYOUTS.split && W >= H ? W * .27 : W / 2; ctx.fillText("Quoted from recap · Personal study site · Not an official Church site", dx, H - u * .068);
+    const dx = LY === LAYOUTS.split && W >= H ? W * .27 : W / 2; ctx.fillText((o.foot || "Quoted from recap") + " · Personal study site · Not an official Church site", dx, H - u * .068);
     if (look.credit && (LY.own ? LY.light && LY !== LAYOUTS.margin : true) && LY !== LAYOUTS.lineart && LY !== LAYOUTS.margin) { ctx.font = `${u * .0145}px ${SANS}`; ctx.fillText(creditLine(look.credit), dx, H - u * .018); }
     ctx.restore(); grain(ctx, W, H, fm.grain);
     if (FXA && FXA.post && !still) { ctx.save(); FXA.post(ctx, W, H, t, u, th2, P, look); ctx.restore(); }
