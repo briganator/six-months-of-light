@@ -3,3 +3,4 @@ screenshots/
 *.mp4
 .DS_Store
 *.log
+__pycache__/
