@@ -47,6 +47,7 @@
   const spot = t => ({ id: "spot-" + t.id, kicker: "Speaker spotlight", title: t.speaker, sub: `“${t.title}” · ${t.calling}`, body: { type: "text", text: t.big_idea }, foot: "Big idea summarized from recaps · confirm with official text", share: `${t.speaker}: “${t.title}”` });
   function get(id) {
     if (!id) return null;
+    if (id.startsWith("z-")) { try { return JSON.parse(localStorage.getItem("zcard:" + id)); } catch (e) { return null; } }
     if (id.startsWith("spot-")) { const t = talkById(id.slice(5)); return t ? spot(t) : null; }
     if (id.startsWith("theme-")) { const n = themeByslug(id.slice(6)); return n ? themeCard(n) : null; }
     return list.find(x => x.id === id) || null;

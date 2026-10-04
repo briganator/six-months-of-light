@@ -18,6 +18,10 @@
     submit: (talkId, name, body, website, group) => rpc("submit_comment", { p_talk_id: talkId, p_name: name, p_body: body, p_website: website || "", p_group: group || null }),
     adminList: (password, status) => rpc("admin_list_comments", { p_password: password, p_status: status }),
     adminSet: (password, id, status) => rpc("admin_set_status", { p_password: password, p_id: id, p_status: status }),
+    // shared card images (per-card share links)
+    adminCards: async (password) => { try { return { ok: true, items: await rpc("admin_list_cards", { p_password: password, p_limit: 120 }) }; } catch (e) { return { ok: false, error: "Wrong password or network error." }; } },
+    adminDeleteCard: async (password, id) => { const r = await fetch(`${C.supabaseUrl}/functions/v1/card`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "delete", id, password }) }); return { ok: r.ok }; },
+    cardImage: id => `${C.supabaseUrl}/storage/v1/object/public/cards/${id}.png`,
   };
   // ---- Local mock (same rules, stored in this browser only) ----
   const KEY = "conf-share-mock-v1", MOCK_PASSWORD = "preview";

@@ -29,6 +29,7 @@
       <button data-s="approved" aria-pressed="false">Approved</button>
       <button data-s="hidden" aria-pressed="false">Hidden</button>
       <button data-s="all" aria-pressed="false">All</button>
+      <button data-s="cards" aria-pressed="false">Shared cards</button>
       <button id="logout" style="margin-left:auto">Lock</button>
     </div>
     <div id="list"></div>
@@ -42,7 +43,16 @@
 document.getElementById('brand').innerHTML = WORDMARK();
 let pw = sessionStorage.getItem("conf-admin-pw") || "", filter = "pending";
 const $ = id => document.getElementById(id);
+async function refreshCards() {
+  const r = ConfAPI.adminCards ? await ConfAPI.adminCards(pw) : { ok: false, error: "Not available in preview mode" };
+  if (!r.ok) { $("list").innerHTML = `<p class="empty">${esc(r.error)}</p>`; return; }
+  $("list").innerHTML = `<p class="speaker">Cards people shared as links (the image shows in link previews). Delete removes the image and the link stops previewing it.</p>` + (r.items.length ? r.items.map(c => `<article class="card qitem" style="display:flex;gap:14px;align-items:flex-start">
+      <a href="${ConfAPI.cardImage(c.id)}" target="_blank" rel="noopener"><img src="${ConfAPI.cardImage(c.id)}" alt="" loading="lazy" width="160" style="border-radius:8px;height:auto"></a>
+      <div style="flex:1"><div class="meta">${esc(c.kind)} · ${new Date(c.created_at).toLocaleString()}</div><div>${esc(c.title)}</div>${c.note ? `<div class="meta">Personal line: “${esc(c.note)}”</div>` : ""}
+      <div class="actions"><button class="btn warn small" data-card="${esc(c.id)}">Delete card</button></div></div></article>`).join("") : `<p class="empty">No shared cards yet.</p>`);
+}
 async function refresh() {
+  if (filter === "cards") { $("login").hidden = true; $("queue").hidden = false; return refreshCards(); }
   const r = await ConfAPI.adminList(pw, filter).catch(e => ({ ok:false, error:e.message }));
   if (!r.ok) { sessionStorage.removeItem("conf-admin-pw"); $("queue").hidden = true; $("login").hidden = false; $("lmsg").textContent = r.error || "Error"; return; }
   $("login").hidden = true; $("queue").hidden = false;
@@ -66,6 +76,8 @@ document.querySelectorAll(".tabs button[data-s]").forEach(b => b.addEventListene
   filter = b.dataset.s; document.querySelectorAll(".tabs button[data-s]").forEach(x => x.setAttribute("aria-pressed", x === b)); refresh();
 }));
 $("list").addEventListener("click", async e => {
+  const cb = e.target.closest("button[data-card]");
+  if (cb) { if (!confirm("Delete this card image?")) return; cb.disabled = true; const r = await ConfAPI.adminDeleteCard(pw, cb.dataset.card); if (!r.ok) alert("Could not delete (check the password)."); return refreshCards(); }
   const b = e.target.closest("button[data-id]"); if (!b) return;
   b.disabled = true;
   const r = await ConfAPI.adminSet(pw, Number(b.dataset.id), b.dataset.to).catch(e => ({ ok:false, error:e.message }));

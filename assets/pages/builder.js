@@ -18,7 +18,7 @@ const resolveLooks = th => { const out = []; (T3.looks[th] || []).forEach(k => {
 if (!P.has("t") && !P.has("ins")) { const d = INSIGHTS.daily; st.t = d.t.id; st.q = d.i; }
 const seg = (id, opts, cur, label) => `<div class="seg" id="${id}" role="group" aria-label="${label}">${Object.entries(opts).map(([k, v]) => `<button type="button" data-k="${k}" aria-pressed="${k === cur}">${esc(v)}</button>`).join("")}</div>`;
 const groups = [...new Set(Object.values(L).map(l => l.group))];
-const PLAT = [["igstory", "Instagram Story", "story"], ["igpost", "Instagram post", "portrait"], ["facebook", "Facebook", "link"], ["whatsapp", "WhatsApp", null], ["sms", "Messages", null], ["x", "X", "wide"], ["pinterest", "Pinterest", "pin"], ["threads", "Threads", null], ["email", "Email", null], ["copy", "Copy link", null]];
+const PLAT = [["igstory", "Instagram Story", "story"], ["igpost", "Instagram post", "portrait"], ["facebook", isPhone ? "Share card to Facebook" : "Facebook", isPhone ? "portrait" : "link"], ["whatsapp", "WhatsApp", null], ["sms", "Messages", null], ["x", "X", "wide"], ["pinterest", "Pinterest", "pin"], ["threads", "Threads", null], ["email", "Email", null], ["copy", "Copy link", null]];
 const lookBtn = id => { const l = L[id]; return `<button type="button" class="look" data-look="${id}" aria-pressed="${id === st.look}" aria-label="${esc(l.name)}">${l.photo ? `<img src="${esc(l.credit.thumb)}" alt="" loading="lazy" decoding="async">` : `<canvas width="72" height="96" data-thumb="${id}"></canvas>`}<span>${esc(l.name)}</span></button>`; };
 document.getElementById("main").innerHTML = `
   <h1 class="st-title">Card Studio <span>Pick a quote · style it · share</span></h1>
@@ -31,6 +31,7 @@ document.getElementById("main").innerHTML = `
         <div class="st-tip" id="igTip" hidden><b>To post to Instagram Stories:</b> tap <b>Save image</b> (on iPhone you can also tap Share → <i>Save Image</i>). Open Instagram → <b>+</b> → <b>Story</b> and pick the card from your photos. Add a <b>Link</b> sticker with the copied link so friends can open the quote. Tip: the <b>Instagram Story preset</b> (Size tab) marks the sticker spot and copies the link when you save.</div>
         <div class="st-btns"><button class="btn gold st-share" id="share"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3l4.5 4.5-1.4 1.4L13 6.8V15h-2V6.8L8.9 8.9 7.5 7.5zM5 13h2v6h10v-6h2v8H5z"/></svg>Share</button>
           <button class="btn secondary" id="save">Save image</button><button class="btn secondary" id="copy">More ways</button></div>
+        <button type="button" class="linkish st-linkonly" id="shareLink">Share link only</button>
       </div>
     </div>
     <div class="st-panel">
@@ -70,7 +71,7 @@ document.getElementById("main").innerHTML = `
       </section>
       <section class="st-pane" id="p-share" role="tabpanel" aria-labelledby="tab-share" hidden>
         <div class="b-label">Share to</div>
-        <div class="plats" id="plats">${PLAT.map(([k, n, sz]) => `<button type="button" class="plat plat-${k}" data-p="${k}"><b>${esc(n)}</b>${sz ? `<small>${esc(S[sz][2])}</small>` : `<small>${{ whatsapp: "Message + link", sms: "Text + link", threads: "Post + link", email: "Email + link", copy: "Just the link" }[k]}</small>`}</button>`).join("")}</div>
+        <div class="plats" id="plats">${PLAT.map(([k, n, sz]) => `<button type="button" class="plat plat-${k}" data-p="${k}"><b>${esc(n)}</b>${sz ? `<small>${esc(S[sz][2])}</small>` : `<small>${{ whatsapp: isPhone ? "Card + link" : "Message + link", sms: isPhone ? "Card + link" : "Text + link", threads: "Post + link", email: "Email + link", copy: "Just the link" }[k]}</small>`}</button>`).join("")}</div>
         <label class="b-label" for="caption">Caption <span class="b-help">edit before sharing · the link is included</span></label>
         <textarea class="field caption" id="caption" rows="5"></textarea>
         <div class="cap-row"><button type="button" class="btn secondary small" id="capReset">Reset caption</button><button type="button" class="btn secondary small" id="capCopy">Copy caption</button></div>
@@ -135,7 +136,8 @@ $("sticker").addEventListener("change", e => { st.sticker = e.target.checked; dr
 document.addEventListener("click", e => { const b = e.target.closest(".look"); if (!b) return; st.look = b.dataset.look; st.ov = null; syncLooks(); draw(true); });
 $("ov").addEventListener("input", e => { st.ov = +e.target.value / 100; draw(); });
 let nt; $("note").addEventListener("input", e => { $("ncnt").textContent = e.target.value.length; clearTimeout(nt); nt = setTimeout(() => { st.note = cleanNote(e.target.value); draw(); }, 200); });
-const cleanNote = s => s.replace(/https?:\/\/\S+|www\.\S+/gi, "").replace(/\s+/g, " ").trim().slice(0, 90);
+const cleanNote = s => { const c = s.replace(/https?:\/\/\S+|www\.\S+/gi, "").replace(/\s+/g, " ").trim().slice(0, 90);
+  if (BAD_NOTE.test(c)) { toast("Please keep your line kind. It wasn't added to the card."); return ""; } return c; };
 let thumbsDone = false;
 function thumbs() { if (thumbsDone) return; thumbsDone = true; const cs = [...document.querySelectorAll("canvas[data-thumb]")]; let i = 0;
   const step = () => { const c = cs[i++]; if (!c) return; K.drawThumb(c.getContext("2d"), c.width, c.height, c.dataset.thumb, st.pal); (window.requestIdleCallback || setTimeout)(step); }; step(); }
@@ -166,7 +168,7 @@ async function draw(changed) {
   const vt = videoType();
   const an = st.anim !== "none";
   $("replay").hidden = !an; $("save").textContent = an && vt ? "Save video" : "Save image";
-  $("hint").textContent = an ? (vt ? `${K.ANIMS[st.anim]}: a 10-second ${vt.includes("mp4") ? "MP4" : "WebM"} video that loops cleanly. It ends on the site name and a QR code that opens this quote.${reduce ? " The preview stays still because your device asks for reduced motion; tap Replay to watch once." : ""}` : "This browser can't record video; Save will download a still image.") : "Saves a still image. Choose an animation above for a video.";
+  $("hint").innerHTML = an ? (vt ? `${K.ANIMS[st.anim]}: a 10-second ${vt.includes("mp4") ? "MP4" : "WebM"} video that loops cleanly. It ends on the site name and a QR code that opens this quote. <b>Share</b> sends the still card; <b>Save video</b> records the animation.${reduce ? " The preview stays still because your device asks for reduced motion; tap Replay to watch once." : ""}` : "This browser can't record video; Save will download a still image.") : "Saves a still image. Choose an animation above for a video.";
   const x = ins(), t = talk();
   if (st.src === "promo") cv.setAttribute("aria-label", `Card preview: ${promoObj(null).title}. ${look.name}, ${S[st.size][2]}.`); else cv.setAttribute("aria-label", x ? `Card preview: ${x.title}. ${look.name}, ${S[st.size][2]}.` : `Card preview: “${t.quotes[st.q]}” by ${t.speaker}. ${look.name}, ${S[st.size][2]}.`);
   const q = new URLSearchParams(x ? { ins: st.ins } : { t: st.t, q: st.q }); q.set("look", st.look); if (st.pal !== "gold") q.set("pal", st.pal); if (st.font !== "classic") q.set("font", st.font); if (st.align !== "center") q.set("align", "left"); q.set("size", st.size); if (st.ov != null) q.set("ov", Math.round(st.ov * 100)); if (st.anim !== "none") q.set("anim", st.anim); if (st.sticker && st.size === "story") q.set("ig", "1"); if (st.theme !== "all") q.set("theme", st.theme); if (st.layout !== "classic") q.set("layout", st.layout);
@@ -178,6 +180,7 @@ async function draw(changed) {
   if (["note", "margin", "polaroid"].includes(st.layout)) await document.fonts.load('500 40px "Caveat"').catch(() => {});
   await K.prepare(opts());
   an && !reduce ? play() : (cancelAnimationFrame(raf), render(Infinity));
+  prerender(); if (changed) document.getElementById("shReady")?.remove();
   if (changed) { const r = $("ready"); r.classList.remove("pulse"); void r.offsetWidth; r.classList.add("pulse"); }
 }
 window.__renderAt = s => { render(s); return true; };
@@ -185,13 +188,48 @@ window.__studio = st; window.__draw = draw;
 $("replay").addEventListener("click", () => play(true));
 // ---- share / save / copy ----
 const fname = ext => `six-months-of-light-${ins() ? st.ins : slug(talk().speaker)}-${st.size}.${ext}`;
-const cardFile = () => new Promise(res => { cancelAnimationFrame(raf); render(Infinity); cv.toBlob(b => res(new File([b], fname("png"), { type: "image/png" })), "image/png"); });
+// Cards are PRE-RENDERED whenever they change (debounced), so the file is ready before the tap.
+// iOS Safari only allows navigator.share() inside the tap; generating the PNG after the tap is what used to drop the image.
+const off = document.createElement("canvas"), offCtx = off.getContext("2d"), cache = new Map(); let preT, gen = 0;
+const optsFor = (sz, sticker) => ({ ...opts(), sticker: !!sticker && sz === "story" });
+const keyFor = (sz, sticker) => JSON.stringify([optsFor(sz, sticker), sz]);
+const fnameFor = (sz, ext) => `six-months-of-light-${ins() ? (st.ins.startsWith("z-") ? "insight" : st.ins) : st.src === "promo" ? "promo-" + st.promo : slug(talk().speaker)}-${sz}.${ext}`;
+async function renderFile(sz = st.size, sticker = st.sticker) {
+  const key = keyFor(sz, sticker); if (cache.has(key)) return cache.get(key);
+  const o = optsFor(sz, sticker), [W, H] = S[sz]; await K.prepare(o); off.width = W; off.height = H; K.drawCard(offCtx, W, H, o, Infinity);
+  const b = await new Promise(r => off.toBlob(r, "image/png")), f = new File([b], fnameFor(sz, "png"), { type: "image/png" });
+  cache.set(key, f); while (cache.size > 10) cache.delete(cache.keys().next().value); return f; }
+const readyFile = (sz = st.size, sticker = st.sticker) => cache.get(keyFor(sz, sticker)) || null;
+function prerender() { clearTimeout(preT); const g = ++gen; preT = setTimeout(async () => {
+  try { await renderFile(); window.__ready = true;
+    if (isPhone) for (const [sz, stk] of [["story", true], ["portrait", false]]) { if (g !== gen) return; await new Promise(r => (window.requestIdleCallback || setTimeout)(r, 50)); await renderFile(sz, stk); }
+  } catch (e) {} }, 250); }
+const cardFile = () => renderFile();
 // Share links: per-quote / per-insight pages carry their own link-preview image (generated at build time).
 const SHARE_I = window.SHARE_PAGES || [];
 const shareUrl = () => { const x = ins(), t = talk();
   if (st.src === "promo") return promoObj(null).url;
   if (x) return SHARE_I.includes(x.id) ? CONF.site_url + "i/" + x.id + ".html" : opts().url;
   return CONF.site_url + "q/" + t.id + "-" + (st.q + 1) + ".html"; };
+// Per-card share links: the rendered card (1200×630) is stored so a LINK post previews this exact card.
+// Served by the 'card' function: people are redirected to the quote on the site; link-preview crawlers get og:image.
+const CARD_FN = (window.CONF_CONFIG || {}).supabaseUrl ? CONF_CONFIG.supabaseUrl + "/functions/v1/card" : null, linkCache = new Map();
+const BAD_NOTE = /\b(f+u+c+k+\w*|sh[i1]+t+\w*|b[i1]tch\w*|c+u+n+t+\w*|asshole\w*|bastard\w*|d[i1]ck\w*|cock\w*|puss(y|ies)|wh[o0]re\w*|slut\w*|n[i1]gg\w*|fag\w*|retard\w*|porn\w*|sex\w*|nude\w*|kys)\b/i;
+function cardLink() {
+  const key = keyFor("link", false); if (linkCache.has(key)) return linkCache.get(key);
+  const p = (async () => { if (!CARD_FN || location.protocol === "file:") return shareUrl();
+    try { const f = await renderFile("link", false), fd = new FormData(), x = ins(); fd.append("file", f, "card.png");
+      if (st.src === "promo") { const o = promoObj(null); fd.append("kind", "promo"); fd.append("title", o.title || "Six Months of Light"); fd.append("target", o.url); }
+      else if (x) { fd.append("kind", "insight"); fd.append("title", x.title); fd.append("target", opts().url); }
+      else { fd.append("kind", "quote"); fd.append("t", st.t); fd.append("q", st.q); if (st.note) fd.append("note", st.note); }
+      const r = await fetch(CARD_FN, { method: "POST", body: fd }), j = await r.json();
+      if (!r.ok || !j.url) throw new Error(j.error || "upload"); return j.url;
+    } catch (e) { linkCache.delete(key); return shareUrl(); } })();
+  linkCache.set(key, p); return p; }
+// Copy a link that is still being made: Safari keeps the tap's permission when given a promise (ClipboardItem).
+async function copyLater(promise, label) {
+  try { if (window.ClipboardItem && navigator.clipboard?.write) { await navigator.clipboard.write([new ClipboardItem({ "text/plain": promise.then(t => new Blob([t], { type: "text/plain" })) })]); return await promise; } } catch (e) {}
+  const t = await promise; await copyText(t, label); return t; }
 const pinMedia = () => { const x = ins(), t = talk(); if (st.src === "promo") return CONF.site_url + "assets/og/site.jpg";
   if (x) return CONF.site_url + (SHARE_I.includes(x.id) ? "assets/og/i/" + x.id + ".jpg" : "assets/og/site.jpg"); return CONF.site_url + "assets/og/pin/" + t.id + "-" + (st.q + 1) + ".jpg"; };
 const baseText = () => { const x = ins(), t = talk(); if (st.src === "promo") return promoObj(null).share; if (x) return x.share;
@@ -200,16 +238,46 @@ const defaultCaption = () => `${baseText()}\n\n${st.src === "promo" ? "Take a lo
 const caption = () => { const c = $("caption").value.trim(); return c.includes(shareUrl()) ? c : `${c}\n${shareUrl()}`; };
 const shareInfo = () => ({ url: shareUrl(), text: caption().replace(shareUrl(), "").replace(/\n{3,}/g, "\n\n").trim() });
 const toast = msg => { $("readyTxt").innerHTML = msg; clearTimeout(readyT); readyT = setTimeout(() => $("readyTxt").innerHTML = "Your card is ready. Tap <b>Share</b>.", 4000); };
+// Share = the image file ONLY (no text/url: many share targets keep the text and drop the image).
+// The caption + link go to the clipboard in the same tap. If the device can't share files, show the image full screen
+// (press and hold to save/share works reliably on iPhone). Never silently fall back to text only.
+const canShareFiles = files => !!(navigator.share && navigator.canShare && (() => { try { return navigator.canShare({ files }); } catch (e) { return false; } })());
+function shareFiles(files, { copy, ok } = {}) {
+  if (copy) { try { navigator.clipboard.writeText(copy).catch(() => {}); } catch (e) {} }
+  window.__lastShare = { files: files.map(f => ({ name: f.name, type: f.type, size: f.size })), copy: copy || "" };
+  if (!canShareFiles(files)) { viewer(files, copy); return; }
+  navigator.share({ files }).then(() => toast(ok || (copy ? "Card shared ✓ · Link copied, paste it in your caption" : "Card shared ✓")))
+    .catch(e => { if (e && e.name === "AbortError") return; if (e && e.name === "NotAllowedError") return readyPrompt(files, { copy, ok }); viewer(files, copy); });
+}
+// When the tap's permission ran out (e.g. a new size had to be drawn first), one more tap shares it.
+function readyPrompt(files, o) { document.getElementById("shReady")?.remove(); const d = document.createElement("div"); d.id = "shReady"; d.className = "sh-ready"; d.setAttribute("role", "dialog"); d.setAttribute("aria-label", "Card ready");
+  d.innerHTML = `<img alt="" src="${URL.createObjectURL(files[0])}"><div><b>${files.length > 1 ? files.length + " slides ready" : "Your card is ready"}</b><button type="button" class="btn gold" data-go>Share ${files.length > 1 ? "slides" : "card"}</button><button type="button" class="linkish" data-x>Cancel</button></div>`;
+  document.body.appendChild(d); d.querySelector("[data-go]").focus();
+  d.addEventListener("click", e => { if (e.target.closest("[data-go]")) { d.remove(); shareFiles(files, o); } else if (e.target.closest("[data-x]")) d.remove(); }); }
+function viewer(files, copy) { document.getElementById("shView")?.remove(); const v = document.createElement("div"); v.id = "shView"; v.className = "sh-view"; v.setAttribute("role", "dialog"); v.setAttribute("aria-modal", "true"); v.setAttribute("aria-label", "Save your card");
+  const urls = files.map(f => URL.createObjectURL(f)), touch = matchMedia("(pointer: coarse)").matches;
+  v.innerHTML = `<div class="shv-top"><b>${touch ? "Press and hold the image to save or share it" : "Right-click the image to copy it, or download"}</b><button type="button" class="shv-x" data-x aria-label="Close">✕</button></div>
+    <div class="shv-imgs">${urls.map((u, i) => `<img src="${u}" alt="Your card${files.length > 1 ? `, slide ${i + 1} of ${files.length}` : ""}">`).join("")}</div>
+    <div class="shv-acts"><button type="button" class="btn gold small" data-link>Copy link</button>${copy ? `<button type="button" class="btn secondary small" data-cap>Copy caption</button>` : ""}<button type="button" class="btn secondary small" data-dl>Download${files.length > 1 ? " all" : ""}</button></div>
+    ${copy ? `<p class="shv-note">Caption and link are already copied: paste them into your post.</p>` : ""}`;
+  document.body.appendChild(v); const prev = document.activeElement; v.querySelector("[data-x]").focus();
+  const close = () => { v.remove(); urls.forEach(u => setTimeout(() => URL.revokeObjectURL(u), 1000)); prev?.focus?.(); };
+  v.addEventListener("click", async e => { const b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.x !== undefined) close();
+    if (b.dataset.link !== undefined) { await copyText(shareUrl(), "Copy this link:"); b.textContent = "Link copied ✓"; }
+    if (b.dataset.cap !== undefined) { await copyText(copy, "Copy this caption:"); b.textContent = "Caption copied ✓"; }
+    if (b.dataset.dl !== undefined) for (const f of files) { download(f, f.name); await new Promise(r => setTimeout(r, 300)); } });
+  v.addEventListener("keydown", e => { if (e.key === "Escape") close(); }); }
 const download = (blob, name) => { const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); };
-$("share").addEventListener("click", async () => {
-  const { url, text } = shareInfo(), file = await cardFile();
-  try {
-    if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: "Six Months of Light", text: caption(), url }); toast("Shared ✓"); return; }
-    if (navigator.share && isPhone) { await navigator.share({ title: "Six Months of Light", text, url }); toast("Link shared ✓ · tap <b>Save image</b> to post the picture"); return; }
-  } catch (e) { if (e && e.name === "AbortError") return; }
-  openShareSheet({ url, text, file });
-  if (st.anim !== "none") draw();
-});
+// Share: uses the pre-rendered file synchronously inside the tap.
+async function shareCurrent(sz = st.size, sticker = st.sticker, copy = caption(), ok) {
+  const f = readyFile(sz, sticker);
+  if (f) return shareFiles([f], { copy, ok });
+  const file = await renderFile(sz, sticker); shareFiles([file], { copy, ok }); }   // not ready yet: NotAllowedError -> one-more-tap prompt
+$("share").addEventListener("click", () => shareCurrent());
+$("shareLink").addEventListener("click", async () => { const url = shareUrl(), text = baseText() + "\n#GeneralConference";
+  if (navigator.share) { try { await navigator.share({ text, url }); return; } catch (e) { if (e && e.name === "AbortError") return; } }
+  await copyText(url, "Copy this link:"); toast("Link copied ✓"); });
 $("save").addEventListener("click", async () => {
   const vt = videoType(), btn = $("save");
   const ig = st.sticker && st.size === "story";
@@ -219,7 +287,9 @@ $("save").addEventListener("click", async () => {
   const rec = new MediaRecorder(cv.captureStream(30), { mimeType: vt, videoBitsPerSecond: 8e6 }), chunks = [];
   btn.disabled = true; btn.textContent = "Recording… 10s";
   rec.ondataavailable = e => chunks.push(e.data);
-  rec.onstop = () => { download(new Blob(chunks, { type: vt }), fname(vt.includes("mp4") ? "mp4" : "webm")); btn.disabled = false; done("Video"); draw(); };
+  rec.onstop = () => { const vf = new File([new Blob(chunks, { type: vt })], fname(vt.includes("mp4") ? "mp4" : "webm"), { type: vt.split(";")[0] }); btn.disabled = false; draw();
+    if (isPhone && canShareFiles([vf])) return readyPrompt([vf], { copy: ig ? shareInfo().url : caption(), ok: "Video shared ✓ · Link copied" });
+    download(vf, vf.name); done("Video"); };
   rec.start(); play(true); setTimeout(() => rec.stop(), K.TL.total * 1000 + 120);
 });
 $("copy").addEventListener("click", () => { setTab("share"); $("plats").querySelector("button").focus({ preventScroll: true }); });
@@ -229,28 +299,28 @@ $("capReset").addEventListener("click", () => { st.capEdited = false; $("caption
 $("capCopy").addEventListener("click", async () => { await copyText(caption(), "Copy this caption:"); toast("Caption copied ✓"); });
 const setSize = sz => { st.size = sz; document.querySelectorAll("#size button").forEach(x => x.setAttribute("aria-pressed", x.dataset.k === sz)); };
 const enc = encodeURIComponent, popup = u => window.open(u, "_blank", "noopener,noreferrer,width=680,height=640");
-const shareFiles = async (files, text) => { if (!(isPhone && navigator.canShare && navigator.canShare({ files }))) return false; try { await navigator.share({ files, text }); return true; } catch (e) { return e && e.name === "AbortError"; } };
 async function platform(k) {
   const url = shareUrl(), cap = caption(), noUrl = cap.replace(url, "").trim(), def = PLAT.find(p => p[0] === k);
   // intent pages open right away (inside the tap) so popup blockers allow them
-  if (k === "facebook") popup(`https://www.facebook.com/sharer/sharer.php?u=${enc(url)}`);
+  if (k === "facebook" && !isPhone) { const w = window.open("", "_blank", "width=680,height=640"); if (w) { try { w.opener = null; w.document.title = "Preparing your card…"; w.document.body.innerHTML = '<p style="font:16px system-ui;padding:24px">Preparing your card for Facebook…</p>'; } catch (e) {} }
+    setSize("link"); setSticker(false); draw(true);
+    cardLink().then(u => { const fb = `https://www.facebook.com/sharer/sharer.php?u=${enc(u)}`; if (w && !w.closed) w.location.href = fb; else popup(fb); });
+    toast("Opening Facebook · your link post will show this card"); return; }
   if (k === "x") popup(`https://x.com/intent/tweet?text=${enc(cap)}`);
   if (k === "pinterest") popup(`https://www.pinterest.com/pin/create/button/?url=${enc(url)}&media=${enc(pinMedia())}&description=${enc(noUrl)}`);
   if (k === "threads") popup(`https://www.threads.net/intent/post?text=${enc(cap)}`);
   if (k === "email") { location.href = `mailto:?subject=${enc(st.src === "promo" ? "Six Months of Light" : "A line from general conference")}&body=${enc(cap)}`; }
-  if (k === "copy") { await copyText(url, "Copy this link:"); toast("Link copied ✓"); return; }
+  if (k === "copy") { toast("Making your card link…"); const u = await copyLater(cardLink(), "Copy this link:"); toast(u === url ? "Link copied ✓" : "Card link copied ✓ · its preview shows this card"); return; }
   if (!isPhone && k === "whatsapp") { popup(`https://wa.me/?text=${enc(cap)}`); toast("Opened WhatsApp ✓"); return; }
   if (!isPhone && k === "sms") { location.href = `sms:?&body=${enc(cap)}`; return; }
-  if (def[2]) { setSize(def[2]); setSticker(k === "igstory"); await draw(true); }
-  if (["facebook", "x", "pinterest", "threads", "email"].includes(k)) { toast(`Opened ${def[1]} · the card is sized for it if you want to add the image`); return; }
-  const file = await cardFile();
-  if (k === "igstory" || k === "igpost") {
-    await copyText(k === "igstory" ? url : cap, "Copy this:");
-    if (await shareFiles([file], cap)) { toast(k === "igstory" ? "Link copied — paste it in a Link sticker" : "Caption copied — paste it in Instagram"); return; }
-    download(file, fname("png")); toast(k === "igstory" ? "Image saved ✓ · Link copied — paste it in a Link sticker" : "Image saved ✓ · Caption copied — paste it in Instagram"); return; }
-  if (await shareFiles([file], cap)) { toast("Shared ✓"); return; }
-  if (k === "whatsapp") location.href = `https://wa.me/?text=${enc(cap)}`;
-  if (k === "sms") location.href = `sms:?&body=${enc(cap)}`;
+  if (["x", "pinterest", "threads", "email"].includes(k)) { if (def[2]) { setSize(def[2]); setSticker(false); draw(true); } toast(`Opened ${def[1]} · the card is sized for it if you want to add the image`); return; }
+  // Phone targets: share the image FILE (pre-rendered for Story and post sizes), caption/link to clipboard in the same tap
+  const sz = def[2] || st.size, stk = k === "igstory" ? true : def[2] ? false : st.sticker, copy = k === "igstory" ? url : cap;
+  const ok = k === "facebook" ? "Card shared ✓ · Caption copied, paste it in your post" : k === "igstory" ? "Card shared ✓ · Link copied, paste it in a Link sticker" : k === "igpost" ? "Card shared ✓ · Caption copied, paste it in Instagram" : "Card shared ✓ · Link copied, paste it in your message";
+  const f = readyFile(sz, stk);
+  if (def[2]) { setSize(sz); setSticker(stk); draw(true); }
+  if (f) return shareFiles([f], { copy, ok });
+  shareFiles([await renderFile(sz, stk)], { copy, ok });
 }
 $("plats").addEventListener("click", e => { const b = e.target.closest(".plat"); if (b) platform(b.dataset.p); });
 // ---- carousels (numbered set of slides) ----
@@ -265,7 +335,8 @@ async function exportCarousel() { cancelAnimationFrame(raf); const [W, H] = S[st
   for (let i = 0; i < list.length; i++) { await K.prepare(list[i]); cv.width = W; cv.height = H; K.drawCard(ctx, W, H, list[i], Infinity);
     const b = await new Promise(r => cv.toBlob(r, "image/png")); files.push(new File([b], `six-months-of-light-${st.src === "promo" ? "promo" : slug(talk().speaker)}-${String(i + 1).padStart(2, "0")}-of-${list.length}.png`, { type: "image/png" })); }
   draw();
-  if (await shareFiles(files, caption())) { toast(`Carousel shared ✓ (${files.length} slides)`); return; }
+  if (canShareFiles(files)) return shareFiles(files, { copy: caption(), ok: `Carousel shared ✓ (${files.length} slides) · Caption copied` });
+  if (isPhone) return viewer(files, caption());
   for (const f of files) { download(f, f.name); await new Promise(r => setTimeout(r, 350)); }
   toast(`${files.length} slides saved ✓ · post them in order as a carousel`); }
 window.__carousel = carouselOpts;
