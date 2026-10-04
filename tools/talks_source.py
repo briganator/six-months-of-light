@@ -326,6 +326,15 @@ talks = [
     "Being quick to help and slow to judge is a simple and deeply encouraging way for each of us to be more holy, to be more like our Savior, to be His true disciples."],
    "Be quick to help and slow to judge — look to a person's possible, not only their past, especially friends and new members.",
    "Whom am I holding hostage to their history — and how could I help them instead of judging them?"),
+ t("sun-pm-7-stevenson", "sun-pm", 7, "Elder Gary E. Stevenson", "Quorum of the Twelve Apostles", "Fruit To Make One Happy",
+   "https://www.thechurchnews.com/general-conference/2026/10/04/elder-gary-stevenson-october-2026-general-conference-fruit-of-gospel/",
+   "Speaking especially to children of Primary age about the fruits of the gospel. Like a favorite fruit, gospel truths become sweet to us as we live them, bringing happiness and joy. He shared three fruits he loves: first, we are children of a loving Heavenly Father, our most important identity, which makes us stronger and kinder to others; second, the plan of happiness, with the Atonement of Jesus Christ at its center, so we can repent, be forgiven and progress; and third, the gift of the Holy Ghost, a member of the Godhead who warns, comforts and testifies. He invited listeners to love, share and invite, with words and actions.",
+   [],
+   ["This knowledge makes us stronger. This knowledge also makes us kinder to others, knowing that everyone around us is our brother or sister.",
+    "Your Heavenly Father and His Son, Jesus Christ, know you and love you. Even though you are young, you are an important part of Their work",
+    "Consider how your family, friends and loved ones will be blessed to partake of the fruit that blesses you."],
+   "Love, share and invite — with words and actions — so others can taste the fruit that blesses you.",
+   "Which gospel truth has become sweetest to me as I've lived it — and whom could I invite to taste it?"),
 ]
 
 # 60-second recap "big idea" — a one-line condensation of the doc's summary (NOT a quote).
@@ -363,6 +372,7 @@ BIG_IDEAS = {
  "sun-pm-4-bednar": "Ordinances and covenants are spiritual credentials — kept faithfully, they are sealed by the Holy Spirit of Promise.",
  "sun-pm-5-lebethoa": "Whatever we face, the answer is always Jesus Christ — faith, daily scripture study and daily repentance let in His light.",
  "sun-pm-6-sinclair": "Be quick to help and slow to judge — like Christ at the well, look to a person's possible, not only their past.",
+ "sun-pm-7-stevenson": "Gospel truths are like a favorite fruit — they grow sweet as we live them; love, share and invite others to taste them.",
 }
 for _t in talks:
     _t["big_idea"] = BIG_IDEAS[_t["id"]]

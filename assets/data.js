@@ -851,6 +851,28 @@ window.CONF = {
    "big_idea": "Be quick to help and slow to judge — like Christ at the well, look to a person's possible, not only their past.",
    "video_embed": null,
    "full_text_permitted": false
+  },
+  {
+   "id": "sun-pm-7-stevenson",
+   "session": "sun-pm",
+   "order": 7,
+   "speaker": "Elder Gary E. Stevenson",
+   "calling": "Quorum of the Twelve Apostles",
+   "title": "Fruit To Make One Happy",
+   "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/elder-gary-stevenson-october-2026-general-conference-fruit-of-gospel/",
+   "official_url": null,
+   "summary": "Speaking especially to children of Primary age about the fruits of the gospel. Like a favorite fruit, gospel truths become sweet to us as we live them, bringing happiness and joy. He shared three fruits he loves: first, we are children of a loving Heavenly Father, our most important identity, which makes us stronger and kinder to others; second, the plan of happiness, with the Atonement of Jesus Christ at its center, so we can repent, be forgiven and progress; and third, the gift of the Holy Ghost, a member of the Godhead who warns, comforts and testifies. He invited listeners to love, share and invite, with words and actions.",
+   "scriptures": [],
+   "quotes": [
+    "This knowledge makes us stronger. This knowledge also makes us kinder to others, knowing that everyone around us is our brother or sister.",
+    "Your Heavenly Father and His Son, Jesus Christ, know you and love you. Even though you are young, you are an important part of Their work",
+    "Consider how your family, friends and loved ones will be blessed to partake of the fruit that blesses you."
+   ],
+   "invitation": "Love, share and invite — with words and actions — so others can taste the fruit that blesses you.",
+   "ponder": "Which gospel truth has become sweetest to me as I've lived it — and whom could I invite to taste it?",
+   "big_idea": "Gospel truths are like a favorite fruit — they grow sweet as we live them; love, share and invite others to taste them.",
+   "video_embed": null,
+   "full_text_permitted": false
   }
  ],
  "challenge": {
