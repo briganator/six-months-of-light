@@ -362,7 +362,7 @@
     minimal:      { name: "Minimal", group: "Simple", dark: 0, paint: minimal(false) },
     minimal_dark: { name: "Minimal dark", group: "Simple", dark: 1, paint: minimal(true) },
   };
-  (window.PHOTOS || []).forEach(p => { LOOKS["photo-" + p.id] = { name: p.name, group: p.group === "temple" ? "Temple photos" : "Gethsemane & nature", dark: 1, ov: p.ov ?? .5, photo: p.id, fx: p.fx, fy: p.fy, credit: p, paint: photoPaint }; });
+  (window.PHOTOS || []).forEach(p => { LOOKS["photo-" + p.id] = { name: p.name, group: p.group === "temple" ? "Temple photos" : p.group === "art" ? "Christ in art (public domain)" : "Gethsemane & nature", dark: 1, ov: p.ov ?? .5, photo: p.id, fx: p.fx, fy: p.fy, credit: p, paint: photoPaint }; });
   const base = () => window.CARDKIT_BASE || "";
   function prepare(o) { const L = LOOKS[o.look]; if (!L || !L.photo) return Promise.resolve();
     if (IMG[L.photo] && IMG[L.photo].complete) return Promise.resolve();
@@ -423,14 +423,56 @@
   const FONTS = { classic: "Classic serif", italic: "Italic serif", bold: "Bold serif", modern: "Modern sans" };
   const FONTF = { classic: f => `500 ${f}px ${SERIF}`, italic: f => `italic 500 ${f}px ${SERIF}`, bold: f => `600 ${f * 1.02}px ${SERIF}`, modern: f => `400 ${f * .8}px ${SANS}` };
 
+  // ---------- formatting (Advanced panel). o.fmt = { size, weight, lh, ls, cs, qm, box, border, vig, grain, blur, ink, acc, dx, dy } ----------
+  const F0 = {};
+  const fmtOf = o => o.fmt || F0;
+  function fontFor(o) { const f = fmtOf(o), base = FONTF[o.font] || FONTF.classic;
+    return fs => { let s = base(fs * (f.size || 1)); if (f.weight) s = s.replace(/^(italic )?\d{3}/, (m, it) => (it || "") + f.weight); return s; }; }
+  const caseOf = (o, s) => { const c = fmtOf(o).cs; return c === "upper" ? s.toUpperCase() : c === "lower" ? s.toLowerCase() : c === "title" ? s.replace(/\b([a-z])/g, m => m.toUpperCase()) : s; };
+  const setLS = (ctx, o, fs) => { const ls = fmtOf(o).ls; if ("letterSpacing" in ctx) ctx.letterSpacing = ls ? (ls * fs).toFixed(1) + "px" : "0px"; };
+  const QM = { curly: ["“", "”"], none: ["", ""], small: ["“", "”"], guillemet: ["«\u202f", "\u202f»"], straight: ['"', '"'], bar: ["", ""] };
+  function fmtTheme(th, o) { const f = fmtOf(o); if (!f.ink && !f.acc) return th; return { ...th, ink: f.ink || th.ink, gold: f.acc || th.gold, gold2: f.acc || th.gold2, sun: f.acc ? hex(f.acc) : th.sun }; }
+  let NOISE = null;
+  function grain(ctx, W, H, a) { if (!a) return; if (!NOISE) { NOISE = document.createElement("canvas"); NOISE.width = NOISE.height = 200; const n = NOISE.getContext("2d"), d = n.createImageData(200, 200), r = rng(3);
+      for (let i = 0; i < d.data.length; i += 4) { const v = r() * 255; d.data[i] = d.data[i + 1] = d.data[i + 2] = v; d.data[i + 3] = 255; } n.putImageData(d, 0, 0); }
+    ctx.save(); ctx.globalAlpha = a * .22; ctx.globalCompositeOperation = "overlay"; ctx.fillStyle = ctx.createPattern(NOISE, "repeat"); ctx.fillRect(0, 0, W, H); ctx.restore(); }
+  function vig(ctx, W, H, a) { if (!a) return; const D = Math.max(W, H), v = ctx.createRadialGradient(W / 2, H / 2, D * .25, W / 2, H / 2, D * .78); v.addColorStop(0, "rgba(0,0,0,0)"); v.addColorStop(1, `rgba(0,0,0,${.75 * a})`); ctx.fillStyle = v; ctx.fillRect(0, 0, W, H); }
+  // background with optional blur (downscale works in every browser) and animation transforms (pan / parallax)
+  let BLUR = null;
+  function paintBG(ctx, W, H, look, P, t, o, A, still) {
+    const b = fmtOf(o).blur || 0, FXA = FX[A];
+    const doPaint = (c, w, h) => { c.save(); if (FXA && FXA.pre && !still) FXA.pre(c, w, h, t, look); look.paint(c, w, h, P, still ? 3 : t, o, look); c.restore(); };
+    if (!b) return doPaint(ctx, W, H);
+    const k = 1 / (1 + b * .9), w = Math.max(16, Math.round(W * k)), h = Math.max(16, Math.round(H * k));
+    if (!BLUR) BLUR = document.createElement("canvas"); BLUR.width = w; BLUR.height = h; const bc = BLUR.getContext("2d"); doPaint(bc, w, h);
+    ctx.save(); ctx.imageSmoothingQuality = "high"; ctx.drawImage(BLUR, -W * .02, -H * .02, W * 1.04, H * 1.04); ctx.restore(); }
+  function textBox(ctx, o, th, x0, y, w, h, u, W) { const bx = fmtOf(o).box; if (!bx || bx === "none") return; const p = u * .05; ctx.save();
+    if (bx === "glass") { ctx.fillStyle = th.dark ? "rgba(10,12,28,.42)" : "rgba(255,255,255,.55)"; roundRect(ctx, x0 - p, y - p, w + 2 * p, h + 2 * p, u * .03); ctx.fill(); ctx.strokeStyle = th.dark ? "rgba(255,255,255,.18)" : "rgba(29,27,46,.12)"; ctx.lineWidth = Math.max(1, u / 900); ctx.stroke(); }
+    if (bx === "solid") { ctx.fillStyle = th.dark ? "rgba(8,10,22,.82)" : "rgba(255,253,248,.92)"; roundRect(ctx, x0 - p, y - p, w + 2 * p, h + 2 * p, u * .02); ctx.fill(); }
+    if (bx === "band") { ctx.fillStyle = th.dark ? "rgba(8,10,22,.55)" : "rgba(255,255,255,.65)"; ctx.fillRect(0, y - p, W, h + 2 * p); }
+    if (bx === "outline") { ctx.strokeStyle = th.gold; ctx.lineWidth = Math.max(1.5, u / 450); roundRect(ctx, x0 - p, y - p, w + 2 * p, h + 2 * p, u * .015); ctx.stroke(); }
+    ctx.restore(); }
+  function border(ctx, W, H, th, a, o) { const s = fmtOf(o).border; if (!s || s === "corners") return frame(ctx, W, H, th, a); if (s === "none") return;
+    const u = Math.min(W, H), m = u * .045; ctx.save(); ctx.globalAlpha = a; ctx.strokeStyle = th.gold; ctx.lineWidth = Math.max(1.5, u / 500);
+    if (s === "thin") ctx.strokeRect(m, m, W - 2 * m, H - 2 * m);
+    if (s === "double") { ctx.strokeRect(m, m, W - 2 * m, H - 2 * m); ctx.lineWidth = Math.max(1, u / 900); ctx.strokeRect(m + u * .012, m + u * .012, W - 2 * m - u * .024, H - 2 * m - u * .024); }
+    if (s === "rounded") { roundRect(ctx, m, m, W - 2 * m, H - 2 * m, u * .05); ctx.stroke(); }
+    if (s === "ornate") { ctx.strokeRect(m, m, W - 2 * m, H - 2 * m); ctx.lineWidth = Math.max(1, u / 900); ctx.strokeRect(m + u * .016, m + u * .016, W - 2 * m - u * .032, H - 2 * m - u * .032);
+      [[m, m], [W - m, m], [m, H - m], [W - m, H - m]].forEach(([x, y]) => { ctx.save(); ctx.translate(x, y); ctx.rotate(Math.PI / 4); ctx.fillStyle = th.gold; ctx.fillRect(-u * .014, -u * .014, u * .028, u * .028); ctx.restore(); });
+      ctx.fillStyle = th.gold; ctx.beginPath(); ctx.arc(W / 2, m, u * .012, 0, TAU); ctx.arc(W / 2, H - m, u * .012, 0, TAU); ctx.fill(); }
+    ctx.restore(); }
+  const FX = {};   // animation effect registry: FX[name] = { pre(ctx,W,H,t,look), mid(ctx,W,H,t,u,th,P,look), post(ctx,W,H,t,u,th,P,look), text: "float"|"letters" }
   // Rows: [{h, draw(y, x, align)}] built at scale k; shrink k until they fit.
   function quoteRows(ctx, G, o, th, k) {
-    const u = G.u, FONT = FONTF[o.font] || FONTF.classic, rows = [];
+    const u = G.u, FONT = fontFor(o), rows = [], f = fmtOf(o), qm = QM[f.qm] || QM.curly, LH = 1.2 * (f.lh || 1), qtext = caseOf(o, o.quote);
     let fs = u * ({ story: .086, wall: .084, wide: .07 }[G.kind] || .078) * k;
-    ctx.font = FONT(fs); let lines = wrap(ctx, o.quote, G.cw);
-    let mw = G.cw; while (mw > G.cw * .62) { const l2 = wrap(ctx, o.quote, mw - u * .02); if (l2.length > lines.length) break; mw -= u * .02; lines = l2; }
-    rows.push({ h: u * .11 * k, draw(y, x, al) { ctx.save(); ctx.font = `500 ${u * .24 * k}px ${SERIF}`; const g = ctx.createLinearGradient(0, y - u * .05, 0, y + u * .1); g.addColorStop(0, th.gold); g.addColorStop(1, th.gold2); ctx.fillStyle = g; ctx.textAlign = al; ctx.fillText("“", al === "left" ? x - u * .01 : x, y + u * .165 * k); ctx.restore(); } });
-    lines.forEach((l, i) => rows.push({ h: fs * 1.2, line: 1, txt: l + (i === lines.length - 1 ? "”" : ""), font: FONT(fs), color: th.ink, by: fs * .95, draw(y, x, al) { ctx.font = FONT(fs); ctx.fillStyle = th.ink; ctx.textAlign = al; ctx.fillText(l + (i === lines.length - 1 ? "”" : ""), x, y + fs * .95); } }));
+    ctx.font = FONT(fs); setLS(ctx, o, fs); let lines = wrap(ctx, qm[0] && f.qm && f.qm !== "curly" ? qm[0] + qtext : qtext, G.cw);
+    let mw = G.cw; while (mw > G.cw * .62) { const l2 = wrap(ctx, qm[0] && f.qm && f.qm !== "curly" ? qm[0] + qtext : qtext, mw - u * .02); if (l2.length > lines.length) break; mw -= u * .02; lines = l2; }
+    if (f.qm === "bar") rows.push({ h: u * .03 * k, draw(y, x, al) { ctx.fillStyle = th.gold; const bw = u * .08; ctx.fillRect(al === "left" ? x : x - bw / 2, y + u * .01, bw, Math.max(3, u / 300)); } });
+    if (!f.qm || f.qm === "curly") rows.push({ h: u * .11 * k, draw(y, x, al) { ctx.save(); ctx.font = `500 ${u * .24 * k}px ${SERIF}`; const g = ctx.createLinearGradient(0, y - u * .05, 0, y + u * .1); g.addColorStop(0, th.gold); g.addColorStop(1, th.gold2); ctx.fillStyle = g; ctx.textAlign = al; ctx.fillText("“", al === "left" ? x - u * .01 : x, y + u * .165 * k); ctx.restore(); } });
+    const close = !f.qm || f.qm === "curly" ? "”" : qm[1];
+    ctx.letterSpacing && setLS(ctx, o, 0);
+    lines.forEach((l, i) => rows.push({ h: fs * LH, line: 1, txt: l + (i === lines.length - 1 ? close : ""), font: FONT(fs), color: th.ink, by: fs * .95, ls: f.ls ? f.ls * fs : 0, draw(y, x, al) { ctx.font = FONT(fs); setLS(ctx, o, fs); ctx.fillStyle = th.ink; ctx.textAlign = al; ctx.fillText(l + (i === lines.length - 1 ? close : ""), x, y + fs * .95); setLS(ctx, o, 0); } }));
     rows.push({ h: u * .17 * k, draw(y, x, al) {
       const lw = u * .14, lx = al === "left" ? x : x - lw / 2; const lg = ctx.createLinearGradient(lx, 0, lx + lw, 0);
       lg.addColorStop(0, al === "left" ? th.gold : "rgba(216,169,91,0)"); lg.addColorStop(.5, th.gold); lg.addColorStop(1, "rgba(216,169,91,0)");
@@ -621,15 +663,16 @@
     if (caret) { const w = ctx.measureText(str).width, fsz = parseFloat(/(\d+(\.\d+)?)px/.exec(r.font)[1]); ctx.fillStyle = th.gold; ctx.fillRect(sx + w + fsz * .06, y + r.by - fsz * .78, Math.max(2, fsz * .06), fsz * .9); }
   }
   function drawFrame(ctx, W, H, o, time) {
-    const G = geom(W, H), u = G.u, look = LOOKS[o.look] || LOOKS.sunrise, P = PALETTES[o.palette] || PALETTES.gold, th = textTheme(look, P);
-    const still = !isFinite(time), t = still ? 3 : time, A = still ? "none" : (o.anim || "fade"), al = o.align === "left" ? "left" : "center", x = al === "left" ? G.x0 : W / 2, D = Math.max(W, H);
+    const G = geom(W, H), u = G.u, look = LOOKS[o.look] || LOOKS.sunrise, P = PALETTES[o.palette] || PALETTES.gold, th = fmtTheme(textTheme(look, P), o), fm = fmtOf(o);
+    const still = !isFinite(time), t = still ? 3 : time, A = still ? "none" : (o.anim || "fade"), al = o.align === "left" ? "left" : "center", D = Math.max(W, H), x = (al === "left" ? G.x0 : W / 2) + (fm.dx || 0) * W, FXA = FX[A];
     const LY = o.kind === "quote" && LAYOUTS[o.layout] && LAYOUTS[o.layout].draw ? LAYOUTS[o.layout] : null;
     if (LY) return drawLayout(ctx, W, H, o, time, LY, G, look, P, th, still, t, A, D);
     ctx.save(); ctx.textBaseline = "alphabetic";
     if (A === "zoom" && !look.photo) { const z = 1 + .1 * easeIO(c01(t / T10)); ctx.translate(W / 2, H * .45); ctx.scale(z, z); ctx.translate(-W / 2, -H * .45); }
-    look.paint(ctx, W, H, P, still ? 3 : t, o, look); ctx.restore();
+    paintBG(ctx, W, H, look, P, t, o, A, still); ctx.restore();
     if (A === "sunrise") { const p = easeIO(c01(t / 5)); glow(ctx, W / 2, H * (1.15 - .4 * p), D * (.45 + .4 * p), P.tint, .45 * p); glow(ctx, W / 2, H * (1.15 - .4 * p), D * .2, [255, 248, 228], .35 * p); }
-    overlay(ctx, W, H, look, o.overlay ?? look.ov ?? 0);
+    overlay(ctx, W, H, look, o.overlay ?? look.ov ?? 0); vig(ctx, W, H, fm.vig);
+    if (FXA && FXA.mid) { ctx.save(); FXA.mid(ctx, W, H, t, u, th, P, look); ctx.restore(); }
     if (A === "rays") { const p = easeIO(c01((t - .3) / 6.5)), bx = -W * .6 + p * W * 2.2; ctx.save(); ctx.globalCompositeOperation = look.dark ? "lighter" : "source-over";
       const g = ctx.createLinearGradient(bx - W * .35, 0, bx + W * .35, H * .25); g.addColorStop(0, rgba(P.tint, 0)); g.addColorStop(.5, rgba(look.dark ? P.tint : [255, 255, 255], look.dark ? .22 : .45)); g.addColorStop(1, rgba(P.tint, 0));
       ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.restore();
@@ -637,7 +680,7 @@
     if (A === "stars") { const r = rng(99), n = 70; for (let i = 0; i < n; i++) { const x0 = r() * W, y0 = r() * H, sp = 1 + Math.floor(r() * 2), s0 = r();
       const y = ((y0 - (t / 10) * H * sp) % H + H) % H, xx = x0 + Math.sin(t / 10 * TAU * sp + i) * u * .015, tw = .5 + .5 * Math.sin(t / 10 * TAU * (2 + i % 3) + i);
       ctx.fillStyle = look.dark ? `rgba(255,246,220,${(.25 + .6 * s0) * tw})` : rgba(hex(P.dk), (.2 + .4 * s0) * tw); ctx.beginPath(); ctx.arc(xx, y, u * (.0016 + s0 * .0032), 0, TAU); ctx.fill(); } }
-    frame(ctx, W, H, th, still || A === "none" ? 1 : ease(c01(t / 1.2)));
+    border(ctx, W, H, th, still || A === "none" ? 1 : ease(c01(t / 1.2)), o);
     ctx.save(); if (look.photo || look.ov) { ctx.shadowColor = "rgba(0,0,0,.45)"; ctx.shadowBlur = u * .018; }
     ctx.globalAlpha = still ? 1 : ease(c01((t - .2) / .8)); ctx.fillStyle = th.gold; ctx.font = `600 ${u * .021}px ${SANS}`;
     spaced(ctx, o.eyebrow || "OCTOBER 2026 · GENERAL CONFERENCE", x, G.eyeY, u * .007, al); ctx.globalAlpha = 1;
@@ -648,9 +691,13 @@
     let tc = TL.start; const units = rows.reduce((s, r) => s + (rev && r.line ? (rev === "words" ? r.txt.split(" ").length : r.txt.length) : 0), 0);
     const rate = rev ? Math.min(rev === "words" ? .26 : .045, 4.6 / Math.max(1, units)) : 0;
     rows.forEach(r => { r.t0 = tc; if (rev && r.line) { r.mode = rev; r.dur = (rev === "words" ? r.txt.split(" ").length : r.txt.length) * rate; tc += r.dur; } else { r.dur = TL.dur; tc += rev ? .25 : TL.gap; } });
-    let y = G.top + Math.max(0, (avail - total) / 2);
-    rows.forEach(r => { if (still || A === "none") { r.draw(y, x, al); y += r.h; return; }
+    const y0 = G.top + Math.max(0, (avail - total) / 2), slack = G.u * .03; let y = y0 + Math.max(G.top - y0 - slack * 2, Math.min(Math.max(0, G.bottom - y0 - total) + slack, (fm.dy || 0) * H));
+    { const bp = still || A === "none" ? 1 : ease(c01((t - TL.start + .3) / .8)); if (bp > 0) { ctx.save(); ctx.globalAlpha = bp; ctx.shadowColor = "transparent"; textBox(ctx, o, th, al === "left" ? x : x - G.cw / 2, y, G.cw, total, u, W); ctx.restore(); } }
+    let ri = 0;
+    rows.forEach(r => { ri++; if (still || A === "none") { r.draw(y, x, al); y += r.h; return; }
       const raw = (t - r.t0) / r.dur;
+      if (FXA && FXA.text === "letters" && r.line) { const f2 = c01((t - r.t0) / (r.dur * 1.6)); if (f2 > 0) { ctx.save(); letters(ctx, r, y, x, al, f2, u); ctx.restore(); } y += r.h; return; }
+      if (FXA && FXA.text === "float") { const p = ease(c01(raw)); if (p > 0) { ctx.save(); ctx.globalAlpha = p; ctx.translate(0, (1 - p) * u * .09 + Math.sin(t / 10 * TAU * 2 + ri) * u * .004); r.draw(y, x, al); ctx.restore(); } y += r.h; return; }
       if (r.mode) { if (raw > 0) { ctx.save(); if (raw >= 1) r.draw(y, x, al); else partial(ctx, r, y, x, al, c01(raw), r.mode === "typewriter", th); ctx.restore(); } }
       else { const p = ease(c01(raw)); if (p > 0) { ctx.save(); ctx.globalAlpha = p; ctx.translate(0, (1 - p) * u * .02); r.draw(y, x, al); ctx.restore(); } }
       y += r.h; });
@@ -668,9 +715,14 @@
     ctx.save(); ctx.globalAlpha = .9; ctx.textAlign = "center"; ctx.fillStyle = th.sub; ctx.font = `${u * .0175}px ${SANS}`;
     if (look.photo || look.ov) { ctx.shadowColor = "rgba(0,0,0,.6)"; ctx.shadowBlur = u * .01; }
     ctx.fillText((o.kind === "insight" ? (o.ins && o.ins.basis) || "Based on recaps" : "Quoted from recap") + " · Personal study site · Not an official Church site", W / 2, H - u * .068);
-    if (look.credit) { ctx.font = `${u * .0145}px ${SANS}`; const c = look.credit; ctx.fillText(`Photo: ${String(c.author).slice(0, 48)} · ${c.license} · Wikimedia Commons`, W / 2, H - u * .018); }
-    ctx.restore();
+    if (look.credit) { ctx.font = `${u * .0145}px ${SANS}`; ctx.fillText(creditLine(look.credit), W / 2, H - u * .018); }
+    ctx.restore(); grain(ctx, W, H, fm.grain);
+    if (FXA && FXA.post && !still) { ctx.save(); FXA.post(ctx, W, H, t, u, th, P, look); ctx.restore(); }
   }
+  const creditLine = c => c.group === "art" ? `Painting: ${String(c.name).slice(0, 40)} · ${String(c.author).slice(0, 40)} · Public domain` : `Photo: ${String(c.author).slice(0, 48)} · ${c.license} · Wikimedia Commons`;
+  // per-letter float-in (each character rises into place)
+  function letters(ctx, r, y, x, al, f, u) { ctx.font = r.font; ctx.fillStyle = r.color; ctx.textAlign = "left"; const full = ctx.measureText(r.txt).width, sx = al === "center" ? x - full / 2 : x, n = r.txt.length;
+    let cx = sx; for (let i = 0; i < n; i++) { const ch = r.txt[i], w = ctx.measureText(r.txt.slice(0, i + 1)).width, lp = c01(f * 1.6 - (i / n) * .6); if (lp > 0) { ctx.globalAlpha = ease(lp); ctx.fillText(ch, sx + (w - ctx.measureText(ch).width), y + r.by + (1 - ease(lp)) * u * .05); } cx = sx + w; } }
   const T10 = 10;
   function fx(ctx, W, H, o, look, P, t, A, D, u, pre) {
     if (pre && A === "sunrise") { const p = easeIO(c01(t / 5)); glow(ctx, W / 2, H * (1.15 - .4 * p), D * (.45 + .4 * p), P.tint, .45 * p); glow(ctx, W / 2, H * (1.15 - .4 * p), D * .2, [255, 248, 228], .35 * p); }
@@ -681,20 +733,21 @@
     if (!pre && A === "shimmer") { const p = c01((t - 3.2) / 1.8); if (p > 0 && p < 1) { const bx = -W * .2 + p * W * 1.4; ctx.save(); ctx.globalCompositeOperation = look.dark ? "lighter" : "source-over"; const g = ctx.createLinearGradient(bx - u * .15, 0, bx + u * .15, u * .3); g.addColorStop(0, rgba(hex(P.acc), 0)); g.addColorStop(.5, rgba(hex(P.acc), .25)); g.addColorStop(1, rgba(hex(P.acc), 0)); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.restore(); } }
   }
   function drawLayout(ctx, W, H, o, time, LY, G, look, P, th, still, t, A, D) {
-    const u = G.u, th2 = LY.light ? TH_LIGHT(P) : th;
+    const u = G.u, th2 = fmtTheme(LY.light ? TH_LIGHT(P) : th, o), fm = fmtOf(o), FXA = FX[A];
     ctx.save(); if (A === "zoom") { const z = 1 + .08 * easeIO(c01(t / T10)); ctx.translate(W / 2, H * .45); ctx.scale(z, z); ctx.translate(-W / 2, -H * .45); }
-    if (!LY.own) look.paint(ctx, W, H, P, still ? 3 : t, o, look); ctx.restore();
-    if (!LY.own) { fx(ctx, W, H, o, look, P, t, A, D, u, true); overlay(ctx, W, H, look, o.overlay ?? Math.max(look.ov || 0, LY.ov || 0)); }
+    if (!LY.own) paintBG(ctx, W, H, look, P, t, o, A, still); ctx.restore();
+    if (!LY.own) { fx(ctx, W, H, o, look, P, t, A, D, u, true); overlay(ctx, W, H, look, o.overlay ?? Math.max(look.ov || 0, LY.ov || 0)); vig(ctx, W, H, fm.vig); if (FXA && FXA.mid) { ctx.save(); FXA.mid(ctx, W, H, t, u, th2, P, look); ctx.restore(); } }
     const a = still || A === "none" ? 1 : ease(c01((t - TL.start) / 1.4));
     ctx.save(); if (!LY.own && (look.photo || look.ov)) { ctx.shadowColor = "rgba(0,0,0,.4)"; ctx.shadowBlur = u * .014; } LY.draw(ctx, W, H, o, th2, P, look, a, still ? 3 : t); ctx.restore();
     if (o.note && !LY.own) { const R = textArea(W, H, u); }
     slideNo(ctx, W, u, o, th2); fx(ctx, W, H, o, look, P, t, A, D, u, false);
-    if (!still && A !== "none") frame(ctx, W, H, th2, ease(c01(t / 1.2))); else frame(ctx, W, H, th2, 1);
+    border(ctx, W, H, th2, !still && A !== "none" ? ease(c01(t / 1.2)) : 1, o);
     const fp = still || A === "none" ? 1 : ease(c01((t - 3.2) / 1)); if (fp > 0) brand(ctx, W, H, u, th2, o, fp, LY.own ? null : look);
     ctx.save(); ctx.globalAlpha = .9; ctx.textAlign = "center"; ctx.fillStyle = th2.sub; ctx.font = `${u * .0175}px ${SANS}`;
     const dx = LY === LAYOUTS.split && W >= H ? W * .27 : W / 2; ctx.fillText("Quoted from recap · Personal study site · Not an official Church site", dx, H - u * .068);
-    if (look.credit && (LY.own ? LY.light && LY !== LAYOUTS.margin : true) && LY !== LAYOUTS.lineart && LY !== LAYOUTS.margin) { ctx.font = `${u * .0145}px ${SANS}`; const c = look.credit; ctx.fillText(`Photo: ${String(c.author).slice(0, 48)} · ${c.license} · Wikimedia Commons`, dx, H - u * .018); }
-    ctx.restore();
+    if (look.credit && (LY.own ? LY.light && LY !== LAYOUTS.margin : true) && LY !== LAYOUTS.lineart && LY !== LAYOUTS.margin) { ctx.font = `${u * .0145}px ${SANS}`; ctx.fillText(creditLine(look.credit), dx, H - u * .018); }
+    ctx.restore(); grain(ctx, W, H, fm.grain);
+    if (FXA && FXA.post && !still) { ctx.save(); FXA.post(ctx, W, H, t, u, th2, P, look); ctx.restore(); }
   }
   function footer(ctx, W, H, G, th, o, p, look) {
     const u = G.u, dom = (window.CONF && CONF.domain) || "sixmonthsoflight.com"; ctx.save(); ctx.globalAlpha = p; if (look.photo || look.ov) { ctx.shadowColor = "rgba(0,0,0,.45)"; ctx.shadowBlur = u * .016; }
@@ -732,5 +785,6 @@
     ctx.fillStyle = th.sub; ctx.font = `italic 500 29px ${SERIF}`; wrap(ctx, o.bigIdea, W * .8).slice(0, 2).forEach((l, i) => ctx.fillText(l, x, y + 44 + i * 34));
     ctx.font = `14px ${SANS}`; ctx.fillStyle = th.sub; ctx.fillText("Personal study site · Not an official Church site · Quotes from recaps", x, H * .92);
   }
-  window.CardKit = { LOOKS, LAYOUTS, PALETTES, FONTS, SIZES, TL, ANIMS, drawCard, drawThumb, drawOG, prepare, IMG };
+  const H_ = { grad, glow, sky, SKY, vignette, ridges, aurora, stars, rgba, hex, rng, TAU, LP, raysAt, temple, oliveBranch, person, wrap, roundRect, paperBase, ease, easeIO, c01, SERIF, SANS };
+  window.CardKit = { LOOKS, LAYOUTS, PALETTES, FONTS, FONTF, SIZES, TL, ANIMS, FX, H: H_, drawCard, drawThumb, drawOG, prepare, IMG };
 })();

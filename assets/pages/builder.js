@@ -12,8 +12,21 @@ const st = {
   size: S[P.get("size")] ? P.get("size") : (isPhone ? "story" : "portrait"), ov: P.has("ov") ? Math.min(.85, Math.max(0, +P.get("ov") / 100)) : null,
   anim: K.ANIMS[P.get("anim")] ? P.get("anim") : P.get("anim") === "1" ? "fade" : "none", sticker: P.get("ig") === "1", note: "", tab: ["quote", "look", "size", "text", "share"].includes(P.get("tab")) ? P.get("tab") : (P.has("t") ? "look" : "quote"), src: P.get("src") === "promo" || P.has("promo") ? "promo" : P.get("ins") ? "ins" : "quote", filter: "", theme: THEMES3.get(P.get("theme")) ? P.get("theme") : "all",
 };
+// Advanced formatting: fx=size:1.1;ls:0.05;box:glass ... (whitelisted keys and values)
+const FMT_NUM = { size: [.6, 1.5], lh: [.8, 1.6], ls: [0, .25], vig: [0, 1], grain: [0, 1], blur: [0, 6], dx: [-.3, .3], dy: [-.3, .3] };
+const FMT_OPT = { weight: ["300", "400", "500", "600", "700", "800"], cs: ["upper", "lower", "title"], qm: ["curly", "none", "guillemet", "straight", "bar"], box: ["none", "glass", "solid", "band", "outline"], border: ["corners", "none", "thin", "double", "rounded", "ornate"] };
+const parseFmt = v => { const f = {}; String(v || "").split(";").forEach(kv => { const [k, x] = kv.split(":"); if (FMT_NUM[k]) { const n = +x; if (isFinite(n)) f[k] = Math.min(FMT_NUM[k][1], Math.max(FMT_NUM[k][0], n)); }
+  else if (FMT_OPT[k] && FMT_OPT[k].includes(x)) f[k] = x; else if ((k === "ink" || k === "acc") && /^[0-9a-f]{6}$/i.test(x)) f[k] = "#" + x.toLowerCase(); }); return f; };
+const encFmt = f => Object.entries(f).filter(([, v]) => v !== undefined && v !== "" && v !== null).map(([k, v]) => k + ":" + (typeof v === "number" ? +v.toFixed(3) : String(v).replace("#", ""))).join(";");
+st.fmt = parseFmt(P.get("fx"));
+const PRESETS = [
+  ["Classic", "classic", {}], ["Elegant", "playfair_i", { border: "double" }], ["Bold statement", "abril", { size: 1.08, box: "band", border: "none" }],
+  ["Modern clean", "montserrat", { weight: "600", ls: .02, border: "none", qm: "bar" }], ["Script", "greatvibes", { size: 1.1, border: "rounded" }],
+  ["Engraved", "cinzel", { cs: "upper", ls: .06, border: "ornate" }], ["Journal", "lora_i", { box: "solid", border: "none" }],
+  ["Frosted glass", "dmserif", { box: "glass", blur: 3, border: "none" }], ["Film", "garamond", { grain: .8, vig: .6 }], ["Soft & airy", "raleway", { weight: "300", lh: 1.2, ls: .03, border: "thin" }]
+];
 { const nq = (talkById(st.t).quotes || []).length; if (!(st.q >= 0 && st.q < nq && Number.isInteger(st.q))) st.q = 0; }
-const T3 = THEMES3, inTheme = (x, th = st.theme) => th === "all" || T3.tagsFor(x.t.id, x.i).includes(th);
+const T3 = THEMES3, inTheme = (x, th = st.theme) => th === "all" || T3.open(th) || T3.tagsFor(x.t.id, x.i).includes(th);
 const resolveLooks = th => { const out = []; (T3.looks[th] || []).forEach(k => { if (k.startsWith("photo:")) Object.entries(L).filter(([, l]) => l.photo && l.credit.group === k.slice(6)).forEach(([id]) => out.push(id)); else if (L[k]) out.push(k); }); return [...new Set(out)]; };
 if (!P.has("t") && !P.has("ins")) { const d = INSIGHTS.daily; st.t = d.t.id; st.q = d.i; }
 const seg = (id, opts, cur, label) => `<div class="seg" id="${id}" role="group" aria-label="${label}">${Object.entries(opts).map(([k, v]) => `<button type="button" data-k="${k}" aria-pressed="${k === cur}">${esc(v)}</button>`).join("")}</div>`;
@@ -39,7 +52,7 @@ document.getElementById("main").innerHTML = `
       <section class="st-pane" id="p-quote" role="tabpanel" aria-labelledby="tab-quote">
         ${seg("src", { quote: "Quotes", ins: "Insights", promo: "Share the site" }, st.src, "Card type")}
         <div id="srcQuote"><div class="b-label step-l"><span class="stepn">1</span> Choose a theme</div>
-          <div class="themegrid" id="qthemes" role="group" aria-label="Choose a theme">${T3.list.map(th => { const n = th.slug === "all" ? ALLQ.length : T3.count(th.slug); return `<button type="button" class="thm" data-th="${th.slug}" aria-pressed="${th.slug === st.theme}"><i aria-hidden="true">${th.icon}</i><b>${esc(th.name)}</b><small>${n} quote${n === 1 ? "" : "s"}</small></button>`; }).join("")}</div>
+          <div class="themegrid" id="qthemes" role="group" aria-label="Choose a theme">${T3.list.map(th => { const n = th.slug === "all" ? ALLQ.length : T3.count(th.slug); return `${th.slug === T3.list.find(x => x.style).slug ? `<div class="thm-sep">Latter-day Saint topics &amp; seasons</div>` : ""}<button type="button" class="thm" data-th="${th.slug}" aria-pressed="${th.slug === st.theme}"><i aria-hidden="true">${th.icon}</i><b>${esc(th.name)}</b><small>${th.style && !n ? "backgrounds · all quotes" : `${n} quote${n === 1 ? "" : "s"}`}</small></button>`; }).join("")}</div>
           <div class="b-label step-l"><span class="stepn">2</span> Pick a quote <span class="b-help" id="thmNote"></span></div><div class="q-tools"><input class="field" id="qsearch" type="search" placeholder="Search quotes, speakers, words…" aria-label="Search quotes"><button type="button" class="btn secondary small" id="shuffle">Shuffle</button></div>
           <p class="b-help">Verified quotes only · from recaps; confirm with official text</p>
           <div id="qlist" class="qlist"></div>
@@ -78,7 +91,30 @@ document.getElementById("main").innerHTML = `
         <p class="b-help">Phones open your share sheet with the image. Facebook, X, Pinterest and Threads open their own share pages with a link preview.</p>
       </section>
       <section class="st-pane" id="p-text" role="tabpanel" aria-labelledby="tab-text">
-        <div class="b-label">Font</div>${seg("font", K.FONTS, st.font, "Font")}
+        <div class="b-label">Quick styles <span class="b-help">a font and finish in one tap</span></div>
+        <div class="seg presets" id="presets" role="group" aria-label="Quick styles">${PRESETS.map(([n], i) => `<button type="button" data-i="${i}">${esc(n)}</button>`).join("")}</div>
+        <div class="b-label">Font</div>${seg("font", K.FONTS, st.font, "Font").replace('class="seg"', 'class="seg fonts"')}
+        <details class="adv" id="adv"><summary>Advanced formatting</summary>
+          <div class="adv-grid">
+            <label>Text size <input type="range" id="f-size" min="0.6" max="1.5" step="0.02"></label>
+            <label>Line spacing <input type="range" id="f-lh" min="0.8" max="1.6" step="0.02"></label>
+            <label>Letter spacing <input type="range" id="f-ls" min="0" max="0.25" step="0.005"></label>
+            <label>Weight <select id="f-weight"><option value="">Font default</option>${FMT_OPT.weight.map(w => `<option>${w}</option>`).join("")}</select></label>
+            <label>Letter case <select id="f-cs"><option value="">As written</option><option value="upper">UPPERCASE</option><option value="lower">lowercase</option><option value="title">Title Case</option></select></label>
+            <label>Quote marks <select id="f-qm"><option value="">“Curly”</option><option value="none">None</option><option value="guillemet">« Guillemets »</option><option value="straight">"Straight"</option><option value="bar">Side bar</option></select></label>
+            <label>Text box <select id="f-box"><option value="">None</option><option value="glass">Frosted glass</option><option value="solid">Solid card</option><option value="band">Full-width band</option><option value="outline">Outline</option></select></label>
+            <label>Border <select id="f-border"><option value="">Corners</option><option value="none">None</option><option value="thin">Thin line</option><option value="double">Double line</option><option value="rounded">Rounded</option><option value="ornate">Ornate</option></select></label>
+            <label>Background blur <input type="range" id="f-blur" min="0" max="6" step="0.25"></label>
+            <label>Vignette <input type="range" id="f-vig" min="0" max="1" step="0.05"></label>
+            <label>Film grain <input type="range" id="f-grain" min="0" max="1" step="0.05"></label>
+            <label>Move left / right <input type="range" id="f-dx" min="-0.3" max="0.3" step="0.005"></label>
+            <label>Move up / down <input type="range" id="f-dy" min="-0.3" max="0.3" step="0.005"></label>
+            <label class="adv-color">Text color <input type="color" id="f-ink"> <button type="button" class="linkish" data-auto="ink">Auto</button></label>
+            <label class="adv-color">Accent color <input type="color" id="f-acc"> <button type="button" class="linkish" data-auto="acc">Auto</button></label>
+          </div>
+          <label class="adv-drag"><input type="checkbox" id="f-drag"> Drag the text on the preview to move it</label>
+          <button type="button" class="btn secondary small" id="f-reset">Reset formatting</button>
+        </details>
         <div class="b-label">Alignment</div>${seg("align", { center: "Centered", left: "Left" }, st.align, "Alignment")}
         <label class="b-label" for="note">My takeaway <span class="b-help">optional · your own words, labeled as yours on the card</span></label>
         <input class="field" id="note" maxlength="90" placeholder="e.g. I'll look for lift every morning this week" autocomplete="off"><div class="count"><span id="ncnt">0</span>/90</div>
@@ -106,7 +142,7 @@ function renderSug() { const ids = resolveLooks(st.theme), th = T3.get(st.theme)
   $("lookSug").querySelectorAll("canvas[data-thumb]").forEach(c => K.drawThumb(c.getContext("2d"), c.width, c.height, c.dataset.thumb, st.pal));
   $("thmNote").textContent = st.theme === "all" ? "" : `· ${th.name}`; }
 function pickTheme(slug, auto) { st.theme = slug; $("qthemes").querySelectorAll(".thm").forEach(c => c.setAttribute("aria-pressed", c.dataset.th === slug)); renderSug();
-  if (slug !== "all" && (!auto || !P.has("look"))) { const ids = resolveLooks(slug); if (ids.length && !ids.includes(st.look)) { st.look = ids[0]; st.ov = null; }
+  if (slug !== "all" && (!auto || !P.has("look"))) { const ids = resolveLooks(slug); if (ids.length && (auto ? !ids.includes(st.look) : ids[0] !== st.look)) { st.look = ids[0]; st.ov = null; }
     const cur = ALLQ.find(x => x.t.id === st.t && x.i === st.q); if (!st.ins && (!cur || !inTheme(cur)) && (!auto || !P.has("t"))) { const f = ALLQ.find(x => inTheme(x)); if (f) { st.t = f.t.id; st.q = f.i; } } syncLooks(); }
   renderQuotes(); if (!auto) draw(true); }
 $("qthemes").addEventListener("click", e => { const b = e.target.closest(".thm"); if (b) pickTheme(b.dataset.th); });
@@ -125,6 +161,25 @@ function renderPromo() { $("promolist").innerHTML = PROMOS.list.map(p => `<butto
 $("promolist").addEventListener("click", e => { const b = e.target.closest(".qitem"); if (!b) return; st.promo = b.dataset.promo; st.hl = 0; renderPromo(); draw(true); });
 $("hlSel").addEventListener("change", e => { st.hl = +e.target.value; draw(); });
 let it; $("invite").addEventListener("input", e => { clearTimeout(it); it = setTimeout(() => { st.invite = cleanNote(e.target.value); draw(); }, 200); });
+// ---- advanced formatting ----
+const FDEF = { size: 1, lh: 1, ls: 0, blur: 0, vig: 0, grain: 0, dx: 0, dy: 0 };
+function syncFmt() { Object.keys(FDEF).forEach(k => { $("f-" + k).value = st.fmt[k] ?? FDEF[k]; }); Object.keys(FMT_OPT).forEach(k => { $("f-" + k).value = st.fmt[k] && st.fmt[k] !== (k === "qm" ? "curly" : k === "border" ? "corners" : "") ? st.fmt[k] : ""; });
+  ["ink", "acc"].forEach(k => { $("f-" + k).value = st.fmt[k] || (k === "ink" ? "#ffffff" : "#f1d394"); $("f-" + k).closest("label").classList.toggle("auto", !st.fmt[k]); });
+  document.querySelectorAll("#font button").forEach(x => x.setAttribute("aria-pressed", x.dataset.k === st.font)); }
+let fT; const fmtChanged = () => { clearTimeout(fT); fT = setTimeout(() => draw(), 60); };
+Object.keys(FDEF).forEach(k => $("f-" + k).addEventListener("input", e => { const v = +e.target.value; if (Math.abs(v - FDEF[k]) < 1e-6) delete st.fmt[k]; else st.fmt[k] = v; fmtChanged(); }));
+Object.keys(FMT_OPT).forEach(k => $("f-" + k).addEventListener("change", e => { if (e.target.value) st.fmt[k] = e.target.value; else delete st.fmt[k]; draw(); }));
+["ink", "acc"].forEach(k => $("f-" + k).addEventListener("input", e => { st.fmt[k] = e.target.value; e.target.closest("label").classList.remove("auto"); fmtChanged(); }));
+document.querySelectorAll("#adv [data-auto]").forEach(b => b.addEventListener("click", e => { e.preventDefault(); delete st.fmt[b.dataset.auto]; syncFmt(); draw(); }));
+$("f-reset").addEventListener("click", () => { st.fmt = {}; syncFmt(); draw(true); });
+$("presets").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; const [, font, f] = PRESETS[+b.dataset.i]; st.font = font; st.fmt = { ...f }; syncFmt(); draw(true); });
+{ let drag = null; const pt = e => { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height]; };
+  cv.addEventListener("pointerdown", e => { if (!$("f-drag").checked) return; drag = { p: pt(e), dx: st.fmt.dx || 0, dy: st.fmt.dy || 0 }; cv.setPointerCapture(e.pointerId); e.preventDefault(); });
+  cv.addEventListener("pointermove", e => { if (!drag) return; const [x, y] = pt(e), c = (v, a) => Math.max(-.3, Math.min(.3, v));
+    st.fmt.dx = +c(drag.dx + x - drag.p[0]).toFixed(3); st.fmt.dy = +c(drag.dy + y - drag.p[1]).toFixed(3); $("f-dx").value = st.fmt.dx; $("f-dy").value = st.fmt.dy; if (!raf || st.anim === "none" || reduce) render(Infinity); });
+  const end = () => { if (drag) { drag = null; draw(); } }; cv.addEventListener("pointerup", end); cv.addEventListener("pointercancel", end);
+  $("f-drag").addEventListener("change", e => cv.classList.toggle("dragging", e.target.checked)); }
+syncFmt();
 ["src", "font", "align", "anim", "size", "pal", "layout"].forEach(id => document.querySelectorAll(`#${id} button`).forEach(b => b.addEventListener("click", () => {
   document.querySelectorAll(`#${id} button`).forEach(x => x.setAttribute("aria-pressed", x === b));
   if (id === "src") { setSrc(b.dataset.k); return draw(true); }
@@ -152,7 +207,7 @@ const statFor = t => { const tags = {}; t.quotes.forEach((q, i) => T3.tagsFor(t.
   return { value: n, label: `of ${CONF.talks.length} talks so far had a quote about ${T3.get(top[0]).name}`, basis: "Counted from the verified quotes on this site, tagged by theme" }; };
 const promoObj = slide => PROMOS.build(PROMOS.get(st.promo), st.hl, st.invite, slide);
 const opts = () => { const x = ins(), t = talk();
-  const base = { look: st.look, palette: st.pal, font: st.font, align: st.align, overlay: st.ov ?? undefined, anim: st.anim === "none" ? "fade" : st.anim, sticker: st.sticker && st.size === "story", layout: st.layout };
+  const base = { look: st.look, palette: st.pal, font: st.font, align: st.align, overlay: st.ov ?? undefined, anim: st.anim === "none" ? "fade" : st.anim, sticker: st.sticker && st.size === "story", layout: st.layout, fmt: st.fmt };
   if (st.src === "promo") { const pr = PROMOS.get(st.promo), o = promoObj(pr.carousel ? 0 : null); return { ...base, kind: "insight", ins: o, eyebrow: o.eyebrow, url: o.url }; }
   if (x) return { ...base, kind: "insight", ins: x, eyebrow: x.eyebrow || (x.id === "daily" ? "SIX MONTHS OF LIGHT · DAILY" : "OCTOBER 2026 · CONFERENCE INSIGHT"), url: x.url || (x.id.startsWith("spot-") ? talkUrl(talkById(x.id.slice(5))) : CONF.site_url + "insights.html#" + x.id) };
   return { ...base, kind: "quote", quote: t.quotes[st.q], speaker: t.speaker, title: t.title, url: talkUrl(t) + "#q" + (st.q + 1), note: st.note, stat: st.layout === "stat" ? statFor(t) : null, daily: st.layout === "daily" ? dailyInfo() : null }; };
@@ -171,7 +226,7 @@ async function draw(changed) {
   $("hint").innerHTML = an ? (vt ? `${K.ANIMS[st.anim]}: a 10-second ${vt.includes("mp4") ? "MP4" : "WebM"} video that loops cleanly. It ends on the site name and a QR code that opens this quote. <b>Share</b> sends the still card; <b>Save video</b> records the animation.${reduce ? " The preview stays still because your device asks for reduced motion; tap Replay to watch once." : ""}` : "This browser can't record video; Save will download a still image.") : "Saves a still image. Choose an animation above for a video.";
   const x = ins(), t = talk();
   if (st.src === "promo") cv.setAttribute("aria-label", `Card preview: ${promoObj(null).title}. ${look.name}, ${S[st.size][2]}.`); else cv.setAttribute("aria-label", x ? `Card preview: ${x.title}. ${look.name}, ${S[st.size][2]}.` : `Card preview: “${t.quotes[st.q]}” by ${t.speaker}. ${look.name}, ${S[st.size][2]}.`);
-  const q = new URLSearchParams(x ? { ins: st.ins } : { t: st.t, q: st.q }); q.set("look", st.look); if (st.pal !== "gold") q.set("pal", st.pal); if (st.font !== "classic") q.set("font", st.font); if (st.align !== "center") q.set("align", "left"); q.set("size", st.size); if (st.ov != null) q.set("ov", Math.round(st.ov * 100)); if (st.anim !== "none") q.set("anim", st.anim); if (st.sticker && st.size === "story") q.set("ig", "1"); if (st.theme !== "all") q.set("theme", st.theme); if (st.layout !== "classic") q.set("layout", st.layout);
+  const q = new URLSearchParams(x ? { ins: st.ins } : { t: st.t, q: st.q }); q.set("look", st.look); if (st.pal !== "gold") q.set("pal", st.pal); if (st.font !== "classic") q.set("font", st.font); if (st.align !== "center") q.set("align", "left"); q.set("size", st.size); if (st.ov != null) q.set("ov", Math.round(st.ov * 100)); if (st.anim !== "none") q.set("anim", st.anim); if (st.sticker && st.size === "story") q.set("ig", "1"); if (st.theme !== "all") q.set("theme", st.theme); if (st.layout !== "classic") q.set("layout", st.layout); { const fx = encFmt(st.fmt); if (fx) q.set("fx", fx); }
   if (st.src === "promo") { q.delete("t"); q.delete("q"); q.set("promo", st.promo); if (st.hl) q.set("hl", st.hl); }
   $("layHelp").textContent = st.src === "quote" ? (st.layout !== "classic" && st.note ? "· your takeaway shows on the Classic layout" : "") : "· layouts apply to quote cards";
   $("carQh").textContent = `${talk().quotes.length + 2} slides: a cover, ${talk().quotes.length} quotes in your layout, and a closing slide.`;

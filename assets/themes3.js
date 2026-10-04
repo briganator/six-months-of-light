@@ -14,12 +14,26 @@ var T=[
  {slug:'youth',name:'Youth',icon:'☆\uFE0E'},
  {slug:'scripture-study',name:'Scripture Study',icon:'¶'},
  {slug:'holy-ghost',name:'Holy Ghost',icon:'≈'},
- {slug:'gratitude',name:'Gratitude',icon:'❀\uFE0E'}
+ {slug:'gratitude',name:'Gratitude',icon:'❀\uFE0E'},
+ {slug:'love',name:'Love',icon:'♥\uFE0E'},
+ {slug:'faith',name:'Faith',icon:'⚓\uFE0E'},
+ /* Style themes: backgrounds for Latter-day Saint topics. Quotes are tagged only where they truly fit; with none tagged, every quote stays available. */
+ {slug:'restoration',name:'Restoration',icon:'☀\uFE0E',style:1},
+ {slug:'book-of-mormon',name:'Book of Mormon',icon:'▤',style:1},
+ {slug:'sacrament',name:'Sacrament',icon:'✚\uFE0E',style:1},
+ {slug:'baptism',name:'Baptism',icon:'〰',style:1},
+ {slug:'priesthood',name:'Priesthood',icon:'⚷',style:1},
+ {slug:'relief-society',name:'Relief Society',icon:'✿\uFE0E',style:1},
+ {slug:'family-history',name:'Family History',icon:'⚘\uFE0E',style:1},
+ {slug:'pioneers',name:'Pioneers',icon:'⛰\uFE0E',style:1},
+ {slug:'second-coming',name:'Second Coming',icon:'✺',style:1},
+ {slug:'easter',name:'Easter',icon:'❁',style:1},
+ {slug:'christmas',name:'Christmas',icon:'✶',style:1}
 ];
 /* Looks that lead for each theme (first = default when the theme is chosen). photo:* = any photo in that group. */
 var LOOKS={
  'all':['sunrise','temple_dusk','mountains','watercolor'],
- 'jesus-christ':['tomb','sunrise','olive','photo-gethsemane','photo-van-gogh-olives','aurora','photo-gethsemane-tree'],
+ 'jesus-christ':['photo-art-consolator','tomb','sunrise','photo:art','olive','photo-gethsemane','photo-van-gogh-olives','aurora','photo-gethsemane-tree'],
  'temple':['temple_dusk','temple_dawn','temple_night','photo:temple'],
  'family':['family','hearth','nature','watercolor','morning'],
  'prayer':['candle','night','olive','minimal_dark','dove'],
@@ -31,7 +45,20 @@ var LOOKS={
  'youth':['path','aurora','mountains','night','sunrise'],
  'scripture-study':['book','candle','paper','hymn','stained'],
  'holy-ghost':['dove','candle','aurora','night','morning'],
- 'gratitude':['wheat','photo:nature','morning','watercolor','hymn','nature']
+ 'gratitude':['wheat','photo:nature','morning','watercolor','hymn','nature','autumn'],
+ 'love':['roses','blossoms','family','rosegold','sunsetclouds','watercolor'],
+ 'faith':['lighthouse','heaven','mountains','secondcoming','path'],
+ 'restoration':['restoration','grove','grove_dawn','heaven','sunrise'],
+ 'book-of-mormon':['plates','book','candle','parchment'],
+ 'sacrament':['sacrament','linen','candle','olive','minimal'],
+ 'baptism':['baptism','ocean','lake','dove','heaven'],
+ 'priesthood':['keys','temple_dusk','navy','heaven','mountains'],
+ 'relief-society':['roses','blossoms','botanical','watercolor','blush'],
+ 'family-history':['familytree','parchment','family','hearth','photo:temple'],
+ 'pioneers':['pioneer','wheat','desert','path','snowpines'],
+ 'second-coming':['secondcoming','heaven','sunrise','aurora','rainbow'],
+ 'easter':['tomb','lilies','sunrise','photo:art','olive'],
+ 'christmas':['snowpines','night','candle','milkyway','photo:art']
 };
 var Q={
  'sat-am-1-gong#0':['temple','gratitude'],'sat-am-1-gong#1':['temple','covenants'],'sat-am-1-gong#2':['temple'],
@@ -52,8 +79,14 @@ var Q={
  'sat-pm-9-eyring#0':['jesus-christ','hope-peace'],'sat-pm-9-eyring#1':['gratitude'],'sat-pm-9-eyring#2':['holy-ghost'],
  'sat-pm-10-rasband#0':['jesus-christ','family','hope-peace'],'sat-pm-10-rasband#1':['ministering','family'],'sat-pm-10-rasband#2':['jesus-christ','family']
 };
+/* Added tags (hand-checked against the quote text). */
+[['sat-am-2-runia#0','love'],['sat-am-2-runia#1','love'],['sat-pm-2-farnes#1','love'],['sat-pm-6-fale#0','love'],['sat-pm-6-fale#2','love'],['sat-pm-10-rasband#1','love'],
+ ['sat-pm-1-renlund#1','faith'],['sat-pm-4-giuffra#2','faith'],['sat-pm-7-kearon#0','faith'],
+ ['sat-pm-5-morgan#0','book-of-mormon'],['sat-pm-3-chigbundu#2','sacrament']].forEach(function(a){(Q[a[0]]=Q[a[0]]||[]);if(Q[a[0]].indexOf(a[1])<0)Q[a[0]].push(a[1]);});
 function byslug(s){for(var i=0;i<T.length;i++)if(T[i].slug===s)return T[i];return null;}
 window.THEMES3={list:T,looks:LOOKS,quotes:Q,get:byslug,
  tagsFor:function(tid,qi){return Q[tid+'#'+qi]||[];},
- count:function(s){if(s==='all')return null;var n=0;for(var k in Q)if(Q[k].indexOf(s)>=0)n++;return n;}};
+ count:function(s){if(s==='all')return null;var n=0;for(var k in Q)if(Q[k].indexOf(s)>=0)n++;return n;},
+ /* a style theme with no tagged quotes keeps every quote available */
+ open:function(s){return s==='all'||(byslug(s)||{}).style&&this.count(s)===0;}};
 })();
