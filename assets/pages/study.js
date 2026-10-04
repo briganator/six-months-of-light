@@ -12,7 +12,7 @@ main.innerHTML = `
   <div class="section-label">Study</div>
   <h1 class="lib-h1">Study library</h1>
   <p class="lib-sub">${cov.talks + CONF.talks.length} talks from ${cov.conferences + 1} general conferences, April 2021 to October 2026. Find a talk by conference, topic, speaker or a word. New here? Try the <a href="plan.html">reading plan to April</a>.</p>
-  <div class="lib-views seg" role="tablist" aria-label="Browse by">${[["talks", "Talks"], ["topics", "Topics"], ["speakers", "Speakers"]].map(([k, v]) => `<button type="button" role="tab" data-v="${k}" aria-selected="${st.view === k}" aria-pressed="${st.view === k}">${v}</button>`).join("")}</div>
+  <div class="lib-views seg" role="group" aria-label="Browse by">${[["talks", "Talks"], ["topics", "Topics"], ["speakers", "Speakers"]].map(([k, v]) => `<button type="button" data-v="${k}" aria-pressed="${st.view === k}">${v}</button>`).join("")}</div>
   <div class="lib-bar" id="bar">
     <label class="lib-search"><span class="sr-only">Search talks</span><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" d="M11 4a7 7 0 1 1 0 14 7 7 0 0 1 0-14zM16 16l5 5"/></svg>
       <input id="q" type="search" placeholder="Search titles, speakers, scriptures…" value="${esc(st.q)}" autocomplete="off" enterkeyhint="search"></label>
@@ -38,7 +38,7 @@ const talkRow = t => { const cf = LB.confOf(t.c), mins = LB.minutes(t), ext = !t
     <span class="lt-meta">${esc(t.s)} · ${esc(cf.label)}${LB.sessName(t) ? " · " + esc(LB.sessName(t).replace(/ Session$/, "")) : ""}${mins ? ` · ${mins} min read` : t.recap ? " · recap" : ""}</span>
     ${t.tg.length ? `<span class="lt-tags">${t.tg.map(k => `<span class="pill">${esc(LB.themeName(k))}</span>`).join("")}</span>` : ""}</a></li>`; };
 function render() { sync(); chips();
-  document.querySelectorAll(".lib-views button").forEach(b => { const on = b.dataset.v === st.view; b.setAttribute("aria-selected", on); b.setAttribute("aria-pressed", on); });
+  document.querySelectorAll(".lib-views button").forEach(b => { b.setAttribute("aria-pressed", b.dataset.v === st.view); });
   const list = LB.filter({ c: st.c, topic: st.topic, sp: st.sp, q: st.q });
   if (st.view === "talks") {
     $("out").innerHTML = `<p class="lib-count" role="status">${list.length} talk${list.length === 1 ? "" : "s"}${st.c === "2026-10" && !st.topic && !st.sp && !st.q ? " in October 2026 · choose <b>All conferences</b> to search all " + LB.talks.length : ""}</p>

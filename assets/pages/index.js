@@ -12,6 +12,11 @@ let html = `<section class="today" aria-labelledby="today-h">
 <div class="steps"><a href="builder.html" class="step"><b>1</b><span>Pick a quote</span></a><a href="builder.html?tab=look" class="step"><b>2</b><span>Style it: temples, light, stained glass…</span></a><a href="builder.html" class="step"><b>3</b><span>Share to Stories, text or feed</span></a></div>
 <a class="ins-banner" href="insights.html#cards"><span class="ic">✨</span><span><b>Shareable insights</b><span>The conference in 10 words, Christ at the center, top themes and more</span></span><span aria-hidden="true">→</span></a>`;
 html += subnavHTML([["totw", "This week"], ["s-sat-am", "Sat morning"], ["s-sat-pm", "Sat afternoon"], ["s-sun-am", "Sun morning"], ["s-sun-pm", "Sun afternoon"]], "Sections");
+html += `<div class="section-label">Keep studying</div><div class="study-strip">
+  <a href="plan.html"><b>Reading plan</b><span>One talk at a time until April</span></a>
+  <a href="study.html"><b>Study library</b><span>Every talk since April 2021, by topic or speaker</span></a>
+  <a href="insights.html#zoom"><b>Zoom insights</b><span>From all conferences down to one talk</span></a>
+  <a href="lessons.html"><b>Family night</b><span>A ready lesson you can present</span></a></div>`;
 html += `<div class="section-label" id="totw">Talk of the week</div><h2 class="sr-only">Talk of the Week</h2>
 <article class="card totw">
   <div class="label">This week's focus</div>

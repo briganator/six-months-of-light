@@ -16,7 +16,7 @@
     const S = LB.stats(ts), lab = scopeLabel(LB, z, ts), eyebrow = (z.k === "all" ? "GENERAL CONFERENCE 2021–2026" : (LB.confOf(z.c).label + " · general conference").toUpperCase()).slice(0, 60);
     const url = SITE + "insights.html?z=" + encodeURIComponent(zq(z)) + "#zoom", recapOnly = S.recap === S.n, part = S.recap && !recapOnly;
     const src = recapOnly ? "From this site's recaps (official text not yet posted)" : part ? "Official talks; October 2026 from recaps" : "From official talk pages";
-    const W = [], add = (id, kicker, title, html, body, share, note) => W.push({ id, kicker, title, html, note, card: body && { title, kicker: kicker + " · " + lab.slice(0, 60), eyebrow, body, share: share + " #GeneralConference", url } });
+    const W = [], add = (id, kicker, title, html, body, share, note) => W.push({ id, kicker, title, html, note, card: body && { title, kicker: (kicker + (z.k === "s" ? " · " + (LB.confOf(z.c).sessions[z.se] || "").replace(/ Session$/, "") : z.k === "t" && ts[0] ? " · " + ts[0].s.replace(/^(President|Elder|Sister|Bishop)\s+/, "") : "")).slice(0, 44), eyebrow, body, share: share + " #GeneralConference", url, basis: recapOnly ? "Based on recaps" : part ? "Official talk pages + Oct 2026 recaps" : "Counted from official talk pages" } });
     const oneTalk = z.k === "t";
     add("size", "At a glance", oneTalk ? "This talk in numbers" : "The numbers",
       `<div class="z-big"><b>${S.n}</b><span>talk${S.n === 1 ? "" : "s"}</span></div>${S.words ? `<div class="z-big"><b>${S.readMin.toLocaleString()}</b><span>min to read</span></div><div class="z-big"><b>${S.spokenMin.toLocaleString()}</b><span>min spoken (est.)</span></div>` : ""}<div class="z-big"><b>${S.refs.reduce((a, r) => a + r[1], 0) ? ts.reduce((a, t) => a + t.rf.length, 0) : 0}</b><span>scripture refs</span></div>`,
@@ -88,9 +88,9 @@
       const wa = Object.fromEntries(A.works), wb = Object.fromEntries(B.works), works = [...new Set([...A.works, ...B.works].map(x => x[0]))];
       const ta = new Set(A.topWords.slice(0, 20).map(x => x[0])), tb = new Set(B.topWords.slice(0, 20).map(x => x[0]));
       el.querySelector("#cout").innerHTML = `<div class="cmp-head"><span><i class="ka"></i>${esc(la)}</span><span><i class="kb"></i>${esc(lb)}</span></div>
-        <div class="tp-two"><section class="z-card"><h3>Size</h3><table class="cmp"><tr><th></th><th>${esc(la)}</th><th>${esc(lb)}</th></tr>
-          <tr><td>Talks</td><td>${A.n}</td><td>${B.n}</td></tr><tr><td>Minutes to read</td><td>${A.readMin}</td><td>${B.readMin}</td></tr><tr><td>Scripture refs</td><td>${A.works.reduce((s, x) => s + x[1], 0)}</td><td>${B.works.reduce((s, x) => s + x[1], 0)}</td></tr>
-          <tr><td>Invitations</td><td>${A.inv}</td><td>${B.inv}</td></tr><tr><td>Promises</td><td>${A.pro}</td><td>${B.pro}</td></tr></table></section>
+        <div class="tp-two"><section class="z-card"><h3>Size</h3><table class="cmp"><tr><th scope="col">Measure</th><th scope="col">${esc(la)}</th><th scope="col">${esc(lb)}</th></tr>
+          <tr><th scope="row">Talks</th><td>${A.n}</td><td>${B.n}</td></tr><tr><th scope="row">Minutes to read</th><td>${A.readMin}</td><td>${B.readMin}</td></tr><tr><th scope="row">Scripture refs</th><td>${A.works.reduce((s, x) => s + x[1], 0)}</td><td>${B.works.reduce((s, x) => s + x[1], 0)}</td></tr>
+          <tr><th scope="row">Invitations</th><td>${A.inv}</td><td>${B.inv}</td></tr><tr><th scope="row">Promises</th><td>${A.pro}</td><td>${B.pro}</td></tr></table></section>
         <section class="z-card"><h3>Topics</h3>${keys.map(k => `<div class="cmp-row"><span>${esc(LB.themeName(k))}</span><div class="cmp-bars"><i class="ka" style="width:${da[k] / m * 100}%"></i><i class="kb" style="width:${db[k] / m * 100}%"></i></div></div>`).join("")}<p class="z-note">Topic words per 1,000 words.</p></section>
         <section class="z-card"><h3>Scriptures by book</h3>${works.map(w => `<div class="cmp-row"><span>${esc(w)}</span><div class="cmp-bars"><i class="ka" style="width:${(wa[w] || 0) / Math.max(...Object.values(wa), ...Object.values(wb)) * 100}%"></i><i class="kb" style="width:${(wb[w] || 0) / Math.max(...Object.values(wa), ...Object.values(wb)) * 100}%"></i></div></div>`).join("")}</section>
         <section class="z-card"><h3>Top words</h3><p><b>Only in ${esc(la)}'s top 20:</b> ${[...ta].filter(w => !tb.has(w)).map(esc).join(", ") || "none"}</p><p><b>Only in ${esc(lb)}'s top 20:</b> ${[...tb].filter(w => !ta.has(w)).map(esc).join(", ") || "none"}</p><p><b>Both:</b> ${[...ta].filter(w => tb.has(w)).slice(0, 12).map(esc).join(", ")}</p></section></div>`; };
@@ -107,7 +107,7 @@
       <section class="z-card"><h3>Coverage</h3><p>Official session music listings for ${confs.length} conferences (${esc(short(LB.confOf(confs[0]).label))} to ${esc(short(LB.confOf(confs[confs.length - 1]).label))}), ${all.length} sessions.</p>
         <p><span class="pill pending">October 2026</span> Song lists will be added when the official listings are posted.</p></section></div>`;
     el.querySelector("#mcard").addEventListener("click", () => location.href = LB.zcard({ title: "Songs sung most at general conference", kicker: "Music · " + confs.length + " conferences", eyebrow: "GENERAL CONFERENCE MUSIC 2021–2026",
-      body: { type: "bars", items: top.slice(0, 5).map(([label, value]) => ({ label, value })) }, share: `The songs sung most often at general conference since ${short(LB.confOf(confs[0]).label)}. #GeneralConference`, url: SITE + "insights.html#music" }));
+      body: { type: "bars", items: top.slice(0, 5).map(([label, value]) => ({ label, value })) }, basis: "From official session music listings", share: `The songs sung most often at general conference since ${short(LB.confOf(confs[0]).label)}. #GeneralConference`, url: SITE + "insights.html#music" }));
   }
   window.Zoom = { render, compare, music, widgets, scopeTalks, parse };
 })();
