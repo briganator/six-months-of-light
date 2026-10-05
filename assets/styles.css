@@ -1102,7 +1102,23 @@ body.post .hero-sky .rays{opacity:.75}
 .sb-keep{margin-left:auto;display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 13px;border-radius:999px;color:#f3d79c;text-decoration:none;font:500 13.5px var(--sans);border:1px solid rgba(243,215,156,.45);background:rgba(243,215,156,.08);transition:background .3s var(--ease),border-color .3s}
 .sb-keep:hover{background:rgba(243,215,156,.16);border-color:rgba(243,215,156,.7)}
 .sitebar .topbar .sb-keep + .sb-cta{margin-left:0}
-.sb-keep .ks{display:none}@media (max-width:899px){.sb-keep{padding:0 12px 0 10px;font-size:13px}.sb-keep .kl{display:none}.sb-keep .ks{display:inline}}@media (max-width:899px){.sb-keep.sb-keep-c{width:36px;padding:0;justify-content:center}.sb-keep.sb-keep-c .ks{display:none}}@media (max-width:340px){.sb-keep{width:36px;padding:0;justify-content:center}.sb-keep .ks{display:none}}
+.sb-keep .ks{display:none}.sb-keep,.sb-cta{white-space:nowrap;flex:none}.sb-cta .sb-ic{display:none}
+/* phones/tablets: header actions collapse to round icons so the bar always fits on one line */
+@media (max-width:899px){
+  .sitebar .topbar{flex-wrap:nowrap;min-width:0;gap:8px}
+  .sitebar .brand{min-width:0;flex:0 1 auto;overflow:hidden}
+  .sitebar .sb-keep{margin-left:auto}
+  .sb-keep,.sitebar .sb-cta{width:38px;height:38px;min-height:38px;padding:0!important;justify-content:center;border-radius:999px}
+  .sb-keep .kl,.sb-keep .ks,.sitebar .sb-cta .sb-lbl{display:none}
+  .sitebar .sb-cta .sb-ic{display:block}
+  .sitebar .sb-cta{display:inline-flex;align-items:center}
+  body.home .sitebar .sb-cta,body.no-tabs .sitebar .sb-cta{display:none}
+}
+/* home phone header has room: keep the labelled pill */
+@media (min-width:360px) and (max-width:899px){
+  body.home .sb-keep{width:auto;padding:0 12px 0 10px!important;font-size:13px}
+  body.home .sb-keep .ks{display:inline}
+}
 .post-actions .ghost-link{background:none;border:0;box-shadow:none;color:rgba(255,255,255,.82);text-decoration:underline;text-underline-offset:4px;text-decoration-color:rgba(243,215,156,.5);min-height:40px;font-size:15px}
 /* post-conference hero button */
 .btn-keep{display:inline-flex;align-items:center;gap:8px}.btn-keep .keep-ic{color:#f3d79c}
