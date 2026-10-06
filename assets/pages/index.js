@@ -7,7 +7,7 @@ let html = `<section class="today" aria-labelledby="today-h">
   <blockquote>“${esc(D.q)}”</blockquote>
   <p class="today-by">${esc(D.t.speaker)} · <a href="talks/${esc(D.t.id)}.html">${esc(D.t.title)}</a></p>
   <div class="today-actions"><a class="btn gold big" href="builder.html?t=${esc(D.t.id)}&q=${D.i}">Share this quote</a></div>
-  <p class="today-note">Quoted from recap; confirm with official text.</p>
+  <p class="today-note">${OFFICIAL_TEXT() ? "Quoted from the official talk text." : "Quoted from recap; confirm with official text."}</p>
 </section>
 `;
 const LN = LIVE.now(), NX = LIVE.next();

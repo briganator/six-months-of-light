@@ -36,9 +36,9 @@ function norm() {
   if (conf === "2026-10") { const t = talkById(tid); if (!t) return null;
     const tags = window.THEMES3 ? [...new Set(t.quotes.flatMap((_, i) => THEMES3.tagsFor(t.id, i)))].map(k => THEMES3.get(k)?.name).filter(Boolean) : [];
     return { title: t.title, speaker: t.speaker, calling: t.calling, conf: "October 2026", official: t.official_url, session: officialUrl(t), local: `talks/${t.id}.html`,
-      overview: t.summary, overviewSrc: "Summary written from news recaps of the talk; not the official text.", big: t.big_idea, ponder: t.ponder,
-      quotes: t.quotes, quoteSrc: "Quoted in news recaps; confirm the wording with the official text when it's posted.",
-      refs: t.scriptures, refSrc: "As reported in recaps.", invitation: t.invitation, invSrc: "", topics: tags };
+      overview: t.summary, overviewSrc: t.official_url ? "Summary written for this site; read the official text for the full message." : "Summary written from news recaps of the talk; not the official text.", big: t.big_idea, ponder: t.ponder,
+      quotes: t.quotes, quoteSrc: t.official_url ? "Quoted from the official talk text." : "Quoted in news recaps; confirm the wording with the official text when it's posted.",
+      refs: t.scriptures, refSrc: t.official_url ? "From the talk's footnotes and this site's notes." : "As reported in recaps.", invitation: t.invitation, invSrc: "", topics: tags };
   }
   const t = LIB_OK() && Library.talks.find(x => x.c === conf && x.id === tid); if (!t) return null;
   const topics = (t.tg.length ? t.tg : Object.entries(t.d || {}).sort((a, b) => b[1] - a[1]).slice(0, 2).map(x => x[0])).map(Library.themeName);
@@ -101,7 +101,7 @@ function gen() {
   if ($("ph")) $("ph").onclick = () => { document.body.classList.add("print-handout"); print(); setTimeout(() => document.body.classList.remove("print-handout"), 500); };
   $("present").onclick = () => present([
     [m.present, n.title, n.speaker], ["Let's ponder", n.ponder, ""], ["The big idea", n.big, ""],
-    ...(quotes.length ? quotes.map(q => ["Read aloud", "“" + q + "”", n.speaker + (conf === "2026-10" ? " (from the recap)" : "")]) : [["Key statement", n.keyStatement, n.speaker]]),
+    ...(quotes.length ? quotes.map(q => ["Read aloud", "“" + q + "”", n.speaker + (conf === "2026-10" && !OFFICIAL_TEXT() ? " (from the recap)" : "")]) : [["Key statement", n.keyStatement, n.speaker]]),
     ...(refs.length ? [["Scripture", refs.map(r => ScripRef.first(r) || r).slice(0, 3).join(" · "), "Read it together from your scriptures."]] : []),
     ...qs.slice(1).map((x, i) => [`Discuss · ${i + 1}`, x, ""]), [mode === "eqrs" ? "Counsel together" : "Activity", m.act, ""], ["This week", n.invitation, m.close]]);
 }
@@ -127,7 +127,7 @@ document.querySelectorAll("#aud button").forEach(b => b.addEventListener("click"
 if (conf === "2026-10") { talkOptions(); gen(); } else gen();
 // Every official conference in the study library (loaded after first paint)
 loadLib().then(() => {
-  if (!conf) { const t = Library.talks.find(x => x.id === tid && !x.recap); conf = t ? t.c : "2026-10"; if (!t) tid = CONF.talks[0].id; }
+  if (!conf) { const t = Library.talks.find(x => x.id === tid && !x.local); conf = t ? t.c : "2026-10"; if (!t) tid = CONF.talks[0].id; }
   $("lc").innerHTML = Library.confs.map(c => `<option value="${c.c}" ${c.c === conf ? "selected" : ""}>${esc(c.label)}${c.recap ? " (recaps)" : ""}</option>`).join("");
   talkOptions(); gen();
 }).catch(() => {});

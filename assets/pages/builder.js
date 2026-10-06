@@ -58,7 +58,7 @@ document.getElementById("main").innerHTML = `
           <div class="qs-top"><input class="field qs-find" id="qsearch" type="search" placeholder="Search quotes, talks or speakers" aria-label="Search quotes, talks or speakers" enterkeyhint="search" autocomplete="off">
             ${seg("qscope", { conf: "This conference", all: "All conferences" }, "conf", "Search in")}</div>
           <div class="qs-chips" id="qthemes" role="group" aria-label="Theme">${T3.list.map(th => `<button type="button" class="thm thm-chip" data-th="${th.slug}" aria-pressed="${th.slug === st.theme}"><i aria-hidden="true">${th.icon}</i>${esc(th.slug === "all" ? "All themes" : th.name)}</button>`).join("")}</div>
-          <p class="b-help qs-note"><span id="thmNote"></span><span class="qs-ver"> Verified quotes only (from recaps; confirm with official text).</span></p>
+          <p class="b-help qs-note"><span id="thmNote"></span><span class="qs-ver"> Verified quotes only (${OFFICIAL_TEXT() ? "from the official talk text" : "from recaps; confirm with official text"}).</span></p>
           <div id="qbrowse"></div><div id="qresults" hidden></div>
           <button type="button" class="btn secondary small car-btn" id="carQ">Save this talk as a carousel</button><p class="b-help" id="carQh"></p></div>
         <div id="srcPromo" hidden><p class="b-help">Invite friends to Six Months of Light. Each card links to the site with a QR code.</p>
@@ -165,7 +165,7 @@ function renderQuotes() {
   const qs = ALLQ.filter(x => inTheme(x) && has(x.q + " " + x.t.speaker + " " + x.t.title)).slice(0, 40);
   let talks = CONF.talks.filter(t => has(t.title + " " + t.speaker)).map(t => ({ c: "2026-10", id: t.id, t: t.title, s: t.speaker, n: t.quotes.length, recap: 1 }));
   let more = "";
-  if (st.scope === "all") { if (window.Library) talks = talks.concat(Library.talks.filter(t => !t.recap && has(t.t + " " + t.s + " " + t.r + " " + (t.k || "") + " " + (t.tw || []).join(" ") + " " + libLabel(t))).slice(0, 60).map(t => ({ c: t.c, id: t.id, t: t.t, s: t.s, n: 0 })));
+  if (st.scope === "all") { if (window.Library) talks = talks.concat(Library.talks.filter(t => !t.local && has(t.t + " " + t.s + " " + t.r + " " + (t.k || "") + " " + (t.tw || []).join(" ") + " " + libLabel(t))).slice(0, 60).map(t => ({ c: t.c, id: t.id, t: t.t, s: t.s, n: 0 })));
     else { more = `<p class="b-help">Loading all conferences…</p>`; loadLib().then(() => renderQuotes()).catch(() => {}); } }
   const tRow = t => `<button type="button" class="qs-talk" data-ct="${t.c}|${esc(t.id)}"><b>${esc(t.t)}</b><span>${esc(t.s)} · ${t.recap ? "October 2026" : esc(window.Library ? libLabel(t) : t.c)} · ${t.recap ? `${t.n} verified quote${t.n === 1 ? "" : "s"}` : "official summary"}</span></button>`;
   $("qresults").innerHTML = `<h3 class="qs-h">Quotes <small>${qs.length}${qs.length === 40 ? "+" : ""}</small></h3>${qs.length ? `<div class="qlistv" role="list">${qs.map(qcard).join("")}</div>` : `<p class="empty">No verified quotes match${st.theme !== "all" ? " in this theme" : ""}.</p>`}
@@ -366,7 +366,7 @@ const pinMedia = () => { const x = ins(), t = talk(); if (st.src === "promo") re
   if (x) return CONF.site_url + (SHARE_I.includes(x.id) ? "assets/og/i/" + x.id + ".jpg" : "assets/og/site.jpg"); return CONF.site_url + "assets/og/pin/" + t.id + "-" + (st.q + 1) + ".jpg"; };
 const baseText = () => { const x = ins(), t = talk(); if (st.src === "promo") return promoObj(null).share; if (x) return x.share;
   return `“${t.quotes[st.q]}” — ${t.speaker}, “${t.title}” (October 2026 General Conference)`; };
-const defaultCaption = () => `${baseText()}\n\n${st.src === "promo" ? "Take a look" : ins() ? "See more" : "Read the recap and make your own card"}: ${shareUrl()}\n#GeneralConference`;
+const defaultCaption = () => `${baseText()}\n\n${st.src === "promo" ? "Take a look" : ins() ? "See more" : "Read the talk and make your own card"}: ${shareUrl()}\n#GeneralConference`;
 const caption = () => { const c = $("caption").value.trim(); return c.includes(shareUrl()) ? c : `${c}\n${shareUrl()}`; };
 const shareInfo = () => ({ url: shareUrl(), text: caption().replace(shareUrl(), "").replace(/\n{3,}/g, "\n\n").trim() });
 const toast = msg => { window.keepAfterShare?.(msg); $("readyTxt").innerHTML = msg; clearTimeout(readyT); readyT = setTimeout(() => $("readyTxt").innerHTML = "Your card is ready. Tap <b>Share</b>.", 4000); };
@@ -474,7 +474,7 @@ $("igBtn").addEventListener("click", () => { const tip = $("igTip"), open = tip.
 // keep the tab bar pinned just under the sticky preview on phones
 const setPrevH = () => document.documentElement.style.setProperty("--prevH", $("stPrev").offsetHeight + "px");
 new ResizeObserver(setPrevH).observe($("stPrev"));
-if (P.get("lt") && /^\d{4}-\d{2}\/[\w-]{1,80}$/.test(P.get("lt"))) loadLib().then(LB => { const [c, id] = P.get("lt").split("/"), T = LB.talks.find(x => x.c === c && x.id === id && !x.recap); if (!T) return;
+if (P.get("lt") && /^\d{4}-\d{2}\/[\w-]{1,80}$/.test(P.get("lt"))) loadLib().then(LB => { const [c, id] = P.get("lt").split("/"), T = LB.talks.find(x => x.c === c && x.id === id && !x.local); if (!T) return;
   st.libT = { c, id, t: T.t, s: T.s, r: T.r }; st.libNote = cleanNote(P.get("ln") || ""); st.scope = "all"; $("qscope").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.k === "all")); qview = { c, id }; renderQuotes(); draw(true); }).catch(() => {});
 setSrc(st.src); setTab(st.src === "promo" && !P.has("tab") ? "quote" : st.tab); pickTheme(st.theme, true);
 Promise.all(['500 40px "Cormorant Garamond"', 'italic 500 40px "Cormorant Garamond"', '600 20px Inter', '400 20px Inter'].map(f => document.fonts.load(f))).then(() => draw()).catch(() => draw());

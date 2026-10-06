@@ -18,4 +18,4 @@ document.getElementById("main").innerHTML = `
   <li>QR code generator (qrcode-generator by Kazuhiko Arase): MIT License.</li>
   <li>Logo, temple-silhouette illustrations and all card backgrounds: original to Six Months of Light.</li></ul>
   <h2>Words</h2>
-  <p>Quotes and summaries come from Church News and Church Newsroom recaps of the October 2026 General Conference. Confirm them with the official text on <a href="${esc(CONF.conference_url)}" rel="noopener">ChurchofJesusChrist.org</a>. Full talk text is not reproduced.</p>`;
+  <p>${OFFICIAL_TEXT() ? "Quotes are short excerpts checked against the official October 2026 General Conference talk text on" : "Quotes and summaries come from Church News and Church Newsroom recaps of the October 2026 General Conference. Confirm them with the official text on"} <a href="${esc(CONF.conference_url)}" rel="noopener">ChurchofJesusChrist.org</a>.${OFFICIAL_TEXT() ? " Summaries were first written from Church News and Newsroom recaps." : ""} Full talk text is not reproduced.</p>`;

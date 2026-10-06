@@ -7,7 +7,7 @@ window.CONF = {
  "domain": "sixmonthsoflight.com",
  "domain_live": true,
  "subtitle": "196th Semiannual General Conference · October 3–4, 2026",
- "updated": "Sunday, October 4, 2026",
+ "updated": "Monday, October 5, 2026",
  "conference_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10?lang=eng",
  "talk_of_the_week": {
   "talk_id": "sat-pm-7-kearon",
@@ -61,15 +61,19 @@ window.CONF = {
    "calling": "Quorum of the Twelve Apostles",
    "title": "Come to the Lord in His Holy House",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/03/elder-gerrit-w-gong-october-2026-general-conference-come-to-the-lord-holy-house-temple/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/12gong?lang=eng",
    "summary": "In a world of commotion and contention, the Lord invites us to a place of spiritual safety, harmony and holiness — His holy house. Agency, faith, repentance and Christ's Atonement make change and forgiveness possible, and temple service softens hearts on both sides of the veil. Everything in every temple testifies of Christ. Look for the miracles and build a personal temple culture.",
    "scriptures": [
-    "Temple inscription “Holiness to the Lord, the House of the Lord” (no verse reported in recaps)"
+    "Moses 1:39",
+    "Job 38:7",
+    "Doctrine and Covenants 76:39–43",
+    "Articles of Faith 1:10",
+    "Alma 34:33"
    ],
    "quotes": [
     "While we are grateful our temples and everything in them are physically beautiful, let us celebrate and treasure even more the spiritual blessings temples bring.",
     "Covenants are not big or small. Please let us never speak of a temple as big or small, elaborate or plain.",
-    "Dear brothers and sisters, come worship and rejoice with the Lord in the house of the Lord, in temple doctrine and in your personal temple culture."
+    "Dear brothers and sisters, come worship and rejoice with the Lord in the house of the Lord, in temple doctrine and in your own personal temple culture."
    ],
    "invitation": "Come worship and rejoice in the house of the Lord; look for the miracles.",
    "ponder": "What does my “personal temple culture” look like right now — and our family's?",
@@ -85,15 +89,18 @@ window.CONF = {
    "calling": "First Counselor, Young Women General Presidency",
    "title": "The Sculpting of Our Souls",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/03/sister-tamara-runia-october-2026-general-conference-sculpting-souls/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/13runia?lang=eng",
    "summary": "Tempering, refining experiences are part of necessary mortal growth — “all these things shall give thee experience.” The gospel isn't an umbrella that keeps the rain off; it's the solid rock we stand on during the storm. A godlike life is carved from the very things that make it hard, and God waits for our invitation before He really goes to work. She shared the sudden death of her son, a young father.",
    "scriptures": [
     "Doctrine and Covenants 122:7",
-    "Helaman 5:12"
+    "Helaman 5:12",
+    "Galatians 3:27",
+    "1 Nephi 11:16, 17",
+    "1 John 3:2"
    ],
    "quotes": [
-    "God's love has moved me from questions that begin with ‘why’ to reflections that begin, ‘I know that God loves me, so what is supposed to be happening here?’",
-    "Christ's work in your life and His love for you are bigger than your present story. And He can fix what feels badly broken.",
+    "God’s love has moved me from questions that begin with ‘why’ to reflections that begin, ‘I know that God loves me, so what is supposed to be happening here?’",
+    "Christ’s work in your life and His love for you are bigger than your present story. And He can fix what feels badly broken.",
     "God is shaping us into something only He knows we can become."
    ],
    "invitation": "Invite God to do His sculpting work. He can fix what feels badly broken.",
@@ -110,16 +117,19 @@ window.CONF = {
    "calling": "Quorum of the Twelve Apostles",
    "title": "The Gift of Testimony",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/03/elder-gerald-causse-october-2026-general-conference-gift-of-testimony/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/14causse?lang=eng",
    "summary": "Apostles are special witnesses of Christ, but the privilege of bearing witness extends to all disciples and is a way to keep our baptismal covenant. Testimony is deeply personal and grows through faith, seeking, living the gospel and the Holy Ghost. A sincere, humble testimony has power to change both giver and receiver. Look for daily opportunities — at home, at church, ministering, online and in everyday conversations.",
    "scriptures": [
     "Doctrine and Covenants 107:23",
-    "Mosiah 18:9"
+    "Mosiah 18:9",
+    "Doctrine and Covenants 68:6",
+    "Acts 1:8",
+    "Matthew 18:16"
    ],
    "quotes": [
     "Bearing witness is a foundational responsibility of discipleship.",
-    "Your testimony may be different from mine or that of other family members or fellow Saints. Please trust it, nurture it and bear it, because it is uniquely yours.",
-    "There is great power in a sincere, humble and heartfelt testimony. It need not be long, eloquent or dramatic — it only needs to be true."
+    "Your testimony may be different from mine or that of other family members or fellow Saints. Please trust it, nurture it, and bear it, because it is uniquely yours.",
+    "There is great power in a sincere, humble, and heartfelt testimony. It need not be long, eloquent, or dramatic—it only needs to be true."
    ],
    "invitation": "Look for opportunities each day to bear witness of Jesus Christ, even briefly.",
    "ponder": "When did I last simply and briefly testify of Christ at home?",
@@ -133,17 +143,17 @@ window.CONF = {
    "order": 4,
    "speaker": "Elder Vaiangina Sikahema",
    "calling": "General Authority Seventy",
-   "title": "Prophets, Seers and Revelators",
+   "title": "Prophets, Seers, and Revelators",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/03/elder-sikahema-october-2026-general-conference-prophets-seers-revelators/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/15sikahema?lang=eng",
    "summary": "In 1947 his grandparents sailed across the Tongan islands to hear a visiting apostle; their infant son died on the journey, yet they buried him and continued. People through the ages have yearned for prophetic voices. Today we can see and hear prophets on our phones, yet many take them for granted. What a blessing to live when apostles and prophets are on the earth.",
    "scriptures": [
     "Doctrine and Covenants 90:5"
    ],
    "quotes": [
     "What a blessing it is to live in a time when apostles and prophets are on the earth.",
-    "I suspect the Lord knew that even when we would have these devices [cellphones] to easily see and hear His anointed servants, many of us would still take them for granted.",
-    "Let us not be guilty of holding the oracles of God ‘as a light thing.’"
+    "I suspect the Lord knew that even when we would have these devices (cell phones) to easily see and hear His anointed servants, many of us would still take them for granted.",
+    "Let us not be guilty of holding ‘the oracles of God … as a light thing.’"
    ],
    "invitation": "Don't hold the oracles of God as a light thing; give prophetic words the effort earlier Saints sacrificed for.",
    "ponder": "Do I treat conference as background noise or as an appointment?",
@@ -157,17 +167,20 @@ window.CONF = {
    "order": 5,
    "speaker": "Elder Kevin J. Hathaway",
    "calling": "General Authority Seventy",
-   "title": "Jesus Christ Is the Great Deliverer",
+   "title": "Jesus Christ Is the Great Deliverer!",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/03/elder-kevin-j-hathaway-october-2026-general-conference-jesus-christ-deliverer/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/16hathaway?lang=eng",
    "summary": "Scripture shows a pattern of divine deliverance: opposition that raises heart-rending questions; sincere seeking through prayer, fasting and scripture study; assurance that the Savior visits us in our afflictions as we keep covenants; enabling grace that strengthens us without removing all pain; and deliverance in His time and way. When it feels too late, remember Jairus.",
    "scriptures": [
     "Mark 5:36",
-    "Luke 8:50 (“Be not afraid, only believe”)"
+    "Luke 8:50 (“Be not afraid, only believe”)",
+    "Mosiah 24:14–16",
+    "Alma 7:11–12",
+    "Alma 36:3"
    ],
    "quotes": [
     "With perfect understanding and infinite power, He can deliver the righteous from all things, forever.",
-    "The Lord is not delayed, distracted or derelict in His deliverance. He has not forgotten you.",
+    "The Lord is not delayed, distracted, or derelict in His deliverance. He has not forgotten you.",
     "Some miracles are immediate, some come after long waiting, and some await the Resurrection."
    ],
    "invitation": "Trust that in His time and way, Jesus Christ will deliver you.",
@@ -184,15 +197,19 @@ window.CONF = {
    "calling": "Quorum of the Twelve Apostles",
    "title": "A Higher and Holier Fast",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/03/elder-ulisses-soares-october-2026-general-conference-higher-and-holier-fast/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/17soares?lang=eng",
    "summary": "The Lord's call to fast echoes Isaiah, with promised blessings of light after darkness, healing, and assurance that He is near. A sincere fast is accompanied by earnest, intentional prayer, and finds its highest expression in Jesus Christ. Fasting is an act of worship that refines discipleship and prepares us for revelation; fast offerings help “let the oppressed go free.”",
    "scriptures": [
-    "Isaiah 58:6"
+    "Isaiah 58:6",
+    "Isaiah 58:1–7",
+    "Isaiah 58:8–9",
+    "Helaman 3:35",
+    "Alma 7:11, 12"
    ],
    "quotes": [
     "A sincere and faithful fast is accompanied by earnest and intentional prayer.",
-    "[Fasting and prayer] may not remove every burden from our path, but they draw heaven near and endow us with divine power to overcome or endure whatever circumstances we may face.",
-    "I invite you to prayerfully ponder Isaiah's teachings and more intentionally embrace the divine purpose of the law of the fast in a higher and holier way as part of our worship."
+    "Fasting and prayer may not remove every burden from our path, but they draw heaven near and endow us with divine power to overcome or endure whatever circumstances we may face.",
+    "I invite you to prayerfully ponder Isaiah’s teachings and more intentionally embrace the divine purpose of the law of the fast in a higher and holier way as part of our worship."
    ],
    "invitation": "Ponder Isaiah's teachings and embrace the law of the fast more intentionally as worship.",
    "ponder": "Is my fast a skipped meal or an act of worship with a clear purpose?",
@@ -208,15 +225,19 @@ window.CONF = {
    "calling": "Second Counselor, Presiding Bishopric",
    "title": "The Hour of Your Mission Is Come",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/03/bishop-sean-douglas-october-2026-general-conference-hour-your-mission-come/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/18douglas?lang=eng",
    "summary": "Missionaries are divinely commissioned to invite God's children to come unto Christ; they are both messengers and living examples. Elder Merlin Sanchez's story showed how a mission builds lifelong discipleship. Worthy, able young men have a priesthood responsibility to serve; young women are invited to prayerfully consider serving. Missionaries of all ages find joy in the work.",
    "scriptures": [
-    "No specific verses reported in recaps"
+    "Matthew 28:19–20",
+    "1 Timothy 1:11–12",
+    "Ephesians 6:11, 14–17",
+    "3 Nephi 5:13",
+    "Doctrine and Covenants 35:13–14"
    ],
    "quotes": [
-    "Make no mistake — you are doing the most important work you could be doing.",
+    "Make no mistake—you are doing the most important work you could be doing.",
     "To all the rising generation of the Church, I invite you to place serving a full-time mission high on your list.",
-    "There is still plenty of room and a special place reserved for each of you. We need you. ‘Come join the ranks.’"
+    "There is still plenty of room and a special place reserved for each one of you! We need you! ‘Come join the ranks!’"
    ],
    "invitation": "Rising generation: place a full-time mission high on your list. Senior missionaries are welcome too.",
    "ponder": "What did the Spirit highlight for me in this talk? What one invitation will I act on this week?",
@@ -232,16 +253,19 @@ window.CONF = {
    "calling": "Second Counselor in the First Presidency",
    "title": "O Be Wise",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/03/president-d-todd-christofferson-october-2026-general-conference-gambling/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/19christofferson?lang=eng",
    "summary": "Gambling has exploded, made continuous and private by smartphones, and disproportionately affects youth and young adults. Beyond lost money, it displaces saving, increases debt and brings family and social costs. Gambling is morally wrong — built on desiring something for nothing — and crowds out things of value. He pled for us to live on a higher plane and use saved time and resources for good.",
    "scriptures": [
     "Jacob 6:12 (“O be wise; what can I say more?”)",
-    "Doctrine and Covenants 58:27"
+    "Doctrine and Covenants 58:27",
+    "Jacob 2:7–9",
+    "1 Corinthians 8:9–11",
+    "Doctrine and Covenants 108:7"
    ],
    "quotes": [
     "For us as Latter-day Saints, overarching all other concerns is the fact that gambling is morally wrong. Gambling is built on the desire to obtain something for nothing.",
     "Today, I am pleading with all of us to live life on a higher plane.",
-    "Work leads to prosperous, just and equitable societies. Gambling, even for fun, leads in the opposite direction."
+    "Work leads to prosperous, just, and equitable societies. Gambling, even for fun, leads in the opposite direction."
    ],
    "invitation": "Refrain from gambling and use the time and resources saved for doing good.",
    "ponder": "What “good cause” could absorb time I currently spend on idle pursuits?",
@@ -255,13 +279,16 @@ window.CONF = {
    "order": 1,
    "speaker": "Elder Dale G. Renlund",
    "calling": "Quorum of the Twelve Apostles",
-   "title": "How Long Will It Be Ere They Believe Me",
+   "title": "How Long Will It Be Ere They Believe Me?",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/03/elder-dale-g-renlund-october-2026-general-conference-trust-savior/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/21renlund?lang=eng",
    "summary": "A heart-transplant patient who survived against overwhelming odds later complained about cold oatmeal. Like him, and like ancient Israel, we can fixate on the here and now and lose sight of the bigger picture and God's promises. God invites us to trust Him; Christ has overcome the world, and His power to save is infinite and intimate.",
    "scriptures": [
     "Numbers 14:11",
-    "cf. John 16:33"
+    "cf. John 16:33",
+    "Exodus 14:11–12",
+    "Exodus 16:2–4",
+    "Exodus 17:3–6"
    ],
    "quotes": [
     "God invites us to trust Him and His promises.",
@@ -282,15 +309,19 @@ window.CONF = {
    "calling": "Young Men General President",
    "title": "Divine Appointments",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/03/president-farnes-october-2026-general-conference-divine-appointments/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/22farnes?lang=eng",
    "summary": "As covenant followers of Jesus Christ we minister with compassion to whomever God places in our path, because that's what the Savior did. Taking His name means seeing as He sees, feeling as He feels and doing as He would do, so people experience something of Christ in us. God places people in our path — “divine appointments.”",
    "scriptures": [
-    "Sacrament covenant to take Christ's name (no specific verse reported in recaps)"
+    "Moroni 4:3",
+    "Doctrine and Covenants 20:77",
+    "Matthew 25:34–40",
+    "Mosiah 2:17",
+    "Luke 10:25"
    ],
    "quotes": [
     "As covenant followers of Jesus Christ, we minister with compassion to whomever God places in our path.",
-    "When someone encounters us, they should experience something of Jesus Christ — His kindness, His patience, His hope, His love, His compassion.",
-    "Let us pray every day for eyes to see the divine appointments God places before us. Let us put compassion into action and minister to the person in front of us. It's what Jesus did."
+    "When someone encounters us, they should experience something of Jesus Christ—His kindness, His patience, His hope, His love, His compassion.",
+    "Let us pray every day for eyes to see the divine appointments God places before us! Let us put compassion into action and minister to the person in front of us. It’s what Jesus did."
    ],
    "invitation": "Pray daily for eyes to see divine appointments and minister to the person in front of you.",
    "ponder": "Who did God place in my path this week that I walked past?",
@@ -306,15 +337,15 @@ window.CONF = {
    "calling": "General Authority Seventy",
    "title": "Spiritual Immunity",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/03/elder-christian-chigbundu-october-2026-general-conference-spiritual-immunity/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/23chigbundu?lang=eng",
    "summary": "These are troubled times, but we need not fear. Build spiritual immunity through four small and simple things: daily meaningful scripture study; prayer; the sacrament, remembered throughout the week; and covenants, including temple worship. Together they are the armor of God.",
    "scriptures": [
-    "Alludes to the “armor of God” and “small and simple” things (no verse cited in recaps)"
+    "Alludes to the “armor of God” and “small and simple” things"
    ],
    "quotes": [
     "As we build our spiritual immunity, we develop the strength and courage to withstand the challenges of life.",
-    "Remember that trials may come, yet, as we worship in the temple and remember our covenants, we receive personal direction from the Lord that will guide us along the covenant path.",
-    "I invite you to always remember scriptures, prayers, sacrament and covenants. While they may seem small and simple, they are truly the armor of God."
+    "Remember that trials may come, yet as we worship in the temple and remember our covenants, we receive personal direction from the Lord that will guide us along the covenant path.",
+    "I invite you to always remember scriptures, prayers, the sacrament, and covenants. While they may seem small and simple, they are truly the armor of God that will help us stand against the tactics of the devil!"
    ],
    "invitation": "Always remember scriptures, prayers, sacrament and covenants.",
    "ponder": "Which of the four (scriptures, prayer, sacrament, covenants) is weakest in my week?",
@@ -330,14 +361,16 @@ window.CONF = {
    "calling": "General Authority Seventy",
    "title": "Trusting the Lord Through Tithes and Offerings",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/03/elder-patricio-giuffra-october-2026-general-conference-tithing-offerings/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/24giuffra?lang=eng",
    "summary": "As a missionary in Chile he taught a 70-year-old woman who cleaned houses to pay rent and said she couldn't pay tithing. His mission president said he was “no one to deny this sister the blessings of the law of tithing.” She prayed for help, was baptized and paid tithing faithfully. The Lord keeps His promises; the windows of heaven open according to obedience.",
    "scriptures": [
-    "Alludes to the “windows of heaven” promise (Malachi 3:10)"
+    "Alludes to the “windows of heaven” promise (Malachi 3:10)",
+    "Mark 12:41–44",
+    "Malachi 3:8, 10"
    ],
    "quotes": [
-    "Commandments are given to draw us closer to the Savior, to protect us and to help us remain free from sin and many of the challenges the world presents.",
-    "Even when we do not understand the purpose of our trials, we can have the assurance that the Lord knows our circumstances, honors our obedience and fulfills His promises in His own time and way.",
+    "Commandments are given to draw us closer to the Savior, to protect us, and to help us remain free from sin and many of the challenges the world presents.",
+    "Even when we do not understand the purpose of our trials, we can have the assurance that the Lord knows our circumstances, honors our obedience, and fulfills His promises in His own time and way.",
     "I testify that the law of tithing is a law of faith. As we obey it, we demonstrate our trust in the Lord and allow Him to work miracles in our lives, often in ways we do not expect."
    ],
    "invitation": "Trust the Lord's promises; don't withhold the blessings of a commandment from others by lowering the standard.",
@@ -354,15 +387,19 @@ window.CONF = {
    "calling": "General Authority Seventy",
    "title": "The Infinite Power of God in Our Covenants",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/03/elder-jeremiah-morgan-october-2026-general-conference-infinite-power-of-god-in-covenants/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/25morgan?lang=eng",
    "summary": "His mother read the Book of Mormon aloud to him every day, whether he listened or not; as a young man he came to know this is the Lord's Church and was baptized at 18. Covenants that came before him reached after him. Covenant faithfulness doesn't override a child's agency, but it has a generational impact. Don't lose hope in loved ones who have wandered.",
    "scriptures": [
-    "Echoes Hebrews 12:2 (“author and finisher”)"
+    "Echoes Hebrews 12:2 (“author and finisher”)",
+    "Doctrine and Covenants 84:57",
+    "Joseph Smith—History 1:25",
+    "Doctrine and Covenants 2:2",
+    "Enos 1:15–18"
    ],
    "quotes": [
     "No time or effort is ever wasted in reading the Book of Mormon. Not for you, not for your children, not for your family, not for anyone.",
     "Covenants with God are filled with incalculable power.",
-    "Don't ever give up. Your story, your family's story, is not all written. God is the author and the finisher of it."
+    "Don’t ever give up. Your story, your family’s story, is not all written. God is the author and the finisher of it."
    ],
    "invitation": "Keep reading the Book of Mormon with your family; never give up.",
    "ponder": "Whose covenants have reached after me?",
@@ -378,15 +415,19 @@ window.CONF = {
    "calling": "General Authority Seventy",
    "title": "I Am a Child of God",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/03/elder-hutch-fale-october-2026-general-conference-i-am-a-child-of-god/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/26fale?lang=eng",
    "summary": "“I am a child of God, and He loves me” is true for everyone. Understanding the Father's love and our identity prevents deception, gives purpose to mortality and brings power, peace and comfort. Beware the lie that we can be saved regardless of sin. Knowing His love helps us reject divisive labels and know it's not too late to turn to Christ. Families, despite imperfections, often teach us God's love.",
    "scriptures": [
-    "Luke 15 (prodigal son, lost sheep)"
+    "Luke 15 (prodigal son, lost sheep)",
+    "1 Nephi 13:26–29",
+    "Matthew 1",
+    "1 Nephi 1",
+    "Genesis 1"
    ],
    "quotes": [
-    "Understanding our Father's love and our true identity as His children is essential for our daily and eternal happiness. It prevents deception and gives purpose to this mortal life.",
-    "From the prodigal son to leaving the 99 sheep to find the one, our Father's message, through His Son, has always been that there is still yet time, if we turn to Christ today.",
-    "It is often through families, despite all their imperfections, that Our Father teaches us about His love."
+    "Understanding our Father’s love and our true identity as His children is essential for our daily and eternal happiness. It prevents deception and gives purpose to this mortal life.",
+    "From the prodigal son to leaving the 99 sheep to find the one, our Father’s message, through His Son, has always been that there is still yet time if we turn to Christ today.",
+    "It is often through families, despite all their imperfections, that our Father teaches us about His love."
    ],
    "invitation": "Turn to Christ today — there is still time.",
    "ponder": "Which labels do I accept above “child of God”?",
@@ -402,15 +443,19 @@ window.CONF = {
    "calling": "Quorum of the Twelve Apostles",
    "title": "Jesus Lives to Lift",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/03/elder-patrick-kearon-october-2026-general-conference-jesus-lives-lift/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/27kearon?lang=eng",
    "summary": "Drawing on flying gliders as a teenager, he taught spiritual “lift” and “sink.” Lift can't be seen but can be felt through the Holy Spirit, drawing us toward Christ. Seek the feelings of the Holy Ghost and join those who are climbing; watch for subtle signs of sink and turn away decisively; and when you find lift, show others where and how to rise.",
    "scriptures": [
-    "The Savior “lifted up” on the cross; His followers “shall be lifted up at the last day” (no verse cited in recaps)"
+    "Matthew 14:28–31",
+    "Mark 5:35–42",
+    "Luke 8:49–55",
+    "Mark 9:17–27",
+    "Isaiah 40:31"
    ],
    "quotes": [
-    "At the heart of our faith is the glorious truth that we have an adoring Father in Heaven, whose Son, our Savior, loves to lift.",
-    "We can learn to live in spiritual lift. And when we sink, our gentle Savior is there to lift us up as we turn to Him.",
-    "Your Savior is your lift. He is your ever-rising air. There is no limit to how high you can climb with Him. Jesus Christ lives to lift."
+    "At the heart of our faith is the glorious truth that we have an adoring Father in Heaven, whose Son, our Saviour, loves to lift!",
+    "We can learn to live in spiritual lift. And when we sink, our gentle Saviour is there to lift us up as we turn to Him.",
+    "Your Saviour is your lift. He is your ever-rising air. There is no limit to how high you can climb with Him. Jesus Christ lives to lift."
    ],
    "invitation": "Seek lift, turn decisively away from sink, and show others where to rise.",
    "ponder": "What are the subtle signs of “sink” in my week?",
@@ -424,16 +469,20 @@ window.CONF = {
    "order": 8,
    "speaker": "Elder Michael A. Dunn",
    "calling": "General Authority Seventy",
-   "title": "The 90 and 10",
+   "title": "The Ninety and Ten",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/03/elder-dunn-october-2026-general-conference-90-and-9/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/28dunn?lang=eng",
    "summary": "Comparing mortality to an ultramarathon he was ready to quit long before the finish, he taught that races can devolve from running to walking to shuffling. The Savior bears our griefs and magnifies our smallest offerings. Giving 90% of a spiritual journey may take all we have; the Savior extends His hand for the final 10%.",
    "scriptures": [
-    "Hymn “Lord, I Would Follow Thee” (Hymns, no. 220)"
+    "Hymn “Lord, I Would Follow Thee” (Hymns, no. 220)",
+    "Psalm 55:22",
+    "1 Thessalonians 5:17",
+    "Isaiah 53:4",
+    "3 Nephi 13:8"
    ],
    "quotes": [
-    "The Redeemer rescues not by shortening our course, but by helping us lengthen our stride.",
-    "Don't confuse the perceived invisibility of the Lord's hand with the inveterate nature of the Lord's heart.",
+    "The Redeemer rescues not by shortening our course but by helping us lengthen our stride.",
+    "Don’t confuse the perceived invisibility of the Lord’s hand with the inveterate nature of the Lord’s heart.",
     "Peace will come even when hoped-for outcomes do not."
    ],
    "invitation": "Give what you can; trust the Savior for the final 10%.",
@@ -448,12 +497,16 @@ window.CONF = {
    "order": 9,
    "speaker": "Elder Matthew J. Eyring",
    "calling": "General Authority Seventy",
-   "title": "Comfort From the Holy Ghost",
+   "title": "Comfort from the Holy Ghost",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/03/elder-matthew-j-eyring-october-2026-general-conference-comfort-holy-ghost/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/29eyring?lang=eng",
    "summary": "Every child of God faces challenges impossible to overcome without the Savior. Handing burdens to the Lord lets us see His promise fulfilled: draw near to Him and He will draw near. In increasing turbulence, true comfort will become scarcer. The Savior's peace is made manifest through the comforting power of the Holy Ghost.",
    "scriptures": [
-    "Doctrine and Covenants 88:63"
+    "Doctrine and Covenants 88:63",
+    "Mosiah 18:9",
+    "Ether 12:6",
+    "Alma 7:11–12",
+    "Psalm 55:22"
    ],
    "quotes": [
     "In a world of increasing temporal and spiritual turbulence, true sources of comfort will become more scarce. … There is hope in Jesus Christ.",
@@ -474,14 +527,18 @@ window.CONF = {
    "calling": "Quorum of the Twelve Apostles",
    "title": "Love Like Jesus",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/03/elder-ronald-a-rasband-october-2026-general-conference-love-like-jesus-wayward-souls/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/210rasband?lang=eng",
    "summary": "Many hearts ache for loved ones who have turned away. By divine design, each person must choose for themselves to follow Christ. Turn your despair over to Jesus Christ — we cannot change their hearts, but He can. Love is the centerpiece of His gospel. Let go of guilt; Christ has already paid for the choices of those we grieve for. Keep loving, praying, and never give up.",
    "scriptures": [
-    "No specific verses reported in recaps"
+    "Ephesians 4:14",
+    "2 Corinthians 1:8",
+    "1 Nephi 1:4",
+    "1 Nephi 8",
+    "1 Nephi 2"
    ],
    "quotes": [
     "I ask you to turn over to Jesus Christ your despair for those wayward souls. We cannot change their hearts, but He can; He is a God of miracles.",
-    "Love is not stepping back or sanctioning others' decisions and actions. Love is being interested in their lives, their successes and their challenges. Love is being there with arms outstretched and a cheerful countenance.",
+    "Love is not stepping back or sanctioning others’ decisions and actions. Love is being interested in their lives, their successes, and their challenges. Love is being there with arms outstretched and a cheerful countenance.",
     "He knows them. He knows their hearts; He loves them. He gave His very life to bring them home, all the way home."
    ],
    "invitation": "Turn your despair over to Christ; let go of guilt; keep loving and praying.",
@@ -496,18 +553,21 @@ window.CONF = {
    "order": 1,
    "speaker": "President Henry B. Eyring",
    "calling": "First Counselor in the First Presidency",
-   "title": "Fear Not, I Am With Thee",
+   "title": "Fear Not, I Am with Thee",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/president-henry-b-eyring-october-2026-general-conference-fear-not-i-am-with-thee/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/41eyring?lang=eng",
    "summary": "President Eyring spoke about helping give the Lord's comfort to others. The Lord's promised comfort in Isaiah 41 and the hymn “How Firm a Foundation” (“Hymns,” No. 85) will become more important and more precious. Mortal tests are hard because we must grow in spiritual cleanliness and stature to live in God's presence; Heavenly Father gave us a Savior and the power to choose by faith to keep commandments, repent and come unto Him. The promise is not for the removal of challenges. The Lord sends faithful disciples to help Him keep His promise to succor others; we are invited to join Him in that work.",
    "scriptures": [
     "Isaiah 41:10",
-    "Hymn “How Firm a Foundation” (Hymns, no. 85)"
+    "Hymn “How Firm a Foundation” (Hymns, no. 85)",
+    "Isaiah 53:4",
+    "Alma 7:11–12",
+    "Mosiah 18:8–9"
    ],
    "quotes": [
     "It is because He knows that we must grow in spiritual cleanliness and stature to be able to live in His presence. To make that possible, Heavenly Father gave us a Savior and the power to choose for ourselves by faith to keep His commandments and to repent and to come unto Him.",
-    "The Lord sends faithful disciples to help Him keep his promise to succor others in their distress.",
-    "We shed tears of joy and take courage whenever we hear the words, ‘Fear not, I am with thee,’ and we are touched that He offers us the trust of helping and loving others."
+    "The Lord sends faithful disciples to help Him keep His promise to succor others in their distress.",
+    "We shed tears of joy and take courage whenever we hear the words ‘Fear not, I am with thee,’ and we are touched that He offers us the trust of helping and loving others."
    ],
    "invitation": "Join the Lord in keeping His promise — help Him comfort and succor those in distress.",
    "ponder": "Whom is the Lord inviting me to comfort for Him today?",
@@ -523,15 +583,18 @@ window.CONF = {
    "calling": "Primary General President",
    "title": "A Child of God",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/president-rosemary-chibota-october-2026-general-conference-a-child-of-god/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/42chibota?lang=eng",
    "summary": "Primary General President Rosemary K. Chibota spoke about seeing each other as children of God. The Southern African greeting “Sawubona” means “I see you” — an acknowledgment of another person’s worth and humanity. Jesus Christ saw people as beloved sons and daughters of God rather than by labels. The world invites focus on labels, but labels never fully capture who we truly are; eternal identity matters more. Whatever labels weigh heavily, Jesus Christ’s grace is sufficient to lift above every label and limitation. She invited disciples this week to learn the name of someone who may feel unseen, pray to see others as Heavenly Father sees them, and replace worldly labels with the eternal truths: child of God, child of the covenant, disciple of Jesus Christ.",
    "scriptures": [
-    "No specific verses reported in recaps"
+    "Mark 10:21",
+    "John 5:2–9",
+    "Luke 10:30–35",
+    "Romans 4:17"
    ],
    "quotes": [
-    "The world invites us to focus on labels rather than eternal identity. However, labels can never fully capture who we truly are",
+    "The world invites us to focus on labels rather than eternal identity. However, labels can never fully capture who we truly are.",
     "When we ask Heavenly Father to help us see others, He guides us to those who feel unseen.",
-    "When we see one another through the Savior’s eyes, hearts change, relationships deepen and faith grows."
+    "When we see one another through the Savior’s eyes, hearts change, relationships deepen, and faith grows."
    ],
    "invitation": "Pray to see others as Heavenly Father sees them; learn the name of someone who may feel unseen.",
    "ponder": "Whom am I labeling instead of seeing as a child of God?",
@@ -547,14 +610,18 @@ window.CONF = {
    "calling": "Quorum of the Twelve Apostles",
    "title": "Courage Born of Our Faith in Jesus Christ",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/elder-andersen-october-2026-general-conference-courage-born-of-faith/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/43andersen?lang=eng",
    "summary": "Elder Neil L. Andersen of the Quorum of the Twelve Apostles spoke about spiritual courage being born of faith in Jesus Christ. Faith and courage are hallmarks of Jesus Christ’s disciples. As we choose faith in Christ, He blesses us with courage to choose the right even in difficult situations, and as we manifest that courage, our faith strengthens. Discipleship always requires spiritual courage; courage is born of faith in Jesus Christ. Being His true disciple — overcoming the world, keeping commandments, trusting Him and His promises — is not a casual pursuit. Spiritual courage is the triumph over obstacles, doubt, and fear in choosing the right. With the world in constant commotion, disciples need stillness to nourish their faith in Christ. Even when troubled on every side, they are not in despair when hope is alive in Christ (2 Corinthians 4:8). Faith in Him brings spiritual courage to minister, keep commandments, speak openly of the Savior, be guided by the Holy Ghost, repent, and receive forgiveness.",
    "scriptures": [
-    "2 Corinthians 4:8"
+    "2 Corinthians 4:8",
+    "Alma 34:9–10, 14–15",
+    "1 Corinthians 15:21–22",
+    "2 Nephi 9:22",
+    "Helaman 14:17"
    ],
    "quotes": [
     "As we choose faith in Christ, He blesses us with the courage, sometimes in very difficult situations, to choose the right, and as we manifest our courage to choose the right, our faith in Christ strengthens.",
-    "It is our faith in Christ that gives us the spiritual courage to speak openly to others of our Savior, make covenants in the house of the Lord, repent and receive forgiveness, follow living prophets and be guided by the quiet impressions of the Holy Ghost.",
+    "It is our faith in Christ that gives us the spiritual courage to speak openly with others about our Savior, make covenants in the house of the Lord, repent and receive forgiveness, follow living prophets, and be guided by the quiet impressions of the Holy Ghost.",
     "I promise you that as you strengthen your faith in Jesus Christ by believing and following Him and keeping His commandments, your answers will come, your spiritual power will increase, and your courage in following Christ will define your eternal soul."
    ],
    "invitation": "Strengthen your faith in Jesus Christ by believing, following Him, and keeping His commandments.",
@@ -567,14 +634,14 @@ window.CONF = {
    "id": "sun-am-4-fantone",
    "session": "sun-am",
    "order": 4,
-   "speaker": "Elder James G.O. Fantone",
+   "speaker": "Elder James G. O. Fantone",
    "calling": "General Authority Seventy",
    "title": "Take Upon Us His Name",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/elder-james-fantone-october-2026-general-conference-take-upon-us-his-name/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/44fantone?lang=eng",
    "summary": "Elder James G.O. Fantone, General Authority Seventy, spoke about taking upon the name of Jesus Christ. Jesus Christ invites all to take upon us His name and become more like Him by making and keeping covenants and serving others. Book of Mormon prophets taught that following baptism, taking upon oneself the name of Jesus Christ requires a lifelong commitment to serve Him. Latter-day Saints can learn from righteous, charitable examples of family members and full-time missionaries who demonstrate courageous service. When we genuinely take upon ourselves His name by losing ourselves in the service of others, something miraculous happens — a mighty change of heart that leads to true conversion. Taking upon the Savior’s name means more than a badge of religious affiliation; His invitation is to take His name by covenant and serve Him with all heart, might, mind and strength — by lifting, loving and serving others. As we lose our lives in His service, we will find Him, and we will find ourselves.",
    "scriptures": [
-    "Alma the Younger on a “mighty change” of heart (no specific verse cited in recaps)"
+    "Alma the Younger on a “mighty change” of heart"
    ],
    "quotes": [
     "The Savior’s invitation is not merely for us to add His name to our name like a badge of religious affiliation.",
@@ -593,16 +660,20 @@ window.CONF = {
    "order": 5,
    "speaker": "Elder Edward Dube",
    "calling": "Presidency of the Seventy",
-   "title": "Come Unto Christ",
+   "title": "Come unto Christ",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/elder-edward-dube-october-2026-general-conference-come-unto-christ/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/45dube?lang=eng",
    "summary": "Elder Edward Dube of the Presidency of the Seventy spoke about coming unto Christ. Moroni’s invitation — “Come unto Christ and be perfected in him … deny yourselves of all ungodliness” (Moroni 10:32) — holds three key truths: come (an action; choose to move from our current place to a better place), deny yourselves (surrender; let go of what holds us back), and be perfected in Him (come as we are with a willing heart; He will give us a new heart). People do not need to be perfect to come unto Christ — “We come to Christ to be perfected.” As a young missionary in 1987, he saw a mission-office gate sign reading “Trespassers will be prosecuted”; President Dallin H. Oaks asked that it be removed to avoid any impression of exclusion. The adversary wants to hang that sign on the gate of our heart — addiction, doubt, pride, pain, grief, guilt, materialism — telling us we are unworthy to come unto Christ. Elder Dube invited all to come unto Christ through faith in Him and His Atonement.",
    "scriptures": [
-    "Moroni 10:32"
+    "Moroni 10:32",
+    "Luke 22:44",
+    "Ezekiel 36:26",
+    "Moroni 10:33",
+    "John 15:11"
    ],
    "quotes": [
     "We invite all to come unto Christ through faith in Him and His Atonement.",
-    "[Jesus Christ’s] suffering and atoning sacrifice show us how completely devoted He is to all of us. He invites us to come unto Him.",
+    "His suffering and atoning sacrifice show us how completely devoted He is to all of us. He invites us to come unto Him.",
     "We do not need to perfect ourselves to come to Christ. We come to Christ to be perfected."
    ],
    "invitation": "Come unto Christ through faith in Him and His Atonement — you do not need to perfect yourself first.",
@@ -619,15 +690,19 @@ window.CONF = {
    "calling": "Quorum of the Twelve Apostles",
    "title": "Integrity and Virtue Lead to Happiness",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/elder-quentin-l-cook-october-2026-general-conference-integrity-virtue-lead-happiness/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/46cook?lang=eng",
    "summary": "Elder Quentin L. Cook of the Quorum of the Twelve Apostles spoke about integrity, virtue and happiness. As a new missionary, President David O. McKay passed a building with a stone above the doorway inscribed “What e’er thou art, act well thy part.” In Heavenly Father’s plan, integrity, virtue and happiness are intrinsically linked — true happiness is the outcome of integrity and virtue. That relationship is less well understood today; the founders of the United States emphasized life, liberty and happiness based on living a virtuous life. The Lord wants us to experience the joy of a virtuous life and richly rewards those who make sacrifices in His name. Covenant keepers are expected to live lives of virtue and integrity; the ultimate reward is the constant companionship of the Holy Ghost. Part of integrity is acknowledging faults to the Lord and repenting. When repentance is a constant day-to-day part of our lives, we can approach the Lord with integrity and receive His saving blessings. Integrity, virtue and ongoing repentance are the answer to today’s challenges.",
    "scriptures": [
-    "Alludes to Doctrine and Covenants 121:45 (“Let virtue garnish thy thoughts unceasingly”) — Liberty Jail guidance referenced in recaps"
+    "Matthew 7:13–14",
+    "Doctrine and Covenants 124:20",
+    "Matthew 5:3–11",
+    "3 Nephi 12:1–11",
+    "Doctrine and Covenants 121:45"
    ],
    "quotes": [
-    "The virtuous Christlike life necessary to sustain us and propel us along the covenant path has never been more important or challenging.",
-    "In the Father’s plan, integrity, virtue and happiness are intrinsically linked.",
-    "Integrity, virtue and on-going repentance are the answer in a world where coarse language and serious challenges are so prevalent."
+    "The virtuous, Christlike life necessary to sustain us and propel us along the covenant path has never been more important or challenging.",
+    "In the Father’s plan, integrity, virtue, and happiness are intrinsically linked.",
+    "Integrity, virtue, and ongoing repentance are the answer in a world where coarse language and serious challenges are so prevalent."
    ],
    "invitation": "Live with integrity and virtue; make repentance a constant day-to-day part of your life.",
    "ponder": "Where do I need more integrity and virtue so the Holy Ghost can be my constant companion?",
@@ -643,15 +718,19 @@ window.CONF = {
    "calling": "General Authority Seventy",
    "title": "Using the Language of Peacemakers",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/elder-alfred-kyungu-october-2026-general-conference-using-language-of-peacemakers/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/47kyungu?lang=eng",
    "summary": "Elder Alfred Kyungu, General Authority Seventy, spoke about using the language of peacemakers. The invitation to forgo contention by using the language of peacemakers comes from the living Prophet and is a call to discipleship as individuals follow Jesus Christ. It is a spiritual exercise to identify language and expressions to forgo and replace them with words and phrases that bring peace. Remove words that damage relationships — such as “You are useless,” “Just stop talking” or “What is wrong with you?” — which weaken love, diminish respect and damage relationships. Rather than words that escalate anger, disappointment and frustration, choose words that encourage understanding and peace and that strengthen confidence and preserve relationships — such as “Thank you,” “I’m sorry” and “I forgive you.” The true doctrine of Christ has power to change language. He invited Saints to repent of harsh language that has offended friends, leaders, family members and colleagues; to pray for peaceful communication regardless of differences of opinion; and to use language that uplifts, edifies, comforts and brings people together.",
    "scriptures": [
-    "No specific verses reported in recaps"
+    "Proverbs 6:16, 17, 19",
+    "Matthew 12:36–37",
+    "Ephesians 4:29",
+    "Colossians 4:6",
+    "Alma 24:19"
    ],
    "quotes": [
     "It is a spiritual exercise to identify the language and expressions we need to forgo and then replace them with words and phrases that bring peace wherever we are and at all times.",
-    "Rather than choosing words and language that escalate feelings of anger, disappointment and frustration, let us use words that encourage understanding and peace. We must choose language that strengthens confidence and preserves relationships.",
-    "Let us repent of the harsh language and expressions that have offended our friends, leaders, family members and colleagues. Let us pray for peaceful communication among us, regardless of the difference in our opinions. Let us use the language that uplifts, edifies, comforts and brings people together."
+    "Rather than choosing words and language that escalate feelings of anger, disappointment, and frustration, let us use words that encourage understanding and peace. We must choose language that strengthens confidence and preserves relationships.",
+    "Let us repent for the harsh language and expressions that have offended our friends, leaders, family members, or colleagues. Let us pray for peaceful communication among us, regardless of the difference in our opinions. Let us use the language that uplifts, edifies, comforts, and brings people together."
    ],
    "invitation": "Repent of harsh language; choose peacemaking words that uplift, edify and preserve relationships.",
    "ponder": "What harsh words do I need to forgo this week — and what peacemaking words will replace them?",
@@ -665,15 +744,15 @@ window.CONF = {
    "order": 8,
    "speaker": "Elder Ciro Schmeil",
    "calling": "General Authority Seventy",
-   "title": "Consider Your Ways, and From This Day Will I Bless You",
+   "title": "Consider Your Ways, and from This Day Will the Lord Bless You",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/elder-ciro-schmeil-october-2026-general-conference-covenants-jesus-christ/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/48schmeil?lang=eng",
    "summary": "Elder Ciro Schmeil, General Authority Seventy, spoke about making covenants with God. God did not leave His children alone on the journey to return to Him — two divine helps are the Savior, Jesus Christ, and covenants. The Savior knows us individually and will help us if we seek Him; we show our faith in Christ by making and keeping covenants with God. Through covenants we become yoked with the Savior and our burdens become lighter. Baptism is the first covenant and is renewed each week by partaking of the sacrament, which is essential to have the Spirit and strength to continue on the covenant path. In Haggai, the Israelites were commanded to rebuild the temple, did not make it a priority, were rebuked, then considered their ways and repented; the Lord said, “from this day will I bless you” (Haggai 2:19). Heavenly Father is not asking us to physically build the temple, but to build a strong relationship with Him and His Son through our covenants; He will magnify our efforts as we make the proper adjustments to make and keep covenants with Him.",
    "scriptures": [
     "Haggai 2:19"
    ],
    "quotes": [
-    "It is through covenants that we become yoked with the Savior, Jesus Christ, and our burdens become lighter.",
+    "It is through covenants that we become yoked with the Savior Jesus Christ and our burdens become lighter.",
     "May we also consider our ways. Heavenly Father is not asking us to physically build the temple, but He is asking us to build a strong relationship with Him and His Son, Jesus Christ, through our covenants.",
     "I know that God keeps His promises. I have seen it in my life. He gave me spiritual and physical strength when I needed it most."
    ],
@@ -691,14 +770,18 @@ window.CONF = {
    "calling": "President of the Church",
    "title": "The Gospel of Jesus Christ Is for All",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/president-oaks-october-2026-general-conference-gospel-of-jesus-christ-for-all/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/49oaks?lang=eng",
    "summary": "President Dallin H. Oaks, President of the Church, closed the Sunday morning session speaking about overcoming through the Savior. Members both obey Amaleki’s invitation and invite all others to “come unto Christ” (Omni 1:26). As President, he prays for what Heavenly Father wants for each of us — to be active members of the Church of Jesus Christ, proceeding forward on the covenant path into the eternities; we need one another’s prayers. Each person is a work in progress with personal trials; whatever present or future concerns or struggles we face, the way to overcome them is to get closer to the Savior. Challenges of mortality provide opportunities to develop faith. Strong faith requires more than strong desire — it means daily trying, one step at a time, with prayer and scriptural learning. Reconciling conflicts between science and religion can take time and may build faith and humility; never let secular learning limit spiritual horizons. If sins are to be forgiven through His Atonement, we must comply with the conditions He has prescribed, including faith, repentance and baptism. He testified the gospel of Jesus Christ is for all and invited all to come unto Christ and help others do the same.",
    "scriptures": [
-    "Omni 1:26"
+    "Omni 1:26",
+    "Doctrine and Covenants 20:17–21",
+    "Moses 1:31–33",
+    "Moses 2:1–2",
+    "3 Nephi 11:14"
    ],
    "quotes": [
-    "I pray for what our Heavenly Father wants for each of us — to be active members of the Church of Jesus Christ, proceeding forward on the covenant path into the eternities.",
-    "We all have present or future concerns or struggles we are trying to overcome. ... Whatever they are, the way to overcome them is to get closer to our Savior, Jesus Christ.",
+    "I pray for what our Heavenly Father wants for each of us—to be active members of The Church of Jesus Christ of Latter-day Saints, proceeding forward on the covenant path into the eternities.",
+    "We all have present or future concerns or struggles we are trying to overcome. Those may include questions or doubts. Whatever they are, the way to overcome them is to get closer to our Savior, Jesus Christ.",
     "The Lord will eventually cause the inspired teachings He has given to His children in various nations to be brought forth for the benefit of all people."
    ],
    "invitation": "Get closer to the Savior — come unto Christ, and help others do the same. The gospel of Jesus Christ is for all.",
@@ -713,17 +796,21 @@ window.CONF = {
    "order": 1,
    "speaker": "President Dieter F. Uchtdorf",
    "calling": "Acting President of the Quorum of the Twelve Apostles",
-   "title": "Christ-centered Unity",
+   "title": "Christ-Centered Unity",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/president-uchtdorf-october-2026-general-conference-christ-centered-unity/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/51uchtdorf?lang=eng",
    "summary": "Baptism, while an individual ordinance, is also a unifying one — it joins us to a worldwide community of Saints. Through baptism, we become not only covenant individuals but also part of a covenant people. The Savior brought people together and broke down divisions and walls; He continues to invite all to come unto Him. Satan seeks to divide, but the Savior's work of gathering is accelerating. Members are united by love for God and neighbor; they are one in Christ (Galatians 3:28). Wars and contentions between the Nephites and the Lamanites changed when Jesus Christ appeared, taught His gospel and established His Church; they became His covenant people. The closer people become to Jesus Christ, the closer they will become to each other. If we are not one, we are not His. Now is the time to unify. The sacrament is also a weekly unifying experience. Wherever you are, join the Christ-centered unity we are trying to build. The more united in Christ we are and the more we desire to build bridges instead of walls, the more our individual lives, families, communities and nations will experience God's presence and blessings.",
    "scriptures": [
-    "Galatians 3:28"
+    "Galatians 3:28",
+    "2 Nephi 31:18",
+    "Matthew 7:13–14",
+    "Jacob 6:11",
+    "Mosiah 18:8"
    ],
    "quotes": [
-    "When we join the Church of Jesus Christ, we say — humbly, gratefully, and with quiet confidence — that we want to follow our beloved Savior, Jesus Christ. And we want to walk that path together.",
-    "In the Savior's Church, it is not our political views, culture or personal interests that unite us. It is our love for God and neighbor — God's children. It is our commitment to our covenants with Jesus Christ and to His restored gospel. We are 'one in Christ.'",
-    "Jesus Christ has the power to change us — you and me — purify us and unite us. The closer we come to Him, the closer we will come to each other — and the closer we will come to the unity He wants for us."
+    "When we join the Church of Jesus Christ, we say—humbly, gratefully, and with quiet confidence—that we want to follow our beloved Savior, Jesus Christ. And we want to walk that path together.",
+    "In the Savior’s Church, it is not our political views, culture, or personal interests that unite us. It is our love for God and neighbor, God’s children. It is our commitment to our covenants with Jesus Christ and to His restored gospel. We are ‘one in Christ.’",
+    "Jesus Christ has the power to change us—you and me—purify us, and unite us. The closer we come to Him, the closer we will come to each other—and the closer we will come to the unity He wants for us."
    ],
    "invitation": "Join the Christ-centered unity; build bridges instead of walls; come closer to Christ and to each other.",
    "ponder": "Where am I building walls instead of bridges — and how can I come closer to Christ so I come closer to others?",
@@ -739,15 +826,19 @@ window.CONF = {
    "calling": "Second Counselor in the Young Women General Presidency",
    "title": "God Is at Your Side",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/sister-andrea-munoz-spannaus-october-2026-general-conference-thirteenth-article-of-faith/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/52munoz-spannaus?lang=eng",
    "summary": "Speaking to young women about accomplishing their crucial and important work on earth. As they look at their lives and what they want to achieve, Heavenly Father will show them the best way to make their righteous desires come true. The Lord knows where they are; He has their exact location and can guide them. He knows their dreams and gifts. Knowing everything about them does not make Him love them less. She shared seven helps and invited listeners to choose one to focus on over the next few weeks: (1) Partake of the sacrament with a humble heart; (2) Repent daily; (3) Study the scriptures with a desire to know God's character; (4) Study about ministering angels; (5) Go to bed early; (6) Limit cellphone use; (7) Seek friends who are striving to follow the Lord. The Lord has greater power than the adversary. Always put Him first and remain faithful to baptismal covenants. Angels can minister; the Father, Jesus Christ and the Holy Ghost are at your side. She invited study of the 13th article of faith and creating your own list of aspirations.",
    "scriptures": [
-    "Articles of Faith 1:13"
+    "Articles of Faith 1:13",
+    "Isaiah 48:17",
+    "Ether 12:27",
+    "Mark 10:21",
+    "Mark 10:17–20"
    ],
    "quotes": [
     "Today I invite you to look at your life and what you want to achieve with enthusiasm and the certainty that your Father in Heaven will guide you on that journey and show you the best way to make the righteous desires of your heart come true.",
     "Dear young women, the Lord knows where you are; He has your exact location and can guide you. … He knows everything. And knowing everything about you does not make Him love you less.",
-    "Always put Him first and remain faithful to the covenants you made at your baptism. Angels can minister to you. The Father, Jesus Christ and the Holy Ghost are at your side."
+    "Always put Him first and remain faithful to the covenants you made at your baptism. Angels can minister to you. The Father, Jesus Christ, and the Holy Ghost are at your side."
    ],
    "invitation": "Choose one of her seven helps to focus on; study the 13th article of faith and create your own list of aspirations; put the Lord first.",
    "ponder": "Which one of her seven invitations will I focus on for the next few weeks?",
@@ -763,14 +854,14 @@ window.CONF = {
    "calling": "General Authority Seventy",
    "title": "Prove Me Now Herewith",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/elder-moises-villanueva-october-2026-general-conference-prove-me-now-herewith/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/53villanueva?lang=eng",
    "summary": "Speaking about the blessings the Lord promises to those who faithfully pay tithing. When his family was baptized into the Church, perhaps the change that required the greatest faith and sacrifice was paying a full tithe, and he is grateful his mother trusted the Lord's promises and lived the law of tithing despite difficult circumstances. Blessings he has received through faithful tithing include steady employment, good health, his home and temporal possessions being preserved, the ability to manage time and resources to get an education, the gift of gratitude, and learning to recognize the influence of the Holy Ghost in important decisions. These temporal and spiritual blessings are evidence that the Lord opens the windows of heaven (Malachi 3:10). God gives commandments because He wants us to receive His blessings; He knows each of us and our needs even before we ask.",
    "scriptures": [
     "Malachi 3:10"
    ],
    "quotes": [
-    "By living the law of tithing, the Lord indeed opens the windows of heaven and pours out a blessing ‘that there shall not be room enough to receive it’ (Malachi 3:10).",
-    "These blessings, both temporal and spiritual — and many others — are evidence that the Lord has indeed opened the windows of heaven and poured out His promised blessings in abundance.",
+    "When we live the law of tithing, the Lord indeed opens the windows of heaven and pours out His promised blessings ‘that there shall not be room enough to receive it’ (Malachi 3:10).",
+    "These blessings, both temporal and spiritual—and many others—are evidence that the Lord has indeed opened the windows of heaven and poured out His promised blessings in abundance.",
     "I bear my testimony that God is our loving Heavenly Father. He knows each of us and is aware of our needs even before we ask."
    ],
    "invitation": "Trust the Lord's promises and live the law of tithing faithfully, then watch for the temporal and spiritual blessings He pours out.",
@@ -787,14 +878,18 @@ window.CONF = {
    "calling": "Quorum of the Twelve Apostles",
    "title": "Sealed by the Holy Spirit of Promise",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/elder-david-bednar-october-2026-general-conference-sealed-holy-spirit-promise/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/54bednar?lang=eng",
    "summary": "Speaking about ordinances and covenants, with a focus on the sealing ordinance. A covenant is a solemn promise and enduring commitment between God and His children, received through sacred ordinances — holy acts performed by priesthood authority with spiritual purpose and eternal significance. Understanding ordinances helps us understand our covenants. Covenants and ordinances are spiritual credentials, and faithfulness keeps them valid to receive the promised blessings. The Holy Ghost is the Holy Spirit of Promise, who ratifies righteous acts as acceptable to God; during mortality that seal is conditional and can be forfeited through unrighteousness. The temple sealing of a man and a woman is a crowning covenant and ordinance; a spouse who violates covenants and does not repent loses the ratifying seal, while a faithful spouse who honors covenants and presses forward in faith remains worthy to receive the promised blessings.",
    "scriptures": [
-    "The Holy Ghost as the “Holy Spirit of Promise” (no verse cited in recaps)"
+    "Doctrine and Covenants 132:7",
+    "Moses 7:21",
+    "Doctrine and Covenants 136:4",
+    "Doctrine and Covenants 64:31–32",
+    "Mosiah 2:41"
    ],
    "quotes": [
-    "For disciples of Jesus Christ, receiving priesthood ordinances and entering into sacred covenants are essential steps in the quest of a lifetime to align our hearts, minds and lives with God’s will.",
-    "The covenants and ordinances of the Savior’s restored gospel are spiritual credentials that can open wide the heavenly windows of opportunity to receive in our lives divine purpose, direction and strength.",
+    "For disciples of Jesus Christ, receiving priesthood ordinances and entering into sacred covenants are essential steps in the ‘quest of a lifetime’ to align our hearts, minds, and lives with God’s will.",
+    "The covenants and ordinances of the Savior’s restored gospel are spiritual credentials that can open wide the heavenly windows of opportunity to receive in our lives divine purpose, direction, and strength.",
     "Ultimately, all gospel ordinances and covenants must be sealed by the Holy Spirit of Promise."
    ],
    "invitation": "Honor your covenants and press forward in faith so your ordinances can be sealed by the Holy Spirit of Promise.",
@@ -811,16 +906,16 @@ window.CONF = {
    "calling": "General Authority Seventy",
    "title": "Jesus Christ Is the Light and Life of the World",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/elder-first-name-if-needed-lebethoa-october-2026-general-conference-jesus-christ-light-of-the-world/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/55lebethoa?lang=eng",
    "summary": "Speaking about how to receive more of the Savior’s light. The Savior said, “I am the light and the life of the world.” Through His Spirit He enlightens our minds, and His light is also revealed through His perfect life and teachings. Jesus Christ can bring light in our moments of darkness and restore hope where there is hopelessness; whatever concerns, challenges and struggles come in life, the answer is always Jesus Christ. To receive more of His light: first, increase faith in Him — trusting that He understands our daily difficulties and knows how to help us rise above them, because He has experienced all our pains, afflictions and infirmities; second, study the scriptures daily, especially the Book of Mormon — the method, timing and length of study matter less than the consistency and sincerity of our effort; third, practice repentance daily — a change of mind and a turning of the heart to God. He invited us to ponder the changes we need to make, which may include how we use our time, what we watch or listen to, and the language and tone we use with others. He testified that today can be a new day and tomorrow a better day for all who come unto Christ.",
    "scriptures": [
-    "“I am the light and the life of the world” (no verse cited in recaps)",
-    "“Come unto me, and I will give you rest” (no verse cited in recaps)"
+    "“I am the light and the life of the world”",
+    "“Come unto me, and I will give you rest”"
    ],
    "quotes": [
-    "Whatever concerns, challenges and struggles we may have in our lives, the answer is always Jesus Christ.",
-    "Having faith in Jesus Christ means trusting that He understands our daily difficulties and knows how to help us rise above them, because He has experienced all our pains, afflictions and infirmities.",
-    "I testify that today can be a new day, and tomorrow will be a better day, for all who come unto Jesus Christ and receive His light in their lives."
+    "Whatever concerns, challenges, and struggles we may have in our lives, the answer is always Jesus Christ.",
+    "Having faith in Jesus Christ means trusting that He understands our daily difficulties and knows how to help us rise above them because He has experienced all our pains, afflictions, and infirmities.",
+    "I testify that today can be a new day and tomorrow will be a better day for all who come unto Jesus Christ and receive His light in their lives."
    ],
    "invitation": "Receive more of His light: increase faith in Christ, study the scriptures daily (especially the Book of Mormon), and practice daily repentance.",
    "ponder": "What change — in how I use my time, what I watch or listen to, or how I speak to others — would let more of the Savior’s light into my life?",
@@ -836,14 +931,18 @@ window.CONF = {
    "calling": "General Authority Seventy",
    "title": "Quick to Help, Slow to Judge",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/elder-paul-h-sinclair-october-2026-general-conference-quick-to-help-slow-to-judge/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/56sinclair?lang=eng",
    "summary": "Speaking about helping more and judging less. In the Gospel of John, Jesus Christ ministers to the Samaritan woman at the well. She may have endured much judgment because of her history of broken relationships and her circumstances at the time, but no one then or now knew the full truth of her situation. In contrast, Christ knew everything about her and offered her living water. He spoke to her with dignity, listened earnestly to her questions, answered with teaching, did not hold her hostage to her history, and trusted her with truth. Every day, missionaries meet people at modern-day wells around the world, finding, teaching, baptizing and confirming those who may fear judgment but need help. Disciples of Jesus Christ are invited to reorient their souls to help friends and new members in more Christlike ways, looking not only to a person's past but to their possible. Helping people rather than judging them, one by one in small and simple ways, prepares the world for the Second Coming.",
    "scriptures": [
-    "The Samaritan woman at the well, Gospel of John (no verse cited in recaps)"
+    "Isaiah 11:6",
+    "Matthew 7:1–5",
+    "Luke 6:37–42",
+    "3 Nephi 14:1–12",
+    "Mormon 8:20"
    ],
    "quotes": [
     "He spoke to the woman with dignity, not shame. He earnestly listened to her questions and responded with teaching, not ridicule. He did not hold her hostage to her history. He trusted her with truth.",
-    "Jesus Christ reminds us that to help people transform their lives; we must look not only to ‘their past’ — we must look to ‘their possible.’",
+    "Jesus Christ reminds us that to help people transform their lives, we must look not only to their past—we must look to their possible.",
     "Being quick to help and slow to judge is a simple and deeply encouraging way for each of us to be more holy, to be more like our Savior, to be His true disciples."
    ],
    "invitation": "Be quick to help and slow to judge — look to a person's possible, not only their past, especially friends and new members.",
@@ -858,15 +957,21 @@ window.CONF = {
    "order": 7,
    "speaker": "Elder Gary E. Stevenson",
    "calling": "Quorum of the Twelve Apostles",
-   "title": "Fruit To Make One Happy",
+   "title": "Fruit to Make One Happy",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/elder-gary-stevenson-october-2026-general-conference-fruit-of-gospel/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/57stevenson?lang=eng",
    "summary": "Speaking especially to children of Primary age about the fruits of the gospel. Like a favorite fruit, gospel truths become sweet to us as we live them, bringing happiness and joy. He shared three fruits he loves: first, we are children of a loving Heavenly Father, our most important identity, which makes us stronger and kinder to others; second, the plan of happiness, with the Atonement of Jesus Christ at its center, so we can repent, be forgiven and progress; and third, the gift of the Holy Ghost, a member of the Godhead who warns, comforts and testifies. He invited listeners to love, share and invite, with words and actions.",
-   "scriptures": [],
+   "scriptures": [
+    "1 Nephi 8:10",
+    "1 Nephi 8:11",
+    "1 Nephi 8:12",
+    "John 3:16",
+    "1 Nephi 11:21–36"
+   ],
    "quotes": [
     "This knowledge makes us stronger. This knowledge also makes us kinder to others, knowing that everyone around us is our brother or sister.",
-    "Your Heavenly Father and His Son, Jesus Christ, know you and love you. Even though you are young, you are an important part of Their work",
-    "Consider how your family, friends and loved ones will be blessed to partake of the fruit that blesses you."
+    "‘Your Heavenly Father and His Son, Jesus Christ, know you and love you.’ Even though you are young, ‘you are an important part of Their work.’",
+    "Consider how your family, friends, and loved ones will be blessed to partake of the fruit that blesses you."
    ],
    "invitation": "Love, share and invite — with words and actions — so others can taste the fruit that blesses you.",
    "ponder": "Which gospel truth has become sweetest to me as I've lived it — and whom could I invite to taste it?",
@@ -880,15 +985,21 @@ window.CONF = {
    "order": 8,
    "speaker": "Brother Gabriel W. Reid",
    "calling": "Second Counselor in the Sunday School General Presidency",
-   "title": "You Are Good Enough To Teach",
+   "title": "You Are Good Enough to Teach",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/brother-reid-october-2026-general-conference-you-are-good-enough-to-teach/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/58reid?lang=eng",
    "summary": "Speaking about teaching in the Church. The Lord invites all to teach His gospel, and wherever we teach — in classrooms, in the mission field, in our homes or one by one — He promises to help us do His work; we were never meant to do it alone. Before the Savior taught His disciples where to go and what to teach, He taught them who to become: His first lesson was about discipleship, and at the heart of discipleship is love. For the Master Teacher, every lesson was inspired by love for those He taught. Christ-centered teaching is rooted in relationships, and the inspired new Sunday schedule offers weekly opportunities to know and love those we teach, helping them come closer to the Savior and deepen their conversion — His pattern for every gospel lesson, even shorter ones. He invited all to come unto the Master Teacher, learn of Him and love Him, and He will help us love those we teach.",
-   "scriptures": [],
+   "scriptures": [
+    "Mark 1:17",
+    "Matthew 4:19",
+    "Mosiah 27:8–37",
+    "Mosiah 28:1–3",
+    "Alma 17:11"
+   ],
    "quotes": [
-    "To teach like the Savior, we must love like the Savior.",
-    "The impact of a gospel teacher is not just the message — it is the love of the messenger.",
-    "Learn of Him. Love Him. And as you do, He will help you love those you teach — and that love will make your teaching more like His."
+    "To teach like the Savior, we must love like the Savior!",
+    "The impact of a gospel teacher is not just the message—it is the love of the messenger.",
+    "Learn of Him. Love Him. As you do, He will help you love those you teach—and that love will make your teaching more like His."
    ],
    "invitation": "Come unto the Master Teacher — learn of Him and love Him, and let that love shape how you teach those around you.",
    "ponder": "Whom do I teach — at church, at home or one by one — and how could I come to know and love them better?",
@@ -902,12 +1013,14 @@ window.CONF = {
    "order": 9,
    "speaker": "Elder Clark G. Gilbert",
    "calling": "Quorum of the Twelve Apostles",
-   "title": "Teach Truth With Love",
+   "title": "Teach Truth with Love",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/elder-clark-gilbert-october-2026-general-conference-teach-truth-with-love/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/59gilbert?lang=eng",
    "summary": "Speaking about standing for truth with love. Standing for truth takes courage, and standing for truth with love takes even more. Drawing on teachings of President Dallin H. Oaks, he shared five principles: avoid overly contentious settings, where tense moments make it harder to see what is really causing someone’s protests; find common ground, as the Savior did, for “we love him, because he first loved us”; be a light, which opens more doors than any pointed argument; hold to truth even in outreach, because minimizing God’s laws separates us from the One who loves others most; and stay anchored in Jesus Christ, asking ourselves whether we carry Christlike attributes as we strive to stand for truth with love. For disciples of Jesus Christ, truth and love always walk together — for some this will require greater conviction, for others greater charity, and the Lord will help us.",
    "scriptures": [
-    "1 John 4:19"
+    "1 John 4:19",
+    "John 8:11",
+    "Moroni 7:45"
    ],
    "quotes": [
     "It takes courage to stand for truth. It takes even more courage to stand for truth with love.",
@@ -926,17 +1039,17 @@ window.CONF = {
    "order": 10,
    "speaker": "President Dallin H. Oaks",
    "calling": "President of the Church",
-   "title": "Concluding Remarks",
+   "title": "Closing Remarks",
    "recap_url": "https://www.thechurchnews.com/general-conference/2026/10/04/president-dallin-oaks-october-2026-general-conference-concluding-remarks/",
-   "official_url": null,
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/510oaks?lang=eng",
    "summary": "President Dallin H. Oaks, President of the Church, closed the conference. He said the messages of the conference and the Spirit of the Lord had inspired all to concentrate their worship, focus their learning and unite their testimonies on the teachings of the Lord Jesus Christ and His Father’s plan. He invited everyone to revisit the conference messages, prayerfully ponder them and act on the principles taught, reminding listeners of the Lord’s promise, “Unto him that receiveth I will give more” (2 Nephi 28:30). He invited the world, in person or virtually, to the Salt Lake Temple Celebration, when the renovated temple’s doors open to the public on April 5, 2027, the first such opening since 1893, and announced “Dedicate,” a new video series about the Salt Lake Temple premiering after the session, with more episodes and a virtual temple tour to come. He closed with a blessing of peace and contentment and his testimony that truth is to be found in the restored gospel of Jesus Christ.",
    "scriptures": [
     "2 Nephi 28:30"
    ],
    "quotes": [
     "The great messages of this conference and the Spirit of the Lord have inspired all of us to concentrate our worship, focus our learning, and unite our testimonies on the teachings of the Lord Jesus Christ and His Father’s plan for our eternal increase and joy.",
-    "As we now go forward, we invoke the blessings of the Lord on you and your families — blessings of peace and contentment.",
-    "Truth is to be found here — truth about the teachings of the Lord and truth about the covenant path that will lead us to our destiny — the destiny desired by our Heavenly Father."
+    "As we now go forward, we invoke the blessings of the Lord on you and your families, blessings of peace and contentment.",
+    "Truth is to be found here—truth about the teachings of the Lord and truth about the covenant path that will lead us to our destiny, the destiny desired by our Heavenly Father."
    ],
    "invitation": "Revisit the messages of this conference, prayerfully ponder them, and act on the principles taught.",
    "ponder": "Which conference message will I go back to first, and what one principle from it will I act on?",

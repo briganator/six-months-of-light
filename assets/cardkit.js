@@ -632,7 +632,7 @@
         ctx.save(); ctx.shadowColor = "transparent"; ctx.fillStyle = th.dark ? "rgba(10,12,26,.55)" : "rgba(255,255,255,.75)"; roundRect(ctx, W / 2 - cw / 2, py, cw, ph, u * .03); ctx.fill(); ctx.strokeStyle = th.gold; ctx.globalAlpha *= .5; ctx.lineWidth = Math.max(1, u / 600); ctx.stroke(); ctx.restore();
         ctx.fillStyle = th.gold; ctx.font = `600 ${ph * .66}px ${SERIF}`; ctx.textAlign = "left"; ctx.fillText(String(S.value), W / 2 - cw / 2 + u * .05, py + ph * .62);
         const vx = W / 2 - cw / 2 + u * .07 + ctx.measureText(String(S.value)).width; ctx.fillStyle = th.ink; const lf = f => `500 ${f}px ${SANS}`, LF = fit(ctx, S.label, lf, cw - (vx - (W / 2 - cw / 2)) - u * .05, ph * .62, u * .034, 1.25);
-        block(ctx, LF, lf, vx, py + (ph - LF.h) / 2, "left", th.ink); ctx.fillStyle = th.sub; ctx.font = `${u * .017}px ${SANS}`; ctx.textAlign = "center"; ctx.fillText(S.basis || "Counted from the recaps", W / 2, py + ph + u * .03); }
+        block(ctx, LF, lf, vx, py + (ph - LF.h) / 2, "left", th.ink); ctx.fillStyle = th.sub; ctx.font = `${u * .017}px ${SANS}`; ctx.textAlign = "center"; ctx.fillText(S.basis || ((window.OFFICIAL_TEXT && OFFICIAL_TEXT()) ? "Counted from this site's talk data" : "Counted from the recaps"), W / 2, py + ph + u * .03); }
       ctx.globalAlpha = 1; } },
     daily:    { name: "Today’s thought", draw(ctx, W, H, o, th, P, look, A) {
       const u = Math.min(W, H), R = textArea(W, H, u), cw = W - u * .24, d = o.daily || {};
@@ -714,7 +714,7 @@
     // disclaimer + photo credit (credit sits under the frame line)
     ctx.save(); ctx.globalAlpha = .9; ctx.textAlign = "center"; ctx.fillStyle = th.sub; ctx.font = `${u * .0175}px ${SANS}`;
     if (look.photo || look.ov) { ctx.shadowColor = "rgba(0,0,0,.6)"; ctx.shadowBlur = u * .01; }
-    ctx.fillText((o.kind === "insight" ? (o.ins && o.ins.basis) || "Based on recaps" : o.foot || "Quoted from recap") + " · Personal study site · Not an official Church site", W / 2, H - u * .068);
+    ctx.fillText((o.kind === "insight" ? (o.ins && o.ins.basis) || ((window.OFFICIAL_TEXT && OFFICIAL_TEXT()) ? "From this site's talk data" : "Based on recaps") : o.foot || ((window.OFFICIAL_TEXT && OFFICIAL_TEXT()) ? "Official talk text" : "Quoted from recap")) + " · Personal study site · Not an official Church site", W / 2, H - u * .068);
     if (look.credit) { ctx.font = `${u * .0145}px ${SANS}`; ctx.fillText(creditLine(look.credit), W / 2, H - u * .018); }
     ctx.restore(); grain(ctx, W, H, fm.grain);
     if (FXA && FXA.post && !still) { ctx.save(); FXA.post(ctx, W, H, t, u, th, P, look); ctx.restore(); }
@@ -744,7 +744,7 @@
     border(ctx, W, H, th2, !still && A !== "none" ? ease(c01(t / 1.2)) : 1, o);
     const fp = still || A === "none" ? 1 : ease(c01((t - 3.2) / 1)); if (fp > 0) brand(ctx, W, H, u, th2, o, fp, LY.own ? null : look);
     ctx.save(); ctx.globalAlpha = .9; ctx.textAlign = "center"; ctx.fillStyle = th2.sub; ctx.font = `${u * .0175}px ${SANS}`;
-    const dx = LY === LAYOUTS.split && W >= H ? W * .27 : W / 2; ctx.fillText((o.foot || "Quoted from recap") + " · Personal study site · Not an official Church site", dx, H - u * .068);
+    const dx = LY === LAYOUTS.split && W >= H ? W * .27 : W / 2; ctx.fillText((o.foot || ((window.OFFICIAL_TEXT && OFFICIAL_TEXT()) ? "Official talk text" : "Quoted from recap")) + " · Personal study site · Not an official Church site", dx, H - u * .068);
     if (look.credit && (LY.own ? LY.light && LY !== LAYOUTS.margin : true) && LY !== LAYOUTS.lineart && LY !== LAYOUTS.margin) { ctx.font = `${u * .0145}px ${SANS}`; ctx.fillText(creditLine(look.credit), dx, H - u * .018); }
     ctx.restore(); grain(ctx, W, H, fm.grain);
     if (FXA && FXA.post && !still) { ctx.save(); FXA.post(ctx, W, H, t, u, th2, P, look); ctx.restore(); }
@@ -783,7 +783,7 @@
     const y = H * .43 + (lines.length - 1) * fs * 1.02 + 46;
     ctx.fillStyle = th.gold; ctx.font = `600 18px ${SANS}`; spaced(ctx, o.speaker.toUpperCase(), x, y, 3, "left");
     ctx.fillStyle = th.sub; ctx.font = `italic 500 29px ${SERIF}`; wrap(ctx, o.bigIdea, W * .8).slice(0, 2).forEach((l, i) => ctx.fillText(l, x, y + 44 + i * 34));
-    ctx.font = `14px ${SANS}`; ctx.fillStyle = th.sub; ctx.fillText("Personal study site · Not an official Church site · Quotes from recaps", x, H * .92);
+    ctx.font = `14px ${SANS}`; ctx.fillStyle = th.sub; ctx.fillText("Personal study site · Not an official Church site · " + ((window.OFFICIAL_TEXT && OFFICIAL_TEXT()) ? "Quotes from the official talk text" : "Quotes from recaps"), x, H * .92);
   }
   const H_ = { grad, glow, sky, SKY, vignette, ridges, aurora, stars, rgba, hex, rng, TAU, LP, raysAt, temple, oliveBranch, person, wrap, roundRect, paperBase, ease, easeIO, c01, SERIF, SANS };
   window.CardKit = { LOOKS, LAYOUTS, PALETTES, FONTS, FONTF, SIZES, TL, ANIMS, FX, H: H_, drawCard, drawThumb, drawOG, prepare, IMG };

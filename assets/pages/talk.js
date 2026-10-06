@@ -8,7 +8,7 @@ else {
   const committed = Store.commitments().find(c => c.talkId === t.id);
   main.innerHTML = `
   <p class="crumbs"><a href="index.html">← All talks</a> · <a href="session.html?s=${s.id}">${esc(s.name)}</a>, talk ${t.order}</p>
-  ${recapNotice(true)}
+  ${recapNotice(true, t)}
   <article class="card talk-main s-${s.color}">
     <div class="talk-head"><span class="chip-session s-${s.color}">${esc(s.name)} · Talk ${t.order}</span><h1>${esc(t.title)}</h1>
       <p class="speaker"><a href="speaker.html?s=${slug(t.speaker)}">${esc(t.speaker)}</a> · ${esc(t.calling)}</p></div>
@@ -22,7 +22,7 @@ else {
     <dl class="kv">
       <dt>Key scriptures</dt>
       <dd><ul class="scriptures">${t.scriptures.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></dd>
-      <dt>Quotes <span style="text-transform:none;letter-spacing:0;font-weight:400;color:var(--muted)">(from recaps; confirm with official text)</span></dt>
+      <dt>Quotes <span style="text-transform:none;letter-spacing:0;font-weight:400;color:var(--muted)">(${t.official_url ? "from the official talk text" : "from recaps; confirm with official text"})</span></dt>
       <dd>${t.quotes.map((q,qi)=>`<blockquote id="q${qi+1}" class="qanchor" tabindex="-1">“${esc(q)}”</blockquote>
         <div class="qrow"><button type="button" data-save="${qi}" aria-pressed="${Store.isSaved(t.id,qi)}">${Store.isSaved(t.id,qi)?"★ Saved":"☆ Save"}</button>
         <a class="qmake" href="builder.html?t=${t.id}&q=${qi}">Make a card</a></div>`).join("")}</dd>
@@ -69,7 +69,7 @@ else {
     </form>
   </section>
   ${askTalksPanel({ label: "this talk", questions: ["What is the main message?", "Which scriptures are cited?", "What does it invite me to do?"],
-    answer: k => talkAnswer([esc(t.big_idea), "Recaps report: " + esc(t.scriptures.join("; ")), esc(t.invitation)][k], [t]) })}
+    answer: k => talkAnswer([esc(t.big_idea), (t.official_url ? "Key scriptures: " : "Recaps report: ") + esc(t.scriptures.join("; ")), esc(t.invitation)][k], [t]) })}
   <nav class="links">
     ${prev ? `<a class="btn secondary small" href="talks/${esc(prev.id)}.html">← ${esc(prev.speaker)}</a>` : ""}
     ${next ? `<a class="btn secondary small" href="talks/${esc(next.id)}.html">${esc(next.speaker)} →</a>` : ""}
@@ -96,14 +96,14 @@ const whenNear = (id, fn) => { const el = document.getElementById(id); let done 
   if (el && "IntersectionObserver" in window) { const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); go(); } }, { rootMargin: "600px" }); io.observe(el); }
   (window.requestIdleCallback || (f => setTimeout(f, 1500)))(go, { timeout: 4000 }); if (!el) go(); };
 if (t) whenNear("studyPanel", () => loadLib().then(LB => {
-  const me = LB.talks.find(x => x.recap && x.id === t.id), el = document.getElementById("studyPanel"); if (!me || !el) return;
+  const me = LB.talks.find(x => x.local && x.id === t.id), el = document.getElementById("studyPanel"); if (!me || !el) return;
   const cfm = r => { const w = LB.work(r); return w === "Old Testament" ? `<span class="pill">In Come, Follow Me 2026</span>` : w === "New Testament" ? `<span class="pill pending">Come, Follow Me 2027</span>` : ""; };
-  const rel = LB.related(me, 4).filter(x => !x.t.recap), before = LB.talks.filter(x => x.sp === me.sp && !x.recap).slice(0, 3);
+  const rel = LB.related(me, 4).filter(x => !x.t.local), before = LB.talks.filter(x => x.sp === me.sp && !x.local).slice(0, 3);
   const dens = Object.entries(me.d).sort((a, b) => b[1] - a[1]).slice(0, 4);
   el.innerHTML = `<h2 id="sp-h" style="margin-top:0">Study this talk</h2>
     <div class="sp-grid">
       <div><h3>Topics</h3><p>${(me.tg.length ? me.tg : dens.map(x => x[0])).map(k => LB.THEME_KEYS.includes(k) ? `<a class="pill" href="topic.html?k=${k}">${esc(LB.themeName(k))}</a>` : `<span class="pill">${esc(LB.themeName(k))}</span>`).join(" ") || "None tagged yet."}</p>
-        <h3>Structure</h3><ul class="sp-facts"><li>${t.quotes.length} verified quote${t.quotes.length === 1 ? "" : "s"}</li><li>${t.scriptures.length} key scripture${t.scriptures.length === 1 ? "" : "s"} in the recap</li><li>1 invitation · 1 ponder question</li></ul></div>
+        <h3>Structure</h3><ul class="sp-facts"><li>${t.quotes.length} verified quote${t.quotes.length === 1 ? "" : "s"}</li><li>${t.scriptures.length} key scripture${t.scriptures.length === 1 ? "" : "s"}${t.official_url ? "" : " in the recap"}</li><li>1 invitation · 1 ponder question</li></ul></div>
       <div><h3>Scriptures to study</h3><ul class="sp-refs">${t.scriptures.map(r => `<li><span>${esc(r)}</span> ${cfm(r)}</li>`).join("")}</ul>
         <p class="z-note">This year's Come, Follow Me is the ${esc(LB.CFM[2026][0])}; 2027 is the ${esc(LB.CFM[2027][0])}. <a href="${esc(LB.CFM[2026][1])}" rel="noopener">Manual ↗</a></p></div>
     </div>

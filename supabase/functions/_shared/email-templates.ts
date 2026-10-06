@@ -13,7 +13,7 @@ const shell = (pre: string, inner: string, footer: string) => `<!doctype html><h
 </td></tr></table></body></html>`;
 const btn = (href: string, label: string, gold = true) => `<a href="${h(href)}" style="display:inline-block;margin:6px 8px 6px 0;padding:11px 18px;border-radius:999px;font:600 15px Arial,sans-serif;text-decoration:none;${gold ? "background:#d9b25f;color:#1b1608" : "background:#eef1f7;color:#1f2433"}">${h(label)}</a>`;
 const foot = (unsub: string, manage: string) => `You're receiving this because you signed up at sixmonthsoflight.com. <a href="${h(unsub)}" style="color:#6b6457">Unsubscribe</a> (one click) · <a href="${h(manage)}" style="color:#6b6457">Change what you get</a><br>
-Six Months of Light is not an official website of The Church of Jesus Christ of Latter-day Saints. Quotes come from news recaps; confirm with the official text at ChurchofJesusChrist.org.<br>${h(EMAIL.mailingAddress)}`;
+Six Months of Light is not an official website of The Church of Jesus Christ of Latter-day Saints. Quotes are short excerpts from the official talk text; read the full talks at ChurchofJesusChrist.org.<br>${h(EMAIL.mailingAddress)}`;
 
 export function deliveryEmail(it: Item, unsub: string, manage: string) {
   const subject = it.kind === "quote" ? `Quote card · ${it.text.split(" · ")[0]}` : `${it.label}: ${it.title}`.slice(0, 120);

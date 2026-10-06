@@ -6,7 +6,7 @@ let score = 0, n = 0, mode = "quiz", cur;
 const rnd = a => a[Math.floor(Math.random() * a.length)];
 const main = document.getElementById("main");
 main.innerHTML = `${recapNotice()}<h1 style="margin-top:38px">Who said it?</h1>
-  <p class="speaker">Quotes from ${CONF.talks.some(t => /^sun/.test(t.session)) ? "this conference's talks so far" : "Saturday's talks"} (as reported in recaps).</p>
+  <p class="speaker">Quotes from ${CONF.talks.some(t => /^sun/.test(t.session)) ? "this conference's talks so far" : "Saturday's talks"} (${OFFICIAL_TEXT() ? "official wording" : "as reported in recaps"}).</p>
   <div class="seg" id="mode"><button data-k="quiz" aria-pressed="true">Quiz</button><button data-k="flash" aria-pressed="false">Flashcards</button></div>
   <div class="flash"><div class="inner" id="card"></div></div><div id="opts"></div>
   <div class="links"><button class="btn" id="nx">Next</button><span class="speaker" id="sc" style="align-self:center"></span></div>`;

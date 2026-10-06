@@ -40,7 +40,7 @@ if (!sl) {
     <dl class="kv">
       <dt>Bio</dt><dd>Only the calling above is included here. For the official biography, see <a href="${OFFICIAL_LEADERS}" rel="noopener">Church leadership on ChurchofJesusChrist.org ↗</a>.</dd>
       <dt>This conference</dt><dd>${ts.map(t => `<a href="talks/${t.id}.html">“${esc(t.title)}”</a> · ${esc(sessionById(t.session).name)}`).join("<br>")}</dd>
-      <dt>Themes this weekend</dt><dd>${themes.length ? themes.map(x => `<span class="pill" style="margin:2px">${esc(x)}</span>`).join(" ") : "None noted"}<div class="speaker">From this conference's recap.</div></dd>
+      <dt>Themes this weekend</dt><dd>${themes.length ? themes.map(x => `<span class="pill" style="margin:2px">${esc(x)}</span>`).join(" ") : "None noted"}<div class="speaker">${OFFICIAL_TEXT() ? "From this conference's talk." : "From this conference's recap."}</div></dd>
     </dl></article>
   <div id="lib"><p class="empty">Loading past talks…</p></div>
   ${askTalksPanel({ label: s.speaker, questions: ["What did this speaker teach this weekend?"],

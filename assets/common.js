@@ -8,6 +8,8 @@ window.esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&l
 window.talkById = id => CONF.talks.find(t => t.id === id);
 window.sessionById = id => CONF.sessions.find(s => s.id === id);
 window.officialUrl = t => t.official_url || sessionById(t.session).url;
+// True once every talk on the site has its official talk page (quotes then use the official wording).
+window.OFFICIAL_TEXT = () => CONF.talks.length > 0 && CONF.talks.every(t => t.official_url);
 window.slug = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/^(elder|sister|president|bishop)\s+/, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 window.speakerTalks = sl => CONF.talks.filter(t => slug(t.speaker) === sl);
 window.fmtDate = iso => new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" });
@@ -96,7 +98,7 @@ window.postHeroHTML = () => `<div class="post-hero">
       ${countdownHTML()}
       <a class="hero-link post-share" href="builder.html?ins=spoken">Share this as a card →</a></div>`;
 window.headerHTML = (active, small) => `
-  <div class="unofficial" role="note">Not an official Church site<span class="uo-more"> · Personal study page · Quotes from recaps; confirm with official text</span></div>
+  <div class="unofficial" role="note">Not an official Church site<span class="uo-more"> · Personal study page · ${OFFICIAL_TEXT() ? "Quotes match the official talk text" : "Quotes from recaps; confirm with official text"}</span></div>
   ${liveBarHTML(active)}
   <div class="sitebar" id="sitebar"><nav class="topbar wrap" aria-label="Main">
       ${NOTABS.includes(active) ? `<a class="sb-home" href="index.html"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg><span>Home</span></a>` : ""}
@@ -142,10 +144,10 @@ window.footerHTML = () => `
     <div class="foot-brand">${WORDMARK()}<p>${esc(CONF.tagline)}</p></div>
     <p class="big"><strong>This is not an official website of The Church of Jesus Christ of Latter-day Saints.</strong></p>
     <p>Six Months of Light is a personal study page. It is not affiliated with or endorsed by the Church. For official talks, audio and video, visit <a href="${esc(CONF.conference_url)}" rel="noopener">ChurchofJesusChrist.org</a>.</p>
-    <p>Summaries and quotes come from Church News / Church Newsroom recaps; confirm with official text. Full talk text is not reproduced. Your saved quotes, notes and commitments stay on this device.</p>
+    <p>${OFFICIAL_TEXT() ? "Quotes are short excerpts checked against the official talk text; summaries are this site's own." : "Summaries and quotes come from Church News / Church Newsroom recaps; confirm with official text."} Full talk text is not reproduced. Your saved quotes, notes and commitments stay on this device.</p>
     <p class="foot-links"><a href="builder.html?src=promo"><strong>Share this site</strong></a> · <a href="quiz.html">Who said it? quiz</a> · <a href="lessons.html">Lesson helps</a> · <a href="challenge.html">Challenge</a> · <a href="groups.html">Family &amp; ward group links</a> · <a href="subscribe.html"><strong>Keep the Light</strong> (reminders)</a> · <a href="credits.html">Photo credits</a> · <a href="privacy.html">Privacy</a></p>
   </div></footer>`;
-window.recapNotice = compact => compact ? `<p class="notice-sm" role="note"><span class="pill pending">Recap</span> Quotes and summary from Church News / Newsroom recaps; confirm with official text.</p>` : `<div class="notice" role="note"><strong>Quotes from recaps; confirm with official text.</strong> Official talk text isn't posted yet. Summaries and quotes here come from Church News and Church Newsroom recaps.</div>`;
+window.recapNotice = (compact, t) => (t ? t.official_url : OFFICIAL_TEXT()) ? "" : compact ? `<p class="notice-sm" role="note"><span class="pill pending">Recap</span> Quotes and summary from Church News / Newsroom recaps; confirm with official text.</p>` : `<div class="notice" role="note"><strong>Quotes from recaps; confirm with official text.</strong> Official talk text isn't posted yet. Summaries and quotes here come from Church News and Church Newsroom recaps.</div>`;
 window.mount = (active, small) => {
   document.body.insertAdjacentHTML("afterbegin", headerHTML(active, small)); if (NOTABS.includes(active)) document.body.classList.add("no-tabs"); if (active === "index.html") document.body.classList.add("home"); if (active === "index.html" && POSTCONF && !LIVE.now()) document.body.classList.add("post");
   document.body.insertAdjacentHTML("beforeend", footerHTML());
@@ -195,7 +197,7 @@ window.askTalksPanel = (scope = {}) => {
 // talks: array of talk objects cited by this answer (linked to the talk page and its recap source)
 window.talkAnswer = (html, talks) => `<div class="ask-bubble"><p>${html}</p>
   <ol class="cites">${talks.map(t => `<li><a href="talks/${esc(t.id)}.html">${esc(t.speaker)}, “${esc(t.title)}”</a> · <a href="${esc(t.official_url || t.recap_url)}" rel="noopener">${t.official_url ? "official text" : "recap source"} ↗</a></li>`).join("")}</ol>
-  <div class="ask-tag">From recaps on this site; confirm with the official text.</div></div>`;
+  <div class="ask-tag">${talks.every(t => t.official_url) ? "From this site's summaries and quotes from the official talk text." : "From recaps on this site; confirm with the official text."}</div></div>`;
 
 // Simple theme buckets used by Insights, speaker pages and lesson helps.
 window.THEMES = {

@@ -11,7 +11,12 @@
   const count = (re, s) => (s.match(re) || []).length;
   const recapCorpus = t => [t.summary, t.big_idea, t.invitation, ...t.quotes].join(" ");
   const octSess = Object.fromEntries(CONF.sessions.map(s => [SE[s.id] || s.id, s.name]));
+  // Once the official text posts, October 2026 uses the official derived counts (library-data.js) for each site talk.
+  const offId = t => (t.official_url || "").match(/2026\/10\/([\w-]+)\?/)?.[1];
+  const offOct = new Map(L.talks.filter(x => x.c === "2026-10").map(x => [x.id, x]));
   const oct = CONF.talks.map(t => {
+    const O = offOct.get(offId(t));
+    if (O) return { ...O, id: t.id, t: t.title, s: t.speaker, sp: slug(t.speaker), oid: O.id, k: t.big_idea, recap: 0, local: "talks/" + t.id + ".html" };
     const txt = recapCorpus(t), low = lowc(txt), words = low.match(/[a-z][a-z'-]+/g) || [];
     const tw = {}; words.forEach(w => { w = w.replace(/'s$/, ""); if (w.length > 3 && !STOP.has(w)) tw[w] = (tw[w] || 0) + 1; });
     const qs = t.quotes.join(" ").toLowerCase();
@@ -21,12 +26,13 @@
       tg: [...new Set(t.quotes.flatMap((_, i) => T3.tagsFor(t.id, i)))].slice(0, 3),
       inv: count(/\bi (invite|extend an invitation|encourage you)/g, qs), pro: count(/\bi promise/g, qs), q: (t.quotes.join(" ").match(/\?/g) || []).length,
       ti: Object.fromEntries(Object.entries(TITLE_RE).map(([k, r]) => [k, count(r, low)]).filter(x => x[1])), pl: {},
-      tw: Object.entries(tw).sort((a, b) => b[1] - a[1]).slice(0, 10).map(x => x[0]), recap: 1, local: "talks/" + t.id + ".html" };
+      tw: Object.entries(tw).sort((a, b) => b[1] - a[1]).slice(0, 10).map(x => x[0]), recap: t.official_url ? 0 : 1, local: "talks/" + t.id + ".html" };
   });
-  const confs = [{ c: "2026-10", label: "October 2026", sessions: octSess, n: oct.length, recap: 1, url: CONF.conference_url }, ...L.confs.slice().reverse()];
-  const talks = [...oct, ...L.talks.slice().sort((a, b) => b.c.localeCompare(a.c) || a.id.localeCompare(b.id))];
+  const octRecap = oct.some(t => t.recap) ? 1 : 0;
+  const confs = [{ c: "2026-10", label: "October 2026", sessions: octSess, n: oct.length, recap: octRecap, url: CONF.conference_url }, ...L.confs.filter(c => c.c !== "2026-10").slice().reverse()];
+  const talks = [...oct, ...L.talks.filter(t => t.c !== "2026-10").slice().sort((a, b) => b.c.localeCompare(a.c) || a.id.localeCompare(b.id))];
   const confOf = c => confs.find(x => x.c === c);
-  const official = t => t.recap ? (talkById(t.id)?.official_url || null) : `https://www.churchofjesuschrist.org/study/general-conference/${t.c.slice(0, 4)}/${t.c.slice(5)}/${t.id}?lang=eng`;
+  const official = t => t.local ? (talkById(t.id)?.official_url || null) : `https://www.churchofjesuschrist.org/study/general-conference/${t.c.slice(0, 4)}/${t.c.slice(5)}/${t.id}?lang=eng`;
   const href = t => t.local || official(t);
   const sessName = t => (confOf(t.c)?.sessions || {})[t.se] || "";
   const minutes = t => t.w ? Math.max(1, Math.round(t.w / 200)) : null;      // reading at ~200 wpm

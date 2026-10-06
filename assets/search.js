@@ -28,13 +28,13 @@
     const P = parse(q); if (!P.terms.length && !P.ref && !P.themes.length) return { P, hits: [] };
     const hits = [];
     LB.talks.forEach(t => {
-      const o = t.recap ? octById(t.id) : null, why = new Set(); let s = 0;
+      const o = t.local ? octById(t.id) : null, why = new Set(); let s = 0;
       P.terms.forEach(w => {
         if (hasWord(t.t, w)) { s += 4; why.add("title"); }
-        if (hasWord(t.k, w)) { s += 2; why.add(t.recap ? "big idea" : "summary line"); }
+        if (hasWord(t.k, w)) { s += 2; why.add(t.local ? "big idea" : "summary line"); }
         if (t.tw.some(x => x === w || stem(x) === stem(w))) { s += 2; why.add("top words"); }
         if (w.length > 3 && lc(t.s).split(/\s+/).includes(w)) { s += 5; why.add("speaker"); }
-        if (o && (hasWord(o.summary, w) || o.quotes.some(x => hasWord(x, w)))) { s += 2; why.add("recap"); }
+        if (o && (hasWord(o.summary, w) || o.quotes.some(x => hasWord(x, w)))) { s += 2; why.add(o.official_url ? "summary or quote" : "recap"); }
       });
       if (P.ref && refMatch(t.rf, P.ref)) { s += 6; why.add("cites " + P.ref); }
       P.themes.forEach(k => { if (t.tg.includes(k)) { s += 3; why.add("topic: " + LB.themeName(k)); } else if (!t.recap && (t.d[k] || 0) > 2 * (L.themeMean[k] || 99)) { s += 1; why.add("topic words"); } });
@@ -55,7 +55,7 @@
       basis = P.ref ? "Counted from official talk footnotes" : "Matched in titles, summary lines, top words and topics"; R.count = hits.length; R.countTalks = hits.map(h => h.t); }
     const pool = R.countTalks, by = {}; pool.forEach(t => by[t.s] = (by[t.s] || 0) + 1);
     const who = Object.entries(by).sort((a, b) => b[1] - a[1]).slice(0, 3), peak = per.slice().sort((a, b) => b[1] - a[1])[0];
-    const octN = pool.filter(t => t.recap).length;
+    const octN = pool.filter(t => t.recap).length;  // recap-only October 2026 talks (0 once official text posts)
     return { label, per, unit, basis, who, peak, octN, theme, confsN: new Set(pool.map(t => t.c)).size };
   }
   const spark = (per, peak) => { const m = Math.max(...per.map(x => x[1])) || 1;
@@ -79,14 +79,14 @@
         ${spark(I.per, I.peak)}<p class="z-note">Trend: ${esc(I.unit)} per official conference${I.peak && I.peak[1] ? `, highest in ${esc(LB.confOf(I.peak[0]).label)}` : ""}. October 2026 joins when the official text is posted. ${esc(I.basis)}.</p>
         <button class="btn gold small" type="button" data-zcard>Make a card</button></section>
       ${octQ.length ? `<section><h3 class="srch-h">Verified quotes · October 2026</h3><ul class="srch-quotes">${octQ.slice(0, 4).map(o => `<li><blockquote>“${esc(o.x)}”</blockquote><div class="speaker">${esc(o.t.speaker)}, <a href="talks/${esc(o.t.id)}.html">“${esc(o.t.title)}”</a> · from recaps · <a href="builder.html?t=${esc(o.t.id)}&q=${o.i}">Make a card</a></div></li>`).join("")}</ul></section>` : ""}
-      ${top.length ? `<section><h3 class="srch-h">Talks</h3><ol class="srch-talks">${top.map(h => `<li><a href="${esc(LB.href(h.t))}" ${h.t.recap ? "" : 'target="_blank" rel="noopener"'}>${esc(h.t.t)}${h.t.recap ? "" : " ↗"}</a><div class="speaker">${esc(h.t.s)} · ${esc(LB.confOf(h.t.c).label)} · <span class="srch-why">${esc(h.why.slice(0, 2).join(", "))}</span></div>${h.t.k ? `<div class="srch-k">${esc(h.t.k)}</div>` : ""}</li>`).join("")}</ol>
+      ${top.length ? `<section><h3 class="srch-h">Talks</h3><ol class="srch-talks">${top.map(h => `<li><a href="${esc(LB.href(h.t))}" ${h.t.local ? "" : 'target="_blank" rel="noopener"'}>${esc(h.t.t)}${h.t.recap ? "" : " ↗"}</a><div class="speaker">${esc(h.t.s)} · ${esc(LB.confOf(h.t.c).label)} · <span class="srch-why">${esc(h.why.slice(0, 2).join(", "))}</span></div>${h.t.k ? `<div class="srch-k">${esc(h.t.k)}</div>` : ""}</li>`).join("")}</ol>
         ${R.hits.length > top.length ? `<a class="linkish" href="study.html?c=all&q=${encodeURIComponent(P.terms[0] || P.ref || "")}">See more in the Study library →</a>` : ""}</section>` : ""}
       <div class="srch-cols">
       ${P.themes.length ? `<section><h3 class="srch-h">Topics</h3><p>${P.themes.map(k => `<a class="pill" href="topic.html?k=${k}">${esc(LB.themeIcon(k))} ${esc(LB.themeName(k))}</a>`).join(" ")}</p></section>` : ""}
       ${sps.length ? `<section><h3 class="srch-h">Speakers</h3><p>${sps.map(s => `<a class="pill" href="speaker.html?s=${esc(s.sp)}">${esc(s.s)} · ${s.n}</a>`).join(" ")}</p></section>` : ""}
       ${topRefs.length ? `<section><h3 class="srch-h">${P.ref ? "Scripture" : "Scriptures cited most in these talks"}</h3><ul class="srch-refs">${topRefs.map(([r, n]) => `<li>${SR ? SR.linkify(r) : esc(r)} <span class="speaker">· ${n} talk${n === 1 ? "" : "s"}</span></li>`).join("")}</ul></section>` : ""}
       </div>
-      <div class="ask-tag">Every result links its talk. Counts come from official talk pages; October 2026 quotes come from news recaps.</div></div>`;
+      <div class="ask-tag">Every result links its talk. Counts come from official talk pages${LB.confs.some(c => c.recap) ? "; October 2026 quotes come from news recaps" : ""}.</div></div>`;
     el.querySelector("[data-zcard]").onclick = () => location.href = LB.zcard(card);
   }
   window.InsightSearch = { search, render, parse };

@@ -25,7 +25,7 @@ main.innerHTML = `
     <div class="lib-chips" id="chips" aria-live="polite"></div>
   </div>
   <div id="out"></div>
-  <p class="lib-note">Official talks link to ChurchofJesusChrist.org. Topics come from counting topic words in each talk (a rough guide, not a judgment). October 2026 entries use this site's recap until the official text is posted. <a href="credits.html">About the data</a>.</p>`;
+  <p class="lib-note">Official talks link to ChurchofJesusChrist.org. Topics come from counting topic words in each talk (a rough guide, not a judgment). ${OFFICIAL_TEXT() ? "October 2026 entries open this site's talk pages, with counts from the official text. " : "October 2026 entries use this site's recap until the official text is posted. "}<a href="credits.html">About the data</a>.</p>`;
 const $ = id => document.getElementById(id);
 function sync() { const q = new URLSearchParams(); if (st.view !== "talks") q.set("view", st.view); if (st.c !== "2026-10") q.set("c", st.c); if (st.topic) q.set("topic", st.topic); if (st.sp) q.set("sp", st.sp); if (st.q) q.set("q", st.q);
   setURL("study.html" + (q.toString() ? "?" + q : "")); }
@@ -38,7 +38,7 @@ const talkRow = t => { const cf = LB.confOf(t.c), mins = LB.minutes(t), ext = !t
     <span class="lt-title">${esc(t.t)}${ext ? ' <span class="ext" aria-label="opens ChurchofJesusChrist.org">↗</span>' : ""}</span>
     <span class="lt-meta">${esc(t.s)} · ${esc(cf.label)}${LB.sessName(t) ? " · " + esc(LB.sessName(t).replace(/ Session$/, "")) : ""}${mins ? ` · ${mins} min read` : t.recap ? " · recap" : ""}</span>
     ${t.tg.length ? `<span class="lt-tags">${t.tg.map(k => `<span class="pill">${esc(LB.themeName(k))}</span>`).join("")}</span>` : ""}</a>${makeLink(t)}</li>`; };
-const makeLink = t => { if (t.recap) { const r = talkById(t.id); return r && r.quotes.length ? `<a class="lib-make" href="builder.html?t=${esc(t.id)}&q=0">Make a card</a>` : ""; }
+const makeLink = t => { if (t.local) { const r = talkById(t.id); return r && r.quotes.length ? `<a class="lib-make" href="builder.html?t=${esc(t.id)}&q=0">Make a card</a>` : ""; }
   return `<a class="lib-make" href="builder.html?lt=${esc(t.c)}/${esc(t.id)}" aria-label="Make a card for ${esc(t.t)}">Make a card</a>`; };
 function render() { sync(); chips();
   document.querySelectorAll(".lib-views button").forEach(b => { b.setAttribute("aria-pressed", b.dataset.v === st.view); });

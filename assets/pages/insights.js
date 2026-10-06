@@ -33,7 +33,7 @@ addEventListener("hashchange", openCharts);
 document.getElementById("main").innerHTML = `
   <div class="section-label">Understand &amp; share</div><h1 style="margin-top:0">Conference Insights</h1>
   <p class="lede">The conference at a glance. Every insight is a card you can share in one tap.</p>
-  <div class="notice"><strong>Based on recaps, not official text.</strong> Computed in your browser from the summaries and verified recap quotes for ${SCOPE.of(T.length)}. Numbers will be recomputed from official text once it's posted.</div>
+  ${OFFICIAL_TEXT() ? `<div class="notice"><strong>From this site's summaries and official-text quotes.</strong> Computed in your browser from the summary and verified quotes of ${SCOPE.of(T.length)} (quotes match the official text). For counts from the full official text and comparisons with past conferences, open <a href="study.html">Study</a>.</div>` : `<div class="notice"><strong>Based on recaps, not official text.</strong> Computed in your browser from the summaries and verified recap quotes for ${SCOPE.of(T.length)}. Numbers will be recomputed from official text once it's posted.</div>`}
   <div class="stat-row">
     <div class="stat"><b data-count="${T.length}">${T.length}</b><span>talks so far</span></div>
     <div class="stat"><b data-count="${I.christMentions}">${I.christMentions}</b><span>mentions of Christ</span></div>
@@ -65,7 +65,7 @@ document.getElementById("main").innerHTML = `
   </div></details>
   <div id="ask"></div>${askTalksPanel({ label: "the whole conference", questions: ["Which talks taught about the temple?", "Which talks focused on Jesus Christ?"],
     answer: k => { const key = k === 0 ? "Temples & covenants" : "Jesus Christ & His Atonement", ts = T.filter(t => talkThemes(t).includes(key));
-      return talkAnswer(`${ts.length} of ${T.length} ${SCOPE.adj}talks touched “${esc(key)}” (keyword-based, from recaps):`, ts); } })}`;
+      return talkAnswer(`${ts.length} of ${T.length} ${SCOPE.adj}talks touched “${esc(key)}” (keyword-based, ${OFFICIAL_TEXT() ? "from summaries and quotes" : "from recaps"}):`, ts); } })}`;
 initSubnav();
 const spot = document.getElementById("spot"), go = document.getElementById("spotgo");
 spot.addEventListener("change", () => go.href = `builder.html?ins=spot-${spot.value}`);

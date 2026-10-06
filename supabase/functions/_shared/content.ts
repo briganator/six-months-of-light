@@ -86,11 +86,11 @@ export async function itemFor(p: Prefs, dateISO: string): Promise<Item> {
   const filt = (ts: Talk[]) => { let r = ts; if (p.sp) { const x = r.filter(t => t.sp === p.sp); if (x.length) r = x; } if (p.tp) { const x = r.filter(t => t.topics.includes(p.tp)); if (x.length) r = x; } return r; };
   const pools: Record<string, () => Item[]> = {
     talk: () => order(filt(all), t => t.c + t.id, seed).map(t => ({ kind: "talk", label: KIND_LABEL.talk, title: t.title, text: `${t.speaker} · ${t.conf}`,
-      lines: [t.overview, t.oct ? "Summary written from news recaps of the talk; read the official text for the full message." : "The summary line from the talk's official page."],
+      lines: [t.overview, t.oct ? (t.official ? "Summary written for this site; read the official text for the full message." : "Summary written from news recaps of the talk; read the official text for the full message.") : "The summary line from the talk's official page."],
       url: t.url, image: t.image, card: t.oct ? SITE + "builder.html?t=" + t.id : null, reflect: t.ponder })),
     quote: () => { const oct = filt(talks(D, "oct")); const qs = oct.flatMap(t => t.quotes.map((q, i) => ({ t, q, i }))).filter(x => !p.tp || ((D.meta.quoteTags || {})[x.t.id + "#" + x.i] || []).includes(p.tp) || !oct.some(t => t.topics.includes(p.tp)));
       return order(qs, x => x.t.id + x.i, seed).map(({ t, q, i }) => ({ kind: "quote", label: KIND_LABEL.quote, title: `“${clip(q, 150)}”`, text: `${t.speaker} · ${t.title}`,
-        lines: [`“${q}”`, `${t.speaker}, “${t.title},” October 2026 general conference. Quoted in news recaps; confirm the wording with the official text.`],
+        lines: [`“${q}”`, `${t.speaker}, “${t.title},” October 2026 general conference.${t.official ? "" : " Quoted in news recaps; confirm the wording with the official text."}`],
         url: `${SITE}q/${t.id}-${i + 1}.html`, image: `${SITE}assets/og/q/${t.id}-${i + 1}.jpg`, card: `${SITE}q/${t.id}-${i + 1}.html`, reflect: t.ponder })); },
     insight: () => { const tc = (D.meta.themeCards || []).filter((c: any) => !p.tp || c.theme.includes(tpWord));
       const list = (p.tp && tc.length ? tc : []).concat(D.meta.insights || [], p.tp ? [] : D.meta.themeCards || []);

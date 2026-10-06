@@ -6,7 +6,7 @@ Live URL: **https://sixmonthsoflight.com/** (GitHub Pages from `briganator/six-m
 A personal study and sharing site for the 196th Semiannual General Conference (internal folder name: `conference-share`). It is a static site (HTML, CSS and vanilla JS) with no build step, so visitors don't install anything. It's meant for free GitHub Pages hosting. **Nothing has been published.**
 
 > **Not an official Church site.** Every page has a top banner and a footer that say so.
-> **Quotes come from Church News / Newsroom recaps; confirm them with the official text.** Official text wasn't posted when this was built.
+> **Official text posted Oct 5, 2026.** Every quote was checked against the official talk text and set to its exact wording; each talk links its official page, key scriptures come from the official footnotes, and October 2026 now uses official derived counts in the study library and comparisons. Summaries are still this site's own (first written from recaps).
 > Full talk text is Church copyright and is **not** reproduced. The site uses only summaries and short quotes, and each talk page has an empty slot in case permission is ever granted.
 
 ## Look and motion
@@ -117,7 +117,7 @@ Answer **only** from official talk text on ChurchofJesusChrist.org. Cite the tal
 
 ## Launch plan
 - **This week:** Card Studio (still and animated), 60-second recaps, talk pages, quiz, insights (labeled "based on recaps"), What stuck with me plus moderation, challenge, group links.
-- **When official text posts (Mon/Tue):** replace recap quotes with official wording, set `official_url` and `video_embed`, remove the recap banners, recompute insights, add Sunday talks, rerender cards and OG images.
+- **Done Oct 5, 2026 — when official text posts (Mon/Tue):** replace recap quotes with official wording, set `official_url` and `video_embed`, remove the recap banners, recompute insights, add Sunday talks, rerender cards and OG images.
 - **After official text posts:** consider letting insight search take free-text questions under the rules above (free-tier or self-hosted only), add the past-conference comparisons, and fill in speakers' recent talks from official listings.
 
 ## Test data

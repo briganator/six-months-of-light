@@ -94,7 +94,7 @@ for t in talks:
 music = json.loads((ROOT / "tools/music_sessions.json").read_text())
 links = json.loads((ROOT / "tools/hymn_links.json").read_text())
 LIB = {"coverage": {"from": confs[0]["label"], "to": confs[-1]["label"], "conferences": len(confs), "talks": len(talks),
-                    "note": "Official churchofjesuschrist.org talk pages (metadata, footnotes and derived counts only). October 2026 comes from this site's recaps until official text is posted."},
+                    "note": "Official churchofjesuschrist.org talk pages (metadata, footnotes and derived counts only). October 2026 uses the official text (posted Oct 5, 2026), linked to this site\'s talk pages."},
        "themeMean": {k: round(v, 2) for k, v in mean.items()}, "themeKeys": {k: v["keys"] for k, v in THEMES.items()},
        "titles": ns["TITLES"], "confs": confs, "talks": talks,
        "music": [{"c": s["c"], "se": s["session"], "choir": s["choir"].rstrip("*"), "songs": [[x["t"], x["b"], x["n"]] for x in s["songs"]]} for s in music],

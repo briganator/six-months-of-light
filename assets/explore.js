@@ -188,7 +188,7 @@
     function behind(A, sets, labels) {
       const k = focusKey; if (!k) return "";
       const lists = sets.map((S, i) => { const items = (S.beh[k] || []).slice(0, 8); if (!items.length) return "";
-        return `${labels ? `<div class="xp-bl"><span class="xp-key ${i ? "kb" : "ka"}"></span>${esc(labels[i])}</div>` : ""}<ol class="xp-behind">${items.map(x => x.t ? `<li><a href="${esc(LB.href(x.t))}" ${x.t.recap ? "" : 'target="_blank" rel="noopener"'}>${esc(x.t.t)}${x.t.recap ? "" : " ↗"}</a><span class="speaker">${esc(x.t.s)} · ${esc(short(LB.confOf(x.t.c).label))} · ${esc(String(x.text).slice(0, 90))}</span></li>`
+        return `${labels ? `<div class="xp-bl"><span class="xp-key ${i ? "kb" : "ka"}"></span>${esc(labels[i])}</div>` : ""}<ol class="xp-behind">${items.map(x => x.t ? `<li><a href="${esc(LB.href(x.t))}" ${x.t.local ? "" : 'target="_blank" rel="noopener"'}>${esc(x.t.t)}${x.t.recap ? "" : " ↗"}</a><span class="speaker">${esc(x.t.s)} · ${esc(short(LB.confOf(x.t.c).label))} · ${esc(String(x.text).slice(0, 90))}</span></li>`
           : `<li>${LB.hymnLink(x.text) ? `<a href="${esc(LB.hymnLink(x.text))}" target="_blank" rel="noopener">${esc(x.text)} ↗</a>` : esc(x.text)}<span class="speaker">${esc(short(LB.confOf(x.m.c).label))} · ${esc(x.m.se.replace(/ Session$/, ""))}${x.m.choir && family(st.s) === "music" && st.m !== "choirs" ? " · " + esc(x.m.choir) : ""}</span></li>`).join("")}</ol>${(S.beh[k] || []).length > 8 ? `<p class="z-note">and ${(S.beh[k] || []).length - 8} more.</p>` : ""}`; }).join("");
       return lists ? `<section class="xp-why"><h4>Behind “${esc(k)}”</h4>${lists}</section>` : "";
     }
