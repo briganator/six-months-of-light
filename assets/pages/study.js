@@ -25,7 +25,7 @@ main.innerHTML = `
     ${confDrop}
   </section>
   <h2 class="lib-h2" id="search-h">Search all talks</h2>
-  <p class="lib-sub">${cov.talks + CONF.talks.length} talks from ${cov.conferences + 1} general conferences, ${cov.from} to October 2026. Search, or filter by session, topic, speaker or conference. New here? Try the <a href="plan.html">reading plan to April</a>.</p>
+  <p class="lib-sub">${LB.talks.length} talks from ${LB.confs.length} general conferences, ${cov.from} to ${cov.to}. Search, or filter by session, topic, speaker or conference. New here? Try the <a href="plan.html">reading plan to April</a>.</p>
   <p class="lib-acts"><a class="btn gold small" href="lessons.html">Build a lesson</a><a class="btn secondary small" href="quiz.html">Who said it? quiz</a></p>
   <div class="lib-views seg" role="group" aria-label="Browse by">${[["talks", "Talks"], ["topics", "Topics"], ["speakers", "Speakers"]].map(([k, v]) => `<button type="button" data-v="${k}" aria-pressed="${st.view === k}">${v}</button>`).join("")}</div>
   <div class="lib-bar" id="bar">
