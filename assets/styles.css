@@ -288,6 +288,10 @@ footer.site a{color:var(--gold-hi)}
 /* ---------- motion ---------- */
 .reveal{opacity:0;transform:translateY(18px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
 .reveal.in,.reveal:target,.reveal:focus-within{opacity:1;transform:none}
+/* Chrome drops closed <details> content out of the disclosure box when a
+   descendant (or the details itself) has a transform. Session titles then
+   stay at opacity 0 while the talk-count pill paints at the bottom. */
+details.session.reveal,details.session .reveal{opacity:1;transform:none;transition:none}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
   .reveal{opacity:1;transform:none}
@@ -974,6 +978,16 @@ details.session .talks{margin-bottom:var(--sp-5)}
 .txt-link{display:inline-flex;align-items:center;min-height:44px;padding:0 8px;color:var(--gold-hi);font-weight:600}
 @media (prefers-reduced-motion:reduce){.entry-i{transition:none}}
 details.session>summary .pill{white-space:nowrap;flex:none}
+/* Closed session rows must not paint. backdrop-filter on .talkcard makes Chrome
+   skip the disclosure's hidden state, so those cards cover the open session. */
+details.session:not([open]) > :not(summary){display:none}
+@media (max-width:899px){
+  /* Keep the open session's date line above the fixed tab bar when the list
+     first comes into view. */
+  #sessions.section-label{margin-top:28px}
+  details.session{margin-top:4px}
+  details.session>summary{padding:10px 0}
+}
 /* insights: swipeable cards on phones, charts behind one disclosure */
 .sw-hint{display:none}
 @media (max-width:899px){

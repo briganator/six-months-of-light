@@ -206,7 +206,12 @@ window.talkThemes = t => { const x = talkText(t); return Object.entries(THEMES).
 // a fast flick, an anchor, or back/forward restore can skip IntersectionObserver, so anything
 // actually on screen is shown directly and never left at opacity 0.
 window.addEventListener("load", () => {
-  const els = [...document.querySelectorAll("main .card, main .session, main .tile, main h2, .recap60, main .stat, ol.talks li")];
+  // Skip disclosures and anything inside them. A transform or opacity fade on <details>
+  // (or on the headings and talk rows inside) makes Chrome lay closed session
+  // content outside the box, so the titles stay invisible and the summary sits
+  // under the tab bar. Those rows are shown as normal content.
+  const els = [...document.querySelectorAll("main .card, main .tile, main h2, .recap60, main .stat")]
+    .filter(el => !el.closest("details"));
   if (!els.length) return;
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduce || !("IntersectionObserver" in window)) return;
