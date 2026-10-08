@@ -46,7 +46,50 @@ for t in d["talks"]:
 </html>
 '''
     (root / "talks" / f'{t["id"]}.html').write_text(page)
-print("wrote", len(d["talks"]), "talk pages")
+for b in d.get("business") or []:
+    e = lambda s: html.escape(s, quote=True)
+    title = b["title"]
+    desc = b.get("lead") or title
+    desc = (desc[:180] + "…") if len(desc) > 180 else desc
+    url = f'{site}talks/{b["id"]}.html'
+    img = f'{site}assets/og/site.jpg'
+    page = f'''<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<base href="../">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{e(title)} · Six Months of Light</title>
+<meta name="description" content="{e(desc)} Not an official Church site.">
+<link rel="canonical" href="{e(url)}">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Six Months of Light">
+<meta property="og:title" content="{e(title)}">
+<meta property="og:description" content="{e(desc)}">
+<meta property="og:url" content="{e(url)}">
+<meta property="og:image" content="{e(img)}">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{e(title)}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0d1326">
+<link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/CormorantGaramond.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<main class="wrap" id="main"></main>
+<script>window.TALK_ID = {json.dumps(b["id"])};</script>
+<script src="assets/config.js"></script>
+<script src="assets/api.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/common.js"></script>
+<script src="assets/pages/share.js"></script>
+<script src="assets/pages/talk.js"></script>
+</body>
+</html>
+'''
+    (root / "talks" / f'{b["id"]}.html').write_text(page)
+print("wrote", len(d["talks"]), "talk pages,", len(d.get("business") or []), "business pages")
 
 # ---- v3 share pages: q/<talk>-<n>.html (one per verified quote) and i/<insight>.html, each with its own
 # link-preview image (tools/render_share.py). They forward people to the quote on the talk page.

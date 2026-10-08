@@ -63,26 +63,16 @@ window.downloadReminder = (talk, text) => {
 window.LOGO_RAYS = [[17.73, 39.36, 13.45, 37.97, 0.38, 1.6], [21.73, 33.07, 16.87, 27.89, 0.5, 1.78], [28.27, 29.47, 25.86, 20.08, 0.63, 1.96], [35.73, 29.47, 38.79, 17.56, 0.75, 2.14], [42.27, 33.07, 52.47, 22.2, 0.88, 2.32], [46.27, 39.36, 62.91, 33.96, 1.0, 2.5]];
 window.LOGO_MARK = (size = 40) => `<svg class="mark" width="${size}" height="${size}" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lmg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3a693"/><stop offset=".55" stop-color="#f1d394"/><stop offset="1" stop-color="#fff3d1"/></linearGradient></defs><g stroke="url(#lmg)" stroke-linecap="round">${LOGO_RAYS.map(([a,b,c,d,o,w],i) => `<line class="ray r${i}" x1="${a}" y1="${b}" x2="${c}" y2="${d}" stroke-opacity="${o}" stroke-width="${w}"/>`).join("")}</g><path d="M21 44a11 11 0 0 1 22 0z" fill="url(#lmg)"/><line x1="6" y1="44" x2="58" y2="44" stroke="url(#lmg)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="50" x2="46" y2="50" stroke="url(#lmg)" stroke-width="1.3" stroke-linecap="round" opacity=".55"/></svg>`;
 window.WORDMARK = () => `<span class="wordmark">${LOGO_MARK(36)}<span class="wm-text">Six Months <em>of</em> Light</span></span>`;
-const NAV = [["index.html","Home"],["study.html","Study"],["builder.html","Make a card"],["insights.html","Insights"],["live.html","Live"],["my.html","My Conference"]];
-const ICON = { study: '<path d="M4 5.5C6.5 4 9.5 4 12 5.8 14.5 4 17.5 4 20 5.5V19c-2.5-1.4-5.5-1.4-8 .4-2.5-1.8-5.5-1.8-8-.4zM12 5.8v13.6"/>', home: '<path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/>', talks: '<path d="M5 4h10l4 4v12H5zM8 11h8M8 15h8M8 7h5"/>', studio: '<path d="M12 3v3M5.6 5.6l2.1 2.1M3 12h3M18.4 5.6l-2.1 2.1M21 12h-3M7 16a5 5 0 0 1 10 0zM3 19h18"/>', insights: '<path d="M5 20V10M10 20V4M15 20v-7M20 20v-11"/>', me: '<path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/>' };
+const NAV = [["index.html","Home"],["study.html","Study"],["builder.html","Make a card"],["insights.html","Insights"],["quiz.html","Quiz"],["my.html","My Conference"]];
+const ICON = { study: '<path d="M4 5.5C6.5 4 9.5 4 12 5.8 14.5 4 17.5 4 20 5.5V19c-2.5-1.4-5.5-1.4-8 .4-2.5-1.8-5.5-1.8-8-.4zM12 5.8v13.6"/>', home: '<path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/>', talks: '<path d="M5 4h10l4 4v12H5zM8 11h8M8 15h8M8 7h5"/>', studio: '<path d="M12 3v3M5.6 5.6l2.1 2.1M3 12h3M18.4 5.6l-2.1 2.1M21 12h-3M7 16a5 5 0 0 1 10 0zM3 19h18"/>', insights: '<path d="M5 20V10M10 20V4M15 20v-7M20 20v-11"/>', me: '<path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/>', quiz: '<circle cx="12" cy="12" r="8"/><path d="M9.2 9.2a2.6 2.6 0 1 1 3.4 2.5c-.8.4-1.3 1-1.3 1.8V14.2M12 17h.01"/>' };
 const TABS = [["index.html","Home","home"],["study.html","Study","study"],["builder.html","Create","studio"],["insights.html","Insights","insights"],["my.html","Me","me"]];
 window.TAB_ICON = ICON;
 window.tabbarHTML = (active) => `<nav class="tabbar" aria-label="Quick">${TABS.map(([h,l,i]) => `<a href="${h}" class="${i === "studio" ? "tb-main" : ""}" ${active === h ? 'aria-current="page"' : ""}><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICON[i]}</svg><span>${l}</span></a>`).join("")}</nav>`;
-// ---- Live now: session windows (MDT = UTC-6), from 10 minutes before a session until 15 minutes after ----
-window.LIVE_WATCH = "https://www.churchofjesuschrist.org/broadcasts?lang=eng";
-// After conference: from 4:15 pm MDT on Oct 4, 2026 (when Live mode turns off). ?post=1 / ?post=0 force it for testing.
+// After conference: from 4:15 pm MDT on Oct 4, 2026. ?post=1 / ?post=0 force it for testing.
 window.POSTCONF = (() => { const f = new URLSearchParams(location.search).get("post"); if (f === "1") return true; if (f === "0") return false; return Date.now() >= Date.parse("2026-10-04T22:15:00Z"); })();
 window.DC138 = { text: "What I the Lord have spoken, I have spoken… whether by mine own voice or by the voice of my servants, it is the same.", ref: "Doctrine and Covenants 1:38", url: "https://www.churchofjesuschrist.org/study/scriptures/dc-testament/dc/1?lang=eng&id=p38#p38" };
-window.LIVE = (() => { const W = { "sat-am": "2026-10-03T16:00:00Z", "sat-pm": "2026-10-03T20:00:00Z", "sun-am": "2026-10-04T16:00:00Z", "sun-pm": "2026-10-04T20:00:00Z" };
-  const force = new URLSearchParams(location.search).get("live");
-  const now = () => { if (new URLSearchParams(location.search).get("post") === "1") return null; if (force && W[force]) return CONF.sessions.find(s => s.id === force) || null; if (force === "0") return null;
-    const t = Date.now(); const id = Object.keys(W).find(k => { const s = Date.parse(W[k]); return t >= s - 6e5 && t <= s + 2 * 36e5 + 9e5; }); return id ? CONF.sessions.find(s => s.id === id) || null : null; };
-  const next = () => { const t = Date.now(), id = Object.keys(W).find(k => Date.parse(W[k]) > t); return id ? { s: CONF.sessions.find(x => x.id === id), at: new Date(W[id]) } : null; };
-  return { now, next, W }; })();
-window.liveBarHTML = active => { const s = LIVE.now(); if (!s || active === "live.html") return "";
-  return `<div class="live-bar" role="region" aria-label="Conference is live"><span class="live-dot" aria-hidden="true"></span><a class="lb-main" href="live.html"><b>Conference is live</b> · share a line you just heard →</a><a class="lb-watch" href="${LIVE_WATCH}" target="_blank" rel="noopener">Watch ↗</a></div>`; };
 // Pages that hide the bottom tab bar on phones get a visible Home button in the header.
-const NOTABS = ["builder.html", "live.html"];
+const NOTABS = ["builder.html"];
 // Keep the Light icon: a small bell giving off three rays of dawn light. Line style to match the tab icons.
 window.KEEP_ICON = (size = 22, cls = "") => `<svg class="keep-ic ${cls}" viewBox="0 0 24 24" width="${size}" height="${size}" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.6v2.1M6.3 4.9l1.3 1.5M17.7 4.9l-1.3 1.5"/><path d="M7.4 16.2v-4.6a4.6 4.6 0 0 1 9.2 0v4.6l1.6 2.1H5.8z"/><path d="M10.4 20.6a1.7 1.7 0 0 0 3.2 0"/></svg>`;
 // Small status message for any page (pages with their own message area, like the Card Studio, keep theirs).
@@ -98,8 +88,7 @@ window.postHeroHTML = () => `<div class="post-hero">
       ${countdownHTML()}
       <a class="hero-link post-share" href="builder.html?ins=spoken">Share this as a card →</a></div>`;
 window.headerHTML = (active, small) => `
-  <div class="unofficial" role="note">Not an official Church site<span class="uo-more"> · Personal study page · ${OFFICIAL_TEXT() ? "Quotes match the official talk text" : "Quotes from recaps; confirm with official text"}</span></div>
-  ${liveBarHTML(active)}
+  <div class="unofficial" role="note">Not an official Church site<span class="uo-more"> · Personal study page · ${OFFICIAL_TEXT() ? "Full talks posted with the Church's permission" : "Quotes from recaps; confirm with official text"}</span></div>
   <div class="sitebar" id="sitebar"><nav class="topbar wrap" aria-label="Main">
       ${NOTABS.includes(active) ? `<a class="sb-home" href="index.html"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg><span>Home</span></a>` : ""}
       <a class="brand" href="index.html" aria-label="Six Months of Light home">${WORDMARK()}</a>
@@ -110,13 +99,12 @@ window.headerHTML = (active, small) => `
   <header class="hero ${small ? "hero-sm" : "hero-lg"}">
     <div class="hero-sky" aria-hidden="true"><span class="rays"></span><span class="glow g1"></span><span class="glow g2"></span><span class="sun"></span>${LANDSCAPE()}<span class="motes"></span><span class="horizon"></span></div>
     ${small ? "" : `<div class="hero-copy wrap">
-      ${active === "index.html" && POSTCONF && !LIVE.now() ? "" : `<div class="eyebrow">${esc(CONF.title)} · October 3–4</div>
+      ${active === "index.html" && POSTCONF ? "" : `<div class="eyebrow">${esc(CONF.title)} · October 3–4</div>
       <h1 class="display"><span class="d1">Six Months</span> <em>of</em> <span class="d2">Light</span></h1>
       <p class="tagline">${esc(CONF.tagline)}</p>`}
-      ${active === "index.html" && POSTCONF && !LIVE.now() ? postHeroHTML() : LIVE.now() ? `<div class="hero-live"><p class="hl-on"><span class="live-dot" aria-hidden="true"></span>Live now · ${esc(LIVE.now().name)}</p><p class="hero-how">Conference is live, share a line you just heard.</p>
-      <div class="hero-actions"><a class="btn gold big" href="live.html">Share a line you heard</a><a class="btn glass" href="${LIVE_WATCH}" target="_blank" rel="noopener">Watch live ↗</a></div></div>` : `<p class="hero-how">Find a line from conference. Make it beautiful. Share it.</p>
+      ${active === "index.html" && POSTCONF ? postHeroHTML() : `<p class="hero-how">Find a line from conference. Make it beautiful. Share it.</p>
       <div class="hero-actions"><a class="btn gold big" href="builder.html">Make a card</a><a class="hero-link" href="${active === "index.html" ? "" : "index.html"}#sessions">or browse the talks ↓</a></div>`}
-      ${active === "index.html" && POSTCONF && !LIVE.now() ? "" : countdownHTML()}
+      ${active === "index.html" && POSTCONF ? "" : countdownHTML()}
     </div>`}
     ${GROUP ? `<p class="grouptag wrap">Group: <strong>${esc(GROUP)}</strong> · <a href="?g=">leave group</a></p>` : ""}
   </header>`;
@@ -144,12 +132,12 @@ window.footerHTML = () => `
     <div class="foot-brand">${WORDMARK()}<p>${esc(CONF.tagline)}</p></div>
     <p class="big"><strong>This is not an official website of The Church of Jesus Christ of Latter-day Saints.</strong></p>
     <p>Six Months of Light is a personal study page. It is not affiliated with or endorsed by the Church. For official talks, audio and video, visit <a href="${esc(CONF.conference_url)}" rel="noopener">ChurchofJesusChrist.org</a>.</p>
-    <p>${OFFICIAL_TEXT() ? "Quotes are short excerpts checked against the official talk text; summaries are this site's own." : "Summaries and quotes come from Church News / Church Newsroom recaps; confirm with official text."} Full talk text is not reproduced. Your saved quotes, notes and commitments stay on this device.</p>
+    <p>${OFFICIAL_TEXT() ? "Full talks are posted here with the Church's permission. Each talk links its official page on ChurchofJesusChrist.org. Summaries are this site's own." : "Summaries and quotes come from Church News / Church Newsroom recaps; confirm with official text. Full talk text is not reproduced."} Your saved quotes, notes and commitments stay on this device.</p>
     <p class="foot-links"><a href="builder.html?src=promo"><strong>Share this site</strong></a> · <a href="quiz.html">Who said it? quiz</a> · <a href="lessons.html">Lesson helps</a> · <a href="challenge.html">Challenge</a> · <a href="groups.html">Family &amp; ward group links</a> · <a href="subscribe.html"><strong>Keep the Light</strong> (reminders)</a> · <a href="credits.html">Photo credits</a> · <a href="privacy.html">Privacy</a></p>
   </div></footer>`;
 window.recapNotice = (compact, t) => (t ? t.official_url : OFFICIAL_TEXT()) ? "" : compact ? `<p class="notice-sm" role="note"><span class="pill pending">Recap</span> Quotes and summary from Church News / Newsroom recaps; confirm with official text.</p>` : `<div class="notice" role="note"><strong>Quotes from recaps; confirm with official text.</strong> Official talk text isn't posted yet. Summaries and quotes here come from Church News and Church Newsroom recaps.</div>`;
 window.mount = (active, small) => {
-  document.body.insertAdjacentHTML("afterbegin", headerHTML(active, small)); if (NOTABS.includes(active)) document.body.classList.add("no-tabs"); if (active === "index.html") document.body.classList.add("home"); if (active === "index.html" && POSTCONF && !LIVE.now()) document.body.classList.add("post");
+  document.body.insertAdjacentHTML("afterbegin", headerHTML(active, small)); if (NOTABS.includes(active)) document.body.classList.add("no-tabs"); if (active === "index.html") document.body.classList.add("home"); if (active === "index.html" && POSTCONF) document.body.classList.add("post");
   document.body.insertAdjacentHTML("beforeend", footerHTML());
   if (active !== "builder.html") { document.body.insertAdjacentHTML("beforeend", tabbarHTML(active)); document.body.classList.add("has-tabbar"); }
   // Sticky header: publish its height (for sticky sub-navs below it) and compact it on scroll (with hysteresis).
@@ -214,11 +202,31 @@ window.THEMES = {
 };
 window.talkText = t => [t.title, t.summary, t.big_idea, t.invitation, ...t.quotes].join(" ").toLowerCase();
 window.talkThemes = t => { const x = talkText(t); return Object.entries(THEMES).filter(([, ks]) => ks.some(k => x.includes(k))).map(([n]) => n); };
-// Gentle reveal-on-scroll motion (respects reduced-motion via CSS).
+// Gentle reveal-on-scroll motion. Reduced motion never hides anything. A jump to the bottom,
+// a fast flick, an anchor, or back/forward restore can skip IntersectionObserver, so anything
+// actually on screen is shown directly and never left at opacity 0.
 window.addEventListener("load", () => {
-  const els = document.querySelectorAll("main .card, main .session, main .tile, main h2, .recap60, main .stat, ol.talks li");
-  const io = "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -5% 0px" }) : null;
-  els.forEach((el, i) => { el.classList.add("reveal"); el.style.setProperty("--i", i % 7); el.style.transitionDelay = Math.min(i, 6) * 40 + "ms"; io ? io.observe(el) : el.classList.add("in"); });
+  // Skip disclosures and anything inside them. A transform or opacity fade on <details>
+  // (or on the headings and talk rows inside) makes Chrome lay closed session
+  // content outside the box, so the titles stay invisible and the summary sits
+  // under the tab bar. Those rows are shown as normal content.
+  const els = [...document.querySelectorAll("main .card, main .tile, main h2, .recap60, main .stat")]
+    .filter(el => !el.closest("details"));
+  if (!els.length) return;
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce || !("IntersectionObserver" in window)) return;
+  const show = el => el.classList.add("in");
+  const onScreen = el => { const r = el.getBoundingClientRect(); return r.bottom > 8 && r.top < innerHeight - 8; };
+  const revealVisible = () => els.forEach(el => { if (!el.classList.contains("in") && onScreen(el)) show(el); });
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { show(e.target); io.unobserve(e.target); } }), { rootMargin: "80px 0px 80px 0px" });
+  els.forEach((el, i) => { el.classList.add("reveal"); el.style.setProperty("--i", i % 7); el.style.transitionDelay = Math.min(i, 6) * 40 + "ms"; io.observe(el); });
+  revealVisible();
+  addEventListener("scroll", revealVisible, { passive: true });
+  addEventListener("hashchange", () => requestAnimationFrame(revealVisible));
+  addEventListener("pageshow", revealVisible);
+  requestAnimationFrame(revealVisible);
+  setTimeout(revealVisible, 60);
+  setTimeout(revealVisible, 500);
 });
 window.talkUrl = t => CONF.site_url + "talks/" + t.id + ".html";
 

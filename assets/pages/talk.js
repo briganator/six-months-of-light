@@ -1,7 +1,26 @@
 mount("", true);
-const CFG = window.CONF_CONFIG, t = talkById(window.TALK_ID || QS.get("t")), main = document.getElementById("main");
+const CFG = window.CONF_CONFIG, tid = window.TALK_ID || QS.get("t");
+const t = talkById(tid) || (CONF.business || []).find(b => b.id === tid);
+const main = document.getElementById("main");
 if (!t) { main.innerHTML = `<div class="card"><p>Talk not found. <a href="index.html">See all talks</a>.</p></div>`; }
-else {
+else if (t.kind === "business") {
+  const s = sessionById(t.session);
+  document.title = t.title;
+  main.innerHTML = `
+  <p class="crumbs"><a href="index.html">← All talks</a> · <a href="session.html?s=${s.id}">${esc(s.name)}</a></p>
+  <article class="card talk-main s-${s.color}" id="summary">
+    <div class="talk-head"><span class="chip-session s-${s.color}">${esc(s.name)} · Business</span><h1>${esc(t.title)}</h1>
+      <p class="speaker">${esc(t.speaker)} · ${esc(t.calling)}</p></div>
+    <p>${esc(t.lead)}</p>
+    <div class="links">
+      <a class="btn" href="${esc(t.official_url)}" rel="noopener">Official page ↗</a>
+      <a class="btn secondary" href="#fulltext">Read the full text</a>
+    </div>
+    <div id="fulltext"></div>
+  </article>
+  <nav class="links"><a class="btn secondary small" href="session.html?s=${s.id}">← ${esc(s.name)}</a></nav>`;
+  loadFull(t);
+} else {
   const s = sessionById(t.session), ts = CONF.talks.filter(x => x.session === t.session).sort((a,b)=>a.order-b.order);
   const i = ts.findIndex(x => x.id === t.id), prev = ts[i-1], next = ts[i+1];
   document.title = `${t.title} · ${t.speaker}`;
@@ -9,7 +28,7 @@ else {
   main.innerHTML = `
   <p class="crumbs"><a href="index.html">← All talks</a> · <a href="session.html?s=${s.id}">${esc(s.name)}</a>, talk ${t.order}</p>
   ${recapNotice(true, t)}
-  <article class="card talk-main s-${s.color}">
+  <article class="card talk-main s-${s.color}" id="summary">
     <div class="talk-head"><span class="chip-session s-${s.color}">${esc(s.name)} · Talk ${t.order}</span><h1>${esc(t.title)}</h1>
       <p class="speaker"><a href="speaker.html?s=${slug(t.speaker)}">${esc(t.speaker)}</a> · ${esc(t.calling)}</p></div>
     <section class="recap60" aria-label="60-second recap">
@@ -31,13 +50,17 @@ else {
       <div id="commitbox" style="margin-top:8px">${committed ? `✓ You committed on ${fmtDate(committed.start)}. <a href="my.html">Track your 7 days</a>`
         : `<button class="btn ok small" id="commit">Commit for 7 days</button>`}</div></div>
     <div class="ponder"><div class="label">Ponder</div>${esc(t.ponder)}</div>
+    <div class="talk-cta" aria-label="Teach it or test yourself">
+      <a class="cta-card test" href="quiz.html?t=${esc(t.id)}"><span class="cta-k">Test yourself</span><strong>Quiz yourself on this talk</strong><span>Who said it? using this talk’s quotes.</span></a>
+      <a class="cta-card teach" href="lessons.html?t=${esc(t.id)}"><span class="cta-k">Teach it</span><strong>Build a lesson from this talk</strong><span>For FHE, a youth class, or a sacrament talk. This talk is already selected.</span></a>
+    </div>
     <div class="links">
       <a class="btn" href="${esc(officialUrl(t))}" rel="noopener">${t.official_url ? "Official talk" : "Official session page"} ↗</a>
       <a class="btn secondary" href="${esc(t.recap_url)}" rel="noopener">Church News recap ↗</a>
+      ${t.full_text_permitted ? `<a class="btn secondary" href="#fulltext">Read the full talk</a>` : ""}
     </div>
     ${t.official_url ? "" : `<p class="speaker">The official talk page isn't posted yet; this links to the session page on ChurchofJesusChrist.org.</p>`}
-    ${t.video_embed ? `<div class="video"><iframe src="${esc(t.video_embed)}" title="Official video: ${esc(t.title)}" loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe></div>`
-      : ""}
+    ${t.video_embed ? `<div class="video"><iframe src="${esc(t.video_embed)}" title="Official video: ${esc(t.title)}" loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe></div>` : ""}
     ${t.full_text_permitted ? `<div id="fulltext"></div>` : `<p class="speaker">Full talk text isn't reproduced here (Church copyright); read it on ChurchofJesusChrist.org.</p>`}
   </article>
   <section class="card study-panel" id="studyPanel" aria-labelledby="sp-h"><h2 id="sp-h" style="margin-top:0">Study this talk</h2><p class="empty">Loading…</p></section>
@@ -85,17 +108,76 @@ else {
   let nt; document.getElementById("note").addEventListener("input", e => { clearTimeout(nt); nt = setTimeout(() => { Store.setNote(t.id, e.target.value.trim()); document.getElementById("notemsg").textContent = "Saved on this device."; }, 400); });
   document.getElementById("cplink").addEventListener("click", () => shareCard({ url: talkUrl(t), text: shareText(t) }));
   setupShare(t.id);
-  // deep link from cards / QR codes: talks/<id>.html#q2 highlights that quote
   const hm = /^#q(\d)$/.exec(location.hash), qa = hm && document.getElementById("q" + hm[1]);
   if (qa) { qa.classList.add("qhit"); requestAnimationFrame(() => { qa.scrollIntoView({ block: "center" }); qa.focus({ preventScroll: true }); }); }
+  loadFull(t);
+}
+
+// Official full text, audio and video. The JSON is this talk only, so the page stays small until it's opened.
+function loadFull(talk) {
+  const slot = document.getElementById("fulltext");
+  if (!slot || !talk.full_text_permitted) return;
+  fetch("assets/fulltext/" + talk.id + ".json").then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(ft => renderFull(slot, talk, ft)).catch(() => {
+    slot.innerHTML = `<p class="speaker">The full talk couldn’t load just now. <a href="${esc(talk.official_url || officialUrl(talk))}" rel="noopener">Read it on ChurchofJesusChrist.org ↗</a></p>`;
+  });
+}
+function mediaBlock(ft, talk) {
+  const v = ft.video, a = ft.audio, off = esc(talk.official_url || officialUrl(talk));
+  if (!v && !a) return "";
+  return `<div class="ft-media no-print">
+    ${v ? `<video controls playsinline preload="none" ${v.poster ? `poster="${esc(v.poster)}"` : ""} aria-label="Official video"><source src="${esc(v.src)}" type="video/mp4"></video>` : ""}
+    ${a ? `<audio controls preload="none" src="${esc(a)}" aria-label="Official audio"></audio>` : ""}
+    <p class="speaker">Official ${v && a ? "video and audio" : v ? "video" : "audio"} from <a href="${off}" rel="noopener">ChurchofJesusChrist.org ↗</a>${v && v.duration ? " · " + esc(v.duration) : ""}</p>
+  </div>`;
+}
+function renderFull(slot, talk, ft) {
+  const notes = ft.notes || [];
+  slot.innerHTML = `<section class="fulltext" aria-labelledby="ft-h">
+    <nav class="ft-tools no-print" aria-label="In this talk">
+      ${talk.kind === "business" ? "" : `<a href="#summary">Summary</a>`}
+      <a href="#fulltext">Full talk</a>
+      ${notes.length ? `<a href="#ft-notes">Notes</a>` : ""}
+    </nav>
+    <h2 id="ft-h">${talk.kind === "business" ? "Full text" : "Full talk"}</h2>
+    <p class="ft-perm">Posted here with the Church’s permission. The wording is the official talk. <a href="${esc(talk.official_url || officialUrl(talk))}" rel="noopener">Official page ↗</a></p>
+    ${mediaBlock(ft, talk)}
+    <div class="ft-body">${ft.body || ""}</div>
+    ${notes.length ? `<details class="ft-notes" id="ft-notes"><summary>Notes (${notes.length})</summary><ol>${notes.map(n => `<li id="fn-${esc(n.n)}" value="${esc(n.n)}">${n.html}</li>`).join("")}</ol></details>` : ""}
+  </section>`;
+  slot.querySelectorAll("img").forEach(img => img.addEventListener("error", () => { const fig = img.closest("figure"); if (fig) fig.classList.add("ft-fig-miss"); img.remove(); }));
+  slot.querySelectorAll("video, audio").forEach(el => el.addEventListener("error", () => {
+    const p = document.createElement("p"); p.className = "speaker";
+    p.innerHTML = `This ${el.tagName === "VIDEO" ? "video" : "audio"} didn’t load. <a href="${esc(talk.official_url || officialUrl(talk))}" rel="noopener">Play it on ChurchofJesusChrist.org ↗</a>`;
+    el.replaceWith(p);
+  }, true));
+  let pop = null;
+  const close = () => { pop?.remove(); pop = null; };
+  const openNote = a => {
+    const n = a.getAttribute("data-n"), li = document.getElementById("fn-" + n); if (!li) return;
+    close();
+    pop = document.createElement("div"); pop.className = "fn-pop"; pop.setAttribute("role", "dialog"); pop.setAttribute("aria-label", "Note " + n);
+    pop.innerHTML = `<div class="fn-pop-h"><span>Note ${esc(n)}</span><button type="button" class="fn-x" aria-label="Close">Close</button></div><div class="fn-pop-b">${li.innerHTML}</div><a class="fn-more" href="#fn-${esc(n)}">See in notes</a>`;
+    document.body.appendChild(pop);
+    if (innerWidth >= 700) { const r = a.getBoundingClientRect(); pop.style.top = Math.max(8, Math.min(r.bottom + 8, innerHeight - 240)) + "px"; pop.style.left = Math.max(8, Math.min(r.left, innerWidth - 440)) + "px"; }
+    else pop.classList.add("fn-sheet");
+    pop.querySelector(".fn-x").addEventListener("click", close);
+    pop.querySelector(".fn-more").addEventListener("click", () => { const d = document.getElementById("ft-notes"); if (d) d.open = true; close(); });
+  };
+  slot.addEventListener("click", e => { const a = e.target.closest("a.fn"); if (!a) return; e.preventDefault(); e.stopPropagation(); openNote(a); });
+  document.addEventListener("click", e => { if (pop && !pop.contains(e.target) && !e.target.closest("a.fn")) close(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") close(); });
+  const bar = document.createElement("div"); bar.className = "readbar no-print"; bar.setAttribute("aria-hidden", "true"); bar.innerHTML = "<span></span>"; document.body.appendChild(bar);
+  const tick = () => { const el = slot.querySelector(".ft-body"); if (!el) return; const r = el.getBoundingClientRect(), total = Math.max(1, el.offsetHeight - innerHeight * .35), seen = Math.min(Math.max(-r.top + innerHeight * .2, 0), total); bar.firstChild.style.width = (seen / total * 100) + "%"; };
+  addEventListener("scroll", tick, { passive: true }); tick();
+  addEventListener("beforeprint", () => { const d = document.getElementById("ft-notes"); if (d) d.open = true; });
+  if (/^#fn-\d+$/.test(location.hash)) { const d = document.getElementById("ft-notes"); if (d) d.open = true; }
 }
 
 // ---- Study panel: topics, scriptures with Come, Follow Me tie-in, structure, taught before, print summary ----
-// Loaded after first paint (idle, or when the panel nears the screen) so the talk itself shows right away.
 const whenNear = (id, fn) => { const el = document.getElementById(id); let done = false; const go = () => { if (!done) { done = true; fn(); } };
   if (el && "IntersectionObserver" in window) { const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); go(); } }, { rootMargin: "600px" }); io.observe(el); }
   (window.requestIdleCallback || (f => setTimeout(f, 1500)))(go, { timeout: 4000 }); if (!el) go(); };
-if (t) whenNear("studyPanel", () => loadLib().then(LB => {
+if (t && t.kind !== "business") whenNear("studyPanel", () => loadLib().then(LB => {
   const me = LB.talks.find(x => x.local && x.id === t.id), el = document.getElementById("studyPanel"); if (!me || !el) return;
   const cfm = r => { const w = LB.work(r); return w === "Old Testament" ? `<span class="pill">In Come, Follow Me 2026</span>` : w === "New Testament" ? `<span class="pill pending">Come, Follow Me 2027</span>` : ""; };
   const rel = LB.related(me, 4).filter(x => !x.t.local), before = LB.talks.filter(x => x.sp === me.sp && !x.local).slice(0, 3);
@@ -109,6 +191,6 @@ if (t) whenNear("studyPanel", () => loadLib().then(LB => {
     </div>
     ${rel.length ? `<h3>Taught before</h3><ul class="sp-rel">${rel.map(x => `<li><a href="${esc(LB.href(x.t))}" rel="noopener" target="_blank">${esc(x.t.t)} ↗</a> <span class="speaker">${esc(x.t.s)} · ${esc(LB.confOf(x.t.c).label)}${x.sharedRefs.length ? " · also cites " + esc(x.sharedRefs.slice(0, 2).join(", ")) : ""}</span></li>`).join("")}</ul>` : ""}
     ${before.length ? `<h3>Earlier from ${esc(t.speaker.replace(/^(President|Elder|Sister|Bishop)\s+/, ""))}</h3><ul class="sp-rel">${before.map(x => `<li><a href="${esc(LB.href(x))}" rel="noopener" target="_blank">${esc(x.t)} ↗</a> <span class="speaker">${esc(LB.confOf(x.c).label)}</span></li>`).join("")}</ul><a class="linkish" href="speaker.html?s=${me.sp}">All talks by this speaker</a>` : ""}
-    <div class="links no-print"><a class="btn secondary small" href="lessons.html?mode=eqrs&c=2026-10&t=${esc(t.id)}">Lesson helps: EQ & RS, youth, family</a><button type="button" class="btn secondary small" id="printBtn">Print a one-page summary</button>${(() => { const k = me.tg.find(x => LB.THEME_KEYS.includes(x)) || (dens[0] || [])[0]; return k ? `<a class="btn secondary small" href="study.html?c=all&topic=${k}">More talks on ${esc(LB.themeName(k))}</a>` : ""; })()}</div>`;
+    <div class="links no-print"><a class="btn secondary small" href="lessons.html?t=${esc(t.id)}">Build a lesson from this talk</a><button type="button" class="btn secondary small" id="printBtn">Print a one-page summary</button>${(() => { const k = me.tg.find(x => LB.THEME_KEYS.includes(x)) || (dens[0] || [])[0]; return k ? `<a class="btn secondary small" href="study.html?c=all&topic=${k}">More talks on ${esc(LB.themeName(k))}</a>` : ""; })()}</div>`;
   document.getElementById("printBtn").addEventListener("click", () => window.print());
 }).catch(() => { const el = document.getElementById("studyPanel"); if (el) el.remove(); }));

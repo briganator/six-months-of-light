@@ -6,8 +6,7 @@ Live URL: **https://sixmonthsoflight.com/** (GitHub Pages from `briganator/six-m
 A personal study and sharing site for the 196th Semiannual General Conference (internal folder name: `conference-share`). It is a static site (HTML, CSS and vanilla JS) with no build step, so visitors don't install anything. It's meant for free GitHub Pages hosting. **Nothing has been published.**
 
 > **Not an official Church site.** Every page has a top banner and a footer that say so.
-> **Official text posted Oct 5, 2026.** Every quote was checked against the official talk text and set to its exact wording; each talk links its official page, key scriptures come from the official footnotes, and October 2026 now uses official derived counts in the study library and comparisons. Summaries are still this site's own (first written from recaps).
-> Full talk text is Church copyright and is **not** reproduced. The site uses only summaries and short quotes, and each talk page has an empty slot in case permission is ever granted.
+> **Full talks posted Oct 8, 2026, with the Church's permission.** Each October 2026 talk page shows the complete official talk (paragraphs, headings, scriptures, notes, and any illustration in the talk), plus the official audio and video from ChurchofJesusChrist.org. The site still credits the Church and links each official page. Summaries, the 60-second recap, quotes and Card Studio stay as they were. Quotes were checked against the official wording on Oct 5.
 
 ## Look and motion
 - Palette: midnight, warm gold, dawn rose and cream. Type: Cormorant Garamond for display and Inter for text, both self-hosted under the OFL.
@@ -15,14 +14,14 @@ A personal study and sharing site for the 196th Semiannual General Conference (i
 - Cinematic hero: a rising sun, slowly turning light rays, drifting glows, floating light motes, and generated SVG ridgelines with parallax on scroll. A six-month progress bar runs from Oct 2026 to April 2027, with a count-up of days left (the April date is an estimate, labeled as such).
 - Scroll-driven reveals, a soft light sheen across every card, hover lift, a button shine, and fade page transitions (View Transitions where supported).
 - `prefers-reduced-motion` turns all of this off. Nothing is loaded from third parties. Everything is CSS, SVG and canvas.
-- No Church photos or speaker portraits are used (copyright). Speakers get an initials monogram with painted light, plus an empty portrait slot in case the Church grants permission.
+- Speaker pages use initials, not portraits. Card photos are openly licensed, not Church photos. Talk pages hotlink official audio, video and any illustration in the talk; those files stay on the Church's servers.
 
 ## Features
 **Card Studio** (`builder.html`; `quote.html` redirects here)
 - Pick a talk, then a quote. You can **only** choose from verified quotes in `assets/data.js`. The quote can't be typed or edited.
 - Choose a background (light rays, dawn mountains, aurora, soft glow), a theme (dusk, midnight, dawn), a font (classic serif, italic serif, modern sans), a size (1:1, 4:5, 9:16), and still or animated.
 - Optional personal line, up to 90 characters with links stripped. It's drawn in a separate box labeled "MY TAKEAWAY · ADDED BY THE SHARER, NOT A QUOTE".
-- Every card carries the Six Months of Light logo, the site URL, a QR code to the talk, and "Quoted from recap · Not an official Church site".
+- Every card carries the Six Months of Light logo, the site URL, a QR code to the talk, and "Official text, with permission · Not an official Church site".
 - Export: PNG in the browser. Animated cards record as **MP4** where the browser's MediaRecorder supports it (recent Chrome/Edge/Safari) or **WebM** otherwise. Where video isn't supported, it falls back to PNG plus a share link. Web Share is used on phones.
 - Offline MP4 rendering (frame-accurate, H.264): `python tools/render_assets.py`
 
@@ -30,7 +29,7 @@ A personal study and sharing site for the 196th Semiannual General Conference (i
 - Home: hero, Talk of the Week (one ponder question and one invitation), sessions, feature tiles
 - 60-second recap card on each talk (big idea, quote, invitation)
 - Animated cards (10 s): light rises, the quote appears line by line with a soft glow, and the card ends on the logo (its rays grow in), the tagline, the URL and a QR code.
-- "Who said it?" quiz and flashcards (`quiz.html`)
+- "Who said it?" quiz and flashcards (`quiz.html`), linked from the home page (a band under Talk of the Week, and a start-here tile), the Study page, and each talk (`quiz.html?t=<id>` starts on that talk). Lesson helps sit in the same home band and on each talk (`lessons.html?t=<id>`).
 
 **Understand**
 - Conference Insights (`insights.html`): word cloud, top words, top themes, most-cited scriptures and speakers by calling. It's computed in the browser from the recap data and labeled "based on recaps." The comparison with past conferences is a labeled stub with no numbers.
@@ -47,7 +46,7 @@ A personal study and sharing site for the 196th Semiannual General Conference (i
 - Conference challenge (`challenge.html`): 7-day invitation plus shared stories, moderated
 - Group links (`groups.html`): `?g=smith-family` tags posts so they show only on that group's view. These links are unlisted, **not private**.
 - Each talk has a static page (`talks/<id>.html`) with Open Graph and Twitter tags and a 1200×630 preview image (`assets/og/<id>.jpg`), so links unfurl properly in Messages, Facebook and WhatsApp.
-- Official video: embedded **only** when `video_embed` is set to an embed URL the Church allows (for example, the official General Conference YouTube video). Until then the page shows the official link.
+- Official video and audio: each talk page plays the Church's own mp4 and mp3 (nothing from third parties). `video_embed` stays empty. If a file fails to load, the page links the official talk instead.
 
 ## Structure
 ```
@@ -57,6 +56,9 @@ talks/<id>.html          generated per-talk pages with OG tags (<base href="../"
 talk.html                redirects ?t=<id> to talks/<id>.html
 moderate.html            admin moderation queue (noindex, password)
 assets/data.js           GENERATED content (from tools/talks_source.py)
+assets/fulltext/<id>.json  GENERATED official talk text (one file per talk; search index at index.json)
+tools/official/*.json    official language-page responses used to build the full text
+live.html                redirects to the home page (the live wall was removed after conference)
 assets/config.js         backend config (Supabase URL + publishable key; ?mock=1 = local mock)
 assets/api.js            backend adapter (Supabase REST, or localStorage mock)
 assets/common.js         header/footer, device storage, insight search panel, themes, motion
@@ -79,8 +81,9 @@ tools/render.html        internal render surface (not linked from the site)
 - Content is transcribed from the Google Doc "October 2026 General Conference — Study Guide," Saturday sessions. **Personal application sections, private notes and the personal-lens section are excluded.** Ponder questions that named family members or the stake were not used.
 - All 54 quotes were checked to be verbatim substrings of the doc. The one editorial bracket is "[Fasting and prayer]" in Elder Soares's second quote.
 - The official talk URLs weren't posted yet, so each talk links to its **official session page**. When the URLs post, set `official_url` in `tools/talks_source.py`.
-- Updating: edit `tools/talks_source.py`, then run
-  `python3 tools/talks_source.py && python3 tools/build_shells.py && python3 tools/build_pages.py && python tools/render_assets.py`
+- Updating: edit `tools/talks_source.py` (keep `full_text_permitted` true), then run
+  `python3 tools/talks_source.py && python3 tools/build_shells.py && python3 tools/build_pages.py && python3 tools/build_sitemap.py`
+  `talks_source.py` also rebuilds `assets/fulltext/` from `tools/official/`. The sustaining of Church officers is `CONF.business`, not a sermon.
 
 ## Preview locally
 ```

@@ -14,7 +14,7 @@ const main = document.getElementById("main");
 main.innerHTML = `
   <h1 style="margin-top:38px">Lesson helps</h1>
   <p class="lede" style="margin-top:-4px">A ready outline for any general conference talk: family night, Elders Quorum and Relief Society, youth classes or a sacrament talk.</p>
-  <div class="notice"><strong>Starter outline.</strong> Built from this site's data: verified quotes, the scriptures each talk cites and its official summary line. Prepare from the official talk text, and follow the Spirit.</div>
+  <div class="notice"><strong>Starter outline.</strong> Built from this site's summaries, verified quotes and the scriptures each talk cites. The full talk is on the talk page, posted with the Church's permission. Prepare with that text, and follow the Spirit.</div>
   <div class="card no-print">
     <div class="ls-pick">
       <label><span class="speaker">Conference</span><select id="lc"><option value="2026-10">October 2026</option></select></label>
@@ -95,7 +95,7 @@ function gen() {
     ${refs.length ? `<h3>Scriptures to read</h3><p>${refs.map(r => esc(ScripRef.first(r) || r)).join(" · ")}</p>` : ""}
     ${qs.length ? `<h3>To ponder and discuss</h3><ol>${qs.map(x => `<li>${esc(x)}</li>`).join("")}</ol>` : ""}
     <h3>This week</h3><p>${esc(n.invitation)}</p>
-    <p class="ho-foot">Read the full talk at ChurchofJesusChrist.org · Handout from sixmonthsoflight.com (not an official Church site)</p>`;
+    <p class="ho-foot">Full talk on this site and at ChurchofJesusChrist.org, posted with the Church's permission · Handout from sixmonthsoflight.com (not an official Church site)</p>`;
   $("cp").onclick = () => navigator.clipboard.writeText(out.innerText).then(() => window.toast?.("Outline copied"));
   $("po").onclick = () => print();
   if ($("ph")) $("ph").onclick = () => { document.body.classList.add("print-handout"); print(); setTimeout(() => document.body.classList.remove("print-handout"), 500); };

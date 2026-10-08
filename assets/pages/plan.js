@@ -23,7 +23,7 @@ function render() {
     <ol class="plan-list">${Object.entries(byW).map(([w, rs]) => `<li class="${+w === nowW ? "now" : +w < nowW ? "past" : ""}"><div class="plan-wk">Week ${+w + 1} · ${fmt(rs[0].from)}</div>
       ${rs.map(r => `<label class="plan-item"><input type="checkbox" data-id="${r.t.id}" ${done.has(r.t.id) ? "checked" : ""}><span><a href="talks/${r.t.id}.html">${esc(r.t.title)}</a><small>${esc(r.t.speaker)} · ${r.t.official_url ? `<a href="${esc(r.t.official_url)}" rel="noopener">official text ↗</a>` : "official text not posted yet"}</small></span></label>`).join("")}</li>`).join("")}</ol>
     <div class="links"><button class="btn secondary small" id="restart">Restart the plan from this week</button><button class="btn secondary small" id="ics">Weekly reminder (.ics)</button></div>
-    <p class="lib-note">Sunday's talks join the plan automatically when they're added to the site. Read the full talks on ChurchofJesusChrist.org.</p>`;
+    <p class="lib-note">Each talk page has the full talk, posted with the Church's permission, plus a link to the official page.</p>`;
   main.querySelectorAll("[data-id]").forEach(c => c.addEventListener("change", () => { const d = new Set(Store.get("plan-done", [])); c.checked ? d.add(c.dataset.id) : d.delete(c.dataset.id); Store.set("plan-done", [...d]); if (!Store.get("plan-start")) Store.set("plan-start", +start); render(); }));
   main.querySelectorAll("#pace button").forEach(b => b.addEventListener("click", () => { Store.set("plan-pace", b.dataset.k); if (!Store.get("plan-start")) Store.set("plan-start", +start); render(); }));
   document.getElementById("restart").addEventListener("click", () => { Store.set("plan-start", +monday(Date.now() + DAY)); render(); });
