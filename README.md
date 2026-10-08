@@ -18,10 +18,10 @@ A personal study and sharing site for the 196th Semiannual General Conference (i
 
 ## Features
 **Card Studio** (`builder.html`; `quote.html` redirects here)
-- Pick a talk, then a quote. You can **only** choose from verified quotes in `assets/data.js`. The quote can't be typed or edited.
+- Pick a talk. The top 3 verified quotes from that talk are one-tap choices. You can also paste or type your own quote (up to 360 characters, extra whitespace stripped). A custom card is labeled “Your own words,” not as official text.
 - Choose a background (light rays, dawn mountains, aurora, soft glow), a theme (dusk, midnight, dawn), a font (classic serif, italic serif, modern sans), a size (1:1, 4:5, 9:16), and still or animated.
 - Optional personal line, up to 90 characters with links stripped. It's drawn in a separate box labeled "MY TAKEAWAY · ADDED BY THE SHARER, NOT A QUOTE".
-- Every card carries the Six Months of Light logo, the site URL, a QR code to the talk, and "Official text, with permission · Not an official Church site".
+- Every card carries the Six Months of Light logo, the site URL, a QR code, and “Personal study site · Not an official Church site.” Verified quotes also say “Official text, with permission.”
 - Export: PNG in the browser. Animated cards record as **MP4** where the browser's MediaRecorder supports it (recent Chrome/Edge/Safari) or **WebM** otherwise. Where video isn't supported, it falls back to PNG plus a share link. Web Share is used on phones.
 - Offline MP4 rendering (frame-accurate, H.264): `python tools/render_assets.py`
 
@@ -30,6 +30,7 @@ A personal study and sharing site for the 196th Semiannual General Conference (i
 - 60-second recap card on each talk (big idea, quote, invitation)
 - Animated cards (10 s): light rises, the quote appears line by line with a soft glow, and the card ends on the logo (its rays grow in), the tagline, the URL and a QR code.
 - Lesson helps (`lessons.html`) are the first block under the home hero, a start-here tile, a desktop nav item, and a primary button at the top of each talk (`lessons.html?t=<id>`). "Who said it?" (`quiz.html`) sits beside that as a secondary action, on Study, and on each talk (`quiz.html?t=<id>`). Official Church links stay at the bottom of a talk, after the full text.
+- Study (`study.html`) opens with the October 2026 talks, grouped by session. Search, session, topic, speaker and conference filters sit below that, under “Search all talks.”
 
 **Understand**
 - Conference Insights (`insights.html`): word cloud, top words, top themes, most-cited scriptures and speakers by calling. It's computed in the browser from the recap data and labeled "based on recaps." The comparison with past conferences is a labeled stub with no numbers.

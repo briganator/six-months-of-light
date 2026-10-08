@@ -11,6 +11,7 @@ const st = {
   font: K.FONTS[P.get("font")] ? P.get("font") : "classic", align: P.get("align") === "left" ? "left" : "center",
   size: S[P.get("size")] ? P.get("size") : (isPhone ? "story" : "portrait"), ov: P.has("ov") ? Math.min(.85, Math.max(0, +P.get("ov") / 100)) : null,
   anim: K.ANIMS[P.get("anim")] ? P.get("anim") : P.get("anim") === "1" ? "fade" : "none", sticker: P.get("ig") === "1", note: "", tab: ["quote", "look", "size", "text", "share"].includes(P.get("tab")) ? P.get("tab") : (P.has("t") ? "look" : "quote"), src: P.get("src") === "promo" || P.has("promo") ? "promo" : P.get("ins") ? "ins" : "quote", filter: "", scope: "conf", mode: "still", libT: null, libNote: "", theme: THEMES3.get(P.get("theme")) ? THEMES3.get(P.get("theme")).slug : "all",
+  own: "", ownOn: false, ownSp: "", ownTi: "", attrTouched: false,
 };
 // Advanced formatting: fx=size:1.1;ls:0.05;box:glass ... (whitelisted keys and values)
 const FMT_NUM = { size: [.6, 1.5], lh: [.8, 1.6], ls: [0, .25], vig: [0, 1], grain: [0, 1], blur: [0, 6], dx: [-.3, .3], dy: [-.3, .3] };
@@ -36,6 +37,11 @@ const POPULAR = groups.map(g => Object.keys(L).find(id => L[id].group === g)).fi
 const lookCat0 = POPULAR.includes(st.look) || !L[st.look] ? "Popular" : L[st.look].group;
 const PLAT = [["igstory", "Instagram Story", "story"], ["igpost", "Instagram post", "portrait"], ["facebook", isPhone ? "Share card to Facebook" : "Facebook", isPhone ? "portrait" : "link"], ["whatsapp", "WhatsApp", null], ["sms", "Messages", null], ["x", "X", "wide"], ["pinterest", "Pinterest", "pin"], ["threads", "Threads", null], ["email", "Email", null], ["copy", "Copy link", null]];
 const lookBtn = id => { const l = L[id]; return `<button type="button" class="look" data-look="${id}" aria-pressed="${id === st.look}" aria-label="${esc(l.name)}">${l.photo ? `<img src="${esc(l.credit.thumb)}" alt="" loading="lazy" decoding="async">` : `<canvas width="72" height="96" data-thumb="${id}"></canvas>`}<span>${esc(l.name)}</span></button>`; };
+const OWN_MAX = 360;
+const pickTalkOpts = CONF.sessions.map(s => {
+  const ts = CONF.talks.filter(t => t.session === s.id).sort((a, b) => a.order - b.order);
+  return `<optgroup label="${esc(s.name)}">${ts.map(t => `<option value="${esc(t.id)}" ${t.id === st.t ? "selected" : ""}>${esc(t.speaker.replace(/^(President|Elder|Sister|Bishop)\s+/, ""))} — ${esc(t.title)}</option>`).join("")}</optgroup>`;
+}).join("");
 document.getElementById("main").innerHTML = `
   <h1 class="st-title">Card Studio <span>Pick a quote · style it · share</span></h1>
   <div class="studio">
@@ -55,6 +61,22 @@ document.getElementById("main").innerHTML = `
       <section class="st-pane" id="p-quote" role="tabpanel" aria-labelledby="tab-quote">
         ${seg("src", { quote: "Quotes", ins: "Insights", promo: "Share the site" }, st.src, "Card type")}
         <div id="srcQuote">
+          <section class="pick-box" aria-labelledby="pick3-h">
+            <div class="b-label" id="pick3-h">Top quotes from this talk</div>
+            <label class="lib-sel pick-talk"><span>Talk</span><select id="pickTalk" aria-label="Choose a talk">${pickTalkOpts}</select></label>
+            <div class="top3" id="top3" role="list"></div>
+            <div class="own-box" id="ownBox">
+              <label class="b-label" for="ownQ">Your own quote <span class="b-help">paste or type</span></label>
+              <textarea class="field" id="ownQ" maxlength="${OWN_MAX}" rows="4" placeholder="Paste the words you want on the card"></textarea>
+              <div class="count"><span id="ownCnt">0</span>/${OWN_MAX}</div>
+              <label class="b-label" for="ownSp">Speaker <span class="b-help">on your card</span></label>
+              <input class="field" id="ownSp" maxlength="80" autocomplete="name" placeholder="Speaker">
+              <label class="b-label" for="ownTi">Talk <span class="b-help">optional</span></label>
+              <input class="field" id="ownTi" maxlength="140" autocomplete="off" placeholder="Talk title">
+              <p class="b-help">Your words stay on this card and are labeled as yours, not as official text. The site name stays on the card.</p>
+            </div>
+          </section>
+          <h3 class="qs-h">Search all quotes</h3>
           <div class="qs-top"><input class="field qs-find" id="qsearch" type="search" placeholder="Search quotes, talks or speakers" aria-label="Search quotes, talks or speakers" enterkeyhint="search" autocomplete="off">
             ${seg("qscope", { conf: "This conference", all: "All conferences" }, "conf", "Search in")}</div>
           <div class="qs-chips" id="qthemes" role="group" aria-label="Theme">${T3.list.map(th => `<button type="button" class="thm thm-chip" data-th="${th.slug}" aria-pressed="${th.slug === st.theme}"><i aria-hidden="true">${th.icon}</i>${esc(th.slug === "all" ? "All themes" : th.name)}</button>`).join("")}</div>
@@ -147,11 +169,25 @@ const ins = () => st.libT ? libIns() : st.ins && INSIGHTS.get(st.ins);
 // ---- quote list ----
 const norm = x => String(x || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[’']/g, "'");
 const SESS_ORDER = CONF.sessions.map(x => x.id);
-const isOn = (t, i) => !st.ins && !st.libT && t.id === st.t && i === st.q;
+const isOn = (t, i) => !st.ownOn && !st.ins && !st.libT && t.id === st.t && i === st.q;
+function renderPick() {
+  const t = talk();
+  if (!st.attrTouched) { st.ownSp = t.speaker; st.ownTi = t.title; if ($("ownSp")) { $("ownSp").value = st.ownSp; $("ownTi").value = st.ownTi; } }
+  if ($("pickTalk")) $("pickTalk").value = t.id;
+  const box = $("top3"); if (!box) return;
+  box.innerHTML = t.quotes.slice(0, 3).map((q, i) => `<button type="button" class="top3-q ${isOn(t, i) ? "on" : ""}" data-q="${i}" aria-pressed="${isOn(t, i)}"><span class="top3-n">${i + 1}</span><span class="top3-t">“${esc(q)}”</span></button>`).join("");
+  $("ownBox").classList.toggle("on", !!(st.ownOn && st.own));
+}
+function cleanOwn(s) {
+  let c = String(s || "").replace(/<[^>]*>/g, "").replace(/\u00a0/g, " ").replace(/\s*\n\s*/g, " ").replace(/[ \t]{2,}/g, " ").trim();
+  if ((c.startsWith("“") && c.endsWith("”")) || (c.startsWith('"') && c.endsWith('"'))) c = c.slice(1, -1).trim();
+  return c.slice(0, OWN_MAX);
+}
 const qcard = x => `<article class="qcard ${isOn(x.t, x.i) ? "on" : ""}" role="listitem"><p class="qq">“${esc(x.q)}”</p><p class="qs"><b>${esc(x.t.speaker)}</b> · ${esc(x.t.title)}</p>
   <button type="button" class="btn ${isOn(x.t, x.i) ? "secondary" : "gold"} small qs-use" data-t="${x.t.id}" data-q="${x.i}" aria-pressed="${isOn(x.t, x.i)}" aria-label="${isOn(x.t, x.i) ? "On your card" : "Use this quote"}: ${esc(x.t.speaker)}">${isOn(x.t, x.i) ? "✓ On your card" : "Use this"}</button></article>`;
 let qview = null; // null = results list; {c, id} = one talk
 function renderQuotes() {
+  renderPick();
   const words = norm(st.filter).split(/\s+/).filter(w => w.length > 1), q = words.length > 0;
   $("qbrowse").hidden = q || !!qview; $("qresults").hidden = !q && !qview;
   if (!q && !qview) { // browse: newest session first, newest talks first, swipe sideways
@@ -192,12 +228,29 @@ $("qresults").addEventListener("click", e => {
 let lnT; $("qresults").addEventListener("input", e => { if (e.target.id !== "libNote") return; clearTimeout(lnT); lnT = setTimeout(() => { st.libNote = cleanNote(e.target.value); draw(true); }, 250); });
 const setScope = v => { st.scope = v; $("qscope").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.k === v)); if (v === "all") loadLib().then(() => renderQuotes()).catch(() => {}); renderQuotes(); };
 $("qscope").addEventListener("click", e => { const b = e.target.closest("button[data-k]"); if (b) setScope(b.dataset.k); });
-const useQuote = (t, q) => { st.ins = null; st.libT = null; st.t = t; st.q = q; renderQuotes(); draw(true); };
+const useQuote = (t, q) => { st.ins = null; st.libT = null; st.ownOn = false; st.t = t; st.q = q; renderQuotes(); draw(true); };
 function renderIns() { $("inslist").innerHTML = INSIGHTS.list.map(x => `<button type="button" class="qitem" data-ins="${x.id}" aria-pressed="${st.ins === x.id}"><span class="qq">${esc(x.title)}</span><span class="qs">${esc(x.kicker)}</span></button>`).join(""); }
 document.getElementById("srcQuote").addEventListener("click", e => { const b = e.target.closest(".qs-use"); if (b) useQuote(b.dataset.t, +b.dataset.q); });
 $("inslist").addEventListener("click", e => { const b = e.target.closest(".qitem"); if (!b) return; st.libT = null; st.ins = b.dataset.ins; renderIns(); draw(true); });
 ["spotSel", "themeSel"].forEach(id => $(id).addEventListener("change", e => { if (e.target.value) { st.ins = e.target.value; renderIns(); draw(true); } }));
 let qt; $("qsearch").addEventListener("input", e => { clearTimeout(qt); qt = setTimeout(() => { st.filter = e.target.value; qview = null; renderQuotes(); }, 150); });
+$("top3").addEventListener("click", e => { const b = e.target.closest("[data-q]"); if (b) useQuote(talk().id, +b.dataset.q); });
+$("pickTalk").addEventListener("change", () => {
+  const keep = st.ownOn && st.own; st.attrTouched = false; st.t = $("pickTalk").value;
+  const nq = talk().quotes.length; if (!(st.q >= 0 && st.q < nq)) st.q = 0;
+  st.ownOn = !!keep; renderQuotes(); draw(true);
+});
+let ownT; $("ownQ").addEventListener("input", () => {
+  $("ownCnt").textContent = String($("ownQ").value.length);
+  clearTimeout(ownT); ownT = setTimeout(() => {
+    const c = cleanOwn($("ownQ").value);
+    if (c && BAD_NOTE.test(c)) { toast("Please keep the quote kind. It wasn't added to the card."); st.ownOn = false; renderPick(); draw(true); return; }
+    st.own = c; st.ownOn = c.length > 0; renderPick(); draw(true);
+  }, 160);
+});
+const onAttr = e => { st.attrTouched = true; const v = e.target.value.replace(/\s+/g, " ").trim().slice(0, e.target.id === "ownSp" ? 80 : 140);
+  if (e.target.id === "ownSp") st.ownSp = v; else st.ownTi = v; if (usingOwn()) draw(true); };
+$("ownSp").addEventListener("input", onAttr); $("ownTi").addEventListener("input", onAttr);
 function renderSug() { const ids = resolveLooks(st.theme), th = T3.get(st.theme);
   $("lookSug").innerHTML = st.theme === "all" ? "" : `<div class="b-label">Suggested for ${esc(th.name)}</div><div class="looks sug">${ids.map(lookBtn).join("")}</div>`;
   $("lookSug").querySelectorAll("canvas[data-thumb]").forEach(c => K.drawThumb(c.getContext("2d"), c.width, c.height, c.dataset.thumb, st.pal));
@@ -277,10 +330,12 @@ const statFor = t => { const tags = {}; t.quotes.forEach((q, i) => T3.tagsFor(t.
   const n = CONF.talks.filter(x => x.quotes.some((q, i) => T3.tagsFor(x.id, i).includes(top[0]))).length;
   return { value: n, label: `of ${CONF.talks.length} talks so far had a quote about ${T3.get(top[0]).name}`, basis: "Counted from the verified quotes on this site, tagged by theme" }; };
 const promoObj = slide => PROMOS.build(PROMOS.get(st.promo), st.hl, st.invite, slide);
+const usingOwn = () => st.src === "quote" && st.ownOn && !!st.own;
 const opts = () => { const x = ins(), t = talk();
   const base = { look: st.look, palette: st.pal, font: st.font, align: st.align, overlay: st.ov ?? undefined, anim: st.anim === "none" ? "fade" : st.anim, sticker: st.sticker && st.size === "story", layout: st.layout, fmt: st.fmt };
   if (st.src === "promo") { const pr = PROMOS.get(st.promo), o = promoObj(pr.carousel ? 0 : null); return { ...base, kind: "insight", ins: o, eyebrow: o.eyebrow, url: o.url }; }
   if (x) return { ...base, kind: "insight", ins: x, eyebrow: x.eyebrow || (x.id === "daily" ? "SIX MONTHS OF LIGHT · DAILY" : "OCTOBER 2026 · CONFERENCE INSIGHT"), url: x.url || (x.id.startsWith("spot-") ? talkUrl(talkById(x.id.slice(5))) : CONF.site_url + "insights.html#" + x.id) };
+  if (usingOwn()) return { ...base, kind: "quote", quote: st.own, speaker: st.ownSp || t.speaker, title: st.ownTi || "", url: talkUrl(t), note: st.note, foot: "Your own words", stat: null, daily: st.layout === "daily" ? dailyInfo() : null };
   return { ...base, kind: "quote", quote: t.quotes[st.q], speaker: t.speaker, title: t.title, url: talkUrl(t) + "#q" + (st.q + 1), note: st.note, stat: st.layout === "stat" ? statFor(t) : null, daily: st.layout === "daily" ? dailyInfo() : null }; };
 let raf, t0;
 function render(time) { const [W, H] = S[st.size]; if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; } K.drawCard(ctx, W, H, opts(), time); }
@@ -296,11 +351,12 @@ async function draw(changed) {
   $("replay").hidden = !an; syncMode();
   $("hint").innerHTML = an ? (vt || window.VideoEncoder ? `${K.ANIMS[st.anim]}: with <b>Animated</b> on (next to Share), <b>Share video</b> sends an 8-second MP4 that loops cleanly, made on your device. It ends on the site name and a QR code that opens this quote. Choose <b>Still</b> to share the image instead.${reduce ? " The preview stays still because your device asks for reduced motion; tap Replay to watch once." : ""}` : "This browser can't record video; Save will download a still image.") : "Saves a still image. Choose an animation above for a video.";
   const x = ins(), t = talk();
-  if (st.src === "promo") cv.setAttribute("aria-label", `Card preview: ${promoObj(null).title}. ${look.name}, ${S[st.size][2]}.`); else cv.setAttribute("aria-label", x ? `Card preview: ${x.title}. ${look.name}, ${S[st.size][2]}.` : `Card preview: “${t.quotes[st.q]}” by ${t.speaker}. ${look.name}, ${S[st.size][2]}.`);
+  const shown = usingOwn() ? st.own : t.quotes[st.q];
+  if (st.src === "promo") cv.setAttribute("aria-label", `Card preview: ${promoObj(null).title}. ${look.name}, ${S[st.size][2]}.`); else cv.setAttribute("aria-label", x ? `Card preview: ${x.title}. ${look.name}, ${S[st.size][2]}.` : `Card preview: “${String(shown).slice(0, 180)}” by ${usingOwn() ? (st.ownSp || t.speaker) : t.speaker}. ${look.name}, ${S[st.size][2]}.`);
   const q = new URLSearchParams(st.libT ? { lt: st.libT.c + "/" + st.libT.id } : x ? { ins: st.ins } : { t: st.t, q: st.q }); if (st.libT && st.libNote) q.set("ln", st.libNote); q.set("look", st.look); if (st.pal !== "gold") q.set("pal", st.pal); if (st.font !== "classic") q.set("font", st.font); if (st.align !== "center") q.set("align", "left"); q.set("size", st.size); if (st.ov != null) q.set("ov", Math.round(st.ov * 100)); if (st.anim !== "none") q.set("anim", st.anim); if (st.sticker && st.size === "story") q.set("ig", "1"); if (st.theme !== "all") q.set("theme", st.theme); if (st.layout !== "classic") q.set("layout", st.layout); { const fx = encFmt(st.fmt); if (fx) q.set("fx", fx); }
   if (st.src === "promo") { q.delete("t"); q.delete("q"); q.set("promo", st.promo); if (st.hl) q.set("hl", st.hl); }
   $("layHelp").textContent = st.src === "quote" ? (st.layout !== "classic" && st.note ? "· your takeaway shows on the Classic layout" : "") : "· layouts apply to quote cards";
-  $("carQ").hidden = !!st.libT; $("carQh").hidden = !!st.libT; $("carQh").textContent = `${talk().quotes.length + 2} slides: a cover, ${talk().quotes.length} quotes in your layout, and a closing slide.`;
+  $("carQ").hidden = !!st.libT || usingOwn(); $("carQh").hidden = !!st.libT || usingOwn(); $("carQh").textContent = `${talk().quotes.length + 2} slides: a cover, ${talk().quotes.length} quotes in your layout, and a closing slide.`;
   if (!st.capEdited) $("caption").value = defaultCaption();
   setURL("builder.html?" + q);
   if (["note", "margin", "polaroid"].includes(st.layout)) await document.fonts.load('500 40px "Caveat"').catch(() => {});
@@ -313,13 +369,13 @@ window.__renderAt = s => { render(s); return true; };
 window.__studio = st; window.__draw = draw;
 $("replay").addEventListener("click", () => play(true));
 // ---- share / save / copy ----
-const fname = ext => `six-months-of-light-${ins() ? ins().id : slug(talk().speaker)}-${st.size}.${ext}`;
+const fname = ext => `six-months-of-light-${usingOwn() ? "my-quote" : ins() ? ins().id : slug(talk().speaker)}-${st.size}.${ext}`;
 // Cards are PRE-RENDERED whenever they change (debounced), so the file is ready before the tap.
 // iOS Safari only allows navigator.share() inside the tap; generating the PNG after the tap is what used to drop the image.
 const off = document.createElement("canvas"), offCtx = off.getContext("2d"), cache = new Map(); let preT, gen = 0;
 const optsFor = (sz, sticker) => ({ ...opts(), sticker: !!sticker && sz === "story" });
 const keyFor = (sz, sticker) => JSON.stringify([optsFor(sz, sticker), sz]);
-const fnameFor = (sz, ext) => `six-months-of-light-${ins() ? (ins().id.startsWith("z-") ? "insight" : ins().id) : st.src === "promo" ? "promo-" + st.promo : slug(talk().speaker)}-${sz}.${ext}`;
+const fnameFor = (sz, ext) => `six-months-of-light-${usingOwn() ? "my-quote" : ins() ? (ins().id.startsWith("z-") ? "insight" : ins().id) : st.src === "promo" ? "promo-" + st.promo : slug(talk().speaker)}-${sz}.${ext}`;
 async function renderFile(sz = st.size, sticker = st.sticker) {
   const key = keyFor(sz, sticker); if (cache.has(key)) return cache.get(key);
   const o = optsFor(sz, sticker), [W, H] = S[sz]; await K.prepare(o); off.width = W; off.height = H; K.drawCard(offCtx, W, H, o, Infinity);
@@ -359,13 +415,17 @@ const SHARE_I = window.SHARE_PAGES || [];
 const shareUrl = () => { const x = ins(), t = talk();
   if (st.src === "promo") return promoObj(null).url;
   if (x) return SHARE_I.includes(x.id) ? CONF.site_url + "i/" + x.id + ".html" : opts().url;
+  if (usingOwn()) return talkUrl(t);
   return CONF.site_url + "q/" + t.id + "-" + (st.q + 1) + ".html"; };
 // Link posts use the static share pages above (served as real HTML by GitHub Pages, each with its own card preview image),
 // which every link-preview crawler reads reliably. Phones share the exact card image itself through the share sheet.
 const BAD_NOTE = /\b(f+u+c+k+\w*|sh[i1]+t+\w*|b[i1]tch\w*|c+u+n+t+\w*|asshole\w*|bastard\w*|d[i1]ck\w*|cock\w*|puss(y|ies)|wh[o0]re\w*|slut\w*|n[i1]gg\w*|fag\w*|retard\w*|porn\w*|sex\w*|nude\w*|kys)\b/i;
 const pinMedia = () => { const x = ins(), t = talk(); if (st.src === "promo") return CONF.site_url + "assets/og/site.jpg";
-  if (x) return CONF.site_url + (SHARE_I.includes(x.id) ? "assets/og/i/" + x.id + ".jpg" : "assets/og/site.jpg"); return CONF.site_url + "assets/og/pin/" + t.id + "-" + (st.q + 1) + ".jpg"; };
+  if (x) return CONF.site_url + (SHARE_I.includes(x.id) ? "assets/og/i/" + x.id + ".jpg" : "assets/og/site.jpg");
+  if (usingOwn()) return CONF.site_url + "assets/og/site.jpg";
+  return CONF.site_url + "assets/og/pin/" + t.id + "-" + (st.q + 1) + ".jpg"; };
 const baseText = () => { const x = ins(), t = talk(); if (st.src === "promo") return promoObj(null).share; if (x) return x.share;
+  if (usingOwn()) return `“${st.own}” — ${st.ownSp || t.speaker}${st.ownTi ? `, “${st.ownTi}”` : ""}`;
   return `“${t.quotes[st.q]}” — ${t.speaker}, “${t.title}” (October 2026 General Conference)`; };
 const defaultCaption = () => `${baseText()}\n\n${st.src === "promo" ? "Take a look" : ins() ? "See more" : "Read the talk and make your own card"}: ${shareUrl()}\n#GeneralConference`;
 const caption = () => { const c = $("caption").value.trim(); return c.includes(shareUrl()) ? c : `${c}\n${shareUrl()}`; };
