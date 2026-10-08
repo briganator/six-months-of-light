@@ -63,8 +63,8 @@ window.downloadReminder = (talk, text) => {
 window.LOGO_RAYS = [[17.73, 39.36, 13.45, 37.97, 0.38, 1.6], [21.73, 33.07, 16.87, 27.89, 0.5, 1.78], [28.27, 29.47, 25.86, 20.08, 0.63, 1.96], [35.73, 29.47, 38.79, 17.56, 0.75, 2.14], [42.27, 33.07, 52.47, 22.2, 0.88, 2.32], [46.27, 39.36, 62.91, 33.96, 1.0, 2.5]];
 window.LOGO_MARK = (size = 40) => `<svg class="mark" width="${size}" height="${size}" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lmg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3a693"/><stop offset=".55" stop-color="#f1d394"/><stop offset="1" stop-color="#fff3d1"/></linearGradient></defs><g stroke="url(#lmg)" stroke-linecap="round">${LOGO_RAYS.map(([a,b,c,d,o,w],i) => `<line class="ray r${i}" x1="${a}" y1="${b}" x2="${c}" y2="${d}" stroke-opacity="${o}" stroke-width="${w}"/>`).join("")}</g><path d="M21 44a11 11 0 0 1 22 0z" fill="url(#lmg)"/><line x1="6" y1="44" x2="58" y2="44" stroke="url(#lmg)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="50" x2="46" y2="50" stroke="url(#lmg)" stroke-width="1.3" stroke-linecap="round" opacity=".55"/></svg>`;
 window.WORDMARK = () => `<span class="wordmark">${LOGO_MARK(36)}<span class="wm-text">Six Months <em>of</em> Light</span></span>`;
-const NAV = [["index.html","Home"],["study.html","Study"],["builder.html","Make a card"],["insights.html","Insights"],["quiz.html","Quiz"],["my.html","My Conference"]];
-const ICON = { study: '<path d="M4 5.5C6.5 4 9.5 4 12 5.8 14.5 4 17.5 4 20 5.5V19c-2.5-1.4-5.5-1.4-8 .4-2.5-1.8-5.5-1.8-8-.4zM12 5.8v13.6"/>', home: '<path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/>', talks: '<path d="M5 4h10l4 4v12H5zM8 11h8M8 15h8M8 7h5"/>', studio: '<path d="M12 3v3M5.6 5.6l2.1 2.1M3 12h3M18.4 5.6l-2.1 2.1M21 12h-3M7 16a5 5 0 0 1 10 0zM3 19h18"/>', insights: '<path d="M5 20V10M10 20V4M15 20v-7M20 20v-11"/>', me: '<path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/>', quiz: '<circle cx="12" cy="12" r="8"/><path d="M9.2 9.2a2.6 2.6 0 1 1 3.4 2.5c-.8.4-1.3 1-1.3 1.8V14.2M12 17h.01"/>' };
+const NAV = [["index.html","Home"],["study.html","Study"],["lessons.html","Lessons"],["builder.html","Make a card"],["insights.html","Insights"],["quiz.html","Quiz"],["my.html","My Conference"]];
+const ICON = { study: '<path d="M4 5.5C6.5 4 9.5 4 12 5.8 14.5 4 17.5 4 20 5.5V19c-2.5-1.4-5.5-1.4-8 .4-2.5-1.8-5.5-1.8-8-.4zM12 5.8v13.6"/>', home: '<path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/>', talks: '<path d="M5 4h10l4 4v12H5zM8 11h8M8 15h8M8 7h5"/>', studio: '<path d="M12 3v3M5.6 5.6l2.1 2.1M3 12h3M18.4 5.6l-2.1 2.1M21 12h-3M7 16a5 5 0 0 1 10 0zM3 19h18"/>', insights: '<path d="M5 20V10M10 20V4M15 20v-7M20 20v-11"/>', me: '<path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/>', quiz: '<circle cx="12" cy="12" r="8"/><path d="M9.2 9.2a2.6 2.6 0 1 1 3.4 2.5c-.8.4-1.3 1-1.3 1.8V14.2M12 17h.01"/>', lessons: '<path d="M6 4h9a3 3 0 0 1 3 3v13H9a3 3 0 0 0-3 3z"/><path d="M6 4v16M10 9h5M10 13h4"/>' };
 const TABS = [["index.html","Home","home"],["study.html","Study","study"],["builder.html","Create","studio"],["insights.html","Insights","insights"],["my.html","Me","me"]];
 window.TAB_ICON = ICON;
 window.tabbarHTML = (active) => `<nav class="tabbar" aria-label="Quick">${TABS.map(([h,l,i]) => `<a href="${h}" class="${i === "studio" ? "tb-main" : ""}" ${active === h ? 'aria-current="page"' : ""}><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICON[i]}</svg><span>${l}</span></a>`).join("")}</nav>`;
@@ -82,7 +82,7 @@ if (!window.toast) window.toast = msg => { let t = document.getElementById("site
 window.postHeroHTML = () => `<div class="post-hero">
       <div class="eyebrow">October 2026 General Conference</div>
       <h1 class="display post-h"><span class="ph1">The Lord has spoken.</span> <span class="ph2">Now, let’s live it.</span></h1>
-      <figure class="post-scrip"><blockquote>“${esc(DC138.text)}”</blockquote><figcaption><a href="${DC138.url}" rel="noopener" target="_blank">${DC138.ref} ↗</a></figcaption></figure>
+      <figure class="post-scrip"><blockquote>“${esc(DC138.text)}”</blockquote><figcaption>${DC138.ref}</figcaption></figure>
       <p class="hero-how">Six months to study, apply and share these words before April.</p>
       <div class="post-actions"><a class="btn gold big" href="plan.html">Start studying</a><a class="btn glass btn-keep" href="subscribe.html">${KEEP_ICON(18)}Remind me until April</a><button type="button" class="btn ghost-link" id="pickInvite">Choose one invitation</button></div>
       ${countdownHTML()}
@@ -184,7 +184,7 @@ window.askTalksPanel = (scope = {}) => {
 };
 // talks: array of talk objects cited by this answer (linked to the talk page and its recap source)
 window.talkAnswer = (html, talks) => `<div class="ask-bubble"><p>${html}</p>
-  <ol class="cites">${talks.map(t => `<li><a href="talks/${esc(t.id)}.html">${esc(t.speaker)}, “${esc(t.title)}”</a> · <a href="${esc(t.official_url || t.recap_url)}" rel="noopener">${t.official_url ? "official text" : "recap source"} ↗</a></li>`).join("")}</ol>
+  <ol class="cites">${talks.map(t => `<li><a href="talks/${esc(t.id)}.html">${esc(t.speaker)}, “${esc(t.title)}”</a></li>`).join("")}</ol>
   <div class="ask-tag">${talks.every(t => t.official_url) ? "From this site's summaries and quotes from the official talk text." : "From recaps on this site; confirm with the official text."}</div></div>`;
 
 // Simple theme buckets used by Insights, speaker pages and lesson helps.
@@ -211,7 +211,7 @@ window.addEventListener("load", () => {
   // content outside the box, so the titles stay invisible and the summary sits
   // under the tab bar. Those rows are shown as normal content.
   const els = [...document.querySelectorAll("main .card, main .tile, main h2, .recap60, main .stat")]
-    .filter(el => !el.closest("details"));
+    .filter(el => !el.closest("details") && !el.closest(".lesson-band"));
   if (!els.length) return;
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduce || !("IntersectionObserver" in window)) return;

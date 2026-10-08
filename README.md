@@ -29,12 +29,12 @@ A personal study and sharing site for the 196th Semiannual General Conference (i
 - Home: hero, Talk of the Week (one ponder question and one invitation), sessions, feature tiles
 - 60-second recap card on each talk (big idea, quote, invitation)
 - Animated cards (10 s): light rises, the quote appears line by line with a soft glow, and the card ends on the logo (its rays grow in), the tagline, the URL and a QR code.
-- "Who said it?" quiz and flashcards (`quiz.html`), linked from the home page (a band under Talk of the Week, and a start-here tile), the Study page, and each talk (`quiz.html?t=<id>` starts on that talk). Lesson helps sit in the same home band and on each talk (`lessons.html?t=<id>`).
+- Lesson helps (`lessons.html`) are the first block under the home hero, a start-here tile, a desktop nav item, and a primary button at the top of each talk (`lessons.html?t=<id>`). "Who said it?" (`quiz.html`) sits beside that as a secondary action, on Study, and on each talk (`quiz.html?t=<id>`). Official Church links stay at the bottom of a talk, after the full text.
 
 **Understand**
 - Conference Insights (`insights.html`): word cloud, top words, top themes, most-cited scriptures and speakers by calling. It's computed in the browser from the recap data and labeled "based on recaps." The comparison with past conferences is a labeled stub with no numbers.
 - Speaker pages (`speaker.html?s=…`): calling (from the doc only), talks at this conference, recurring themes and links to the official bio and speaker index. No invented biographical facts.
-- **“What insight do you want to search?”** panel (home, talk, speaker, session and insights pages): type a question or key word; searches talks, verified quotes, topics, speakers and scriptures across all 12 conferences, with a quick insight (count, speakers, trend) that can become a card (`assets/search.js`). Page-specific quick questions remain under it. Tap a question; the answer is assembled from this site's recap data and always cites and links the talk (plus its recap or official source). Nothing is generated or invented.
+- **“What insight do you want to search?”** panel (home, talk, speaker, session and insights pages): type a question or key word; searches talks, verified quotes, topics, speakers and scriptures across all 12 conferences, with a quick insight (count, speakers, trend) that can become a card (`assets/search.js`). Page-specific quick questions remain under it. Tap a question; the answer is assembled from this site's talk data and cites the talk on this site. Nothing is generated or invented.
 
 **Apply** (stored only on the device, in localStorage)
 - Commit to an invitation for 7 days, with day check-ins and a downloadable `.ics` reminder that repeats daily for 7 days

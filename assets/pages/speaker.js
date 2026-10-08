@@ -29,7 +29,9 @@ if (!sl) {
     document.title = x.s + " · Six Months of Light";
     main.innerHTML = `<p class="crumbs"><a href="study.html?view=speakers&c=all">← All speakers</a></p>
     <article class="card speaker-card"><div class="sp-head">${monogram(x.s, true)}<div><h1 style="margin:0">${esc(x.s)}</h1><p class="speaker">${esc(x.r || "")}</p></div></div>
-    <p class="b-help">Calling as listed with the most recent talk here. Official biography: <a href="${OFFICIAL_LEADERS}" rel="noopener">Church leadership on ChurchofJesusChrist.org ↗</a>.</p></article>${libSection(LB, sl, x.s)}`; })
+    <p class="b-help">Calling as listed with the most recent talk here.</p></article>
+    ${libSection(LB, sl, x.s)}
+    <p class="talk-source">Source: <a href="${OFFICIAL_LEADERS}" rel="noopener">Official biography on ChurchofJesusChrist.org</a></p>`; })
   .catch(() => { document.getElementById("ld").textContent = "The library didn't load. Check your connection and try again."; });
 } else {
   const s = ts[0], themes = [...new Set(ts.flatMap(talkThemes))];
@@ -38,13 +40,14 @@ if (!sl) {
   <article class="card speaker-card">
     <div class="sp-head">${monogram(s.speaker, true)}<div><h1 style="margin:0">${esc(s.speaker)}</h1><p class="speaker">${esc(s.calling)}</p></div></div>
     <dl class="kv">
-      <dt>Bio</dt><dd>Only the calling above is included here. For the official biography, see <a href="${OFFICIAL_LEADERS}" rel="noopener">Church leadership on ChurchofJesusChrist.org ↗</a>.</dd>
+      <dt>Bio</dt><dd>Only the calling above is included here.</dd>
       <dt>This conference</dt><dd>${ts.map(t => `<a href="talks/${t.id}.html">“${esc(t.title)}”</a> · ${esc(sessionById(t.session).name)}`).join("<br>")}</dd>
       <dt>Themes this weekend</dt><dd>${themes.length ? themes.map(x => `<span class="pill" style="margin:2px">${esc(x)}</span>`).join(" ") : "None noted"}<div class="speaker">${OFFICIAL_TEXT() ? "From this conference's talk." : "From this conference's recap."}</div></dd>
     </dl></article>
   <div id="lib"><p class="empty">Loading past talks…</p></div>
   ${askTalksPanel({ label: s.speaker, questions: ["What did this speaker teach this weekend?"],
-    answer: () => talkAnswer(ts.map(t => esc(t.big_idea)).join(" "), ts) })}`;
+    answer: () => talkAnswer(ts.map(t => esc(t.big_idea)).join(" "), ts) })}
+  <p class="talk-source">Source: <a href="${OFFICIAL_LEADERS}" rel="noopener">Official biography on ChurchofJesusChrist.org</a></p>`;
   loadLib().then(LB => { document.getElementById("lib").innerHTML = libSection(LB, sl, s.speaker) || `<p class="b-help">No other talks from ${LB.coverage.from} on. See the <a href="${SPEAKER_INDEX}" rel="noopener">speaker index ↗</a>.</p>`; })
     .catch(() => { document.getElementById("lib").innerHTML = `<p class="b-help">Past talks didn't load. <a href="${SPEAKER_INDEX}" rel="noopener">Speaker index on ChurchofJesusChrist.org ↗</a></p>`; });
 }
