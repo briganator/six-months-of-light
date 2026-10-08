@@ -202,11 +202,26 @@ window.THEMES = {
 };
 window.talkText = t => [t.title, t.summary, t.big_idea, t.invitation, ...t.quotes].join(" ").toLowerCase();
 window.talkThemes = t => { const x = talkText(t); return Object.entries(THEMES).filter(([, ks]) => ks.some(k => x.includes(k))).map(([n]) => n); };
-// Gentle reveal-on-scroll motion (respects reduced-motion via CSS).
+// Gentle reveal-on-scroll motion. Reduced motion never hides anything. A jump to the bottom,
+// a fast flick, an anchor, or back/forward restore can skip IntersectionObserver, so anything
+// actually on screen is shown directly and never left at opacity 0.
 window.addEventListener("load", () => {
-  const els = document.querySelectorAll("main .card, main .session, main .tile, main h2, .recap60, main .stat, ol.talks li");
-  const io = "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -5% 0px" }) : null;
-  els.forEach((el, i) => { el.classList.add("reveal"); el.style.setProperty("--i", i % 7); el.style.transitionDelay = Math.min(i, 6) * 40 + "ms"; io ? io.observe(el) : el.classList.add("in"); });
+  const els = [...document.querySelectorAll("main .card, main .session, main .tile, main h2, .recap60, main .stat, ol.talks li")];
+  if (!els.length) return;
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce || !("IntersectionObserver" in window)) return;
+  const show = el => el.classList.add("in");
+  const onScreen = el => { const r = el.getBoundingClientRect(); return r.bottom > 8 && r.top < innerHeight - 8; };
+  const revealVisible = () => els.forEach(el => { if (!el.classList.contains("in") && onScreen(el)) show(el); });
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { show(e.target); io.unobserve(e.target); } }), { rootMargin: "80px 0px 80px 0px" });
+  els.forEach((el, i) => { el.classList.add("reveal"); el.style.setProperty("--i", i % 7); el.style.transitionDelay = Math.min(i, 6) * 40 + "ms"; io.observe(el); });
+  revealVisible();
+  addEventListener("scroll", revealVisible, { passive: true });
+  addEventListener("hashchange", () => requestAnimationFrame(revealVisible));
+  addEventListener("pageshow", revealVisible);
+  requestAnimationFrame(revealVisible);
+  setTimeout(revealVisible, 60);
+  setTimeout(revealVisible, 500);
 });
 window.talkUrl = t => CONF.site_url + "talks/" + t.id + ".html";
 

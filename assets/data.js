@@ -7,7 +7,7 @@ window.CONF = {
  "domain": "sixmonthsoflight.com",
  "domain_live": true,
  "subtitle": "196th Semiannual General Conference · October 3–4, 2026",
- "updated": "Thursday, October 8, 2026",
+ "updated": "Wednesday, October 7, 2026",
  "conference_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10?lang=eng",
  "talk_of_the_week": {
   "talk_id": "sat-pm-7-kearon",

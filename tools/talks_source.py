@@ -4,6 +4,8 @@
 # Quotes were first copied from the doc (as reported in recaps); on Oct 5, 2026 every quote was
 # checked against and set to the official talk text. Do not add quotes that are not in the official text.
 import json, pathlib
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 SAT_AM = "https://www.churchofjesuschrist.org/study/general-conference/2026/10/saturday-morning-session?lang=eng"
 SAT_PM = "https://www.churchofjesuschrist.org/study/general-conference/2026/10/saturday-afternoon-session?lang=eng"
@@ -698,7 +700,8 @@ site = {
   "domain": DOMAIN,
   "domain_live": DOMAIN_LIVE,
   "subtitle": "196th Semiannual General Conference · October 3–4, 2026",
-  "updated": "Thursday, October 8, 2026",
+  # Owner's clock is America/Denver. A UTC date here was a day ahead on the evening of Oct 7.
+  "updated": datetime.now(ZoneInfo("America/Denver")).strftime("%A, %B %-d, %Y"),
   "conference_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10?lang=eng",
   "talk_of_the_week": {"talk_id": "sat-pm-7-kearon",
      "ponder": "What are the subtle signs of “sink” in my week?",

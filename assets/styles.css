@@ -287,7 +287,7 @@ footer.site a{color:var(--gold-hi)}
 
 /* ---------- motion ---------- */
 .reveal{opacity:0;transform:translateY(18px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
-.reveal.in{opacity:1;transform:none}
+.reveal.in,.reveal:target,.reveal:focus-within{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
   .reveal{opacity:1;transform:none}
@@ -396,7 +396,7 @@ main.wrap:has(.builder){max-width:1180px}
   .tabbar a.tb-main svg{background:linear-gradient(180deg,#f6dfa6,#d8a95b);border-radius:14px;padding:6px;width:36px;height:30px;box-sizing:content-box;margin-top:-14px;box-shadow:0 8px 20px -6px rgba(216,169,91,.7)}
   .tabbar a.tb-main span{color:#f6dfa6}
   body.has-tabbar{padding-bottom:0}
-  body.has-tabbar footer.site{padding-bottom:calc(132px + env(safe-area-inset-bottom))}
+  body.has-tabbar footer.site{margin-top:48px;padding-bottom:calc(132px + env(safe-area-inset-bottom))}
   html{scroll-padding-top:calc(var(--hdrH, 72px) + 12px);scroll-padding-bottom:calc(120px + env(safe-area-inset-bottom))}
   .navlinks{display:none}
 }
