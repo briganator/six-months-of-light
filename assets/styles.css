@@ -1049,7 +1049,7 @@ details.fine>summary{cursor:pointer;min-height:44px;display:flex;align-items:cen
   body.home .hero .display{font-size:clamp(44px,12.5vw,56px);margin:6px 0}
   body.home .cd-labels{display:none}
   body.home .countdown{max-width:340px}
-  body.home .entry{margin-top:-44px}
+  body.home .entry{margin-top:0}
 }
 @media (max-width:899px){body.home .hero .countdown{display:none}body.home .hero-lg .hero-copy{padding-bottom:64px}}
 /* Quote step on phones: smaller preview and a one-row share bar, so the picker gets the screen */
@@ -1208,13 +1208,21 @@ body.post .hero-sky .rays{opacity:.75}
 .sub-foot{margin:18px 6px 8px;text-align:center}
 
 /* Teach it: first thing under the hero, then a start-here tile */
-.lesson-band{position:relative;z-index:2;margin:-56px 0 18px;padding:22px 22px 20px;border-radius:28px;background:radial-gradient(420px 180px at 100% 0,rgba(246,223,166,.7),transparent 68%),linear-gradient(165deg,#fffaf3,#f3e4c4);border:1px solid rgba(216,169,91,.55);box-shadow:var(--shadow-3)}
-.lesson-band + .entry{margin-top:0}
+.lesson-band{position:relative;z-index:2;margin:-56px 0 22px;padding:22px 22px 24px;border-radius:28px;background:radial-gradient(420px 180px at 100% 0,rgba(246,223,166,.7),transparent 68%),linear-gradient(165deg,#fffaf3,#f3e4c4);border:1px solid rgba(216,169,91,.55);box-shadow:var(--shadow-3)}
+.lesson-band + .entry,body.home .lesson-band + .entry{margin-top:0}
 .lesson-band h2{margin:2px 0 8px;font-size:clamp(34px,8vw,52px);line-height:.95}
 .lesson-band p{margin:0 0 16px;max-width:38rem;color:var(--ink-2);font-size:16.5px;line-height:1.45}
 .lb-k{font:600 11.5px var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--gold-deep)}
-.lb-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.lb-actions{display:flex;flex-wrap:nowrap;gap:10px;align-items:center}
+.lb-actions .btn{justify-content:center;text-align:center}
 .lb-actions .btn.secondary{background:#fff}
+@media (max-width:899px){
+  .lb-actions{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.82fr);gap:8px;align-items:stretch}
+  .lb-actions .btn,.lb-actions .btn.big{min-height:48px;padding:12px 8px;font-size:15px;white-space:nowrap}
+}
+@media (max-width:370px){
+  .lb-actions .btn,.lb-actions .btn.big{font-size:14px;padding:12px 6px}
+}
 .entry-i.teach{background:linear-gradient(165deg,#fffaf3,#f3e4c4);border-color:rgba(216,169,91,.55)}
 .entry-i.teach b{color:var(--midnight-2)}
 .entry-i.teach>span:last-child{color:var(--ink-2)}
