@@ -110,7 +110,8 @@ blockquote{margin:14px 0;padding:6px 0 6px 22px;border-left:1.5px solid var(--go
 .crumbs a{color:var(--muted)}
 
 /* ---------- surfaces ---------- */
-.intro{margin-top:-64px;position:relative;z-index:2}
+.intro{margin-top:24px;position:relative}
+.page-updated{margin:32px 0 4px;color:var(--muted);font-size:14px}
 .notice{background:rgba(255,250,240,.85);backdrop-filter:blur(14px);border:1px solid rgba(216,169,91,.35);border-radius:var(--r-sm);padding:12px 16px;font-size:13.5px;color:#6a4d1d;box-shadow:var(--shadow-1);margin:18px 0}
 .notice strong{font-weight:600}
 .card{position:relative;background:rgba(255,253,249,.78);backdrop-filter:blur(18px) saturate(1.2);border:1px solid rgba(255,255,255,.7);border-radius:var(--r-lg);padding:clamp(20px,4vw,34px);margin:18px 0;
@@ -394,7 +395,9 @@ main.wrap:has(.builder){max-width:1180px}
   .tabbar a.tb-main{color:#1a1530}
   .tabbar a.tb-main svg{background:linear-gradient(180deg,#f6dfa6,#d8a95b);border-radius:14px;padding:6px;width:36px;height:30px;box-sizing:content-box;margin-top:-14px;box-shadow:0 8px 20px -6px rgba(216,169,91,.7)}
   .tabbar a.tb-main span{color:#f6dfa6}
-  body.has-tabbar{padding-bottom:76px}
+  body.has-tabbar{padding-bottom:0}
+  body.has-tabbar footer.site{padding-bottom:calc(132px + env(safe-area-inset-bottom))}
+  html{scroll-padding-top:calc(var(--hdrH, 72px) + 12px);scroll-padding-bottom:calc(120px + env(safe-area-inset-bottom))}
   .navlinks{display:none}
 }
 /* home */
@@ -694,7 +697,8 @@ table.cmp td:first-child,table.cmp th:first-child{text-align:left}
   .study-panel{break-inside:avoid}
   blockquote{break-inside:avoid}
   h1{font-size:22pt;margin:0 0 4pt} h2{font-size:14pt}
-  .study-panel::after{content:"Six Months of Light · sixmonthsoflight.com · Quotes from recaps; confirm with the official text on ChurchofJesusChrist.org. Not an official Church site.";display:block;margin-top:10pt;font-size:8.5pt;color:#555}
+  .study-panel::after{content:"Six Months of Light · sixmonthsoflight.com · Full talk posted with the Church's permission. Not an official Church site.";display:block;margin-top:10pt;font-size:8.5pt;color:#555}
+  .ft-media,.readbar,.ft-tools,.fn-pop,.talk-cta,.act-band{display:none!important}
 }
 /* ---- reading plan ---- */
 .plan-top{margin:14px 0}
@@ -1188,3 +1192,58 @@ body.post .hero-sky .rays{opacity:.75}
 .sub-mail{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.sub-mail input{flex:1;min-width:200px;font:16px var(--sans);padding:12px 16px;border-radius:999px;border:1.5px solid rgba(42,45,92,.16)}
 @media (max-width:420px){.sub-mail .btn{width:100%;justify-content:center}}
 .sub-foot{margin:18px 6px 8px;text-align:center}
+
+/* Teach it / Test yourself */
+.act-band{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:4px 0 8px}
+@media (max-width:640px){.act-band{grid-template-columns:1fr}}
+.act-card,.cta-card{display:flex;flex-direction:column;gap:6px;padding:18px 18px 16px;border-radius:var(--r);text-decoration:none;color:var(--ink);min-height:132px;border:1px solid var(--line);box-shadow:var(--shadow-2)}
+.act-card .act-k,.cta-card .cta-k{font:600 11px var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep)}
+.act-card strong,.cta-card strong{font:500 clamp(26px,4vw,32px)/1.05 var(--serif);color:var(--midnight-2)}
+.act-card .act-go{margin-top:auto;font:600 14px var(--sans);color:var(--indigo)}
+.act-card.teach,.cta-card.teach{background:linear-gradient(165deg,#fffaf3,#f3e4c4)}
+.act-card.test,.cta-card.test{background:linear-gradient(165deg,#141c3c,#3a2d58);color:#fbf3e3;border-color:transparent}
+.act-card.test strong,.act-card.test .act-k,.cta-card.test strong,.cta-card.test .cta-k{color:#f6dfa6}
+.act-card.test .act-go{color:#f6dfa6}
+.talk-cta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}
+@media (max-width:640px){.talk-cta{grid-template-columns:1fr}}
+.cta-card{min-height:0;box-shadow:none}
+.cta-card span:last-child{font-size:14px;line-height:1.4;color:var(--ink-2)}
+.cta-card.test span:last-child{color:rgba(251,243,227,.82)}
+.lib-acts{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.talkcard.biz{margin:12px 0 4px}
+
+/* Full official talk */
+.fulltext{margin-top:22px;padding-top:8px;border-top:1px solid rgba(29,27,34,.08)}
+.ft-tools{position:sticky;top:var(--hdrH,64px);z-index:5;display:flex;gap:8px;flex-wrap:wrap;padding:8px 0;margin:0 0 8px;background:rgba(251,246,238,.94)}
+.ft-tools a{font:600 13px var(--sans);text-decoration:none;color:var(--midnight-2);background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;min-height:40px;display:inline-flex;align-items:center}
+.fulltext h2{margin:4px 0 8px}
+.ft-perm{font-size:13.5px;color:var(--muted);margin:0 0 14px;max-width:40rem}
+.ft-media{display:grid;gap:10px;margin:0 0 16px}
+.ft-media video{width:100%;max-height:70vh;border-radius:16px;background:#0d1326}
+.ft-media audio{width:100%}
+.ft-body{font:400 18.5px/1.75 var(--sans);color:var(--ink);max-width:40rem;overflow-wrap:anywhere}
+.ft-body p{margin:0 0 1em}
+.ft-kicker,.ft-sub{font:italic 500 22px/1.4 var(--serif);color:var(--midnight-2)}
+.ft-h{font:500 clamp(26px,4vw,34px)/1.15 var(--serif);color:var(--midnight-2);margin:1.35em 0 .45em}
+.ft-poem{margin:0 0 1.1em;padding-left:.2em}
+.ft-line{font:italic 500 20px/1.5 var(--serif);margin:0 0 .15em}
+.ft-list{margin:0 0 1em;padding-left:1.2em}
+.ft-fig{margin:1.1em 0}
+.ft-fig img{max-width:100%;height:auto;border-radius:12px}
+.ft-credit{font-size:13px;line-height:1.45;color:var(--muted);margin:.35em 0 0}
+.ft-fig-miss{padding:10px 12px;border:1px dashed rgba(168,122,53,.45);border-radius:12px}
+.fn{display:inline-flex;align-items:center;justify-content:center;min-width:1.7em;min-height:1.7em;padding:0 .28em;margin:0 .12em;border-radius:999px;background:rgba(216,169,91,.22);color:var(--gold-deep);font:700 12px/1 var(--sans);text-decoration:none;vertical-align:super}
+.ft-ref,.ft-xref{color:var(--indigo)}
+.ft-notes{margin-top:8px;border-top:1px solid var(--line);padding-top:4px}
+.ft-notes summary{cursor:pointer;font:600 15px var(--sans);min-height:44px;display:flex;align-items:center}
+.ft-notes li{margin:.55em 0;font-size:15px;line-height:1.55;scroll-margin-bottom:120px}
+.readbar{position:fixed;top:var(--hdrH,0px);left:0;right:0;height:3px;z-index:35;pointer-events:none}
+.readbar span{display:block;height:100%;width:0;background:linear-gradient(90deg,#e3a693,#f1d394)}
+.fn-pop{position:fixed;z-index:60;width:min(420px,calc(100vw - 24px));max-height:min(46vh,360px);overflow:auto;background:#fffaf3;color:var(--ink);border-radius:18px;padding:12px 14px 14px;box-shadow:var(--shadow-3);border:1px solid rgba(216,169,91,.4)}
+.fn-pop.fn-sheet{left:12px;right:12px;bottom:calc(96px + env(safe-area-inset-bottom));width:auto}
+.fn-pop-h{display:flex;justify-content:space-between;align-items:center;gap:8px;font:600 13px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--gold-deep)}
+.fn-x{border:0;background:transparent;font:600 14px var(--sans);color:var(--ink);cursor:pointer;min-height:40px}
+.fn-pop-b{font-size:15px;line-height:1.5}
+.fn-pop-b p{margin:.4em 0}
+.fn-more{font:600 13px var(--sans)}
+@media (prefers-reduced-motion:reduce){.readbar span{transition:none}}

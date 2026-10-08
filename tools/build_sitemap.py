@@ -3,7 +3,7 @@ import pathlib, json, datetime
 root = pathlib.Path(__file__).resolve().parent.parent
 SITE = json.loads((root / "assets/data.js").read_text().split("window.CONF = ", 1)[1].rstrip().rstrip(";"))["site_url"]
 assert SITE.startswith("https://")
-skip = {"moderate.html", "404.html"}
+skip = {"moderate.html", "404.html", "live.html"}
 pages = [p for p in sorted(root.glob("*.html")) if p.name not in skip and not p.name.startswith("_")] + sorted((root / "talks").glob("*.html"))
 today = datetime.date.today().isoformat()
 urls = [SITE + ("" if p.name == "index.html" and p.parent == root else str(p.relative_to(root))) for p in pages]

@@ -1,5 +1,7 @@
-// Six Months of Light: service worker for Keep the Light reminder notifications only. It doesn't cache pages, so the site
-// always loads fresh from the network.
+// Six Months of Light: service worker for Keep the Light reminder notifications only.
+// It does not cache HTML, CSS or JS, so pages always load fresh from the network.
+// SW_VERSION is bumped when the worker script changes so installed workers update.
+self.SW_VERSION = "8";
 const SB = "https://yrofrjdmhnudqbuvukqm.supabase.co", KEY = "sb_publishable_CTdJCpH-2P34ANI0Qq3SrQ_9ZbQ-KqB";
 self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", e => e.waitUntil(self.clients.claim()));

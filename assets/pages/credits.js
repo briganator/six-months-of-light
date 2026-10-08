@@ -1,7 +1,7 @@
 mount("credits.html", true);
 document.getElementById("main").innerHTML = `
   <div class="section-label">Credits</div><h1 style="margin-top:0">Credits &amp; licenses</h1>
-  <p class="lede">Six Months of Light uses only openly licensed photos, original artwork and open-source fonts and code. It uses no Church photos, logos, trademarks or modern Church artwork; paintings of the Savior are nineteenth-century public-domain works.</p>
+  <p class="lede">Six Months of Light uses openly licensed photos, original artwork and open-source fonts and code for its cards. Card photos are not Church images. Paintings of the Savior are nineteenth-century public-domain works. Speaker pages use initials, not portraits.</p>
   <div class="notice"><strong>Not an official Church site.</strong> Temple photos are from Wikimedia Commons under the licenses below. Photos marked CC BY or CC BY-SA need attribution, so each card made with one carries a small credit line. Temple silhouettes, stained glass, scripture paper, hymn sheet, watercolor, olive branch, night sky, landscape and topic looks (Sacred Grove, golden plates, pioneer trail, family tree and others) are drawn in code by this site.</div>
   <h2>Paintings of the Savior (public domain)</h2>
   <p>Nineteenth-century paintings by Carl Bloch (1834–1890) and Heinrich Hofmann (1824–1911). The works are in the public domain; the reproductions come from Wikimedia Commons, where each file is marked public domain.</p>
@@ -18,4 +18,4 @@ document.getElementById("main").innerHTML = `
   <li>QR code generator (qrcode-generator by Kazuhiko Arase): MIT License.</li>
   <li>Logo, temple-silhouette illustrations and all card backgrounds: original to Six Months of Light.</li></ul>
   <h2>Words</h2>
-  <p>${OFFICIAL_TEXT() ? "Quotes are short excerpts checked against the official October 2026 General Conference talk text on" : "Quotes and summaries come from Church News and Church Newsroom recaps of the October 2026 General Conference. Confirm them with the official text on"} <a href="${esc(CONF.conference_url)}" rel="noopener">ChurchofJesusChrist.org</a>.${OFFICIAL_TEXT() ? " Summaries were first written from Church News and Newsroom recaps." : ""} Full talk text is not reproduced.</p>`;
+  <p>${OFFICIAL_TEXT() ? "The October 2026 talks are posted in full on each talk page, with the Church's permission, including the official audio, video and any illustrations in the talk. Those media files stay on ChurchofJesusChrist.org (they are not copied into this site). Quotes are short excerpts of that same text. Summaries were first written from Church News and Newsroom recaps." : "Quotes and summaries come from Church News and Church Newsroom recaps of the October 2026 General Conference. Confirm them with the official text. Full talk text is not reproduced."} Read each official page on <a href="${esc(CONF.conference_url)}" rel="noopener">ChurchofJesusChrist.org</a>.</p>`;

@@ -24,8 +24,9 @@
     return { raw, ref, terms: ref ? terms.filter(w => !lc(ref).includes(w)) : terms, themes };
   }
   const refMatch = (rf, ref) => { const a = lc(ref).replace(/[–-]\d+$/, ""); return rf.some(r => { const b = lc(r); return b === a || b.startsWith(a + ":") || b.startsWith(a + "–") || (a.includes(":") && b.startsWith(a)); }); };
-  function search(q) {
-    const P = parse(q); if (!P.terms.length && !P.ref && !P.themes.length) return { P, hits: [] };
+  const sentence = (text, terms) => { const parts = String(text || "").split(/(?<=[.!?])\s+/); const hit = parts.find(p => terms.some(w => hasWord(p, w))) || ""; return hit.length > 220 ? hit.slice(0, 210).replace(/\s+\S*$/, "") + "…" : hit; };
+  function search(q, full) {
+    const P = parse(q); if (!P.terms.length && !P.ref && !P.themes.length) return { P, hits: [], biz: [] };
     const hits = [];
     LB.talks.forEach(t => {
       const o = t.local ? octById(t.id) : null, why = new Set(); let s = 0;
@@ -36,12 +37,23 @@
         if (w.length > 3 && lc(t.s).split(/\s+/).includes(w)) { s += 5; why.add("speaker"); }
         if (o && (hasWord(o.summary, w) || o.quotes.some(x => hasWord(x, w)))) { s += 2; why.add(o.official_url ? "summary or quote" : "recap"); }
       });
+      let ex = "";
+      if (full && full[t.id] && P.terms.some(w => hasWord(full[t.id], w))) {
+        const covered = ["title", "summary or quote", "recap", "big idea"].some(k => why.has(k));
+        if (!covered) { s += 2; why.add("full text"); ex = sentence(full[t.id], P.terms); }
+      }
       if (P.ref && refMatch(t.rf, P.ref)) { s += 6; why.add("cites " + P.ref); }
       P.themes.forEach(k => { if (t.tg.includes(k)) { s += 3; why.add("topic: " + LB.themeName(k)); } else if (!t.recap && (t.d[k] || 0) > 2 * (L.themeMean[k] || 99)) { s += 1; why.add("topic words"); } });
-      if (s) hits.push({ t, s, why: [...why] });
+      if (s) hits.push({ t, s, why: [...why], excerpt: ex });
+    });
+    const biz = [];
+    if (full) (CONF.business || []).forEach(b => {
+      const text = full[b.id] || "";
+      if (!P.terms.some(w => hasWord(b.title + " " + (b.lead || "") + " " + text, w))) return;
+      biz.push({ b, excerpt: sentence(text, P.terms) });
     });
     hits.sort((a, b) => b.s - a.s || b.t.c.localeCompare(a.t.c));
-    return { P, hits };
+    return { P, hits, biz };
   }
   // Quick insight: how often, by whom, trend over conferences
   function insight(R) {
@@ -61,9 +73,9 @@
   const spark = (per, peak) => { const m = Math.max(...per.map(x => x[1])) || 1;
     return `<div class="srch-spark" role="img" aria-label="Trend across conferences">${per.map(([c, v]) => `<span title="${esc(LB.confOf(c).label)}: ${Math.round(v * 10) / 10}" class="${c === peak[0] ? "pk" : ""}" style="height:${Math.max(4, v / m * 100)}%"></span>`).join("")}</div>
       <div class="srch-axis"><span>${esc(shortConf(per[0][0]))}</span><span>${esc(shortConf(per[per.length - 1][0]))}</span></div>`; };
-  function render(el, q) {
-    const R = search(q), P = R.P;
-    if (!R.hits.length && !P.themes.length) { el.innerHTML = `<div class="ask-bubble"><p>Nothing on this site matches “${esc(q)}” yet. Try one key word, like <em>hope</em>, <em>temple</em> or a scripture such as <em>Alma 32</em>.</p></div>`; return; }
+  function paint(el, q, full) {
+    const R = search(q, full), P = R.P;
+    if (!R.hits.length && !(R.biz || []).length && !P.themes.length) { el.innerHTML = `<div class="ask-bubble"><p>Nothing on this site matches “${esc(q)}” yet. Try one key word, like <em>hope</em>, <em>temple</em> or a scripture such as <em>Alma 32</em>.</p></div>`; return; }
     const I = insight(R), top = R.hits.slice(0, 8), octQ = [];
     CONF.talks.forEach(t => t.quotes.forEach((x, i) => { if (P.terms.some(w => hasWord(x, w)) || P.themes.some(k => (window.THEMES3?.tagsFor(t.id, i) || []).includes(k))) octQ.push({ t, i, x }); }));
     const sps = P.terms.length ? LB.speakers.filter(s => P.terms.some(w => w.length > 3 && lc(s.s).split(/\s+/).includes(w))).slice(0, 4) : [];
@@ -76,10 +88,11 @@
     el.innerHTML = `<div class="srch-res">
       <section class="srch-ins"><div class="ins-kicker">Quick insight</div><h3>${esc(I.label)}${P.ref ? " " + esc(P.ref) : ""}</h3>
         <p class="speaker">${I.confsN} conference${I.confsN === 1 ? "" : "s"}${I.octN ? ` · ${I.octN} from October 2026 recaps` : ""}${I.who.length ? ` · most by ${I.who.map(([s, n]) => `${esc(s.replace(/^(President|Elder|Sister|Bishop|Brother)\s+/, ""))} (${n})`).join(", ")}` : ""}</p>
-        ${spark(I.per, I.peak)}<p class="z-note">Trend: ${esc(I.unit)} per official conference${I.peak && I.peak[1] ? `, highest in ${esc(LB.confOf(I.peak[0]).label)}` : ""}. October 2026 joins when the official text is posted. ${esc(I.basis)}.</p>
+        ${spark(I.per, I.peak)}<p class="z-note">Trend: ${esc(I.unit)} per official conference${I.peak && I.peak[1] ? `, highest in ${esc(LB.confOf(I.peak[0]).label)}` : ""}. ${LB.confs.some(c => c.recap) ? "October 2026 joins when the official text is posted. " : ""} ${esc(I.basis)}.</p>
         <button class="btn gold small" type="button" data-zcard>Make a card</button></section>
-      ${octQ.length ? `<section><h3 class="srch-h">Verified quotes · October 2026</h3><ul class="srch-quotes">${octQ.slice(0, 4).map(o => `<li><blockquote>“${esc(o.x)}”</blockquote><div class="speaker">${esc(o.t.speaker)}, <a href="talks/${esc(o.t.id)}.html">“${esc(o.t.title)}”</a> · from recaps · <a href="builder.html?t=${esc(o.t.id)}&q=${o.i}">Make a card</a></div></li>`).join("")}</ul></section>` : ""}
-      ${top.length ? `<section><h3 class="srch-h">Talks</h3><ol class="srch-talks">${top.map(h => `<li><a href="${esc(LB.href(h.t))}" ${h.t.local ? "" : 'target="_blank" rel="noopener"'}>${esc(h.t.t)}${h.t.recap ? "" : " ↗"}</a><div class="speaker">${esc(h.t.s)} · ${esc(LB.confOf(h.t.c).label)} · <span class="srch-why">${esc(h.why.slice(0, 2).join(", "))}</span></div>${h.t.k ? `<div class="srch-k">${esc(h.t.k)}</div>` : ""}</li>`).join("")}</ol>
+      ${octQ.length ? `<section><h3 class="srch-h">Verified quotes · October 2026</h3><ul class="srch-quotes">${octQ.slice(0, 4).map(o => `<li><blockquote>“${esc(o.x)}”</blockquote><div class="speaker">${esc(o.t.speaker)}, <a href="talks/${esc(o.t.id)}.html">“${esc(o.t.title)}”</a> · ${o.t.official_url ? "official text" : "from recaps"} · <a href="builder.html?t=${esc(o.t.id)}&q=${o.i}">Make a card</a></div></li>`).join("")}</ul></section>` : ""}
+      ${(R.biz || []).length ? `<section><h3 class="srch-h">Conference business</h3><ul class="srch-talks">${R.biz.map(x => `<li><a href="talks/${esc(x.b.id)}.html">${esc(x.b.title)}</a><div class="speaker">${esc(x.b.speaker)} · full text</div>${x.excerpt ? `<div class="srch-k">${esc(x.excerpt)}</div>` : ""}</li>`).join("")}</ul></section>` : ""}
+      ${top.length ? `<section><h3 class="srch-h">Talks</h3><ol class="srch-talks">${top.map(h => `<li><a href="${esc(LB.href(h.t))}" ${h.t.local ? "" : 'target="_blank" rel="noopener"'}>${esc(h.t.t)}${h.t.recap ? "" : " ↗"}</a><div class="speaker">${esc(h.t.s)} · ${esc(LB.confOf(h.t.c).label)} · <span class="srch-why">${esc(h.why.slice(0, 2).join(", "))}</span></div>${h.excerpt ? `<div class="srch-k">${esc(h.excerpt)}</div>` : h.t.k ? `<div class="srch-k">${esc(h.t.k)}</div>` : ""}</li>`).join("")}</ol>
         ${R.hits.length > top.length ? `<a class="linkish" href="study.html?c=all&q=${encodeURIComponent(P.terms[0] || P.ref || "")}">See more in the Study library →</a>` : ""}</section>` : ""}
       <div class="srch-cols">
       ${P.themes.length ? `<section><h3 class="srch-h">Topics</h3><p>${P.themes.map(k => `<a class="pill" href="topic.html?k=${k}">${esc(LB.themeIcon(k))} ${esc(LB.themeName(k))}</a>`).join(" ")}</p></section>` : ""}
@@ -88,6 +101,11 @@
       </div>
       <div class="ask-tag">Every result links its talk. Counts come from official talk pages${LB.confs.some(c => c.recap) ? "; October 2026 quotes come from news recaps" : ""}.</div></div>`;
     el.querySelector("[data-zcard]").onclick = () => location.href = LB.zcard(card);
+  }
+  function render(el, q) {
+    const go = full => paint(el, q, full);
+    if (window.__ftIndex) return go(window.__ftIndex);
+    fetch("assets/fulltext/index.json").then(r => r.ok ? r.json() : {}).then(idx => { window.__ftIndex = idx || {}; go(window.__ftIndex); }).catch(() => go(null));
   }
   window.InsightSearch = { search, render, parse };
 })();

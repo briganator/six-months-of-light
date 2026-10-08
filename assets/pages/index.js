@@ -10,10 +10,8 @@ let html = `<section class="today" aria-labelledby="today-h">
   <p class="today-note">${OFFICIAL_TEXT() ? "Quoted from the official talk text." : "Quoted from recap; confirm with official text."}</p>
 </section>
 `;
-const LN = LIVE.now(), NX = LIVE.next();
-const liveSub = LN ? "Live now · share a line you heard" : POSTCONF ? "Lines people heard this weekend" : NX ? `Next session ${NX.at.toLocaleString([], { weekday: "short", hour: "numeric", minute: "2-digit" })}` : "Share a line during each session";
-const ENTRY = [["builder.html", "Make a card", "Turn a line into a card for your story or feed", "studio"], ["study.html", "Study", "Every talk, by session, topic or speaker", "study"], ["insights.html", "Insights", "Themes, words and scriptures at a glance", "insights"], ["live.html", "Live", liveSub, "live"]];
-html = `<nav class="entry" aria-label="Start here">${ENTRY.map(([h, t, d, i]) => `<a class="entry-i ${i === "live" && LN ? "is-live" : ""}" href="${h}"><span class="entry-ic" aria-hidden="true">${i === "live" ? '<span class="live-dot"></span>' : `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${TAB_ICON[i]}</svg>`}</span><b>${t}</b><span>${esc(d)}</span></a>`).join("")}</nav>` + html;
+const ENTRY = [["builder.html", "Make a card", "Turn a line into a card for your story or feed", "studio"], ["study.html", "Study", "Every talk, by session, topic or speaker", "study"], ["insights.html", "Insights", "Themes, words and scriptures at a glance", "insights"], ["quiz.html", "Who said it?", "Quiz yourself on this conference's quotes", "quiz"]];
+html = `<nav class="entry" aria-label="Start here">${ENTRY.map(([h, t, d, i]) => `<a class="entry-i" href="${h}"><span class="entry-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${TAB_ICON[i]}</svg></span><b>${t}</b><span>${esc(d)}</span></a>`).join("")}</nav>` + html;
 const KEEP_ON = Store.get("keep-on", null);
 html += KEEP_ON ? `<a class="keep-band keep-on" href="subscribe.html"><span class="kb-ic">${KEEP_ICON(22)}</span><span class="kb-copy"><strong>You're keeping the light</strong><small>Your ${esc(KEEP_ON.how || "reminder")} is on until April.</small></span><span class="kb-go">Change</span></a>`
   : `<section class="keep-band" aria-labelledby="kb-h"><div class="kb-glow" aria-hidden="true"></div><span class="kb-ic">${KEEP_ICON(26)}</span>
@@ -35,23 +33,29 @@ html += `<div class="section-label" id="totw">Talk of the week</div><h2 class="s
     <a class="txt-link" href="builder.html?t=${esc(tt.id)}&q=2">Make a card →</a>
   </div>
 </article>
+<section class="act-band" aria-label="Teach it and test yourself">
+  <a class="act-card teach" href="lessons.html"><span class="act-k">Teach it</span><strong>Lesson helps</strong><span>Build a lesson for family home evening, a youth class, or a sacrament talk.</span><span class="act-go">Build a lesson →</span></a>
+  <a class="act-card test" href="quiz.html"><span class="act-k">Test yourself</span><strong>Who said it?</strong><span>A short quiz and flashcards from this conference's verified quotes.</span><span class="act-go">Start the quiz →</span></a>
+</section>
 `;
 const withTalks = CONF.sessions.filter(s => CONF.talks.some(t => t.session === s.id)), openId = (withTalks[withTalks.length - 1] || {}).id;
 html += `<div class="section-label" id="sessions">Talks by session</div>`;
 for (const s of CONF.sessions) {
   const ts = CONF.talks.filter(t => t.session === s.id).sort((a,b) => a.order-b.order);
   const pill = ts.length ? `${ts.length} talk${ts.length === 1 ? "" : "s"}${s.status === "pending" ? " so far" : ""}` : "Coming soon";
+  const biz = (CONF.business || []).filter(b => b.session === s.id);
   html += `<details class="session s-${s.color}" id="s-${s.id}" ${s.id === openId ? "open" : ""}>
    <summary class="session-head"><h2>${esc(s.name)}</h2><span class="pill ${ts.length ? "" : "pending"}">${pill}</span></summary>
    <div class="when">${esc(s.when)} · <a href="session.html?s=${s.id}">Session page</a> · <a href="${esc(s.url)}" rel="noopener">Official ↗</a></div>`;
+  html += biz.map(b => `<a class="talkcard s-${s.color} biz" href="talks/${esc(b.id)}.html"><span class="num">S</span><span class="tc-body"><span class="t-title">${esc(b.title)}</span><span class="t-speaker">${esc(b.speaker)}</span><span class="t-idea">${esc(b.lead)}</span></span><span class="tc-arrow" aria-hidden="true">→</span></a>`).join("");
   html += ts.length ? `<ol class="talks">` + ts.map(t => `<li><a class="talkcard s-${s.color}" href="talks/${esc(t.id)}.html">
       <span class="num">${t.order}</span>
       <span class="tc-body"><span class="t-title">${esc(t.title)}</span><span class="t-speaker">${esc(t.speaker)}</span><span class="t-idea">${esc(t.big_idea)}</span></span><span class="tc-arrow" aria-hidden="true">→</span></a></li>`).join("") + `</ol>`
     : `<p class="empty">${esc(s.note)}</p>`;
   html += `</details>`;
 }
-html += `<div class="section-label">More</div><nav class="more-links" aria-label="More">${[["plan.html", "Reading plan"], ["lessons.html", "Lesson helps"], ["quiz.html", "Who said it? quiz"], ["my.html", "My Conference"], ["challenge.html", esc(CONF.challenge.title)], ["builder.html?src=promo", "Share this site"]].map(([h, l]) => `<a href="${h}">${l}</a>`).join("")}</nav>`;
-html += `<div class="intro">${recapNotice()}</div><p class="speaker" style="margin-top:24px">Last updated ${esc(CONF.updated)}.</p>`;
+html += `<div class="section-label">More</div><nav class="more-links" aria-label="More">${[["plan.html", "Reading plan"], ["my.html", "My Conference"], ["challenge.html", esc(CONF.challenge.title)], ["builder.html?src=promo", "Share this site"]].map(([h, l]) => `<a href="${h}">${l}</a>`).join("")}</nav>`;
+html += `${recapNotice() ? `<div class="intro">${recapNotice()}</div>` : ""}<p class="page-updated">Last updated ${esc(CONF.updated)}.</p>`;
 document.getElementById("main").innerHTML = html;
 
 

@@ -7,7 +7,6 @@ NAME, TAG = "Six Months of Light", "The words of October 2026 General Conference
 pages = {
  "index": ("Six Months of Light · October 2026 General Conference", ["share"], ["insights-data.js"]),
  "builder": ("Card Studio · Six Months of Light", [], ["themes3.js", "insights-data.js", "photos.js", "vendor/qrcode.js", "cardkit.js", "cardkit-plus.js", "videokit.js", "promos.js", "share-pages.js"]),
- "live": ("Heard it live · Six Months of Light", [], ["photos.js", "vendor/qrcode.js", "cardkit.js", "videokit.js"]),
  "quiz": ("Who said it? · Six Months of Light", [], []),
  "insights": ("Conference Insights · Six Months of Light", [], ["insights-data.js", "explore.js"]),
  "credits": ("Credits & licenses · Six Months of Light", [], ["photos.js"]),

@@ -1,12 +1,14 @@
 mount("quiz.html", true);
-const pool = CONF.talks.flatMap(t => t.quotes.map((q, i) => ({ t, q, k: t.id + "#" + i })));
+const focus = talkById(QS.get("t"));
+let pool = CONF.talks.flatMap(t => t.quotes.map((q, i) => ({ t, q, k: t.id + "#" + i })));
+if (focus && focus.quotes && focus.quotes.length) pool = pool.filter(x => x.t.id === focus.id);
 const known = () => new Set(Store.get("flash-known", [])), setKnown = (k, on) => { const s = known(); on ? s.add(k) : s.delete(k); Store.set("flash-known", [...s]); };
 const speakers = [...new Set(CONF.talks.map(t => t.speaker))];
 let score = 0, n = 0, mode = "quiz", cur;
 const rnd = a => a[Math.floor(Math.random() * a.length)];
 const main = document.getElementById("main");
 main.innerHTML = `${recapNotice()}<h1 style="margin-top:38px">Who said it?</h1>
-  <p class="speaker">Quotes from ${CONF.talks.some(t => /^sun/.test(t.session)) ? "this conference's talks so far" : "Saturday's talks"} (${OFFICIAL_TEXT() ? "official wording" : "as reported in recaps"}).</p>
+  <p class="speaker">${focus && pool.length && pool.every(x => x.t.id === focus.id) ? `Quotes from <a href="talks/${esc(focus.id)}.html">“${esc(focus.title)}”</a> only (${OFFICIAL_TEXT() ? "official wording" : "as reported in recaps"}). <a href="quiz.html">Quiz all talks</a>.` : `Quotes from ${CONF.talks.some(t => /^sun/.test(t.session)) ? "this conference's talks" : "Saturday's talks"} (${OFFICIAL_TEXT() ? "official wording" : "as reported in recaps"}).`}</p>
   <div class="seg" id="mode"><button data-k="quiz" aria-pressed="true">Quiz</button><button data-k="flash" aria-pressed="false">Flashcards</button></div>
   <div class="flash"><div class="inner" id="card"></div></div><div id="opts"></div>
   <div class="links"><button class="btn" id="nx">Next</button><span class="speaker" id="sc" style="align-self:center"></span></div>`;
@@ -36,7 +38,7 @@ function next() {
       `<div class="card"><b>${esc(cur.t.speaker)}</b><br><span class="speaker">“${esc(cur.t.title)}” · ${esc(cur.t.calling)}</span></div>
        <div class="links"><button class="btn secondary" id="again">Again</button><button class="btn ok" id="got">Got it ✓</button></div>`;
       document.getElementById("again").onclick = () => { setKnown(cur.k, false); next(); };
-      document.getElementById("got").onclick = () => { setKnown(cur.k, true); if (known().size >= pool.length) { opts.innerHTML = `<p class="lede">You've learned all ${pool.length}. Well done.</p>`; document.getElementById("sc").textContent = `${pool.length} of ${pool.length} learned`; } else next(); }; });
+      document.getElementById("got").onclick = () => { setKnown(cur.k, true); if (pool.every(x => known().has(x.k))) { opts.innerHTML = `<p class="lede">You've learned all ${pool.length}. Well done.</p>`; document.getElementById("sc").textContent = `${pool.length} of ${pool.length} learned`; } else next(); }; });
   }
 }
 document.getElementById("nx").addEventListener("click", next);

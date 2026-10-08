@@ -7,7 +7,7 @@ window.CONF = {
  "domain": "sixmonthsoflight.com",
  "domain_live": true,
  "subtitle": "196th Semiannual General Conference · October 3–4, 2026",
- "updated": "Monday, October 5, 2026",
+ "updated": "Thursday, October 8, 2026",
  "conference_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10?lang=eng",
  "talk_of_the_week": {
   "talk_id": "sat-pm-7-kearon",
@@ -79,7 +79,7 @@ window.CONF = {
    "ponder": "What does my “personal temple culture” look like right now — and our family's?",
    "big_idea": "The temple is the Lord's place of spiritual safety and holiness — every temple testifies of Christ.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sat-am-2-runia",
@@ -107,7 +107,7 @@ window.CONF = {
    "ponder": "Where am I still asking “why” instead of “what is supposed to be happening here?”",
    "big_idea": "God sculpts our souls through the very things that make life hard; invite Him to do His work.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sat-am-3-causse",
@@ -135,7 +135,7 @@ window.CONF = {
    "ponder": "When did I last simply and briefly testify of Christ at home?",
    "big_idea": "Every disciple can bear witness of Christ — a testimony need only be true.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sat-am-4-sikahema",
@@ -159,7 +159,7 @@ window.CONF = {
    "ponder": "Do I treat conference as background noise or as an appointment?",
    "big_idea": "Don't take living prophets for granted; earlier Saints sacrificed greatly to hear them.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sat-am-5-hathaway",
@@ -187,7 +187,7 @@ window.CONF = {
    "ponder": "What am I waiting on the Lord for right now, and what growth might the waiting be producing?",
    "big_idea": "Jesus Christ delivers in His time and way; He has not forgotten you.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sat-am-6-soares",
@@ -215,7 +215,7 @@ window.CONF = {
    "ponder": "Is my fast a skipped meal or an act of worship with a clear purpose?",
    "big_idea": "Fasting with intentional prayer is worship that draws heaven near.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sat-am-7-douglas",
@@ -243,7 +243,7 @@ window.CONF = {
    "ponder": "What did the Spirit highlight for me in this talk? What one invitation will I act on this week?",
    "big_idea": "Missionary service is the most important work; there's a place reserved for you.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sat-am-8-christofferson",
@@ -271,7 +271,7 @@ window.CONF = {
    "ponder": "What “good cause” could absorb time I currently spend on idle pursuits?",
    "big_idea": "Gambling is morally wrong; live on a higher plane and use time and means for good.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sat-pm-1-renlund",
@@ -299,7 +299,7 @@ window.CONF = {
    "ponder": "What is my “cold oatmeal” — the small frustration crowding out a miracle?",
    "big_idea": "Remember what God has already done so you can trust His promises now.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sat-pm-2-farnes",
@@ -327,7 +327,7 @@ window.CONF = {
    "ponder": "Who did God place in my path this week that I walked past?",
    "big_idea": "God places people in our path — minister to the person in front of you.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sat-pm-3-chigbundu",
@@ -351,7 +351,7 @@ window.CONF = {
    "ponder": "Which of the four (scriptures, prayer, sacrament, covenants) is weakest in my week?",
    "big_idea": "Scriptures, prayer, sacrament and covenants build spiritual immunity — the armor of God.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sat-pm-4-giuffra",
@@ -377,7 +377,7 @@ window.CONF = {
    "ponder": "Where am I tempted to “make an exception” for someone and withhold the blessing of a commandment?",
    "big_idea": "Tithing is a law of faith; don't withhold its blessings from anyone.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sat-pm-5-morgan",
@@ -405,7 +405,7 @@ window.CONF = {
    "ponder": "Whose covenants have reached after me?",
    "big_idea": "Covenants reach across generations; your family's story isn't finished.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sat-pm-6-fale",
@@ -433,7 +433,7 @@ window.CONF = {
    "ponder": "Which labels do I accept above “child of God”?",
    "big_idea": "Knowing you are a child of God protects from deception and gives life purpose.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sat-pm-7-kearon",
@@ -461,7 +461,7 @@ window.CONF = {
    "ponder": "What are the subtle signs of “sink” in my week?",
    "big_idea": "Seek spiritual lift, turn from sink, and show others where to rise — Jesus lives to lift.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sat-pm-8-dunn",
@@ -489,7 +489,7 @@ window.CONF = {
    "ponder": "Where am I shuffling right now, and what would “lengthening my stride” look like?",
    "big_idea": "Give your 90%; the Savior helps with the final 10% by lengthening our stride.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sat-pm-9-eyring",
@@ -517,7 +517,7 @@ window.CONF = {
    "ponder": "Where do I turn first for comfort — the Holy Ghost or something else?",
    "big_idea": "In turbulent times, the Holy Ghost is the true source of comfort and hope.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sat-pm-10-rasband",
@@ -545,7 +545,7 @@ window.CONF = {
    "ponder": "Whom am I carrying guilt or despair for that I need to give to Christ?",
    "big_idea": "Give your despair for wayward loved ones to Christ, and keep loving like Jesus.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sun-am-1-eyring",
@@ -573,7 +573,7 @@ window.CONF = {
    "ponder": "Whom is the Lord inviting me to comfort for Him today?",
    "big_idea": "The Lord keeps His promise ‘Fear not, I am with thee’ — and trusts us to help comfort others.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sun-am-2-chibota",
@@ -600,7 +600,7 @@ window.CONF = {
    "ponder": "Whom am I labeling instead of seeing as a child of God?",
    "big_idea": "See others as children of God — pray to see as He sees, and lift labels with His grace.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sun-am-3-andersen",
@@ -628,7 +628,7 @@ window.CONF = {
    "ponder": "Where do I need spiritual courage right now — and how will I strengthen my faith in Christ to receive it?",
    "big_idea": "Faith in Christ gives spiritual courage to choose the right — and courage in turn strengthens that faith.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sun-am-4-fantone",
@@ -652,7 +652,7 @@ window.CONF = {
    "ponder": "Where am I merely wearing His name as a badge, instead of serving Him by lifting and loving others?",
    "big_idea": "Take His name by covenant — lose yourself in serving others, and find Him (and yourself).",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sun-am-5-dube",
@@ -680,7 +680,7 @@ window.CONF = {
    "ponder": "What “trespassers” sign has the adversary hung on the gate of my heart that I need to let go of?",
    "big_idea": "Come unto Christ as you are — He perfects us; we do not perfect ourselves first.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sun-am-6-cook",
@@ -708,7 +708,7 @@ window.CONF = {
    "ponder": "Where do I need more integrity and virtue so the Holy Ghost can be my constant companion?",
    "big_idea": "Integrity, virtue and daily repentance lead to happiness and the Holy Ghost’s companionship.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sun-am-7-kyungu",
@@ -736,7 +736,7 @@ window.CONF = {
    "ponder": "What harsh words do I need to forgo this week — and what peacemaking words will replace them?",
    "big_idea": "Forgo harsh words; use the language of peacemakers that uplifts and preserves relationships.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sun-am-8-schmeil",
@@ -760,7 +760,7 @@ window.CONF = {
    "ponder": "What “proper adjustments” do I need to make so I can better make and keep my covenants?",
    "big_idea": "Consider your ways — build your relationship with God through covenants, and He will bless you.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sun-am-9-oaks",
@@ -788,7 +788,7 @@ window.CONF = {
    "ponder": "What concern or struggle am I trying to overcome on my own instead of getting closer to Christ?",
    "big_idea": "The gospel of Jesus Christ is for all — overcome by getting closer to the Savior, and help others come unto Him.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sun-pm-1-uchtdorf",
@@ -816,7 +816,7 @@ window.CONF = {
    "ponder": "Where am I building walls instead of bridges — and how can I come closer to Christ so I come closer to others?",
    "big_idea": "Jesus Christ unites His covenant people — the closer we come to Him, the closer we come to each other.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sun-pm-2-spannaus",
@@ -844,7 +844,7 @@ window.CONF = {
    "ponder": "Which one of her seven invitations will I focus on for the next few weeks?",
    "big_idea": "Heavenly Father knows you and is at your side — put Him first, and He will guide your righteous desires.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sun-pm-3-villanueva",
@@ -868,7 +868,7 @@ window.CONF = {
    "ponder": "What blessings — temporal or spiritual — have come into my life through paying tithing, and have I recognized them?",
    "big_idea": "Live the law of tithing and the Lord opens the windows of heaven — blessings both temporal and spiritual.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sun-pm-4-bednar",
@@ -896,7 +896,7 @@ window.CONF = {
    "ponder": "Am I keeping my covenant “credentials” valid — and what would help me honor my temple covenants more faithfully?",
    "big_idea": "Ordinances and covenants are spiritual credentials — kept faithfully, they are sealed by the Holy Spirit of Promise.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sun-pm-5-lebethoa",
@@ -921,7 +921,7 @@ window.CONF = {
    "ponder": "What change — in how I use my time, what I watch or listen to, or how I speak to others — would let more of the Savior’s light into my life?",
    "big_idea": "Whatever we face, the answer is always Jesus Christ — faith, daily scripture study and daily repentance let in His light.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sun-pm-6-sinclair",
@@ -949,7 +949,7 @@ window.CONF = {
    "ponder": "Whom am I holding hostage to their history — and how could I help them instead of judging them?",
    "big_idea": "Be quick to help and slow to judge — like Christ at the well, look to a person's possible, not only their past.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sun-pm-7-stevenson",
@@ -977,7 +977,7 @@ window.CONF = {
    "ponder": "Which gospel truth has become sweetest to me as I've lived it — and whom could I invite to taste it?",
    "big_idea": "Gospel truths are like a favorite fruit — they grow sweet as we live them; love, share and invite others to taste them.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sun-pm-8-reid",
@@ -1005,7 +1005,7 @@ window.CONF = {
    "ponder": "Whom do I teach — at church, at home or one by one — and how could I come to know and love them better?",
    "big_idea": "You are good enough to teach — the Lord will help you, and teaching like the Savior begins with loving like the Savior.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sun-pm-9-gilbert",
@@ -1031,7 +1031,7 @@ window.CONF = {
    "ponder": "Do I need greater conviction or greater charity to teach truth with love — and where can I start this week?",
    "big_idea": "Stand for truth with love — for disciples of Jesus Christ, truth and love always walk together.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
   },
   {
    "id": "sun-pm-10-oaks",
@@ -1055,7 +1055,20 @@ window.CONF = {
    "ponder": "Which conference message will I go back to first, and what one principle from it will I act on?",
    "big_idea": "Revisit, ponder and act on what was taught — unto him that receiveth, the Lord will give more.",
    "video_embed": null,
-   "full_text_permitted": false
+   "full_text_permitted": true
+  }
+ ],
+ "business": [
+  {
+   "id": "sat-am-sustaining",
+   "session": "sat-am",
+   "kind": "business",
+   "speaker": "Presented by President D. Todd Christofferson",
+   "calling": "Second Counselor in the First Presidency",
+   "title": "Sustaining of General Authorities, Area Seventies, and General Officers",
+   "lead": "Brothers and sisters, it will now be my privilege to present the General Authorities, Area Seventies, and General Officers of the Church for your sustaining vote.",
+   "official_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10/11christofferson?lang=eng",
+   "full_text_permitted": true
   }
  ],
  "challenge": {

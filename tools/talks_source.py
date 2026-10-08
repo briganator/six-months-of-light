@@ -669,11 +669,11 @@ for _t in talks:
     _t["big_idea"] = BIG_IDEAS[_t["id"]]
     _t["official_url"] = f"https://www.churchofjesuschrist.org/study/general-conference/2026/10/{OFFICIAL_IDS[_t['id']]}?lang=eng" if _t["id"] in OFFICIAL_IDS else _t["official_url"]
     if _t["id"] in OFFICIAL_SCRIPTURES: _t["scriptures"] = OFFICIAL_SCRIPTURES[_t["id"]]
-    # Official video: paste ONLY an embed URL the Church makes embeddable (e.g. the official
-    # General Conference YouTube video's embed link) once posted. None = show link instead.
+    # Official video: an iframe embed URL only (for example a Church YouTube embed).
+    # October 2026 video and audio are the Church's own mp4/mp3 files, loaded with the full text.
     _t["video_embed"] = None
-    # Full talk text is Church copyright. Keep False unless written permission is granted.
-    _t["full_text_permitted"] = False
+    # The Church has permitted this site to post the October 2026 talks. Keep True so a rebuild does too.
+    _t["full_text_permitted"] = True
 
 # Public site URL used for QR codes, deep links and Open Graph tags. SET BEFORE PUBLISHING.
 # ---- SINGLE DOMAIN CONFIG ----
@@ -683,6 +683,13 @@ DOMAIN = "sixmonthsoflight.com"
 DOMAIN_LIVE = True
 SITE_URL = f"https://{DOMAIN}/" if DOMAIN_LIVE else "https://briganator.github.io/six-months-of-light/"
 
+import fulltext
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+# Sustaining is official conference business, not a sermon: full text and media, no invented quotes.
+business = fulltext.build(ROOT, talks, OFFICIAL_IDS, [
+    {"id": "sat-am-sustaining", "official_id": "11christofferson", "session": "sat-am", "kind": "business"},
+])
+
 site = {
   "site_name": "Six Months of Light",
   "tagline": "The words of October 2026 General Conference, to carry you to April.",
@@ -691,12 +698,12 @@ site = {
   "domain": DOMAIN,
   "domain_live": DOMAIN_LIVE,
   "subtitle": "196th Semiannual General Conference · October 3–4, 2026",
-  "updated": "Monday, October 5, 2026",
+  "updated": "Thursday, October 8, 2026",
   "conference_url": "https://www.churchofjesuschrist.org/study/general-conference/2026/10?lang=eng",
   "talk_of_the_week": {"talk_id": "sat-pm-7-kearon",
      "ponder": "What are the subtle signs of “sink” in my week?",
      "invitation": "This week, notice what lifts and what sinks — turn decisively toward the Spirit, and show one person where the lift is."},
-  "sessions": sessions, "talks": talks,
+  "sessions": sessions, "talks": talks, "business": business,
   "challenge": {"id": "challenge-oct-2026", "title": "The Lift Challenge",
      "text": "For 7 days, choose one invitation from a Saturday talk and act on it. Then share a short story of what happened.",
      "note": "Stories are reviewed before they appear."},
