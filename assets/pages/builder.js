@@ -176,9 +176,10 @@ function renderTalkView() { const { c, id } = qview, back = `<button type="butto
   const T = Library.talks.find(x => x.c === c && x.id === id); if (!T) { qview = null; return renderQuotes(); }
   const on = st.libT && st.libT.id === T.id && st.libT.c === T.c;
   $("qresults").innerHTML = `${back}<div class="qs-old"><p class="eyebrow-s">${esc(libLabel(T))} · General Conference</p><h3>${esc(T.t)}</h3><p class="qs-by">${esc(T.s)}${T.r ? " · " + esc(T.r) : ""}</p>
-    ${T.k ? `<p class="qs-sum">${esc(T.k)}</p><p class="b-help">Official summary line</p>` : ""}<p><a href="${esc(Library.official(T))}" target="_blank" rel="noopener">Read the talk on churchofjesuschrist.org ↗</a></p>
+    ${T.k ? `<p class="qs-sum">${esc(T.k)}</p><p class="b-help">Official summary line</p>` : ""}
     <p class="b-help">This site has no verified quotes for this talk, so its words don't go on cards. You can still make a card:</p>
     <div class="qs-old-btns"><button type="button" class="btn ${on && !st.libNote ? "secondary" : "gold"}" data-lib="title">${on && !st.libNote ? "✓ Title card" : "Use the title"}</button><button type="button" class="btn secondary" data-lib="note">Add your own takeaway</button></div>
+    <p class="talk-source">Source: <a href="${esc(T.local ? "talks/" + T.id + ".html" : Library.official(T))}" ${T.local ? "" : 'target="_blank" rel="noopener"'}>${T.local ? "Read this talk on this site" : "This talk on ChurchofJesusChrist.org"}</a>${T.local ? "" : ". Talks from before October 2026 are not hosted here."}</p>
     <div class="qs-note-box" id="libNoteBox" ${on && st.libNote ? "" : "hidden"}><label class="b-label" for="libNote">Your takeaway <span class="b-help">labeled “My takeaway” on the card, so it's clearly personal</span></label>
       <textarea class="field" id="libNote" maxlength="90" rows="2" placeholder="What you want to remember from this talk">${esc(st.libNote)}</textarea></div></div>`; }
 $("qresults").addEventListener("click", e => {

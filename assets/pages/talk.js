@@ -13,11 +13,11 @@ else if (t.kind === "business") {
       <p class="speaker">${esc(t.speaker)} · ${esc(t.calling)}</p></div>
     <p>${esc(t.lead)}</p>
     <div class="links">
-      <a class="btn" href="${esc(t.official_url)}" rel="noopener">Official page ↗</a>
       <a class="btn secondary" href="#fulltext">Read the full text</a>
     </div>
     <div id="fulltext"></div>
   </article>
+  ${sourceLine(t)}
   <nav class="links"><a class="btn secondary small" href="session.html?s=${s.id}">← ${esc(s.name)}</a></nav>`;
   loadFull(t);
 } else {
@@ -31,6 +31,10 @@ else if (t.kind === "business") {
   <article class="card talk-main s-${s.color}" id="summary">
     <div class="talk-head"><span class="chip-session s-${s.color}">${esc(s.name)} · Talk ${t.order}</span><h1>${esc(t.title)}</h1>
       <p class="speaker"><a href="speaker.html?s=${slug(t.speaker)}">${esc(t.speaker)}</a> · ${esc(t.calling)}</p></div>
+    <div class="talk-actions">
+      <a class="btn gold" href="lessons.html?t=${esc(t.id)}">Build a lesson from this talk</a>
+      <a class="btn secondary" href="quiz.html?t=${esc(t.id)}">Quiz yourself</a>
+    </div>
     <section class="recap60" aria-label="60-second recap">
       <div class="label">60-second recap</div>
       <div class="big">${esc(t.big_idea)}</div>
@@ -50,20 +54,12 @@ else if (t.kind === "business") {
       <div id="commitbox" style="margin-top:8px">${committed ? `✓ You committed on ${fmtDate(committed.start)}. <a href="my.html">Track your 7 days</a>`
         : `<button class="btn ok small" id="commit">Commit for 7 days</button>`}</div></div>
     <div class="ponder"><div class="label">Ponder</div>${esc(t.ponder)}</div>
-    <div class="talk-cta" aria-label="Teach it or test yourself">
-      <a class="cta-card test" href="quiz.html?t=${esc(t.id)}"><span class="cta-k">Test yourself</span><strong>Quiz yourself on this talk</strong><span>Who said it? using this talk’s quotes.</span></a>
-      <a class="cta-card teach" href="lessons.html?t=${esc(t.id)}"><span class="cta-k">Teach it</span><strong>Build a lesson from this talk</strong><span>For FHE, a youth class, or a sacrament talk. This talk is already selected.</span></a>
-    </div>
-    <div class="links">
-      <a class="btn" href="${esc(officialUrl(t))}" rel="noopener">${t.official_url ? "Official talk" : "Official session page"} ↗</a>
-      <a class="btn secondary" href="${esc(t.recap_url)}" rel="noopener">Church News recap ↗</a>
-      ${t.full_text_permitted ? `<a class="btn secondary" href="#fulltext">Read the full talk</a>` : ""}
-    </div>
-    ${t.official_url ? "" : `<p class="speaker">The official talk page isn't posted yet; this links to the session page on ChurchofJesusChrist.org.</p>`}
+    ${t.full_text_permitted ? `<p class="links" style="margin-bottom:0"><a class="txt-link" href="#fulltext">Read the full talk</a></p>` : ""}
     ${t.video_embed ? `<div class="video"><iframe src="${esc(t.video_embed)}" title="Official video: ${esc(t.title)}" loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe></div>` : ""}
     ${t.full_text_permitted ? `<div id="fulltext"></div>` : `<p class="speaker">Full talk text isn't reproduced here (Church copyright); read it on ChurchofJesusChrist.org.</p>`}
   </article>
   <section class="card study-panel" id="studyPanel" aria-labelledby="sp-h"><h2 id="sp-h" style="margin-top:0">Study this talk</h2><p class="empty">Loading…</p></section>
+  ${sourceLine(t)}
   <section class="card"><h2 style="margin-top:0">Share this talk</h2>
     <p class="speaker">Quote cards include a QR code that links back to this page.</p>
     <div class="links" style="margin-bottom:0">
@@ -121,13 +117,18 @@ function loadFull(talk) {
     slot.innerHTML = `<p class="speaker">The full talk couldn’t load just now. <a href="${esc(talk.official_url || officialUrl(talk))}" rel="noopener">Read it on ChurchofJesusChrist.org ↗</a></p>`;
   });
 }
+function sourceLine(t) {
+  const off = t.official_url || officialUrl(t);
+  const recap = t.recap_url ? ` · <a href="${esc(t.recap_url)}" rel="noopener">Church News recap</a>` : "";
+  return `<p class="talk-source">Source: <a href="${esc(off)}" rel="noopener">${t.official_url ? "Official talk" : "Official session"} on ChurchofJesusChrist.org</a>${recap}. The wording on this page is posted with the Church’s permission.</p>`;
+}
 function mediaBlock(ft, talk) {
-  const v = ft.video, a = ft.audio, off = esc(talk.official_url || officialUrl(talk));
+  const v = ft.video, a = ft.audio;
   if (!v && !a) return "";
   return `<div class="ft-media no-print">
     ${v ? `<video controls playsinline preload="none" ${v.poster ? `poster="${esc(v.poster)}"` : ""} aria-label="Official video"><source src="${esc(v.src)}" type="video/mp4"></video>` : ""}
     ${a ? `<audio controls preload="none" src="${esc(a)}" aria-label="Official audio"></audio>` : ""}
-    <p class="speaker">Official ${v && a ? "video and audio" : v ? "video" : "audio"} from <a href="${off}" rel="noopener">ChurchofJesusChrist.org ↗</a>${v && v.duration ? " · " + esc(v.duration) : ""}</p>
+    <p class="speaker">Official ${v && a ? "video and audio" : v ? "video" : "audio"}, posted with the Church’s permission.${v && v.duration ? " · " + esc(v.duration) : ""}</p>
   </div>`;
 }
 function renderFull(slot, talk, ft) {
@@ -139,11 +140,14 @@ function renderFull(slot, talk, ft) {
       ${notes.length ? `<a href="#ft-notes">Notes</a>` : ""}
     </nav>
     <h2 id="ft-h">${talk.kind === "business" ? "Full text" : "Full talk"}</h2>
-    <p class="ft-perm">Posted here with the Church’s permission. The wording is the official talk. <a href="${esc(talk.official_url || officialUrl(talk))}" rel="noopener">Official page ↗</a></p>
+    <p class="ft-perm">Posted here with the Church’s permission. The wording is the official talk.</p>
     ${mediaBlock(ft, talk)}
     <div class="ft-body">${ft.body || ""}</div>
     ${notes.length ? `<details class="ft-notes" id="ft-notes"><summary>Notes (${notes.length})</summary><ol>${notes.map(n => `<li id="fn-${esc(n.n)}" value="${esc(n.n)}">${n.html}</li>`).join("")}</ol></details>` : ""}
   </section>`;
+  slot.querySelectorAll(".ft-body a[href*='churchofjesuschrist.org'], .ft-notes a[href*='churchofjesuschrist.org']").forEach(a => {
+    const s = document.createElement("span"); if (a.className) s.className = a.className; s.innerHTML = a.innerHTML; a.replaceWith(s);
+  });
   slot.querySelectorAll("img").forEach(img => img.addEventListener("error", () => { const fig = img.closest("figure"); if (fig) fig.classList.add("ft-fig-miss"); img.remove(); }));
   slot.querySelectorAll("video, audio").forEach(el => el.addEventListener("error", () => {
     const p = document.createElement("p"); p.className = "speaker";
@@ -187,7 +191,7 @@ if (t && t.kind !== "business") whenNear("studyPanel", () => loadLib().then(LB =
       <div><h3>Topics</h3><p>${(me.tg.length ? me.tg : dens.map(x => x[0])).map(k => LB.THEME_KEYS.includes(k) ? `<a class="pill" href="topic.html?k=${k}">${esc(LB.themeName(k))}</a>` : `<span class="pill">${esc(LB.themeName(k))}</span>`).join(" ") || "None tagged yet."}</p>
         <h3>Structure</h3><ul class="sp-facts"><li>${t.quotes.length} verified quote${t.quotes.length === 1 ? "" : "s"}</li><li>${t.scriptures.length} key scripture${t.scriptures.length === 1 ? "" : "s"}${t.official_url ? "" : " in the recap"}</li><li>1 invitation · 1 ponder question</li></ul></div>
       <div><h3>Scriptures to study</h3><ul class="sp-refs">${t.scriptures.map(r => `<li><span>${esc(r)}</span> ${cfm(r)}</li>`).join("")}</ul>
-        <p class="z-note">This year's Come, Follow Me is the ${esc(LB.CFM[2026][0])}; 2027 is the ${esc(LB.CFM[2027][0])}. <a href="${esc(LB.CFM[2026][1])}" rel="noopener">Manual ↗</a></p></div>
+        <p class="z-note">This year's Come, Follow Me is the ${esc(LB.CFM[2026][0])}; 2027 is the ${esc(LB.CFM[2027][0])}.</p></div>
     </div>
     ${rel.length ? `<h3>Taught before</h3><ul class="sp-rel">${rel.map(x => `<li><a href="${esc(LB.href(x.t))}" rel="noopener" target="_blank">${esc(x.t.t)} ↗</a> <span class="speaker">${esc(x.t.s)} · ${esc(LB.confOf(x.t.c).label)}${x.sharedRefs.length ? " · also cites " + esc(x.sharedRefs.slice(0, 2).join(", ")) : ""}</span></li>`).join("")}</ul>` : ""}
     ${before.length ? `<h3>Earlier from ${esc(t.speaker.replace(/^(President|Elder|Sister|Bishop)\s+/, ""))}</h3><ul class="sp-rel">${before.map(x => `<li><a href="${esc(LB.href(x))}" rel="noopener" target="_blank">${esc(x.t)} ↗</a> <span class="speaker">${esc(LB.confOf(x.c).label)}</span></li>`).join("")}</ul><a class="linkish" href="speaker.html?s=${me.sp}">All talks by this speaker</a>` : ""}

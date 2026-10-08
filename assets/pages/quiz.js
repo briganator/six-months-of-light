@@ -9,6 +9,7 @@ const rnd = a => a[Math.floor(Math.random() * a.length)];
 const main = document.getElementById("main");
 main.innerHTML = `${recapNotice()}<h1 style="margin-top:38px">Who said it?</h1>
   <p class="speaker">${focus && pool.length && pool.every(x => x.t.id === focus.id) ? `Quotes from <a href="talks/${esc(focus.id)}.html">“${esc(focus.title)}”</a> only (${OFFICIAL_TEXT() ? "official wording" : "as reported in recaps"}). <a href="quiz.html">Quiz all talks</a>.` : `Quotes from ${CONF.talks.some(t => /^sun/.test(t.session)) ? "this conference's talks" : "Saturday's talks"} (${OFFICIAL_TEXT() ? "official wording" : "as reported in recaps"}).`}</p>
+  <p class="lib-acts"><a class="btn gold small" href="lessons.html${focus ? `?t=${esc(focus.id)}` : ""}">Build a lesson${focus ? " from this talk" : ""}</a></p>
   <div class="seg" id="mode"><button data-k="quiz" aria-pressed="true">Quiz</button><button data-k="flash" aria-pressed="false">Flashcards</button></div>
   <div class="flash"><div class="inner" id="card"></div></div><div id="opts"></div>
   <div class="links"><button class="btn" id="nx">Next</button><span class="speaker" id="sc" style="align-self:center"></span></div>`;

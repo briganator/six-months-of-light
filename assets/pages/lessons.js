@@ -66,7 +66,7 @@ function gen() {
   setURL(`?mode=${mode}&c=${encodeURIComponent(conf)}&t=${encodeURIComponent(tid || "")}`);
   if (!n) { out.innerHTML = `<p class="empty">Loading talks…</p>`; return; }
   const qs = m.nq ? questions(n, mode) : [], quotes = n.quotes.slice(0, mode === "eqrs" ? 3 : 2), refs = n.refs.slice(0, 8);
-  const refList = refs.map(r => `<li>${ScripRef.linkify(r)}</li>`).join("") + (n.refs.length > refs.length ? `<li class="speaker">and ${n.refs.length - refs.length} more in the official footnotes</li>` : "");
+  const refList = refs.map(r => `<li>${esc(r)}</li>`).join("") + (n.refs.length > refs.length ? `<li class="speaker">and ${n.refs.length - refs.length} more in the official footnotes</li>` : "");
   const quoteBlock = quotes.length ? `<ul>${quotes.map(q => `<li>“${esc(q)}”</li>`).join("")}</ul><p class="src">${esc(n.quoteSrc)}</p>`
     : `<blockquote class="ls-key">${esc(n.keyStatement)}</blockquote><p class="src">From the talk's official page. ${esc(n.quoteSrc)}</p>`;
   let s = 0; const h = t => `<h3>${++s}. ${t}</h3>`;
@@ -86,9 +86,9 @@ function gen() {
       ${mode !== "talk" ? `<button class="btn secondary small" id="ph">Print handout</button>` : ""}
       <button class="btn secondary small" id="po">Print outline</button>
       <button class="btn secondary small" id="cp">Copy outline</button>
-      ${n.official ? `<a class="btn secondary small" href="${esc(n.official)}" target="_blank" rel="noopener">Official text ↗</a>` : `<a class="btn secondary small" href="${esc(n.session)}" target="_blank" rel="noopener">Session on ChurchofJesusChrist.org ↗</a>`}
-      ${n.local ? `<a class="btn secondary small" href="${esc(n.local)}">Talk page</a>` : ""}
-    </div>`;
+      ${n.local ? `<a class="btn secondary small" href="${esc(n.local)}">Read this talk</a>` : ""}
+    </div>
+    <p class="src talk-source">Source: <a href="${esc(n.official || n.session)}" rel="noopener">Official text on ChurchofJesusChrist.org</a>${n.local ? ". The full talk is on this site." : ""}</p>`;
   // Class-member handout: one page, big enough to read, no leader notes
   $("handout").innerHTML = `<div class="ho-head"><div class="ho-k">${esc(m.name)}</div><h2>${esc(n.title)}</h2><p>${esc(n.speaker)} · ${esc(n.conf)} general conference</p></div>
     ${quotes.length ? `<h3>Key quotes</h3>${quotes.map(q => `<blockquote>“${esc(q)}”</blockquote>`).join("")}<p class="src">${esc(n.quoteSrc)}</p>` : `<h3>Key statement</h3><blockquote>${esc(n.keyStatement)}</blockquote>`}

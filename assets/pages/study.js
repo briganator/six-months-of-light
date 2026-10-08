@@ -13,7 +13,7 @@ main.innerHTML = `
   <div class="section-label">Study</div>
   <h1 class="lib-h1">Study library</h1>
   <p class="lib-sub">${cov.talks + CONF.talks.length} talks from ${cov.conferences + 1} general conferences, ${cov.from} to October 2026. Find a talk by conference, topic, speaker or a word. New here? Try the <a href="plan.html">reading plan to April</a>.</p>
-  <p class="lib-acts"><a class="btn secondary small" href="quiz.html">Who said it? quiz</a><a class="btn secondary small" href="lessons.html">Lesson helps</a></p>
+  <p class="lib-acts"><a class="btn gold small" href="lessons.html">Build a lesson</a><a class="btn secondary small" href="quiz.html">Who said it? quiz</a></p>
   <div class="lib-views seg" role="group" aria-label="Browse by">${[["talks", "Talks"], ["topics", "Topics"], ["speakers", "Speakers"]].map(([k, v]) => `<button type="button" data-v="${k}" aria-pressed="${st.view === k}">${v}</button>`).join("")}</div>
   <div class="lib-bar" id="bar">
     <label class="lib-search"><span class="sr-only">Search talks</span><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" d="M11 4a7 7 0 1 1 0 14 7 7 0 0 1 0-14zM16 16l5 5"/></svg>
@@ -26,7 +26,7 @@ main.innerHTML = `
     <div class="lib-chips" id="chips" aria-live="polite"></div>
   </div>
   <div id="out"></div>
-  <p class="lib-note">Official talks link to ChurchofJesusChrist.org. Topics come from counting topic words in each talk (a rough guide, not a judgment). ${OFFICIAL_TEXT() ? "October 2026 entries open this site's talk pages, where the full talk is posted with the Church's permission. " : "October 2026 entries use this site's recap until the official text is posted. "}<a href="credits.html">About the data</a>.</p>`;
+  <p class="lib-note">October 2026 talks open on this site. Earlier conferences open on ChurchofJesusChrist.org, because those talks are not hosted here. Topics come from counting topic words in each talk (a rough guide, not a judgment). <a href="credits.html">About the data</a>.</p>`;
 const $ = id => document.getElementById(id);
 function sync() { const q = new URLSearchParams(); if (st.view !== "talks") q.set("view", st.view); if (st.c !== "2026-10") q.set("c", st.c); if (st.topic) q.set("topic", st.topic); if (st.sp) q.set("sp", st.sp); if (st.q) q.set("q", st.q);
   setURL("study.html" + (q.toString() ? "?" + q : "")); }

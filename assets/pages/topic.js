@@ -27,11 +27,11 @@ if (!LB.THEME_KEYS.includes(k)) {
     <div class="spark-x" style="grid-template-columns:repeat(${trend.length},1fr)">${trend.map(([c]) => `<span>${short(c)}</span>`).join("")}</div>
     <p class="b-help"><span class="pill pending">October 2026</span> joins this chart when the official text is posted.</p></section>
   ${T3Q.length ? `<section><h2>October 2026 quotes</h2><ul class="tp-quotes">${T3Q.map(([t, i]) => `<li><blockquote>“${esc(t.quotes[i])}”</blockquote><p class="speaker">${esc(t.speaker)} · <a href="talks/${t.id}.html#q${i + 1}">${esc(t.title)}</a> · <a href="builder.html?t=${t.id}&q=${i}&theme=${k}">Make a card</a></p></li>`).join("")}</ul></section>` : ""}
-  <section><h2>Talks that dwell on it most</h2><ol class="lib-list">${top.map(t => `<li><a class="lib-talk" href="${esc(LB.href(t))}" rel="noopener" target="_blank"><span class="lt-title">${esc(t.t)} <span class="ext" aria-label="opens ChurchofJesusChrist.org">↗</span></span><span class="lt-meta">${esc(t.s)} · ${esc(LB.confOf(t.c).label)} · ${t.d[k].toFixed(1)} per 1,000 words</span></a></li>`).join("")}</ol>
+  <section><h2>Talks that dwell on it most</h2><ol class="lib-list">${top.map(t => `<li><a class="lib-talk" href="${esc(LB.href(t))}" ${t.local ? "" : 'rel="noopener" target="_blank"'}><span class="lt-title">${esc(t.t)}${t.local ? "" : ' <span class="ext" aria-label="opens ChurchofJesusChrist.org">↗</span>'}</span><span class="lt-meta">${esc(t.s)} · ${esc(LB.confOf(t.c).label)} · ${t.d[k].toFixed(1)} per 1,000 words</span></a></li>`).join("")}</ol>
     <a class="btn secondary" href="study.html?c=all&topic=${k}">See all ${tagged.length} in the Study library</a></section>
   <div class="tp-two">
     <section class="card"><h2>Scriptures cited with it</h2><ol class="tp-rank">${sort(refs).slice(0, 10).map(([r, n]) => `<li><span>${esc(r)}</span><b>${n}</b></li>`).join("") || "<li>None counted yet.</li>"}</ol><p class="b-help">From the footnotes of talks on this topic.</p></section>
     <section class="card"><h2>Speakers who return to it</h2><ol class="tp-rank">${sort(sps).slice(0, 8).map(([sp, n]) => `<li><a href="speaker.html?s=${sp}">${esc(spName(sp))}</a><b>${n}</b></li>`).join("")}</ol></section>
   </div>
-  <p class="lib-note">Counts come from topic words in each talk and its footnotes, a rough guide only. Read the talks themselves on ChurchofJesusChrist.org.</p>`;
+  <p class="lib-note">Counts come from topic words in each talk and its footnotes, a rough guide only. October 2026 talks open on this site. Earlier talks open on ChurchofJesusChrist.org, because they are not hosted here.</p>`;
 }
