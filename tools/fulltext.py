@@ -304,6 +304,34 @@ def soft(s):
     return re.sub(r"\s+", " ", s)
 
 
+def quote_norm(s):
+    """Typography only: curly/straight and single/double quote marks, dashes, spaces, ellipses."""
+    return soft(s).replace("\u2026", "...").replace('"', "'").strip()
+
+
+def quote_plain(body_html):
+    """Talk text as readers see it, without footnote numbers glued to words."""
+    b = re.sub(r'<a class="fn"[^>]*>.*?</a>', "", body_html, flags=re.S)
+    b = re.sub(r"<sup[^>]*>.*?</sup>", "", b, flags=re.S)
+    b = re.sub(r"</?(p|li|h\d|blockquote|div|br|figure|figcaption)\b[^>]*>", " ", b)
+    return quote_norm(html.unescape(re.sub(r"<[^>]+>", "", b)))
+
+
+def quote_found(q, blob):
+    """Word-for-word match. Allowed: a capital first letter on an excerpt, closing punctuation on a
+    cut-off sentence, and marked omissions (each piece must appear, in order)."""
+    pos = 0
+    for seg in re.split(r"\s*\.\.\.\s*", quote_norm(q)):
+        seg = seg.strip(" '").rstrip(".,;:!?' ").lstrip("'")
+        if not seg:
+            continue
+        hits = [m for m in (blob.find(seg, pos), blob.find(seg[:1].swapcase() + seg[1:], pos)) if m != -1]
+        if not hits:
+            return False
+        pos = min(hits) + len(seg)
+    return True
+
+
 def build(root, talks, official_ids, business_specs):
     """Write per-talk JSON and a search index. Returns business records for data.js."""
     src_dir = root / OFFICIAL_DIR
@@ -347,9 +375,9 @@ def build(root, talks, official_ids, business_specs):
             if page and t.get("official_url") and t["official_url"] != page:
                 print("note: official url", spec["id"], t["official_url"], "->", page)
                 t["official_url"] = page
-            blob = soft(plain)
+            blob = quote_plain(body)
             for q in t.get("quotes") or []:
-                if soft(q) not in blob:
+                if not quote_found(q, blob):
                     print("quote not in full text:", spec["id"], q[:90])
         else:
             name = role = ""
