@@ -88,7 +88,7 @@ window.postHeroHTML = () => `<div class="post-hero">
       ${countdownHTML()}
       <a class="hero-link post-share" href="builder.html?ins=spoken">Share this as a card →</a></div>`;
 window.headerHTML = (active, small) => `
-  <div class="unofficial" role="note">Not an official Church site<span class="uo-more"> · Personal study page · ${OFFICIAL_TEXT() ? "Full talks posted with the Church's permission" : "Quotes from recaps; confirm with official text"}</span></div>
+  <div class="unofficial" role="note">Not an official Church site<span class="uo-more"> · Personal study page · ${OFFICIAL_TEXT() ? "Talk text from ChurchofJesusChrist.org" : "Quotes from recaps; confirm with official text"}</span></div>
   <div class="sitebar" id="sitebar"><nav class="topbar wrap" aria-label="Main">
       ${NOTABS.includes(active) ? `<a class="sb-home" href="index.html"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg><span>Home</span></a>` : ""}
       <a class="brand" href="index.html" aria-label="Six Months of Light home">${WORDMARK()}</a>
@@ -132,7 +132,7 @@ window.footerHTML = () => `
     <div class="foot-brand">${WORDMARK()}<p>${esc(CONF.tagline)}</p></div>
     <p class="big"><strong>This is not an official website of The Church of Jesus Christ of Latter-day Saints.</strong></p>
     <p>Six Months of Light is a personal study page. It is not affiliated with or endorsed by the Church. For official talks, audio and video, visit <a href="${esc(CONF.conference_url)}" rel="noopener">ChurchofJesusChrist.org</a>.</p>
-    <p>${OFFICIAL_TEXT() ? "Full talks are posted here with the Church's permission. Each talk links its official page on ChurchofJesusChrist.org. Summaries are this site's own." : "Summaries and quotes come from Church News / Church Newsroom recaps; confirm with official text. Full talk text is not reproduced."} Your saved quotes, notes and commitments stay on this device.</p>
+    <p>${OFFICIAL_TEXT() ? "Full talk text comes from ChurchofJesusChrist.org. This is a personal study site, not an official Church site. Each talk links its official page on ChurchofJesusChrist.org. Summaries are this site's own." : "Summaries and quotes come from Church News / Church Newsroom recaps; confirm with official text. Full talk text is not reproduced."} Your saved quotes, notes and commitments stay on this device.</p>
     <p class="foot-links"><a href="builder.html?src=promo"><strong>Share this site</strong></a> · <a href="quiz.html">Who said it? quiz</a> · <a href="lessons.html">Lesson helps</a> · <a href="challenge.html">Challenge</a> · <a href="groups.html">Family &amp; ward group links</a> · <a href="subscribe.html"><strong>Keep the Light</strong> (reminders)</a> · <a href="credits.html">Photo credits</a> · <a href="privacy.html">Privacy</a></p>
   </div></footer>`;
 window.recapNotice = (compact, t) => (t ? t.official_url : OFFICIAL_TEXT()) ? "" : compact ? `<p class="notice-sm" role="note"><span class="pill pending">Recap</span> Quotes and summary from Church News / Newsroom recaps; confirm with official text.</p>` : `<div class="notice" role="note"><strong>Quotes from recaps; confirm with official text.</strong> Official talk text isn't posted yet. Summaries and quotes here come from Church News and Church Newsroom recaps.</div>`;

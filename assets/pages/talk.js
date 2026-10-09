@@ -120,7 +120,7 @@ function loadFull(talk) {
 function sourceLine(t) {
   const off = t.official_url || officialUrl(t);
   const recap = t.recap_url ? ` · <a href="${esc(t.recap_url)}" rel="noopener">Church News recap</a>` : "";
-  return `<p class="talk-source">Source: <a href="${esc(off)}" rel="noopener">${t.official_url ? "Official talk" : "Official session"} on ChurchofJesusChrist.org</a>${recap}. The wording on this page is posted with the Church’s permission.</p>`;
+  return `<p class="talk-source">Source: <a href="${esc(off)}" rel="noopener">${t.official_url ? "Official talk" : "Official session"} on ChurchofJesusChrist.org</a>${recap}. Talk text from ChurchofJesusChrist.org · Personal study site · Not an official Church site.</p>`;
 }
 function mediaBlock(ft, talk) {
   const v = ft.video, a = ft.audio;
@@ -128,7 +128,7 @@ function mediaBlock(ft, talk) {
   return `<div class="ft-media no-print">
     ${v ? `<video controls playsinline preload="none" aria-label="Official video"><source src="${esc(v.src)}" type="video/mp4"></video>` : ""}
     ${a ? `<audio controls preload="none" src="${esc(a)}" aria-label="Official audio"></audio>` : ""}
-    <p class="speaker">Official ${v && a ? "video and audio" : v ? "video" : "audio"}, posted with the Church’s permission.${v && v.duration ? " · " + esc(v.duration) : ""}</p>
+    <p class="speaker">Official ${v && a ? "video and audio" : v ? "video" : "audio"} from ChurchofJesusChrist.org.${v && v.duration ? " · " + esc(v.duration) : ""}</p>
   </div>`;
 }
 function renderFull(slot, talk, ft) {
@@ -140,7 +140,7 @@ function renderFull(slot, talk, ft) {
       ${notes.length ? `<a href="#ft-notes">Notes</a>` : ""}
     </nav>
     <h2 id="ft-h">${talk.kind === "business" ? "Full text" : "Full talk"}</h2>
-    <p class="ft-perm">Posted here with the Church’s permission. The wording is the official talk.</p>
+    <p class="ft-perm">Talk text from ChurchofJesusChrist.org. Personal study site, not an official Church site.</p>
     ${mediaBlock(ft, talk)}
     <div class="ft-body">${ft.body || ""}</div>
     ${notes.length ? `<details class="ft-notes" id="ft-notes"><summary>Notes (${notes.length})</summary><ol>${notes.map(n => `<li id="fn-${esc(n.n)}" value="${esc(n.n)}">${n.html}</li>`).join("")}</ol></details>` : ""}

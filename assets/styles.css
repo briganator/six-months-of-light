@@ -731,7 +731,7 @@ table.cmp td:first-child,table.cmp th:first-child{text-align:left}
   .study-panel{break-inside:avoid}
   blockquote{break-inside:avoid}
   h1{font-size:22pt;margin:0 0 4pt} h2{font-size:14pt}
-  .study-panel::after{content:"Six Months of Light · sixmonthsoflight.com · Full talk posted with the Church's permission. Not an official Church site.";display:block;margin-top:10pt;font-size:8.5pt;color:#555}
+  .study-panel::after{content:"Six Months of Light · sixmonthsoflight.com · Talk text from ChurchofJesusChrist.org. Personal study site. Not an official Church site.";display:block;margin-top:10pt;font-size:8.5pt;color:#555}
   .ft-media,.readbar,.ft-tools,.fn-pop,.talk-cta,.act-band,.lesson-band,.talk-actions{display:none!important}
 }
 /* ---- reading plan ---- */

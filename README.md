@@ -6,7 +6,7 @@ Live URL: **https://sixmonthsoflight.com/** (GitHub Pages from `briganator/six-m
 A personal study and sharing site for the 196th Semiannual General Conference (internal folder name: `conference-share`). It is a static site (HTML, CSS and vanilla JS) with no build step, so visitors don't install anything. It's meant for free GitHub Pages hosting. **Nothing has been published.**
 
 > **Not an official Church site.** Every page has a top banner and a footer that say so.
-> **Full talks posted Oct 8, 2026, with the Church's permission.** Each October 2026 talk page shows the complete official talk (paragraphs, headings, scriptures, notes, and any illustration in the talk), plus the official audio and video from ChurchofJesusChrist.org. The site still credits the Church and links each official page. Summaries, the 60-second recap, quotes and Card Studio stay as they were. Quotes were checked against the official wording on Oct 5.
+> **Full talks posted Oct 8, 2026, with text from ChurchofJesusChrist.org.** Each October 2026 talk page shows the complete official talk (paragraphs, headings, scriptures and notes; no photos), plus the official audio and video from ChurchofJesusChrist.org. The site still credits the Church and links each official page. Summaries, the 60-second recap, quotes and Card Studio stay as they were. Quotes were checked against the official wording on Oct 5.
 
 ## Look and motion
 - Palette: midnight, warm gold, dawn rose and cream. Type: Cormorant Garamond for display and Inter for text, both self-hosted under the OFL.
