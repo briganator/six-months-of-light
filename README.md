@@ -21,7 +21,7 @@ A personal study and sharing site for the 196th Semiannual General Conference (i
 - Pick a talk. The top 3 verified quotes from that talk are one-tap choices. You can also paste or type your own quote (up to 360 characters, extra whitespace stripped). A custom card is labeled “Your own words,” not as official text.
 - Choose a background (light rays, dawn mountains, aurora, soft glow), a theme (dusk, midnight, dawn), a font (classic serif, italic serif, modern sans), a size (1:1, 4:5, 9:16), and still or animated.
 - Optional personal line, up to 90 characters with links stripped. It's drawn in a separate box labeled "MY TAKEAWAY · ADDED BY THE SHARER, NOT A QUOTE".
-- Every card carries the Six Months of Light logo, the site URL, a QR code, and “Personal study site · Not an official Church site.” Verified quotes also say “Official text, with permission.”
+- Every card carries the Six Months of Light logo, the site URL, a QR code, and “Personal study site · Not an official Church site.” Verified quotes also say “Text from ChurchofJesusChrist.org.”
 - Export: PNG in the browser. Animated cards record as **MP4** where the browser's MediaRecorder supports it (recent Chrome/Edge/Safari) or **WebM** otherwise. Where video isn't supported, it falls back to PNG plus a share link. Web Share is used on phones.
 - Offline MP4 rendering (frame-accurate, H.264): `python tools/render_assets.py`
 

@@ -81,6 +81,11 @@ def collect_blocks(node, notes=False, blocks=None):
         return blocks
     if tag == "p" and "title" in cls and notes:
         return blocks
+    if tag == "figure":
+        for c in node["children"]:
+            if isinstance(c, dict) and c["tag"] != "img" and "credit" not in classes(c):
+                collect_blocks(c, notes=notes, blocks=blocks)
+        return blocks
     if tag == "li":
         text = squash(node_text(node))
         if text:
@@ -219,22 +224,11 @@ def render_blocks(node, notes_acc):
                     items.append(f"<li>{inner}</li>")
         return f'<ul class="ft-list">{"".join(items)}</ul>' if items else ""
     if tag == "img":
-        img = render_img(node)
-        return f'<figure class="ft-fig">{img}</figure>' if img else ""
+        return ""   # no photos: they are the Church's copyrighted images (many are portraits) and load from a third-party site
     if tag == "figure":
-        bits = []
-        for c in node["children"]:
-            if isinstance(c, str):
-                continue
-            if c["tag"] == "img":
-                bits.append(render_img(c))
-            elif "credit" in classes(c):
-                for p in c["children"]:
-                    if isinstance(p, dict) and p["tag"] == "p":
-                        bits.append(f'<p class="ft-credit">{inline(p)}</p>')
-            else:
-                bits.append(render_blocks(c, notes_acc))
-        return f'<figure class="ft-fig">{"".join(bits)}</figure>' if any(bits) else ""
+        # Drop the photo and its photo credit; keep anything else a figure might hold.
+        return "".join(render_blocks(c, notes_acc) for c in node["children"]
+                       if isinstance(c, dict) and c["tag"] != "img" and "credit" not in classes(c))
     if tag == "div" and "poetry" in cls:
         return f'<div class="ft-poem">{child_html(node, notes_acc)}</div>'
     if tag == "div" and "stanza" in cls:
