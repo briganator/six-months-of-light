@@ -133,7 +133,7 @@ window.PHOTOS = [
   "h": 1064,
   "author": "",
   "license": "CC BY-SA 3.0",
-  "license_url": "http://creativecommons.org/licenses/by-sa/3.0/",
+  "license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
   "source": "https://commons.wikimedia.org/wiki/File:Manti_Utah_Temple.jpg",
   "fy": 0.4
  },
@@ -235,7 +235,7 @@ window.PHOTOS = [
   "h": 1200,
   "author": "Original uploader was Jizzbug at en.wikipedia",
   "license": "CC BY-SA 3.0",
-  "license_url": "http://creativecommons.org/licenses/by-sa/3.0/",
+  "license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
   "source": "https://commons.wikimedia.org/wiki/File:Nauvoo_Illinois_Temple_Southwest_Night_Perspective.jpg",
   "ov": 0.3
  },
@@ -279,7 +279,7 @@ window.PHOTOS = [
   "h": 1200,
   "author": "Syced",
   "license": "CC0",
-  "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
   "source": "https://commons.wikimedia.org/wiki/File:Tokyo_Japan_Temple_2.jpg",
   "ov": 0.45
  },

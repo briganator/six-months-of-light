@@ -93,7 +93,7 @@ window.headerHTML = (active, small) => `
       ${NOTABS.includes(active) ? `<a class="sb-home" href="index.html"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg><span>Home</span></a>` : ""}
       <a class="brand" href="index.html" aria-label="Six Months of Light home">${WORDMARK()}</a>
       <div class="navlinks">${NAV.map(([h,l]) => `<a href="${h}" ${active===h?'aria-current="page"':""}>${l}</a>`).join("")}</div>
-      ${active === "subscribe.html" ? "" : `<a class="sb-keep${NOTABS.includes(active) ? " sb-keep-c" : ""}" href="subscribe.html" aria-label="Keep the Light: conference reminders">${KEEP_ICON(18)}<span class="kl">Keep the Light</span><span class="ks">Remind me</span></a>`}
+      ${active === "subscribe.html" ? "" : `<a class="sb-keep${NOTABS.includes(active) ? " sb-keep-c" : ""}" href="subscribe.html" aria-label="Remind me: Keep the Light conference reminders">${KEEP_ICON(18)}<span class="kl">Keep the Light</span><span class="ks">Remind me</span></a>`}
       ${active === "builder.html" ? "" : `<a class="btn gold small sb-cta" href="builder.html" aria-label="Make a card"><svg class="sb-ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M8.5 15.5h7M8.5 18h4.5"/><path d="M12 6.5l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z"/></svg><span class="sb-lbl">Make a card</span></a>`}
     </nav></div>
   <header class="hero ${small ? "hero-sm" : "hero-lg"}">

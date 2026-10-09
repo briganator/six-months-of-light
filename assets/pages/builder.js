@@ -64,7 +64,7 @@ document.getElementById("main").innerHTML = `
           <section class="pick-box" aria-labelledby="pick3-h">
             <div class="b-label" id="pick3-h">Top quotes from this talk</div>
             <label class="lib-sel pick-talk"><span>Talk</span><select id="pickTalk" aria-label="Choose a talk">${pickTalkOpts}</select></label>
-            <div class="top3" id="top3" role="list"></div>
+            <div class="top3" id="top3" role="group" aria-labelledby="pick3-h"></div>
             <div class="own-box" id="ownBox">
               <label class="b-label" for="ownQ">Your own quote <span class="b-help">paste or type</span></label>
               <textarea class="field" id="ownQ" maxlength="${OWN_MAX}" rows="4" placeholder="Paste the words you want on the card"></textarea>
@@ -76,7 +76,7 @@ document.getElementById("main").innerHTML = `
               <p class="b-help">Your words stay on this card and are labeled as yours, not as official text. The site name stays on the card.</p>
             </div>
           </section>
-          <h3 class="qs-h">Search all quotes</h3>
+          <h2 class="qs-h">Search all quotes</h2>
           <div class="qs-top"><input class="field qs-find" id="qsearch" type="search" placeholder="Search quotes, talks or speakers" aria-label="Search quotes, talks or speakers" enterkeyhint="search" autocomplete="off">
             ${seg("qscope", { conf: "This conference", all: "All conferences" }, "conf", "Search in")}</div>
           <div class="qs-chips" id="qthemes" role="group" aria-label="Theme">${T3.list.map(th => `<button type="button" class="thm thm-chip" data-th="${th.slug}" aria-pressed="${th.slug === st.theme}"><i aria-hidden="true">${th.icon}</i>${esc(th.slug === "all" ? "All themes" : th.name)}</button>`).join("")}</div>
@@ -204,11 +204,11 @@ function renderQuotes() {
   if (st.scope === "all") { if (window.Library) talks = talks.concat(Library.talks.filter(t => !t.local && has(t.t + " " + t.s + " " + t.r + " " + (t.k || "") + " " + (t.tw || []).join(" ") + " " + libLabel(t))).slice(0, 60).map(t => ({ c: t.c, id: t.id, t: t.t, s: t.s, n: 0 })));
     else { more = `<p class="b-help">Loading all conferences…</p>`; loadLib().then(() => renderQuotes()).catch(() => {}); } }
   const tRow = t => `<button type="button" class="qs-talk" data-ct="${t.c}|${esc(t.id)}"><b>${esc(t.t)}</b><span>${esc(t.s)} · ${t.recap ? "October 2026" : esc(window.Library ? libLabel(t) : t.c)} · ${t.recap ? `${t.n} verified quote${t.n === 1 ? "" : "s"}` : "official summary"}</span></button>`;
-  $("qresults").innerHTML = `<h3 class="qs-h">Quotes <small>${qs.length}${qs.length === 40 ? "+" : ""}</small></h3>${qs.length ? `<div class="qlistv" role="list">${qs.map(qcard).join("")}</div>` : `<p class="empty">No verified quotes match${st.theme !== "all" ? " in this theme" : ""}.</p>`}
-    <h3 class="qs-h">Talks <small>${talks.length}${st.scope === "conf" ? " · this conference" : ""}</small></h3>${more}${talks.length ? `<div class="qs-talks">${talks.map(tRow).join("")}</div>` : more ? "" : `<p class="empty">No talks match.${st.scope === "conf" ? ` <button type="button" class="linkish" data-scope-all>Search all conferences</button>` : ""}</p>`}`;
+  $("qresults").innerHTML = `<h2 class="qs-h">Quotes <small>${qs.length}${qs.length === 40 ? "+" : ""}</small></h2>${qs.length ? `<div class="qlistv" role="list">${qs.map(qcard).join("")}</div>` : `<p class="empty">No verified quotes match${st.theme !== "all" ? " in this theme" : ""}.</p>`}
+    <h2 class="qs-h">Talks <small>${talks.length}${st.scope === "conf" ? " · this conference" : ""}</small></h2>${more}${talks.length ? `<div class="qs-talks">${talks.map(tRow).join("")}</div>` : more ? "" : `<p class="empty">No talks match.${st.scope === "conf" ? ` <button type="button" class="linkish" data-scope-all>Search all conferences</button>` : ""}</p>`}`;
 }
 function renderTalkView() { const { c, id } = qview, back = `<button type="button" class="linkish qs-back" data-back>← Back to results</button>`;
-  if (c === "2026-10") { const t = talkById(id); $("qresults").innerHTML = `${back}<h3 class="qs-h">${esc(t.title)} <small>${esc(t.speaker)}</small></h3><div class="qlistv" role="list">${t.quotes.map((q, i) => qcard({ t, i, q })).join("")}</div>`; return; }
+  if (c === "2026-10") { const t = talkById(id); $("qresults").innerHTML = `${back}<h2 class="qs-h">${esc(t.title)} <small>${esc(t.speaker)}</small></h2><div class="qlistv" role="list">${t.quotes.map((q, i) => qcard({ t, i, q })).join("")}</div>`; return; }
   const T = Library.talks.find(x => x.c === c && x.id === id); if (!T) { qview = null; return renderQuotes(); }
   const on = st.libT && st.libT.id === T.id && st.libT.c === T.c;
   $("qresults").innerHTML = `${back}<div class="qs-old"><p class="eyebrow-s">${esc(libLabel(T))} · General Conference</p><h3>${esc(T.t)}</h3><p class="qs-by">${esc(T.s)}${T.r ? " · " + esc(T.r) : ""}</p>

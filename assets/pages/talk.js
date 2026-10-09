@@ -126,7 +126,7 @@ function mediaBlock(ft, talk) {
   const v = ft.video, a = ft.audio;
   if (!v && !a) return "";
   return `<div class="ft-media no-print">
-    ${v ? `<video controls playsinline preload="none" ${v.poster ? `poster="${esc(v.poster)}"` : ""} aria-label="Official video"><source src="${esc(v.src)}" type="video/mp4"></video>` : ""}
+    ${v ? `<video controls playsinline preload="none" aria-label="Official video"><source src="${esc(v.src)}" type="video/mp4"></video>` : ""}
     ${a ? `<audio controls preload="none" src="${esc(a)}" aria-label="Official audio"></audio>` : ""}
     <p class="speaker">Official ${v && a ? "video and audio" : v ? "video" : "audio"}, posted with the Church’s permission.${v && v.duration ? " · " + esc(v.duration) : ""}</p>
   </div>`;

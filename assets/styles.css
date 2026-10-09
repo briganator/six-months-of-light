@@ -645,6 +645,8 @@ details.conf-sess[open] > summary::after{transform:rotate(-135deg) translateY(1p
 .lib-sel{position:relative;display:flex;flex-direction:column;min-width:0}
 .lib-sel span{position:absolute;left:14px;top:5px;font:600 10px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);pointer-events:none}
 .lib-sel select{appearance:none;-webkit-appearance:none;border:1px solid rgba(29,27,34,.15);background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23776' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 12px center;border-radius:14px;padding:19px 34px 6px 14px;font:500 14.5px var(--sans);color:var(--ink);min-height:48px;width:100%;text-overflow:ellipsis;cursor:pointer}
+/* WebKit counts a select's long option text as overflow; clip it here (focus ring drawn inside) */
+.lib-sel{overflow:hidden}.lib-sel select{width:100%;min-width:0;max-width:100%;text-overflow:ellipsis}.lib-sel select:focus-visible{outline-offset:-3px!important}
 .lib-sel select:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .lib-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;align-items:center}
 .lib-chips:empty{display:none}
@@ -1286,7 +1288,7 @@ body.post .hero-sky .rays{opacity:.75}
 .fulltext h2{margin:4px 0 8px}
 .ft-perm{font-size:13.5px;color:var(--muted);margin:0 0 14px;max-width:40rem}
 .ft-media{display:grid;gap:10px;margin:0 0 16px}
-.ft-media video{width:100%;max-height:70vh;border-radius:16px;background:#0d1326}
+.ft-media video{width:100%;aspect-ratio:16/9;max-height:70vh;border-radius:16px;background:#0d1326 radial-gradient(120% 90% at 50% 110%,rgba(241,211,148,.35),transparent 60%)}
 .ft-media audio{width:100%}
 .ft-body{font:400 18.5px/1.75 var(--sans);color:var(--ink);max-width:40rem;overflow-wrap:anywhere}
 .ft-body p{margin:0 0 1em}

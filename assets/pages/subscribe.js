@@ -102,7 +102,7 @@ function preview() {
     if (P.f === "weekly") while (first.getUTCDay() !== P.d) first.setUTCDate(first.getUTCDate() + 1);
     try { const r = await fetch(`${feed()}&fmt=json&date=${first.toISOString().slice(0, 10)}`); const it = await r.json(); if (n !== pvN) return;
       $("pv").innerHTML = `<p class="sub-pv-when">${esc(first.toLocaleDateString([], { weekday: "long", month: "short", day: "numeric", timeZone: "UTC" }))} · ${esc(hourLabel(P.h))}</p>
-        <div class="sub-pv">${it.image ? `<img src="${esc(it.image)}" alt="" loading="lazy" onerror="this.remove()">` : ""}<div><div class="sp-label">${esc(it.label)}</div><h3>${esc(it.title)}</h3><p class="speaker">${esc(it.text)}</p>
+        <div class="sub-pv">${it.image ? `<img src="${esc(it.image)}" alt="" width="1200" height="630" loading="lazy" onerror="this.remove()">` : ""}<div><div class="sp-label">${esc(it.label)}</div><h3>${esc(it.title)}</h3><p class="speaker">${esc(it.text)}</p>
         <p>${esc((it.lines[0] || "").slice(0, 260))}${(it.lines[0] || "").length > 260 ? "…" : ""}</p><a class="txt-link" href="${esc(it.url.replace("https://sixmonthsoflight.com/", ""))}">Open →</a></div></div>`;
     } catch { if (n === pvN) $("pv").innerHTML = `<p class="empty">Preview isn't available right now, but your choices are saved.</p>`; }
   }, 250);
