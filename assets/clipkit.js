@@ -7,9 +7,15 @@
   const ASPECTS = { story: [1080, 1920, "9:16 vertical"], square: [1080, 1080, "1:1 square"], post: [1080, 1350, "4:5 post"], wide: [1920, 1080, "16:9 wide"] };
   const MUSIC = [
     { id: "none", name: "No music" },
-    { id: "morning-light", name: "Morning Light (ambient)", file: "assets/music/morning-light.m4a", lic: "Original, CC0" },
-    { id: "amazing-grace", name: "Amazing Grace (piano)", file: "assets/music/amazing-grace.m4a", lic: "Tune NEW BRITAIN, public domain; arrangement CC0" },
-    { id: "ode-to-joy", name: "Joyful, Joyful (piano)", file: "assets/music/ode-to-joy.m4a", lic: "Beethoven 1824, public domain; arrangement CC0" },
+    { id: "morning-light", name: "Morning Light", mood: "Calm · ambient pads and bells", file: "assets/music/morning-light.m4a", lic: "Original composition, rendered in code for Six Months of Light, CC0" },
+    { id: "still-waters", name: "Still Waters", mood: "Reflective · soft piano and pad", file: "assets/music/still-waters.m4a", lic: "Original composition, rendered in code for Six Months of Light, CC0" },
+    { id: "rising-hope", name: "Rising Hope", mood: "Uplifting · piano with string swells", file: "assets/music/rising-hope.m4a", lic: "Original composition, rendered in code for Six Months of Light, CC0" },
+    { id: "gentle-orchestral", name: "Gentle Orchestral", mood: "Tender · string chorale", file: "assets/music/gentle-orchestral.m4a", lic: "Original composition, rendered in code for Six Months of Light, CC0" },
+    { id: "homeward", name: "Homeward", mood: "Peaceful · slow piano and cello", file: "assets/music/homeward.m4a", lic: "Original composition, rendered in code for Six Months of Light, CC0" },
+    { id: "chorale-of-faith", name: "Chorale of Faith", mood: "Reverent · hymn-style chorale", file: "assets/music/chorale-of-faith.m4a", lic: "Original composition, rendered in code for Six Months of Light, CC0" },
+    { id: "eternal", name: "Eternal", mood: "Awe · low strings and bells", file: "assets/music/eternal.m4a", lic: "Original composition, rendered in code for Six Months of Light, CC0" },
+    { id: "amazing-grace", name: "Amazing Grace", mood: "Hymn · piano and strings", file: "assets/music/amazing-grace.m4a", lic: "Tune NEW BRITAIN (pub. 1829/1835), public domain; arrangement CC0" },
+    { id: "joyful-joyful", name: "Joyful, Joyful", mood: "Joyful · Beethoven, cinematic", file: "assets/music/joyful-joyful.m4a", lic: "Beethoven, Symphony No. 9 (1824), public domain; arrangement CC0" },
   ];
   const base = () => window.CARDKIT_BASE || "";
   const get = (t, q) => (window.CLIPS || {})[t + ":" + q] || null;
@@ -20,19 +26,37 @@
   const timings = id => TIM[id] || (TIM[id] = fetch(base() + "assets/timings/" + id + ".json").then(r => { if (!r.ok) throw new Error("no timings"); return r.json(); }));
   const norm = w => String(w).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[’']/g, "").replace(/[^a-z0-9]/g, "");
   // Local alignment (Smith-Waterman) of the selected words against the transcript; returns best span.
-  function align(words, text) { const q = text.split(/\s+/).map(norm).filter(Boolean), t = words.map(w => norm(w[0])); const n = q.length, m = t.length; if (!n) return null;
-    let prev = new Float32Array(m + 1), cur = new Float32Array(m + 1), sp = new Int32Array(m + 1), sc = new Int32Array(m + 1), best = 0, bj = 0, bs = 0;
-    for (let i = 1; i <= n; i++) { cur[0] = 0; sc[0] = 0;
-      for (let j = 1; j <= m; j++) { const d = prev[j - 1] + (q[i - 1] === t[j - 1] ? 2 : -1), up = prev[j] - 1, lf = cur[j - 1] - 1; let v = 0, st = j;
-        if (d >= up && d >= lf && d > 0) { v = d; st = prev[j - 1] > 0 ? sp[j - 1] : j; } else if (up >= lf && up > 0) { v = up; st = sp[j]; } else if (lf > 0) { v = lf; st = sc[j - 1]; }
-        cur[j] = v; sc[j] = st; if (v > best) { best = v; bj = j; bs = st; } }
-      [prev, cur] = [cur, prev]; [sp, sc] = [sc, sp]; }
-    return best > 0 ? { i0: bs - 1, i1: bj - 1, score: best / (2 * n) } : null; }
-  const MAX_DUR = 60, PAD0 = .45, PAD1 = .7;
+  // Contractions are expanded on both sides ("you've" = "you have"), so speech-to-text spelling doesn't break a match.
+  const EXP = { ve: "have", re: "are", ll: "will", m: "am", d: "would" };
+  const toks = w => { const s = String(w).toLowerCase().replace(/’/g, "'"); let m;
+    if ((m = /^(.*)n't$/.exec(s))) return [norm(m[1] === "won" ? "will" : m[1] === "can" ? "can" : m[1]), "not"];
+    if ((m = /^(.*)'(ve|re|ll|m|d)$/.exec(s))) return [norm(m[1]), EXP[m[2]]];
+    const n = norm(s); return n ? [n] : []; };
+  // Local alignment (Smith-Waterman) of the selected words against the transcript; returns the best span (word indexes).
+  function align(words, text) { const q = text.split(/\s+/).flatMap(toks), t = [], ti = [];
+    words.forEach((w, k) => toks(w[0]).forEach(x => { t.push(x); ti.push(k); }));
+    const n = q.length, m = t.length; if (!n) return null; const MA = 2, MI = -.6, GA = -.7;
+    let prev = new Float32Array(m + 1), cur = new Float32Array(m + 1), sp = new Int32Array(m + 1), sc = new Int32Array(m + 1), qp = new Int32Array(m + 1), qc = new Int32Array(m + 1), best = 0, bj = 0, bs = 0, bi = 0, bq = 1;
+    for (let i = 1; i <= n; i++) { cur[0] = 0; sc[0] = 1; qc[0] = i;
+      for (let j = 1; j <= m; j++) { const d = prev[j - 1] + (q[i - 1] === t[j - 1] ? MA : MI), up = prev[j] + GA, lf = cur[j - 1] + GA; let v = 0, st = j, sq = i;
+        if (d >= up && d >= lf && d > 0) { v = d; if (prev[j - 1] > 0) { st = sp[j - 1]; sq = qp[j - 1]; } } else if (up >= lf && up > 0) { v = up; st = sp[j]; sq = qp[j]; } else if (lf > 0) { v = lf; st = sc[j - 1]; sq = qc[j - 1]; }
+        cur[j] = v; sc[j] = st; qc[j] = sq; if (v > best) { best = v; bj = j; bs = st; bi = i; bq = sq; } }
+      [prev, cur] = [cur, prev]; [sp, sc] = [sc, sp]; [qp, qc] = [qc, qp]; }
+    if (best <= 0) return null;
+    // If the last few selected words weren't recognized, extend to cover them (never past 3 words).
+    const p3 = x => x.slice(0, 3), restE = q.slice(bi).map(p3), restS = q.slice(0, bq - 1).map(p3);
+    let j1 = bj - 1; for (let k = 0; k < Math.min(3, restE.length) && j1 + 1 < m; k++) { if (restE.includes(p3(t[j1 + 1]))) j1++; else if (j1 + 2 < m && restE.includes(p3(t[j1 + 2]))) j1 += 2; else break; }
+    let j0 = bs - 1; for (let k = 0; k < Math.min(3, restS.length) && j0 > 0; k++) { if (restS.includes(p3(t[j0 - 1]))) j0--; else if (j0 > 1 && restS.includes(p3(t[j0 - 2]))) j0 -= 2; else break; }
+    return { i0: ti[j0], i1: ti[j1], score: best / (MA * n) }; }
+  const MAX_DUR = 60, LEAD = .2, TAIL = .3, FADE = .3;
   async function clipFor(id, text) { const T = await timings(id), a = align(T.words, text); if (!a || a.score < .55) throw new Error("Couldn't find that passage in the talk audio. Try a shorter selection.");
     const w = T.words.slice(a.i0, a.i1 + 1), s0 = w[0][1], e0 = w[w.length - 1][2]; if (e0 - s0 > MAX_DUR) throw new Error("That passage is over 60 seconds. Pick a shorter part.");
-    const at0 = Math.max(0, s0 - PAD0);
-    return { talk: id, src: MEDIA_BASE() + id + ".mp4", at0, dur: +(e0 + PAD1 - at0).toFixed(2), speech: [s0 - at0, e0 - at0], score: a.score, text,
+    // Start just before the first word (never inside the previous word); end at the last word's end plus a short
+    // tail, cut before the next word begins. Word ends are snapped to silence by tools/refine_timings.py.
+    const prev = T.words[a.i0 - 1], next = T.words[a.i1 + 1];
+    const at0 = Math.max(0, prev ? Math.max(prev[2] + .02, s0 - LEAD) : s0 - LEAD);
+    const end = Math.max(w[w.length - 1][1] + .15, Math.min(e0 + TAIL, next ? next[1] - .06 : e0 + TAIL));
+    return { talk: id, src: MEDIA_BASE() + id + ".mp4", at0, dur: +(end - at0).toFixed(2), fade: FADE, last: w[w.length - 1][0], nextWord: next && next[0], speech: [s0 - at0, e0 - at0], score: a.score, text,
       words: w.map(x => ({ w: x[0], s: x[1] - at0, e: x[2] - at0 })) }; }
   const TH = { ink: "#fffaf0", sub: "rgba(255,246,228,.82)", gold: "#f1d394", gold2: "#d8a95b", dark: 1 };
   function wrapWords(ctx, words, maxW) { const lines = []; let cur = [], w = 0, sp = ctx.measureText(" ").width;
@@ -40,7 +64,9 @@
   // Quote words (official text) mapped onto spoken word timings by position.
   function timedQuote(clip, quote) { const qw = quote.split(/\s+/).filter(Boolean), sw = clip.words, n = qw.length, m = sw.length;
     return qw.map((t, i) => { const j = Math.min(m - 1, Math.floor(i * m / n)); return { t, s: sw[j].s, e: sw[j].e }; }); }
-  function draw(ctx, W, H, o, time, video) {
+  function draw(ctx, W, H, o, time, video) { drawInner(ctx, W, H, o, time, video); const D = o.dur, F = o.fade || .3;
+    if (D && isFinite(time) && time > D - F) { ctx.save(); ctx.globalAlpha = Math.min(1, (time - (D - F)) / F); ctx.fillStyle = "#0d1326"; ctx.fillRect(0, 0, W, H); ctx.restore(); } }
+  function drawInner(ctx, W, H, o, time, video) {
     const u = Math.min(W, H); ctx.save(); ctx.fillStyle = "#0d1326"; ctx.fillRect(0, 0, W, H);
     if (video && video.videoWidth) { const vw = video.videoWidth, vh = video.videoHeight, story = H > W * 1.3;
       // vertical: video sits in the upper part, cover-cropped around the speaker; others: full-bleed cover
@@ -73,17 +99,22 @@
   // Player: one <video>, one AudioContext. Music gain ducks while the speaker talks.
   function player(clip) {
     const v = document.createElement("video"); v.src = /^(https?:)?\/\//.test(clip.src) || clip.src.startsWith(base() + "media/") ? clip.src : base() + clip.src; const at0 = clip.at0 || 0; v.preload = "auto"; v.playsInline = true; v.crossOrigin = "anonymous";
-    let ac, dest, vNode, mGain, mSrc, buf = {}, music = "none", vol = .35;
+    let ac, dest, vNode, vGain, mGain, mSrc, buf = {}, music = "none", vol = .35;
     const audio = () => { if (ac) return; ac = new (window.AudioContext || window.webkitAudioContext)(); dest = ac.createMediaStreamDestination();
-      vNode = ac.createMediaElementSource(v); vNode.connect(ac.destination); vNode.connect(dest); mGain = ac.createGain(); mGain.connect(ac.destination); mGain.connect(dest); };
+      vNode = ac.createMediaElementSource(v); vGain = ac.createGain(); vNode.connect(vGain); vGain.connect(ac.destination); vGain.connect(dest); mGain = ac.createGain(); mGain.connect(ac.destination); mGain.connect(dest); };
     async function loadMusic(id) { const m = MUSIC.find(x => x.id === id); if (!m || !m.file) return null; if (!buf[id]) { const r = await fetch(base() + m.file); buf[id] = await ac.decodeAudioData(await r.arrayBuffer()); } return buf[id]; }
-    function duck(t0) { const g = mGain.gain, [s, e] = clip.speech, low = vol * .22; g.cancelScheduledValues(t0); g.setValueAtTime(vol, t0); g.linearRampToValueAtTime(low, t0 + Math.max(.05, s - .15));
-      g.setValueAtTime(low, t0 + e); g.linearRampToValueAtTime(vol, t0 + e + .4); g.linearRampToValueAtTime(0, t0 + clip.dur); }
+    // Music: fade in, duck under speech (lifts a little in pauses > .7 s), swell slightly after the last word, fade out.
+    function duck(t0) { const g = mGain.gain, low = vol * .2, D = clip.dur, F = clip.fade || .3; g.cancelScheduledValues(t0); g.setValueAtTime(0, t0);
+      const ws = clip.words || [], s0 = ws.length ? ws[0].s : clip.speech[0], e0 = ws.length ? ws[ws.length - 1].e : clip.speech[1];
+      g.linearRampToValueAtTime(Math.min(vol, low * 2), t0 + Math.max(.05, Math.min(.5, s0 - .05))); g.linearRampToValueAtTime(low, t0 + Math.max(.1, s0));
+      for (let i = 1; i < ws.length; i++) { const gap = ws[i].s - ws[i - 1].e; if (gap > .7) { const a = t0 + ws[i - 1].e; g.setValueAtTime(low, a); g.linearRampToValueAtTime(vol * .45, a + Math.min(.4, gap / 2)); g.linearRampToValueAtTime(low, t0 + ws[i].s - .05); } }
+      const tail = Math.max(e0 + .05, D - F); g.setValueAtTime(low, t0 + Math.min(e0, tail)); g.linearRampToValueAtTime(vol * .5, t0 + tail); g.linearRampToValueAtTime(0, t0 + D); }
     async function start() { audio(); await ac.resume(); if (mSrc) { try { mSrc.stop(); } catch (e) {} mSrc = null; }
-      const b = await loadMusic(music); v.currentTime = at0; await new Promise(r => v.seeking ? v.addEventListener("seeked", r, { once: true }) : r()); await v.play(); const t0 = ac.currentTime;
-      if (b) { mSrc = ac.createBufferSource(); mSrc.buffer = b; mSrc.connect(mGain); mSrc.start(t0); duck(t0); } }
-    function stop() { v.pause(); if (mSrc) { try { mSrc.stop(); } catch (e) {} mSrc = null; } }
-    return { v, start, stop, set music(x) { music = x; }, get music() { return music; }, set vol(x) { vol = x; }, stream: () => (audio(), dest.stream), t: () => v.currentTime - at0, at0, ended: () => v.ended || v.currentTime - at0 >= clip.dur - .03, ready: () => new Promise(r => v.readyState >= 2 ? r() : v.addEventListener("loadeddata", r, { once: true })) };
+      const b = await loadMusic(music); const F = clip.fade || .3; v.currentTime = at0; await new Promise(r => v.seeking ? v.addEventListener("seeked", r, { once: true }) : r()); await v.play(); const t0 = ac.currentTime; const vg = vGain.gain; vg.cancelScheduledValues(t0); vg.setValueAtTime(0, t0); vg.linearRampToValueAtTime(1, t0 + .08); vg.setValueAtTime(1, t0 + clip.dur - F); vg.linearRampToValueAtTime(0, t0 + clip.dur);
+      clearInterval(stopIv); stopIv = setInterval(() => { if (v.currentTime - at0 >= clip.dur) { v.pause(); clearInterval(stopIv); } }, 15);
+      if (b) { mSrc = ac.createBufferSource(); mSrc.buffer = b; mSrc.loop = true; mSrc.connect(mGain); mSrc.start(t0); duck(t0); } }
+    let stopIv; function stop() { clearInterval(stopIv); v.pause(); if (mSrc) { try { mSrc.stop(); } catch (e) {} mSrc = null; } }
+    return { v, start, stop, set music(x) { music = x; }, get music() { return music; }, set vol(x) { vol = x; }, stream: () => (audio(), dest.stream), t: () => v.currentTime - at0, at0, ended: () => v.ended || v.paused || v.currentTime - at0 >= clip.dur, ready: () => new Promise(r => v.readyState >= 2 ? r() : v.addEventListener("loadeddata", r, { once: true })) };
   }
   const recType = () => ["video/mp4;codecs=avc1,mp4a.40.2", "video/mp4;codecs=avc1,opus", "video/mp4;codecs=avc1", "video/mp4", "video/webm;codecs=vp9,opus", "video/webm"].find(t => window.MediaRecorder && MediaRecorder.isTypeSupported(t));
   // Real-time export: plays the clip once while recording the canvas + mixed audio.

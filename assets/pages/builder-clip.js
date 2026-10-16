@@ -8,7 +8,7 @@
     <div class="clip-grid"><div class="clip-stage"><canvas id="clipCv" aria-label="Video clip preview"></canvas></div>
     <div class="clip-ctl">
       <div class="b-label">Shape</div><div class="seg" id="clipAspect" role="group" aria-label="Clip shape">${Object.entries(C.ASPECTS).map(([k, a]) => `<button type="button" data-k="${k}">${a[2]}</button>`).join("")}</div>
-      <div class="b-label">Background music</div><div class="seg" id="clipMusic" role="group" aria-label="Background music" style="flex-wrap:wrap">${C.MUSIC.map(m => `<button type="button" data-k="${m.id}">${esc(m.name)}</button>`).join("")}</div>
+      <div class="b-label">Background music</div><div class="seg" id="clipMusic" role="group" aria-label="Background music" style="flex-wrap:wrap">${C.MUSIC.map(m => `<button type="button" data-k="${m.id}" title="${esc(m.mood || "")}">${esc(m.name)}${m.mood ? `<small style="display:block;opacity:.7;font-size:11px">${esc(m.mood.split(" · ")[0])}</small>` : ""}</button>`).join("")}</div>
       <label class="b-label" for="clipVol">Music volume <span class="b-help">ducks under the speaker</span></label><input type="range" id="clipVol" min="0" max="80" step="5" value="35">
       <div class="b-label">Video look</div><div class="seg" id="clipVbg" role="group" aria-label="Video look">${[["full", "Full"], ["blur", "Soft blur"], ["dim", "Dimmed"], ["duotone", "Duotone"]].map(([k, n]) => `<button type="button" data-k="${k}">${n}</button>`).join("")}</div>
       <label class="b-label" for="clipVop">Video strength</label><input type="range" id="clipVop" min="10" max="100" step="5" value="60">
@@ -23,10 +23,10 @@
   const cv = box.querySelector("#clipCv"), ctx = cv.getContext("2d"), msg = t => box.querySelector("#clipMsg").textContent = t;
   const seg = (id, k) => box.querySelectorAll(`#${id} button`).forEach(b => b.setAttribute("aria-pressed", b.dataset.k === k));
   let raf;
-  const opts = (clip, t) => ({ timed: C.timedQuote(clip, clip.text || t.quotes[clip.q]), speaker: t.speaker, title: t.title, captions: cs.captions, vbg: cs.vbg, vop: cs.vop });
+  const opts = (clip, t) => ({ timed: C.timedQuote(clip, clip.text || t.quotes[clip.q]), speaker: t.speaker, title: t.title, captions: cs.captions, vbg: cs.vbg, vop: cs.vop, dur: cs.playing || cs.busy ? clip.dur : 0, fade: clip.fade });
   function frame() { const clip = cur(); if (!clip) return; const t = talk(), [W, H] = C.ASPECTS[cs.aspect]; if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
     C.draw(ctx, W, H, opts(clip, t), cs.playing ? cs.pl.t() : clip.dur, cs.pl.v); }
-  const loop = () => { frame(); if (cs.playing) raf = requestAnimationFrame(loop); };
+  const loop = () => { frame(); if (cs.playing && !cs.busy && cs.pl.ended()) { cs.playing = false; cs.pl.stop(); frame(); return; } if (cs.playing) raf = requestAnimationFrame(loop); };
   const cur = () => cs.dyn && cs.dyn.talk === st.t ? cs.dyn : st.src === "quote" && !st.libT && !(st.ownOn && st.own) ? C.get(st.t, st.q) : null;
   function sync() { const clip = cur(); box.hidden = !clip && !(st.src === "quote"); if (!clip) { if (cs.pl) cs.pl.stop(); cs.playing = false; return; }
     const key = clip.text ? "sel:" + clip.text : st.t + ":" + st.q; if (cs.key !== key) { if (cs.pl) cs.pl.stop(); cs.key = key; cs.pl = C.player(clip); cs.pl.v.addEventListener("seeked", frame); cs.pl.ready().then(() => { cs.pl.v.currentTime = (clip.at0 || 0) + Math.min(clip.dur - .1, clip.speech[1]); }); }
