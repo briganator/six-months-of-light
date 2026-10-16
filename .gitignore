@@ -6,3 +6,4 @@ screenshots/
 __pycache__/
 media/
 media
+!assets/clips/*.mp4
