@@ -5,18 +5,169 @@
 (function () {
   const K = window.CardKit, SERIF = '"Cormorant Garamond", Georgia, serif', SANS = "Inter, system-ui, sans-serif";
   const ASPECTS = { story: [1080, 1920, "9:16 vertical"], square: [1080, 1080, "1:1 square"], post: [1080, 1350, "4:5 post"], wide: [1920, 1080, "16:9 wide"] };
+  // Background music (assets/music). Sources and licenses: LICENSES-music.md. attr = CC BY, so the credit is burned into the clip and added to the share text.
   const MUSIC = [
-    { id: "none", name: "No music" },
-    { id: "morning-light", name: "Morning Light", mood: "Calm · ambient pads and bells", file: "assets/music/morning-light.m4a", lic: "Original composition, rendered in code for Six Months of Light, CC0" },
-    { id: "still-waters", name: "Still Waters", mood: "Reflective · soft piano and pad", file: "assets/music/still-waters.m4a", lic: "Original composition, rendered in code for Six Months of Light, CC0" },
-    { id: "rising-hope", name: "Rising Hope", mood: "Uplifting · piano with string swells", file: "assets/music/rising-hope.m4a", lic: "Original composition, rendered in code for Six Months of Light, CC0" },
-    { id: "gentle-orchestral", name: "Gentle Orchestral", mood: "Tender · string chorale", file: "assets/music/gentle-orchestral.m4a", lic: "Original composition, rendered in code for Six Months of Light, CC0" },
-    { id: "homeward", name: "Homeward", mood: "Peaceful · slow piano and cello", file: "assets/music/homeward.m4a", lic: "Original composition, rendered in code for Six Months of Light, CC0" },
-    { id: "chorale-of-faith", name: "Chorale of Faith", mood: "Reverent · hymn-style chorale", file: "assets/music/chorale-of-faith.m4a", lic: "Original composition, rendered in code for Six Months of Light, CC0" },
-    { id: "eternal", name: "Eternal", mood: "Awe · low strings and bells", file: "assets/music/eternal.m4a", lic: "Original composition, rendered in code for Six Months of Light, CC0" },
-    { id: "amazing-grace", name: "Amazing Grace", mood: "Hymn · piano and strings", file: "assets/music/amazing-grace.m4a", lic: "Tune NEW BRITAIN (pub. 1829/1835), public domain; arrangement CC0" },
-    { id: "joyful-joyful", name: "Joyful, Joyful", mood: "Joyful · Beethoven, cinematic", file: "assets/music/joyful-joyful.m4a", lic: "Beethoven, Symphony No. 9 (1824), public domain; arrangement CC0" },
-  ];
+ {
+  "id": "none",
+  "name": "No music"
+ },
+ {
+  "id": "meditation-impromptu",
+  "name": "Meditation Impromptu",
+  "mood": "Calm · solo piano",
+  "file": "assets/music/meditation-impromptu.m4a",
+  "lic": "“Meditation Impromptu 02” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "credit": "“Meditation Impromptu 02” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "src": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Meditation%20Impromptu%2002.mp3",
+  "license": "CC BY 4.0",
+  "lurl": "https://creativecommons.org/licenses/by/4.0/",
+  "attr": true
+ },
+ {
+  "id": "dreamy-flashback",
+  "name": "Dreamy Flashback",
+  "mood": "Reflective · piano and strings",
+  "file": "assets/music/dreamy-flashback.m4a",
+  "lic": "“Dreamy Flashback” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "credit": "“Dreamy Flashback” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "src": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Dreamy%20Flashback.mp3",
+  "license": "CC BY 4.0",
+  "lurl": "https://creativecommons.org/licenses/by/4.0/",
+  "attr": true
+ },
+ {
+  "id": "touching-moments",
+  "name": "Touching Moments",
+  "mood": "Tender · piano, strings",
+  "file": "assets/music/touching-moments.m4a",
+  "lic": "“Touching Moments Two - Higher” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "credit": "“Touching Moments Two - Higher” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "src": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Touching%20Moments%20Two%20-%20Higher.mp3",
+  "license": "CC BY 4.0",
+  "lurl": "https://creativecommons.org/licenses/by/4.0/",
+  "attr": true
+ },
+ {
+  "id": "lasting-hope",
+  "name": "Lasting Hope",
+  "mood": "Uplifting · cinematic",
+  "file": "assets/music/lasting-hope.m4a",
+  "lic": "“Lasting Hope” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "credit": "“Lasting Hope” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "src": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Lasting%20Hope.mp3",
+  "license": "CC BY 4.0",
+  "lurl": "https://creativecommons.org/licenses/by/4.0/",
+  "attr": true
+ },
+ {
+  "id": "heartwarming",
+  "name": "Heartwarming",
+  "mood": "Warm · gentle orchestral",
+  "file": "assets/music/heartwarming.m4a",
+  "lic": "“Heartwarming” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "credit": "“Heartwarming” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "src": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Heartwarming.mp3",
+  "license": "CC BY 4.0",
+  "lurl": "https://creativecommons.org/licenses/by/4.0/",
+  "attr": true
+ },
+ {
+  "id": "long-note",
+  "name": "Long Note",
+  "mood": "Ambient · soft pads",
+  "file": "assets/music/long-note.m4a",
+  "lic": "“Long Note Two” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "credit": "“Long Note Two” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "src": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Long%20Note%20Two.mp3",
+  "license": "CC BY 4.0",
+  "lurl": "https://creativecommons.org/licenses/by/4.0/",
+  "attr": true
+ },
+ {
+  "id": "amazing-grace-strings",
+  "name": "Amazing Grace",
+  "mood": "Hymn · string ensemble",
+  "file": "assets/music/amazing-grace-strings.m4a",
+  "lic": "U.S. Air Force Band Strolling Strings, arr. Cleveland Chandler · Public domain (U.S. government work)",
+  "credit": "U.S. Air Force Band Strolling Strings, arr. Cleveland Chandler · Public domain (U.S. government work)",
+  "src": "https://commons.wikimedia.org/wiki/File:Amazing_Grace_(2004)_-_Strolling_Strings_-_United_States_Air_Force_Band.mp3",
+  "license": "Public domain",
+  "lurl": "https://commons.wikimedia.org/wiki/File:Amazing_Grace_(2004)_-_Strolling_Strings_-_United_States_Air_Force_Band.mp3",
+  "attr": false
+ },
+ {
+  "id": "nearer-my-god",
+  "name": "Nearer, My God, to Thee",
+  "mood": "Hymn · concert band",
+  "file": "assets/music/nearer-my-god.m4a",
+  "lic": "U.S. Air Force Band · Public domain (U.S. government work)",
+  "credit": "U.S. Air Force Band · Public domain (U.S. government work)",
+  "src": "https://commons.wikimedia.org/wiki/File:Nearer_My_God_to_Thee_-_Concert_Band_-_United_States_Air_Force_Band.mp3",
+  "license": "Public domain",
+  "lurl": "https://commons.wikimedia.org/wiki/File:Nearer_My_God_to_Thee_-_Concert_Band_-_United_States_Air_Force_Band.mp3",
+  "attr": false
+ },
+ {
+  "id": "eternal-father",
+  "name": "Eternal Father, Strong to Save",
+  "mood": "Hymn · reverent",
+  "file": "assets/music/eternal-father.m4a",
+  "lic": "“The President’s Own” U.S. Marine Band · Public domain (U.S. government work)",
+  "credit": "“The President’s Own” U.S. Marine Band · Public domain (U.S. government work)",
+  "src": "https://commons.wikimedia.org/wiki/File:Eternal_Father,_Strong_to_Save_-_U.S._Marine_Band.ogg",
+  "license": "Public domain",
+  "lurl": "https://commons.wikimedia.org/wiki/File:Eternal_Father,_Strong_to_Save_-_U.S._Marine_Band.ogg",
+  "attr": false
+ },
+ {
+  "id": "canon-strings",
+  "name": "Canon in D",
+  "mood": "Peaceful · strings (Pachelbel)",
+  "file": "assets/music/canon-strings.m4a",
+  "lic": "U.S. Air Force Band Strolling Strings, arr. Frank Hudson · Public domain (U.S. government work)",
+  "credit": "U.S. Air Force Band Strolling Strings, arr. Frank Hudson · Public domain (U.S. government work)",
+  "src": "https://commons.wikimedia.org/wiki/File:Canon_(2004)_-_Strolling_Strings_-_United_States_Air_Force_Band.mp3",
+  "license": "Public domain",
+  "lurl": "https://commons.wikimedia.org/wiki/File:Canon_(2004)_-_Strolling_Strings_-_United_States_Air_Force_Band.mp3",
+  "attr": false
+ },
+ {
+  "id": "ode-to-joy-band",
+  "name": "Joyful, Joyful (Ode to Joy)",
+  "mood": "Joyful · concert band",
+  "file": "assets/music/ode-to-joy-band.m4a",
+  "lic": "U.S. Air Force Band of the Rockies · Public domain (U.S. government work)",
+  "credit": "U.S. Air Force Band of the Rockies · Public domain (U.S. government work)",
+  "src": "https://commons.wikimedia.org/wiki/File:Ode_to_Joy_-_Concert_Band_-_United_States_Air_Force_Band_of_the_Rockies.mp3",
+  "license": "Public domain",
+  "lurl": "https://commons.wikimedia.org/wiki/File:Ode_to_Joy_-_Concert_Band_-_United_States_Air_Force_Band_of_the_Rockies.mp3",
+  "attr": false
+ },
+ {
+  "id": "morning-light",
+  "name": "Morning Light (synth)",
+  "mood": "Calm · ambient (original)",
+  "file": "assets/music/morning-light.m4a",
+  "lic": "Original, Six Months of Light · CC0",
+  "credit": "Original, Six Months of Light · CC0",
+  "src": "",
+  "license": "CC0",
+  "lurl": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "attr": false
+ },
+ {
+  "id": "chorale-of-faith",
+  "name": "Chorale of Faith (synth)",
+  "mood": "Reverent · hymn-style (original)",
+  "file": "assets/music/chorale-of-faith.m4a",
+  "lic": "Original, Six Months of Light · CC0",
+  "credit": "Original, Six Months of Light · CC0",
+  "src": "",
+  "license": "CC0",
+  "lurl": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "attr": false
+ }
+];
   const base = () => window.CARDKIT_BASE || "";
   const get = (t, q) => (window.CLIPS || {})[t + ":" + q] || null;
   // ---- any-text clips: word timings per talk (assets/timings/<id>.json) + self-hosted talk video ----
@@ -93,7 +244,8 @@
     // brand
     const by = H - u * (story ? .1 : .06); if (K && K.wordmark) { K.wordmark(ctx, W / 2, by, u * .036, TH, "center"); }
     ctx.fillStyle = TH.ink; ctx.font = `600 ${u * .022}px ${SANS}`; ctx.fillText((window.CONF && CONF.domain) || "sixmonthsoflight.com", W / 2, by + u * .035);
-    ctx.globalAlpha = .75; ctx.fillStyle = TH.sub; ctx.font = `${u * .015}px ${SANS}`; ctx.fillText("Video and text from ChurchofJesusChrist.org · Personal study site · Not an official Church site", W / 2, H - u * .018);
+    ctx.globalAlpha = .75; ctx.fillStyle = TH.sub; ctx.font = `${u * .015}px ${SANS}`; ctx.fillText("Video and text from ChurchofJesusChrist.org · Personal study site · Not an official Church site", W / 2, H - u * (o.musicCredit ? .042 : .018));
+    if (o.musicCredit) ctx.fillText("Music: " + o.musicCredit, W / 2, H - u * .018);
     ctx.restore();
   }
   // Player: one <video>, one AudioContext. Music gain ducks while the speaker talks.

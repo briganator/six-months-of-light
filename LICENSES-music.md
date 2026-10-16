@@ -1,17 +1,27 @@
 # Music licenses (assets/music/)
 
-Every track was rendered from code by `tools/make_music.py` (additive piano, synthesized strings, pads, bells and reverb). No samples, loops or third-party recordings are used. The recordings and arrangements are released under **CC0 1.0** (public domain dedication). Melodies are either original or in the public domain:
+Each track is a 60–90 s excerpt (trimmed, faded, loudness-normalized to about -20 LUFS, AAC 112 kb/s) made by `tools/prep_music.py` from the source below. Every license allows redistribution in this web app and use in videos people export and share, including on social media and with monetization. No NC/ND licenses are used.
 
-| File | Name | Mood | Melody / source | License |
-|---|---|---|---|---|
-| morning-light.m4a | Morning Light | Calm (ambient pads, bells) | Original | CC0 |
-| still-waters.m4a | Still Waters | Reflective (piano arpeggios, pad) | Original | CC0 |
-| rising-hope.m4a | Rising Hope | Uplifting (piano, string swells) | Original | CC0 |
-| gentle-orchestral.m4a | Gentle Orchestral | Tender (string chorale) | Original | CC0 |
-| homeward.m4a | Homeward | Peaceful (piano, cello) | Original | CC0 |
-| chorale-of-faith.m4a | Chorale of Faith | Reverent (hymn-style chorale) | Original, hymn-inspired | CC0 |
-| eternal.m4a | Eternal | Awe (low strings, bells) | Original | CC0 |
-| amazing-grace.m4a | Amazing Grace | Hymn (piano, strings) | NEW BRITAIN, American folk tune, published 1829/1835: public domain | Arrangement CC0 |
-| joyful-joyful.m4a | Joyful, Joyful | Joyful (cinematic) | Beethoven, Symphony No. 9 (1824): public domain | Arrangement CC0 |
+| File | Title | Performer / author | Source | License | Attribution |
+|---|---|---|---|---|---|
+| meditation-impromptu.m4a | Meditation Impromptu | “Meditation Impromptu 02” Kevin MacLeod (incompetech.com) | https://incompetech.com/music/royalty-free/mp3-royaltyfree/Meditation%20Impromptu%2002.mp3 | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | Required: shown in the picker, burned into exported clips and added to the share text |
+| dreamy-flashback.m4a | Dreamy Flashback | “Dreamy Flashback” Kevin MacLeod (incompetech.com) | https://incompetech.com/music/royalty-free/mp3-royaltyfree/Dreamy%20Flashback.mp3 | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | Required: shown in the picker, burned into exported clips and added to the share text |
+| touching-moments.m4a | Touching Moments | “Touching Moments Two - Higher” Kevin MacLeod (incompetech.com) | https://incompetech.com/music/royalty-free/mp3-royaltyfree/Touching%20Moments%20Two%20-%20Higher.mp3 | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | Required: shown in the picker, burned into exported clips and added to the share text |
+| lasting-hope.m4a | Lasting Hope | “Lasting Hope” Kevin MacLeod (incompetech.com) | https://incompetech.com/music/royalty-free/mp3-royaltyfree/Lasting%20Hope.mp3 | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | Required: shown in the picker, burned into exported clips and added to the share text |
+| heartwarming.m4a | Heartwarming | “Heartwarming” Kevin MacLeod (incompetech.com) | https://incompetech.com/music/royalty-free/mp3-royaltyfree/Heartwarming.mp3 | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | Required: shown in the picker, burned into exported clips and added to the share text |
+| long-note.m4a | Long Note | “Long Note Two” Kevin MacLeod (incompetech.com) | https://incompetech.com/music/royalty-free/mp3-royaltyfree/Long%20Note%20Two.mp3 | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | Required: shown in the picker, burned into exported clips and added to the share text |
+| amazing-grace-strings.m4a | Amazing Grace | U.S. Air Force Band Strolling Strings, arr. Cleveland Chandler | https://commons.wikimedia.org/wiki/File:Amazing_Grace_(2004)_-_Strolling_Strings_-_United_States_Air_Force_Band.mp3 | [Public domain](https://commons.wikimedia.org/wiki/File:Amazing_Grace_(2004)_-_Strolling_Strings_-_United_States_Air_Force_Band.mp3) | Not required (credited anyway) |
+| nearer-my-god.m4a | Nearer, My God, to Thee | U.S. Air Force Band | https://commons.wikimedia.org/wiki/File:Nearer_My_God_to_Thee_-_Concert_Band_-_United_States_Air_Force_Band.mp3 | [Public domain](https://commons.wikimedia.org/wiki/File:Nearer_My_God_to_Thee_-_Concert_Band_-_United_States_Air_Force_Band.mp3) | Not required (credited anyway) |
+| eternal-father.m4a | Eternal Father, Strong to Save | “The President’s Own” U.S. Marine Band | https://commons.wikimedia.org/wiki/File:Eternal_Father,_Strong_to_Save_-_U.S._Marine_Band.ogg | [Public domain](https://commons.wikimedia.org/wiki/File:Eternal_Father,_Strong_to_Save_-_U.S._Marine_Band.ogg) | Not required (credited anyway) |
+| canon-strings.m4a | Canon in D | U.S. Air Force Band Strolling Strings, arr. Frank Hudson | https://commons.wikimedia.org/wiki/File:Canon_(2004)_-_Strolling_Strings_-_United_States_Air_Force_Band.mp3 | [Public domain](https://commons.wikimedia.org/wiki/File:Canon_(2004)_-_Strolling_Strings_-_United_States_Air_Force_Band.mp3) | Not required (credited anyway) |
+| ode-to-joy-band.m4a | Joyful, Joyful (Ode to Joy) | U.S. Air Force Band of the Rockies | https://commons.wikimedia.org/wiki/File:Ode_to_Joy_-_Concert_Band_-_United_States_Air_Force_Band_of_the_Rockies.mp3 | [Public domain](https://commons.wikimedia.org/wiki/File:Ode_to_Joy_-_Concert_Band_-_United_States_Air_Force_Band_of_the_Rockies.mp3) | Not required (credited anyway) |
+| morning-light.m4a | Morning Light (synth) | Original, Six Months of Light | tools/make_music.py | [CC0](https://creativecommons.org/publicdomain/zero/1.0/) | Not required (credited anyway) |
+| chorale-of-faith.m4a | Chorale of Faith (synth) | Original, Six Months of Light | tools/make_music.py | [CC0](https://creativecommons.org/publicdomain/zero/1.0/) | Not required (credited anyway) |
 
-All tracks are loudness-normalized (about -20 LUFS) and play on a loop under a clip. They fade in, duck under speech, lift slightly in pauses and fade out with the clip. Regenerate with `python3 tools/make_music.py`.
+**CC BY 4.0 (Kevin MacLeod):** the attribution format follows incompetech.com: “Title” Kevin MacLeod (incompetech.com), Licensed under Creative Commons: By Attribution 4.0, https://creativecommons.org/licenses/by/4.0/. These clips are excerpts, with fades and level changes only. Kevin MacLeod says his music is not registered with YouTube Content ID.
+
+**Public domain:** performances and recordings by U.S. military bands are works of the U.S. federal government (17 U.S.C. §105), published as public domain at music.af.mil and marineband.marines.mil, via Wikimedia Commons. The compositions are also public domain (traditional/NEW BRITAIN, Lowell Mason, J. B. Dykes, Pachelbel, Beethoven). Platform Content ID systems occasionally misidentify public-domain recordings; a claim can be disputed by citing the source page.
+
+**Original (CC0):** Morning Light and Chorale of Faith were rendered in code by `tools/make_music.py`.
+
+Not found with a clear redistributable license: *Come, Come, Ye Saints*, *I Need Thee Every Hour* and *Be Still, My Soul / Finlandia* (the Commons Finlandia/Abide With Me recordings are CC BY-SA choir recordings, so they were left out to avoid share-alike terms on users’ videos).

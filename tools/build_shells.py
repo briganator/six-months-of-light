@@ -9,7 +9,7 @@ pages = {
  "builder": ("Card Studio · Six Months of Light", [], ["themes3.js", "insights-data.js", "photos.js", "speaker-options.js", "clips.js", "vendor/qrcode.js", "cardkit.js", "cardkit-plus.js", "videokit.js", "clipkit.js", "promos.js", "share-pages.js"]),
  "quiz": ("Who said it? · Six Months of Light", [], []),
  "insights": ("Conference Insights · Six Months of Light", [], ["insights-data.js", "explore.js"]),
- "credits": ("Credits & licenses · Six Months of Light", [], ["photos.js"]),
+ "credits": ("Credits & licenses · Six Months of Light", [], ["clipkit.js", "photos.js"]),
  "speaker": ("Speakers · Six Months of Light", [], []),
  "session": ("Session · Six Months of Light", [], []),
  "my": ("My Conference · Six Months of Light", [], []),

@@ -12,6 +12,8 @@ document.getElementById("main").innerHTML = `
   <div class="credits">${(window.PHOTOS || []).filter(p => p.group !== "art").map(p => `<figure class="credit"><img src="${esc(p.thumb)}" alt="${esc(p.name)}" loading="lazy" width="120" height="90">
     <figcaption><b>${esc(p.name)}</b><span>Photo: ${esc(p.author || "Unknown")} · <a href="${esc(p.license_url || p.source)}" rel="noopener">${esc(p.license)}</a> · <a href="${esc(p.source)}" rel="noopener">Source on Wikimedia Commons ↗</a></span>
     <span class="speaker">Resized and converted to WebP for this site${/SA/.test(p.license) ? "; this adapted version is shared under the same license" : ""}.</span></figcaption></figure>`).join("")}</div>
+  <h2>Music for video clips</h2>
+  <ul>${(window.ClipKit ? ClipKit.MUSIC : []).filter(m => m.file).map(m => `<li><b>${esc(m.name)}</b>: ${esc(m.credit)}${m.src ? ` · <a href="${esc(m.src)}" rel="noopener">source ↗</a>` : ""} · <a href="${esc(m.lurl)}" rel="noopener">${esc(m.license)}</a></li>`).join("")}</ul>
   <h2>Fonts &amp; code</h2>
   <ul><li>Cormorant Garamond and Inter: SIL Open Font License 1.1, self-hosted.</li>
   <li>Card Studio fonts (Playfair Display, Lora, EB Garamond, Libre Baskerville, Cinzel, DM Serif Display, Merriweather, Abril Fatface, Montserrat, Raleway, Josefin Sans, Poppins, Great Vibes, Dancing Script): Google Fonts, SIL Open Font License 1.1, self-hosted and loaded only when chosen. See <a href="assets/fonts/g/OFL-NOTICE.txt">the license notice</a>.</li>
