@@ -5,3 +5,4 @@ screenshots/
 *.log
 __pycache__/
 media/
+media
