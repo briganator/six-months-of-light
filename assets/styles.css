@@ -1336,3 +1336,15 @@ body.post .hero-sky .rays{opacity:.75}
 @media (max-width:899px){.clip-grid{grid-template-columns:1fr}}
 .clip-fab{position:absolute;z-index:50;box-shadow:var(--shadow-2);white-space:nowrap}
 .clip-panel textarea{width:100%;font:inherit;padding:10px;border-radius:12px;border:1px solid rgba(0,0,0,.15);background:rgba(255,255,255,.7)}
+/* Make a video */
+.mv{max-width:640px;margin:0 auto;padding:18px 0 60px}.mv-h{margin:22px 0 4px}.mv-sub{margin:0 0 14px;opacity:.85}
+.mv-in{position:relative}.mv-in textarea{width:100%;box-sizing:border-box;font:inherit;font-size:17px;line-height:1.45;padding:14px 14px 48px;border-radius:14px;border:1px solid var(--line,rgba(255,255,255,.18));background:var(--card,rgba(255,255,255,.05));color:inherit;resize:vertical}
+.mv-in-btns{position:absolute;right:10px;bottom:10px;display:flex;gap:8px}.mv-msg{min-height:1.3em;margin:8px 2px;opacity:.85}
+.mv-src{margin:4px 0 10px}.mv-found{display:inline-block;background:#d8a95b;color:#0d1326;font-weight:700;border-radius:99px;padding:2px 10px;margin-right:6px;font-size:13px}
+.mv-stage{position:relative;max-width:360px;margin:0 auto}.mv-stage canvas{width:100%;height:auto;display:block;border-radius:14px;background:#0d1326;cursor:pointer}
+.mv-play{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);width:78px;height:78px;border-radius:50%;border:0;background:rgba(13,19,38,.7);color:#f1d394;font-size:32px;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+.mv-act{display:flex;gap:10px;justify-content:center;margin:14px 0}.mv-act .btn.big{min-width:200px;font-size:18px;padding:14px 26px}
+.mv-text{line-height:1.6;opacity:.75;margin:6px 0}.mv-text mark{background:rgba(216,169,91,.28);color:inherit;opacity:1;padding:1px 2px;border-radius:3px;font-weight:600}
+.mv-nudge{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.mv-nudge span{font-size:13px;opacity:.7;margin-left:6px}.mv-nudge button{font:inherit;font-size:14px;padding:9px 12px;border-radius:10px;border:1px solid var(--line,rgba(255,255,255,.2));background:transparent;color:inherit;min-height:40px}
+.mv-more{margin-top:18px;border-top:1px solid var(--line,rgba(255,255,255,.15));padding-top:10px}.mv-more summary{cursor:pointer;font-weight:600;padding:8px 0}
+.clip-fab.mobile{position:fixed;left:50%!important;top:auto!important;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%);font-size:18px;padding:14px 24px;z-index:9999}
