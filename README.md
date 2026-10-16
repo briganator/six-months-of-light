@@ -14,7 +14,7 @@ A personal study and sharing site for the 196th Semiannual General Conference (i
 - Cinematic hero: a rising sun, slowly turning light rays, drifting glows, floating light motes, and generated SVG ridgelines with parallax on scroll. A six-month progress bar runs from Oct 2026 to April 2027, with a count-up of days left (the April date is an estimate, labeled as such).
 - Scroll-driven reveals, a soft light sheen across every card, hover lift, a button shine, and fade page transitions (View Transitions where supported).
 - `prefers-reduced-motion` turns all of this off. Nothing is loaded from third parties. Everything is CSS, SVG and canvas.
-- Speaker pages use initials, not portraits. Card photos are openly licensed, not Church photos. Talk pages hotlink official audio, video and any illustration in the talk; those files stay on the Church's servers.
+- Speaker pages and talks show official speaker photos stored locally (see Speaker photos below). Card photos are openly licensed, not Church photos. Talk pages hotlink official audio, video and any illustration in the talk; those files stay on the Church's servers.
 
 ## Features
 **Card Studio** (`builder.html`; `quote.html` redirects here)
