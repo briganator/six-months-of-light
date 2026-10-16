@@ -199,15 +199,19 @@ if (t && t.kind !== "business") whenNear("studyPanel", () => loadLib().then(LB =
   document.getElementById("printBtn").addEventListener("click", () => window.print());
 }).catch(() => { const el = document.getElementById("studyPanel"); if (el) el.remove(); }));
 
-// "Make video clip" from any selected passage in the full talk (prototype).
+// "Make video" from any selected passage in the full talk. Phones get a big fixed button at the bottom
+// (the iOS selection menu covers anything placed above the selection). The text is captured on selectionchange,
+// so it's already in the link when the tap clears the selection.
 (function () {
   if (!t || t.kind === "business") return;
-  const btn = document.createElement("a"); btn.className = "btn gold small clip-fab"; btn.hidden = true; btn.textContent = "🎬 Make video clip"; document.body.appendChild(btn);
-  const selText = () => { const s = getSelection(); if (!s || s.isCollapsed) return ""; const ft = document.getElementById("fulltext"); if (!ft || !ft.contains(s.anchorNode) || !ft.contains(s.focusNode)) return "";
-    return String(s).replace(/\[\d+\]/g, " ").replace(/([A-Za-z.,;:!?”’)])\d{1,2}(?=[\s.,;:!?”’)]|$)/g, "$1").replace(/\s+/g, " ").trim(); };
-  const place = () => { const x = selText(); if (x.split(" ").length < 3 || x.length > 900) { btn.hidden = true; return; }
-    const r = getSelection().getRangeAt(0).getBoundingClientRect(); btn.hidden = false;
-    btn.style.top = Math.max(8, r.top + scrollY - 46) + "px"; btn.style.left = Math.max(8, Math.min(innerWidth - 200, r.left + scrollX + r.width / 2 - 90)) + "px";
-    btn.href = `builder.html?t=${encodeURIComponent(t.id)}&tab=quote&ca=story&sel=${encodeURIComponent(x)}#clipPanel`; };
-  document.addEventListener("selectionchange", () => { clearTimeout(place.t); place.t = setTimeout(place, 250); });
+  const mob = matchMedia("(pointer:coarse)").matches || innerWidth < 700;
+  const btn = document.createElement("a"); btn.className = "btn gold clip-fab" + (mob ? " mobile" : " small"); btn.hidden = true; btn.textContent = "🎬 Make video"; document.body.appendChild(btn);
+  const selText = () => { const s = getSelection(); if (!s || s.isCollapsed || !s.rangeCount) return ""; const ft = document.getElementById("fulltext"); if (!ft || !ft.contains(s.anchorNode) || !ft.contains(s.focusNode)) return "";
+    return String(s).replace(/\s+/g, " ").trim(); };
+  let hideT;
+  const place = () => { const x = selText(); if (x.split(" ").length < 2 || x.length > 1500) { clearTimeout(hideT); hideT = setTimeout(() => { if (!selText()) btn.hidden = true; }, mob ? 900 : 0); return; }
+    clearTimeout(hideT); btn.hidden = false; btn.href = `video.html?t=${encodeURIComponent(t.id)}&sel=${encodeURIComponent(x)}`;
+    if (!mob) { const r = getSelection().getRangeAt(0).getBoundingClientRect(); btn.style.top = Math.max(8, r.top + scrollY - 46) + "px"; btn.style.left = Math.max(8, Math.min(innerWidth - 200, r.left + scrollX + r.width / 2 - 90)) + "px"; } };
+  document.addEventListener("selectionchange", () => { clearTimeout(place.t); place.t = setTimeout(place, mob ? 120 : 250); });
+  document.addEventListener("touchend", () => setTimeout(place, 50), { passive: true });
 })();

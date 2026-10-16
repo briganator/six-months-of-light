@@ -200,23 +200,36 @@
     let j0 = bs - 1; for (let k = 0; k < Math.min(3, restS.length) && j0 > 0; k++) { if (restS.includes(p3(t[j0 - 1]))) j0--; else if (j0 > 1 && restS.includes(p3(t[j0 - 2]))) j0 -= 2; else break; }
     return { i0: ti[j0], i1: ti[j1], score: best / (MA * n) }; }
   const MAX_DUR = 60, LEAD = .2, TAIL = .3, FADE = .3;
-  async function clipFor(id, text) { const T = await timings(id), a = align(T.words, text); if (!a || a.score < .55) throw new Error("Couldn't find that passage in the talk audio. Try a shorter selection.");
-    const w = T.words.slice(a.i0, a.i1 + 1), s0 = w[0][1], e0 = w[w.length - 1][2]; if (e0 - s0 > MAX_DUR) throw new Error("That passage is over 60 seconds. Pick a shorter part.");
+  // Fades (seconds). Video fades are visual (from/to dark); the speech itself is never faded inside the quote.
+  // A fade-out longer than the natural tail holds the last frame, so the last word isn't cut short.
+  const FADES = { off: 0, short: .5, medium: 1, long: 2 };
+  function applyFades(c, f = {}) { const n = x => x == null ? null : +x; c.fin = n(f.fin) ?? 0; c.fout = n(f.fout) ?? FADE; c.mfin = n(f.mfin) ?? .5; c.mfout = n(f.mfout) ?? .6;
+    c.dur = +(c.vEnd + Math.max(0, Math.max(c.fout, c.mfout) - TAIL)).toFixed(2); c.fade = c.fout; return c; }
+  function cut(T, i0, i1, id) { const w = T.words.slice(i0, i1 + 1), s0 = w[0][1], e0 = w[w.length - 1][2]; if (e0 - s0 > MAX_DUR) throw new Error("That passage is over 60 seconds. Pick a shorter part.");
     // Start just before the first word (never inside the previous word); end at the last word's end plus a short
     // tail, cut before the next word begins. Word ends are snapped to silence by tools/refine_timings.py.
-    const prev = T.words[a.i0 - 1], next = T.words[a.i1 + 1];
+    const prev = T.words[i0 - 1], next = T.words[i1 + 1];
     const at0 = Math.max(0, prev ? Math.max(prev[2] + .02, s0 - LEAD) : s0 - LEAD);
     const end = Math.max(w[w.length - 1][1] + .15, Math.min(e0 + TAIL, next ? next[1] - .06 : e0 + TAIL));
-    return { talk: id, src: MEDIA_BASE() + id + ".mp4", at0, dur: +(end - at0).toFixed(2), fade: FADE, last: w[w.length - 1][0], nextWord: next && next[0], speech: [s0 - at0, e0 - at0], score: a.score, text,
+    return { talk: id, src: MEDIA_BASE() + id + ".mp4", at0, vEnd: +(end - at0).toFixed(2), dur: +(end - at0).toFixed(2), fade: FADE, i0, i1, last: w[w.length - 1][0], nextWord: next && next[0], speech: [s0 - at0, e0 - at0],
       words: w.map(x => ({ w: x[0], s: x[1] - at0, e: x[2] - at0 })) }; }
+  async function clipFor(id, text, fades) { const T = await timings(id), a = align(T.words, text); if (!a || a.score < .55) throw new Error("Couldn't find that passage in the talk audio. Try a shorter selection.");
+    return applyFades(Object.assign(cut(T, a.i0, a.i1, id), { score: a.score, text }), fades); }
+  // Printed-text span (from ClipMatch) -> clip. Printed words keep their own timings via the printed->spoken map.
+  async function clipForSpan(m, p0, p1, fades) { const T = await timings(m.talk), map = m.map, i0 = map[p0], i1 = Math.max(i0, map[p1]);
+    const c = cut(T, i0, i1, m.talk), pw = m.words.slice(p0, p1 + 1); c.text = pw.join(" "); c.p0 = p0; c.p1 = p1; c.score = m.score;
+    c.timed = pw.map((t, k) => { const w = T.words[Math.min(i1, Math.max(i0, map[p0 + k]))]; return { t, s: w[1] - c.at0, e: w[2] - c.at0 }; });
+    return applyFades(c, fades); }
   const TH = { ink: "#fffaf0", sub: "rgba(255,246,228,.82)", gold: "#f1d394", gold2: "#d8a95b", dark: 1 };
   function wrapWords(ctx, words, maxW) { const lines = []; let cur = [], w = 0, sp = ctx.measureText(" ").width;
     words.forEach((x, i) => { const ww = ctx.measureText(x.t).width; if (cur.length && w + sp + ww > maxW) { lines.push(cur); cur = []; w = 0; } cur.push({ ...x, i, ww }); w += (cur.length > 1 ? sp : 0) + ww; }); if (cur.length) lines.push(cur); return lines; }
   // Quote words (official text) mapped onto spoken word timings by position.
-  function timedQuote(clip, quote) { const qw = quote.split(/\s+/).filter(Boolean), sw = clip.words, n = qw.length, m = sw.length;
+  function timedQuote(clip, quote) { if (clip.timed && (!quote || quote === clip.text)) return clip.timed; const qw = quote.split(/\s+/).filter(Boolean), sw = clip.words, n = qw.length, m = sw.length;
     return qw.map((t, i) => { const j = Math.min(m - 1, Math.floor(i * m / n)); return { t, s: sw[j].s, e: sw[j].e }; }); }
-  function draw(ctx, W, H, o, time, video) { drawInner(ctx, W, H, o, time, video); const D = o.dur, F = o.fade || .3;
-    if (D && isFinite(time) && time > D - F) { ctx.save(); ctx.globalAlpha = Math.min(1, (time - (D - F)) / F); ctx.fillStyle = "#0d1326"; ctx.fillRect(0, 0, W, H); ctx.restore(); } }
+  function draw(ctx, W, H, o, time, video) { drawInner(ctx, W, H, o, time, video); const D = o.dur, F = o.fout ?? o.fade ?? .3, I = o.fin || 0; let a = 0;
+    if (D && isFinite(time) && F > 0 && time > D - F) a = Math.min(1, (time - (D - F)) / F);
+    if (D && isFinite(time) && I > 0 && time < I) a = Math.max(a, 1 - Math.max(0, time) / I);
+    if (a > 0) { ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = "#0d1326"; ctx.fillRect(0, 0, W, H); ctx.restore(); } }
   function drawInner(ctx, W, H, o, time, video) {
     const u = Math.min(W, H); ctx.save(); ctx.fillStyle = "#0d1326"; ctx.fillRect(0, 0, W, H);
     if (video && video.videoWidth) { const vw = video.videoWidth, vh = video.videoHeight, story = H > W * 1.3;
@@ -256,17 +269,17 @@
       vNode = ac.createMediaElementSource(v); vGain = ac.createGain(); vNode.connect(vGain); vGain.connect(ac.destination); vGain.connect(dest); mGain = ac.createGain(); mGain.connect(ac.destination); mGain.connect(dest); };
     async function loadMusic(id) { const m = MUSIC.find(x => x.id === id); if (!m || !m.file) return null; if (!buf[id]) { const r = await fetch(base() + m.file); buf[id] = await ac.decodeAudioData(await r.arrayBuffer()); } return buf[id]; }
     // Music: fade in, duck under speech (lifts a little in pauses > .7 s), swell slightly after the last word, fade out.
-    function duck(t0) { const g = mGain.gain, low = vol * .2, D = clip.dur, F = clip.fade || .3; g.cancelScheduledValues(t0); g.setValueAtTime(0, t0);
+    function duck(t0) { const g = mGain.gain, low = vol * .2, D = clip.dur, F = clip.mfout ?? clip.fade ?? .3, MI = clip.mfin ?? .5; g.cancelScheduledValues(t0); g.setValueAtTime(0, t0);
       const ws = clip.words || [], s0 = ws.length ? ws[0].s : clip.speech[0], e0 = ws.length ? ws[ws.length - 1].e : clip.speech[1];
-      g.linearRampToValueAtTime(Math.min(vol, low * 2), t0 + Math.max(.05, Math.min(.5, s0 - .05))); g.linearRampToValueAtTime(low, t0 + Math.max(.1, s0));
+      g.linearRampToValueAtTime(Math.min(vol, low * 2), t0 + Math.max(.05, MI ? Math.min(MI, Math.max(.05, s0 - .05)) : .02)); g.linearRampToValueAtTime(low, t0 + Math.max(.1, s0));
       for (let i = 1; i < ws.length; i++) { const gap = ws[i].s - ws[i - 1].e; if (gap > .7) { const a = t0 + ws[i - 1].e; g.setValueAtTime(low, a); g.linearRampToValueAtTime(vol * .45, a + Math.min(.4, gap / 2)); g.linearRampToValueAtTime(low, t0 + ws[i].s - .05); } }
-      const tail = Math.max(e0 + .05, D - F); g.setValueAtTime(low, t0 + Math.min(e0, tail)); g.linearRampToValueAtTime(vol * .5, t0 + tail); g.linearRampToValueAtTime(0, t0 + D); }
+      const tail = Math.max(e0 + .05, D - Math.max(F, .05)); g.setValueAtTime(low, t0 + Math.min(e0, tail)); g.linearRampToValueAtTime(vol * .5, t0 + tail); g.linearRampToValueAtTime(0, t0 + D); }
     async function start() { audio(); await ac.resume(); if (mSrc) { try { mSrc.stop(); } catch (e) {} mSrc = null; }
-      const b = await loadMusic(music); const F = clip.fade || .3; v.currentTime = at0; await new Promise(r => v.seeking ? v.addEventListener("seeked", r, { once: true }) : r()); await v.play(); const t0 = ac.currentTime; const vg = vGain.gain; vg.cancelScheduledValues(t0); vg.setValueAtTime(0, t0); vg.linearRampToValueAtTime(1, t0 + .08); vg.setValueAtTime(1, t0 + clip.dur - F); vg.linearRampToValueAtTime(0, t0 + clip.dur);
-      clearInterval(stopIv); stopIv = setInterval(() => { if (v.currentTime - at0 >= clip.dur) { v.pause(); clearInterval(stopIv); } }, 15);
+      const b = await loadMusic(music); const F = clip.fade || .3; v.currentTime = at0; await new Promise(r => v.seeking ? v.addEventListener("seeked", r, { once: true }) : r()); await v.play(); const t0 = ac.currentTime; T0 = performance.now() - (v.currentTime - at0) * 1000; const VE = clip.vEnd ?? clip.dur, vg = vGain.gain; vg.cancelScheduledValues(t0); vg.setValueAtTime(0, t0); vg.linearRampToValueAtTime(1, t0 + .08); vg.setValueAtTime(1, t0 + Math.max(.1, VE - .3)); vg.linearRampToValueAtTime(0, t0 + VE);
+      clearInterval(stopIv); stopIv = setInterval(() => { if (v.currentTime - at0 >= VE) { v.pause(); clearInterval(stopIv); } }, 15);
       if (b) { mSrc = ac.createBufferSource(); mSrc.buffer = b; mSrc.loop = true; mSrc.connect(mGain); mSrc.start(t0); duck(t0); } }
-    let stopIv; function stop() { clearInterval(stopIv); v.pause(); if (mSrc) { try { mSrc.stop(); } catch (e) {} mSrc = null; } }
-    return { v, start, stop, set music(x) { music = x; }, get music() { return music; }, set vol(x) { vol = x; }, stream: () => (audio(), dest.stream), t: () => v.currentTime - at0, at0, ended: () => v.ended || v.paused || v.currentTime - at0 >= clip.dur, ready: () => new Promise(r => v.readyState >= 2 ? r() : v.addEventListener("loadeddata", r, { once: true })) };
+    let stopIv, T0 = null; function stop() { T0 = null; clearInterval(stopIv); v.pause(); if (mSrc) { try { mSrc.stop(); } catch (e) {} mSrc = null; } }
+    return { v, start, stop, set music(x) { music = x; }, get music() { return music; }, set vol(x) { vol = x; }, stream: () => (audio(), dest.stream), t: () => T0 == null ? v.currentTime - at0 : (performance.now() - T0) / 1000, at0, ended: () => T0 == null || (performance.now() - T0) / 1000 >= clip.dur, ready: () => new Promise(r => v.readyState >= 2 ? r() : v.addEventListener("loadeddata", r, { once: true })) };
   }
   const recType = () => ["video/mp4;codecs=avc1,mp4a.40.2", "video/mp4;codecs=avc1,opus", "video/mp4;codecs=avc1", "video/mp4", "video/webm;codecs=vp9,opus", "video/webm"].find(t => window.MediaRecorder && MediaRecorder.isTypeSupported(t));
   // Real-time export: plays the clip once while recording the canvas + mixed audio.
@@ -279,5 +292,5 @@
     await new Promise(r => { const iv = setInterval(() => { onP(Math.min(1, pl.t() / clip.dur)); if (pl.ended()) { clearInterval(iv); r(); } }, 100); });
     pl.stop(); rec.stop(); await done; return new Blob(chunks, { type: type.split(";")[0] });
   }
-  window.ClipKit = { ASPECTS, MUSIC, get, clipFor, align, timings, timedQuote, draw, player, record, recType };
+  window.ClipKit = { ASPECTS, MUSIC, FADES, applyFades, get, clipFor, clipForSpan, align, timings, timedQuote, draw, player, record, recType };
 })();

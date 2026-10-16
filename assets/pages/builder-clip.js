@@ -4,7 +4,7 @@
   const cs = { aspect: QS.get("ca") && C.ASPECTS[QS.get("ca")] ? QS.get("ca") : "story", music: QS.get("cm") || "dreamy-flashback", vol: .35, captions: true, vbg: "full", vop: .6, sel: QS.get("sel") || "", dyn: null, key: null, pl: null, busy: false, playing: false };
   const box = document.createElement("section"); box.className = "card clip-panel"; box.id = "clipPanel"; box.hidden = true;
   box.innerHTML = `<div class="clip-head"><div><div class="label">Video clip <span class="pill">new</span></div><h2 style="margin:4px 0 2px">Hear it in their voice</h2>
-    <p class="b-help">The moment this quote was spoken, from the official conference video, with the words on screen.</p></div></div>
+    <p class="b-help">The moment this quote was spoken, from the official conference video, with the words on screen. <a href="video.html">Paste any quote to make a video →</a></p></div></div>
     <div class="clip-grid"><div class="clip-stage"><canvas id="clipCv" aria-label="Video clip preview"></canvas></div>
     <div class="clip-ctl">
       <div class="b-label">Shape</div><div class="seg" id="clipAspect" role="group" aria-label="Clip shape">${Object.entries(C.ASPECTS).map(([k, a]) => `<button type="button" data-k="${k}">${a[2]}</button>`).join("")}</div>
@@ -23,7 +23,7 @@
   const cv = box.querySelector("#clipCv"), ctx = cv.getContext("2d"), msg = t => box.querySelector("#clipMsg").textContent = t;
   const seg = (id, k) => box.querySelectorAll(`#${id} button`).forEach(b => b.setAttribute("aria-pressed", b.dataset.k === k));
   let raf;
-  const opts = (clip, t) => ({ timed: C.timedQuote(clip, clip.text || t.quotes[clip.q]), speaker: t.speaker, title: t.title, captions: cs.captions, vbg: cs.vbg, vop: cs.vop, musicCredit: (C.MUSIC.find(m => m.id === cs.music) || {}).attr ? C.MUSIC.find(m => m.id === cs.music).credit : "", dur: cs.playing || cs.busy ? clip.dur : 0, fade: clip.fade });
+  const opts = (clip, t) => ({ timed: C.timedQuote(clip, clip.text || t.quotes[clip.q]), speaker: t.speaker, title: t.title, captions: cs.captions, vbg: cs.vbg, vop: cs.vop, musicCredit: (C.MUSIC.find(m => m.id === cs.music) || {}).attr ? C.MUSIC.find(m => m.id === cs.music).credit : "", dur: cs.playing || cs.busy ? clip.dur : 0, fade: clip.fade, fin: clip.fin, fout: clip.fout });
   function frame() { const clip = cur(); if (!clip) return; const t = talk(), [W, H] = C.ASPECTS[cs.aspect]; if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
     C.draw(ctx, W, H, opts(clip, t), cs.playing ? cs.pl.t() : clip.dur, cs.pl.v); }
   const loop = () => { frame(); if (cs.playing && !cs.busy && cs.pl.ended()) { cs.playing = false; cs.pl.stop(); frame(); return; } if (cs.playing) raf = requestAnimationFrame(loop); };
