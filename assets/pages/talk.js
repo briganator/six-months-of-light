@@ -198,3 +198,16 @@ if (t && t.kind !== "business") whenNear("studyPanel", () => loadLib().then(LB =
     <div class="links no-print"><a class="btn secondary small" href="lessons.html?t=${esc(t.id)}">Build a lesson from this talk</a><button type="button" class="btn secondary small" id="printBtn">Print a one-page summary</button>${(() => { const k = me.tg.find(x => LB.THEME_KEYS.includes(x)) || (dens[0] || [])[0]; return k ? `<a class="btn secondary small" href="study.html?c=all&topic=${k}">More talks on ${esc(LB.themeName(k))}</a>` : ""; })()}</div>`;
   document.getElementById("printBtn").addEventListener("click", () => window.print());
 }).catch(() => { const el = document.getElementById("studyPanel"); if (el) el.remove(); }));
+
+// "Make video clip" from any selected passage in the full talk (prototype).
+(function () {
+  if (!t || t.kind === "business") return;
+  const btn = document.createElement("a"); btn.className = "btn gold small clip-fab"; btn.hidden = true; btn.textContent = "🎬 Make video clip"; document.body.appendChild(btn);
+  const selText = () => { const s = getSelection(); if (!s || s.isCollapsed) return ""; const ft = document.getElementById("fulltext"); if (!ft || !ft.contains(s.anchorNode) || !ft.contains(s.focusNode)) return "";
+    return String(s).replace(/\[\d+\]/g, " ").replace(/([A-Za-z.,;:!?”’)])\d{1,2}(?=[\s.,;:!?”’)]|$)/g, "$1").replace(/\s+/g, " ").trim(); };
+  const place = () => { const x = selText(); if (x.split(" ").length < 3 || x.length > 900) { btn.hidden = true; return; }
+    const r = getSelection().getRangeAt(0).getBoundingClientRect(); btn.hidden = false;
+    btn.style.top = Math.max(8, r.top + scrollY - 46) + "px"; btn.style.left = Math.max(8, Math.min(innerWidth - 200, r.left + scrollX + r.width / 2 - 90)) + "px";
+    btn.href = `builder.html?t=${encodeURIComponent(t.id)}&tab=quote&ca=story&sel=${encodeURIComponent(x)}#clipPanel`; };
+  document.addEventListener("selectionchange", () => { clearTimeout(place.t); place.t = setTimeout(place, 250); });
+})();

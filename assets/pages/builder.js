@@ -11,6 +11,8 @@ const st = {
   font: K.FONTS[P.get("font")] ? P.get("font") : "classic", align: P.get("align") === "left" ? "left" : "center",
   size: S[P.get("size")] ? P.get("size") : (isPhone ? "story" : "portrait"), ov: P.has("ov") ? Math.min(.85, Math.max(0, +P.get("ov") / 100)) : null,
   anim: K.ANIMS[P.get("anim")] ? P.get("anim") : P.get("anim") === "1" ? "fade" : "none", sticker: P.get("ig") === "1", note: "", tab: ["quote", "look", "size", "text", "share"].includes(P.get("tab")) ? P.get("tab") : (P.has("t") ? "look" : "quote"), src: P.get("src") === "promo" || P.has("promo") ? "promo" : P.get("ins") ? "ins" : "quote", filter: "", scope: "conf", mode: "still", libT: null, libNote: "", theme: THEMES3.get(P.get("theme")) ? THEMES3.get(P.get("theme")).slug : "all",
+  pfx: (() => { const f = {}, ok = { size: ["sm", "md", "lg", "bleed"], pos: ["byline", "top", "tl", "tr", "bl", "br"], shape: ["circle", "rounded", "square", "none"], bg: ["none", "blur", "dim", "duotone"] };
+    String(P.get("pf") || "").split(";").forEach(kv => { const [k, v] = kv.split(":"); if (ok[k] && ok[k].includes(v)) f[k] = v; else if (k === "op" && isFinite(+v)) f.op = Math.min(1, Math.max(0, +v)); }); return f; })(),
   sp: P.get("sp") !== "0", pi: Math.max(0, parseInt(P.get("pi") || "0", 10) || 0), own: "", ownOn: false, ownSp: "", ownTi: "", attrTouched: false,
 };
 // Advanced formatting: fx=size:1.1;ls:0.05;box:glass ... (whitelisted keys and values)
@@ -101,6 +103,7 @@ document.getElementById("main").innerHTML = `
         ${groups.map(g => `<div class="looks" data-grp="${esc(g)}" ${g === lookCat0 ? "" : "hidden"}>${Object.keys(L).filter(id => L[id].group === g).map(lookBtn).join("")}</div>`).join("")}
         <label class="chk" id="spRow"><input type="checkbox" id="spPhoto" ${st.sp ? "checked" : ""}> Show the speaker’s photo on the card</label>
         <div class="sp-opts" id="spOpts" role="group" aria-label="Choose a speaker photo"></div>
+        <details class="adv" id="pfxBox"><summary>Photo style</summary><div class="adv-grid"><label>Size <select id="pf-size"><option value="sm">Small</option><option value="md">Medium</option><option value="lg">Large</option><option value="bleed">Full background</option></select></label><label>Position <select id="pf-pos"><option value="byline">By the name</option><option value="top">Top center</option><option value="tl">Top left</option><option value="tr">Top right</option><option value="bl">Bottom left</option><option value="br">Bottom right</option></select></label><label>Shape <select id="pf-shape"><option value="circle">Circle</option><option value="rounded">Rounded square</option><option value="square">Square</option><option value="none">No frame</option></select></label><label>Background mode <select id="pf-bg"><option value="none">Off (badge)</option><option value="blur">Soft blur</option><option value="dim">Dimmed</option><option value="duotone">Duotone</option></select></label><label>Photo strength <input type="range" id="pf-op" min="0.05" max="1" step="0.05"></label></div></details>
         <div class="b-label">Layout <span class="b-help" id="layHelp"></span></div>
         <div class="anims layouts" id="layout" role="group" aria-label="Layout">${Object.entries(K.LAYOUTS).map(([k, l]) => `<button type="button" data-k="${k}" aria-pressed="${k === st.layout}">${esc(l.name)}</button>`).join("")}</div>
         <details class="fine"><summary>Fine-tune color and darkness</summary>
@@ -312,6 +315,8 @@ function setSticker(on) { st.sticker = on; $("igPreset").setAttribute("aria-pres
 $("igPreset").addEventListener("click", () => { const on = $("igPreset").getAttribute("aria-pressed") !== "true"; setSticker(on); if (on) { st.size = "story"; document.querySelectorAll("#size button").forEach(x => x.setAttribute("aria-pressed", x.dataset.k === "story")); } draw(true); });
 $("sticker").addEventListener("change", e => { st.sticker = e.target.checked; draw(); });
 $("spPhoto").addEventListener("change", e => { st.sp = e.target.checked; draw(true); });
+["size", "pos", "shape", "bg", "op"].forEach(k => { const el = $("pf-" + k); el.value = st.pfx[k] ?? K.PFX0[k];
+  el.addEventListener(k === "op" ? "input" : "change", () => { st.pfx[k] = k === "op" ? +el.value : el.value; draw(true); }); });
 $("spOpts").addEventListener("click", e => { const b = e.target.closest("button[data-i]"); if (!b) return; st.pi = +b.dataset.i; draw(true); });
 document.addEventListener("click", e => { const c = e.target.closest("#lookCats [data-cat]"); if (!c) return;
   document.querySelectorAll("#lookCats [data-cat]").forEach(x => x.setAttribute("aria-pressed", x === c));
@@ -341,7 +346,7 @@ function renderSpOpts() { const t = talk(), o = spOpts(t), box = $("spOpts"); if
   box.innerHTML = o.map((x, i) => `<button type="button" data-i="${i}" aria-pressed="${i === st.pi}" title="${esc(x.label)}"><img src="${esc(x.sm)}" alt="${esc(t.speaker)}, photo ${i + 1} (${esc(x.label)})" width="160" height="160" loading="lazy"></button>`).join(""); }
 const usingOwn = () => st.src === "quote" && st.ownOn && !!st.own;
 const opts = () => { const x = ins(), t = talk();
-  const base = { look: st.look, palette: st.pal, font: st.font, align: st.align, overlay: st.ov ?? undefined, anim: st.anim === "none" ? "fade" : st.anim, sticker: st.sticker && st.size === "story", layout: st.layout, fmt: st.fmt };
+  const base = { look: st.look, palette: st.pal, font: st.font, align: st.align, overlay: st.ov ?? undefined, anim: st.anim === "none" ? "fade" : st.anim, sticker: st.sticker && st.size === "story", layout: st.layout, fmt: st.fmt, pfx: st.pfx };
   if (st.src === "promo") { const pr = PROMOS.get(st.promo), o = promoObj(pr.carousel ? 0 : null); return { ...base, kind: "insight", ins: o, eyebrow: o.eyebrow, url: o.url }; }
   if (x) return { ...base, kind: "insight", ins: x, eyebrow: x.eyebrow || (x.id === "daily" ? "SIX MONTHS OF LIGHT · DAILY" : "OCTOBER 2026 · CONFERENCE INSIGHT"), url: x.url || (x.id.startsWith("spot-") ? talkUrl(talkById(x.id.slice(5))) : CONF.site_url + "insights.html#" + x.id) };
   if (usingOwn()) return { ...base, kind: "quote", quote: st.own, speaker: st.ownSp || t.speaker, title: st.ownTi || "", url: talkUrl(t), note: st.note, foot: "Your own words", photo: st.sp && !st.ownSp ? spPick(t) : null, stat: null, daily: st.layout === "daily" ? dailyInfo() : null };
@@ -362,7 +367,7 @@ async function draw(changed) {
   const x = ins(), t = talk();
   const shown = usingOwn() ? st.own : t.quotes[st.q];
   if (st.src === "promo") cv.setAttribute("aria-label", `Card preview: ${promoObj(null).title}. ${look.name}, ${S[st.size][2]}.`); else cv.setAttribute("aria-label", x ? `Card preview: ${x.title}. ${look.name}, ${S[st.size][2]}.` : `Card preview: “${String(shown).slice(0, 180)}” by ${usingOwn() ? (st.ownSp || t.speaker) : t.speaker}. ${look.name}, ${S[st.size][2]}.`);
-  const q = new URLSearchParams(st.libT ? { lt: st.libT.c + "/" + st.libT.id } : x ? { ins: st.ins } : { t: st.t, q: st.q }); if (st.libT && st.libNote) q.set("ln", st.libNote); q.set("look", st.look); if (st.pal !== "gold") q.set("pal", st.pal); if (st.font !== "classic") q.set("font", st.font); if (st.align !== "center") q.set("align", "left"); q.set("size", st.size); if (st.ov != null) q.set("ov", Math.round(st.ov * 100)); if (st.anim !== "none") q.set("anim", st.anim); if (st.sticker && st.size === "story") q.set("ig", "1"); if (st.theme !== "all") q.set("theme", st.theme); if (st.layout !== "classic") q.set("layout", st.layout); if (!st.sp) q.set("sp", "0"); else if (st.pi) q.set("pi", st.pi); renderSpOpts(); $("spRow").hidden = !(st.src === "quote" && !st.libT && speakerPhoto(talk())); { const fx = encFmt(st.fmt); if (fx) q.set("fx", fx); }
+  const q = new URLSearchParams(st.libT ? { lt: st.libT.c + "/" + st.libT.id } : x ? { ins: st.ins } : { t: st.t, q: st.q }); if (st.libT && st.libNote) q.set("ln", st.libNote); q.set("look", st.look); if (st.pal !== "gold") q.set("pal", st.pal); if (st.font !== "classic") q.set("font", st.font); if (st.align !== "center") q.set("align", "left"); q.set("size", st.size); if (st.ov != null) q.set("ov", Math.round(st.ov * 100)); if (st.anim !== "none") q.set("anim", st.anim); if (st.sticker && st.size === "story") q.set("ig", "1"); if (st.theme !== "all") q.set("theme", st.theme); if (st.layout !== "classic") q.set("layout", st.layout); if (!st.sp) q.set("sp", "0"); else { if (st.pi) q.set("pi", st.pi); const pf = Object.entries(st.pfx).map(([k, v]) => k + ":" + v).join(";"); if (pf) q.set("pf", pf); } $("pfxBox").hidden = !st.sp; renderSpOpts(); $("spRow").hidden = !(st.src === "quote" && !st.libT && speakerPhoto(talk())); { const fx = encFmt(st.fmt); if (fx) q.set("fx", fx); }
   if (st.src === "promo") { q.delete("t"); q.delete("q"); q.set("promo", st.promo); if (st.hl) q.set("hl", st.hl); }
   $("layHelp").textContent = st.src === "quote" ? (st.layout !== "classic" && st.note ? "· your takeaway shows on the Classic layout" : "") : "· layouts apply to quote cards";
   $("carQ").hidden = !!st.libT || usingOwn(); $("carQh").hidden = !!st.libT || usingOwn(); $("carQh").textContent = `${talk().quotes.length + 2} slides: a cover, ${talk().quotes.length} quotes in your layout, and a closing slide.`;
@@ -372,6 +377,7 @@ async function draw(changed) {
   await K.prepare(opts());
   an && !reduce ? play() : (cancelAnimationFrame(raf), render(Infinity));
   prerender(); prerenderVideo(); if (changed) document.getElementById("shReady")?.remove();
+  window.updateClip && updateClip();
   if (changed) { const r = $("ready"); r.classList.remove("pulse"); void r.offsetWidth; r.classList.add("pulse"); }
 }
 window.__renderAt = s => { render(s); return true; };

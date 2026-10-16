@@ -368,9 +368,29 @@
   const spImg = o => { if (!o.photo) return null; const im = IMG["sp:" + o.photo]; return im && im.complete && im.naturalWidth ? im : null; };
   function prepPhoto(o) { if (!o.photo) return Promise.resolve(); const k = "sp:" + o.photo; if (IMG[k] && IMG[k].complete) return Promise.resolve();
     return new Promise(res => { const im = IMG[k] || new Image(); IMG[k] = im; im.onload = im.onerror = () => res(); if (!im.src) im.src = base() + o.photo; }); }
-  function portrait(ctx, im, cx, cy, r, th) { ctx.save(); ctx.shadowColor = "rgba(0,0,0,.35)"; ctx.shadowBlur = r * .35; ctx.fillStyle = th.gold;
-    ctx.beginPath(); ctx.arc(cx, cy, r + Math.max(2, r * .07), 0, TAU); ctx.fill(); ctx.shadowColor = "transparent";
-    ctx.beginPath(); ctx.arc(cx, cy, r, 0, TAU); ctx.clip(); ctx.drawImage(im, cx - r, cy - r, r * 2, r * 2); ctx.restore(); }
+  // Photo options: o.pfx = { size: sm|md|lg|bleed, pos: byline|top|tl|tr|bl|br, shape: circle|rounded|square|none, bg: none|blur|dim|duotone, op: 0..1 }
+  const PFX0 = { size: "md", pos: "byline", shape: "circle", bg: "none", op: .35 };
+  const pfx = o => ({ ...PFX0, ...(o.pfx || {}) });
+  const PSIZE = { sm: .045, md: .062, lg: .1 };
+  function shapePath(ctx, cx, cy, r, shape) { ctx.beginPath(); if (shape === "circle") ctx.arc(cx, cy, r, 0, TAU); else roundRect(ctx, cx - r, cy - r, r * 2, r * 2, shape === "rounded" ? r * .28 : shape === "square" ? Math.max(1, r * .03) : 0); }
+  function portrait(ctx, im, cx, cy, r, th, shape = "circle") { ctx.save(); const ring = shape === "none" ? 0 : Math.max(2, r * .07);
+    ctx.shadowColor = "rgba(0,0,0,.35)"; ctx.shadowBlur = r * .35; ctx.fillStyle = th.gold;
+    if (ring) { shapePath(ctx, cx, cy, r + ring, shape); ctx.fill(); } ctx.shadowColor = "transparent";
+    shapePath(ctx, cx, cy, r, shape === "none" ? "square" : shape); ctx.clip(); ctx.drawImage(im, cx - r, cy - r, r * 2, r * 2); ctx.restore(); }
+  const inByline = o => { const f = pfx(o); return f.size !== "bleed" && f.pos === "byline" && f.bg === "none"; };
+  // Full-bleed or subtle background photo, drawn over the look and under the text.
+  function photoLayer(ctx, W, H, o, P) { const im = spImg(o); if (!im) return; const f = pfx(o); if (f.size !== "bleed" && f.bg === "none") return;
+    const D = Math.max(W, H), s = D / Math.min(im.width, im.height), dw = im.width * s, dh = im.height * s;
+    ctx.save(); ctx.globalAlpha = f.size === "bleed" && f.bg === "none" ? 1 : Math.max(.05, f.op);
+    if (f.bg === "blur") ctx.filter = `blur(${Math.round(D * .012)}px)`; else if (f.bg === "duotone") ctx.filter = "grayscale(1) contrast(1.15)";
+    ctx.drawImage(im, (W - dw) / 2, (H - dh) / 2 - (H > W ? H * .05 : 0), dw, dh); ctx.filter = "none";
+    if (f.bg === "duotone") { ctx.globalCompositeOperation = "color"; ctx.fillStyle = P.acc || "#d8a95b"; ctx.fillRect(0, 0, W, H); ctx.globalCompositeOperation = "source-over"; }
+    ctx.restore(); ctx.save(); const g = ctx.createLinearGradient(0, 0, 0, H); const dk = f.bg === "dim" ? .6 : f.size === "bleed" ? .5 : .25;
+    g.addColorStop(0, `rgba(8,12,28,${dk * .6})`); g.addColorStop(.5, `rgba(8,12,28,${dk * .8})`); g.addColorStop(1, `rgba(8,12,28,${Math.min(.92, dk + .25)})`); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.restore(); }
+  // Badge at a corner or top (when not in the byline)
+  function photoBadge(ctx, W, H, u, o, th) { const im = spImg(o); if (!im) return; const f = pfx(o); if (f.size === "bleed" || f.bg !== "none" || f.pos === "byline") return;
+    const r = u * PSIZE[f.size] * 1.1, m = u * .09 + r, map = { top: [W / 2, u * .06 + r + u * .02], tl: [m, m], tr: [W - m, m], bl: [m, H - u * .3 - r], br: [W - m, H - u * .3 - r] }, [cx, cy] = map[f.pos] || map.tr;
+    portrait(ctx, im, cx, cy, r, th, f.shape); }
   function prepare(o) { return Promise.all([prepPhoto(o), prepLook(o)]); }
   function prepLook(o) { const L = LOOKS[o.look]; if (!L || !L.photo) return Promise.resolve();
     if (IMG[L.photo] && IMG[L.photo].complete) return Promise.resolve();
@@ -481,9 +501,9 @@
     const close = !f.qm || f.qm === "curly" ? "”" : qm[1];
     ctx.letterSpacing && setLS(ctx, o, 0);
     lines.forEach((l, i) => rows.push({ h: fs * LH, line: 1, txt: l + (i === lines.length - 1 ? close : ""), font: FONT(fs), color: th.ink, by: fs * .95, ls: f.ls ? f.ls * fs : 0, draw(y, x, al) { ctx.font = FONT(fs); setLS(ctx, o, fs); ctx.fillStyle = th.ink; ctx.textAlign = al; ctx.fillText(l + (i === lines.length - 1 ? close : ""), x, y + fs * .95); setLS(ctx, o, 0); } }));
-    const PI_ = spImg(o), pr = u * .062 * k, ph = PI_ ? pr * 2 + u * .03 * k : 0;
+    const PI_ = inByline(o) ? spImg(o) : null, pr = u * PSIZE[pfx(o).size] * k, ph = PI_ ? pr * 2 + u * .03 * k : 0;
     rows.push({ h: u * .17 * k + ph, draw(y, x, al) {
-      if (PI_) { portrait(ctx, PI_, al === "left" ? x + pr : x, y + u * .035 * k + pr, pr, th); y += ph; }
+      if (PI_) { portrait(ctx, PI_, al === "left" ? x + pr : x, y + u * .035 * k + pr, pr, th, pfx(o).shape); y += ph; }
       const lw = u * .14, lx = al === "left" ? x : x - lw / 2; const lg = ctx.createLinearGradient(lx, 0, lx + lw, 0);
       lg.addColorStop(0, al === "left" ? th.gold : "rgba(216,169,91,0)"); lg.addColorStop(.5, th.gold); lg.addColorStop(1, "rgba(216,169,91,0)");
       ctx.fillStyle = lg; ctx.fillRect(lx, y + u * .04 * k, lw, Math.max(2, u / 520));
@@ -544,10 +564,10 @@
   function block(ctx, F, fontFn, x, y, al, color) { ctx.font = fontFn(F.fs); ctx.fillStyle = color; ctx.textAlign = al; F.lines.forEach((l, i) => ctx.fillText(l, x, y + F.fs * (i * F.lh + .95))); }
   const TH_LIGHT = P => textTheme({ dark: 0 }, P);
   function byline(ctx, o, x, y, al, th, u, s = 1) {
-    const im = spImg(o); if (im) { const r = u * .04 * s, name = String(o.speaker || "").toUpperCase(); ctx.font = `600 ${u * .024 * s}px ${SANS}`;
+    const im = inByline(o) ? spImg(o) : null; if (im) { const r = u * PSIZE[pfx(o).size] * .65 * s, name = String(o.speaker || "").toUpperCase(); ctx.font = `600 ${u * .024 * s}px ${SANS}`;
       const nw = ctx.measureText(name).width + name.length * u * .005 * s, tw = o.title ? (ctx.font = `italic 500 ${u * .036 * s}px ${SERIF}`, ctx.measureText(o.title).width) : 0, bw = Math.max(nw, tw), gap = u * .022 * s;
       const left = al === "left" ? x : al === "right" ? x - bw - r * 2 - gap : x - (bw + r * 2 + gap) / 2;
-      portrait(ctx, im, left + r, y + (o.title ? u * .018 * s : -u * .008 * s), r, th); x = left + r * 2 + gap; al = "left"; }
+      portrait(ctx, im, left + r, y + (o.title ? u * .018 * s : -u * .008 * s), r, th, pfx(o).shape); x = left + r * 2 + gap; al = "left"; }
     ctx.fillStyle = th.gold; ctx.font = `600 ${u * .024 * s}px ${SANS}`; spaced(ctx, String(o.speaker || "").toUpperCase(), x, y, u * .005 * s, al);
     if (o.title) { ctx.fillStyle = th.sub; ctx.font = `italic 500 ${u * .036 * s}px ${SERIF}`; ctx.textAlign = al; ctx.fillText(o.title, x, y + u * .05 * s); }
   }
@@ -685,7 +705,7 @@
     if (A === "zoom" && !look.photo) { const z = 1 + .1 * easeIO(c01(t / T10)); ctx.translate(W / 2, H * .45); ctx.scale(z, z); ctx.translate(-W / 2, -H * .45); }
     paintBG(ctx, W, H, look, P, t, o, A, still); ctx.restore();
     if (A === "sunrise") { const p = easeIO(c01(t / 5)); glow(ctx, W / 2, H * (1.15 - .4 * p), D * (.45 + .4 * p), P.tint, .45 * p); glow(ctx, W / 2, H * (1.15 - .4 * p), D * .2, [255, 248, 228], .35 * p); }
-    overlay(ctx, W, H, look, o.overlay ?? look.ov ?? 0); vig(ctx, W, H, fm.vig);
+    overlay(ctx, W, H, look, o.overlay ?? look.ov ?? 0); photoLayer(ctx, W, H, o, P); vig(ctx, W, H, fm.vig);
     if (FXA && FXA.mid) { ctx.save(); FXA.mid(ctx, W, H, t, u, th, P, look); ctx.restore(); }
     if (A === "rays") { const p = easeIO(c01((t - .3) / 6.5)), bx = -W * .6 + p * W * 2.2; ctx.save(); ctx.globalCompositeOperation = look.dark ? "lighter" : "source-over";
       const g = ctx.createLinearGradient(bx - W * .35, 0, bx + W * .35, H * .25); g.addColorStop(0, rgba(P.tint, 0)); g.addColorStop(.5, rgba(look.dark ? P.tint : [255, 255, 255], look.dark ? .22 : .45)); g.addColorStop(1, rgba(P.tint, 0));
@@ -697,7 +717,7 @@
     border(ctx, W, H, th, still || A === "none" ? 1 : ease(c01(t / 1.2)), o);
     ctx.save(); if (look.photo || look.ov) { ctx.shadowColor = "rgba(0,0,0,.45)"; ctx.shadowBlur = u * .018; }
     ctx.globalAlpha = still ? 1 : ease(c01((t - .2) / .8)); ctx.fillStyle = th.gold; ctx.font = `600 ${u * .021}px ${SANS}`;
-    spaced(ctx, o.eyebrow || "OCTOBER 2026 · GENERAL CONFERENCE", x, G.eyeY, u * .007, al); ctx.globalAlpha = 1;
+    if (!(spImg(o) && pfx(o).size !== "bleed" && pfx(o).bg === "none" && ["top", "tl", "tr"].includes(pfx(o).pos))) spaced(ctx, o.eyebrow || "OCTOBER 2026 · GENERAL CONFERENCE", x, G.eyeY, u * .007, al); ctx.globalAlpha = 1;
     const avail = G.bottom - G.top; let k = 1, rows, total;
     for (let i = 0; i < 14; i++) { rows = o.kind === "insight" ? insightRows(ctx, G, o, th, k) : quoteRows(ctx, G, o, th, k); total = rows.reduce((s, r) => s + r.h, 0); if (total <= avail) break; k *= .93; }
     // per-row timing
@@ -730,7 +750,7 @@
     if (look.photo || look.ov) { ctx.shadowColor = "rgba(0,0,0,.6)"; ctx.shadowBlur = u * .01; }
     ctx.fillText((o.kind === "insight" ? (o.ins && o.ins.basis) || ((window.OFFICIAL_TEXT && OFFICIAL_TEXT()) ? "From this site's talk data" : "Based on recaps") : o.foot || ((window.OFFICIAL_TEXT && OFFICIAL_TEXT()) ? "Text from ChurchofJesusChrist.org" : "Quoted from recap")) + " · Personal study site · Not an official Church site", W / 2, H - u * .068);
     if (look.credit) { ctx.font = `${u * .0145}px ${SANS}`; ctx.fillText(creditLine(look.credit), W / 2, H - u * .018); }
-    ctx.restore(); grain(ctx, W, H, fm.grain);
+    ctx.restore(); photoBadge(ctx, W, H, u, o, th); grain(ctx, W, H, fm.grain);
     if (FXA && FXA.post && !still) { ctx.save(); FXA.post(ctx, W, H, t, u, th, P, look); ctx.restore(); }
   }
   const creditLine = c => c.group === "art" ? `Painting: ${String(c.name).slice(0, 40)} · ${String(c.author).slice(0, 40)} · Public domain` : `Photo: ${String(c.author).slice(0, 48)} · ${c.license} · Wikimedia Commons`;
@@ -750,7 +770,7 @@
     const u = G.u, th2 = fmtTheme(LY.light ? TH_LIGHT(P) : th, o), fm = fmtOf(o), FXA = FX[A];
     ctx.save(); if (A === "zoom") { const z = 1 + .08 * easeIO(c01(t / T10)); ctx.translate(W / 2, H * .45); ctx.scale(z, z); ctx.translate(-W / 2, -H * .45); }
     if (!LY.own) paintBG(ctx, W, H, look, P, t, o, A, still); ctx.restore();
-    if (!LY.own) { fx(ctx, W, H, o, look, P, t, A, D, u, true); overlay(ctx, W, H, look, o.overlay ?? Math.max(look.ov || 0, LY.ov || 0)); vig(ctx, W, H, fm.vig); if (FXA && FXA.mid) { ctx.save(); FXA.mid(ctx, W, H, t, u, th2, P, look); ctx.restore(); } }
+    if (!LY.own) { fx(ctx, W, H, o, look, P, t, A, D, u, true); overlay(ctx, W, H, look, o.overlay ?? Math.max(look.ov || 0, LY.ov || 0)); photoLayer(ctx, W, H, o, P); vig(ctx, W, H, fm.vig); if (FXA && FXA.mid) { ctx.save(); FXA.mid(ctx, W, H, t, u, th2, P, look); ctx.restore(); } }
     const a = still || A === "none" ? 1 : ease(c01((t - TL.start) / 1.4));
     ctx.save(); if (!LY.own && (look.photo || look.ov)) { ctx.shadowColor = "rgba(0,0,0,.4)"; ctx.shadowBlur = u * .014; } LY.draw(ctx, W, H, o, th2, P, look, a, still ? 3 : t); ctx.restore();
     if (o.note && !LY.own) { const R = textArea(W, H, u); }
@@ -760,7 +780,7 @@
     ctx.save(); ctx.globalAlpha = .9; ctx.textAlign = "center"; ctx.fillStyle = th2.sub; ctx.font = `${u * .0175}px ${SANS}`;
     const dx = LY === LAYOUTS.split && W >= H ? W * .27 : W / 2; ctx.fillText((o.foot || ((window.OFFICIAL_TEXT && OFFICIAL_TEXT()) ? "Text from ChurchofJesusChrist.org" : "Quoted from recap")) + " · Personal study site · Not an official Church site", dx, H - u * .068);
     if (look.credit && (LY.own ? LY.light && LY !== LAYOUTS.margin : true) && LY !== LAYOUTS.lineart && LY !== LAYOUTS.margin) { ctx.font = `${u * .0145}px ${SANS}`; ctx.fillText(creditLine(look.credit), dx, H - u * .018); }
-    ctx.restore(); grain(ctx, W, H, fm.grain);
+    ctx.restore(); photoBadge(ctx, W, H, u, o, th2); grain(ctx, W, H, fm.grain);
     if (FXA && FXA.post && !still) { ctx.save(); FXA.post(ctx, W, H, t, u, th2, P, look); ctx.restore(); }
   }
   function footer(ctx, W, H, G, th, o, p, look) {
@@ -800,5 +820,5 @@
     ctx.font = `14px ${SANS}`; ctx.fillStyle = th.sub; ctx.fillText("Personal study site · Not an official Church site · " + ((window.OFFICIAL_TEXT && OFFICIAL_TEXT()) ? "Text from ChurchofJesusChrist.org" : "Quotes from recaps"), x, H * .92);
   }
   const H_ = { grad, glow, sky, SKY, vignette, ridges, aurora, stars, rgba, hex, rng, TAU, LP, raysAt, temple, oliveBranch, person, wrap, roundRect, paperBase, ease, easeIO, c01, SERIF, SANS };
-  window.CardKit = { LOOKS, LAYOUTS, PALETTES, FONTS, FONTF, SIZES, TL, ANIMS, FX, H: H_, drawCard, drawThumb, drawOG, prepare, IMG };
+  window.CardKit = { mark, wordmark, portrait, PFX0, LOOKS, LAYOUTS, PALETTES, FONTS, FONTF, SIZES, TL, ANIMS, FX, H: H_, drawCard, drawThumb, drawOG, prepare, IMG };
 })();

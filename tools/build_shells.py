@@ -6,7 +6,7 @@ SITE = json.loads((root / "assets/data.js").read_text().split("window.CONF = ", 
 NAME, TAG = "Six Months of Light", "The words of October 2026 General Conference, to carry you to April."
 pages = {
  "index": ("Six Months of Light · October 2026 General Conference", ["share"], ["insights-data.js"]),
- "builder": ("Card Studio · Six Months of Light", [], ["themes3.js", "insights-data.js", "photos.js", "speaker-options.js", "vendor/qrcode.js", "cardkit.js", "cardkit-plus.js", "videokit.js", "promos.js", "share-pages.js"]),
+ "builder": ("Card Studio · Six Months of Light", [], ["themes3.js", "insights-data.js", "photos.js", "speaker-options.js", "clips.js", "vendor/qrcode.js", "cardkit.js", "cardkit-plus.js", "videokit.js", "clipkit.js", "promos.js", "share-pages.js"]),
  "quiz": ("Who said it? · Six Months of Light", [], []),
  "insights": ("Conference Insights · Six Months of Light", [], ["insights-data.js", "explore.js"]),
  "credits": ("Credits & licenses · Six Months of Light", [], ["photos.js"]),
@@ -23,7 +23,7 @@ pages = {
  "privacy": ("Privacy · Six Months of Light", [], []),
 }
 for name, (title, pre, libs) in pages.items():
-    scripts = ["assets/config.js", "assets/api.js", "assets/data.js", "assets/common.js"] + [f"assets/{l}" for l in libs] + [f"assets/pages/{e}.js" for e in pre] + [f"assets/pages/{name}.js"]
+    scripts = ["assets/config.js", "assets/api.js", "assets/data.js", "assets/common.js"] + [f"assets/{l}" for l in libs] + [f"assets/pages/{e}.js" for e in pre] + [f"assets/pages/{name}.js"] + (["assets/pages/builder-clip.js"] if name == "builder" else [])
     url = SITE + ("" if name == "index" else f"{name}.html")
     html = f'''<!doctype html>
 <html lang="en">
