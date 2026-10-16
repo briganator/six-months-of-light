@@ -155,3 +155,7 @@ See `critique-v2.md` for the design critique that drove these changes.
 - **Photos:** `assets/photos/*.webp` (about 1600px plus 240px thumbnails), listed with author and license on `credits.html`. Cards made with a photo carry a small credit line. Regenerate `assets/photos.js` with `python3 tools/build_photos.py`.
 - **Performance:** one variable font file per family, card code and photos load only in the studio, and look thumbnails render when the Look tab opens.
 - **QA:** `tools/render_assets.py` renders sample cards, 2 MP4s and a contact-sheet matrix of every look × size into `screenshots/v2/`.
+
+## Speaker photos (added Oct 15, 2026)
+- Brigham has rights to use speaker images. Talk listings, talk pages, session and speaker pages show the speaker's official photo (from the talk page on ChurchofJesusChrist.org), face-cropped and stored in `assets/speakers/` (no hotlinking). Refresh: `/workspace/.venv-cv/bin/python tools/fetch_speaker_photos.py && python3 tools/talks_source.py && python3 tools/build_pages.py`.
+- Card Studio, Look tab: "Show the speaker's photo on the card" (on by default; `sp=0` in the URL turns it off) plus a picker of up to 5 official photos per speaker from earlier conferences (`assets/speakers/opts/`, `assets/speaker-options.js`, from `tools/fetch_speaker_options.py`; choice is `pi=` in the URL). The photo is drawn into the canvas, so saved, shared and video cards include it.

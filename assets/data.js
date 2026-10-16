@@ -77,6 +77,7 @@ window.CONF = {
    ],
    "invitation": "Come worship and rejoice in the house of the Lord; look for the miracles.",
    "ponder": "What does my “personal temple culture” look like right now — and our family's?",
+   "photo": "assets/speakers/sat-am-1-gong.webp",
    "big_idea": "The temple is the Lord's place of spiritual safety and holiness — every temple testifies of Christ.",
    "video_embed": null,
    "full_text_permitted": true
@@ -105,6 +106,7 @@ window.CONF = {
    ],
    "invitation": "Invite God to do His sculpting work. He can fix what feels badly broken.",
    "ponder": "Where am I still asking “why” instead of “what is supposed to be happening here?”",
+   "photo": "assets/speakers/sat-am-2-runia.webp",
    "big_idea": "God sculpts our souls through the very things that make life hard; invite Him to do His work.",
    "video_embed": null,
    "full_text_permitted": true
@@ -133,6 +135,7 @@ window.CONF = {
    ],
    "invitation": "Look for opportunities each day to bear witness of Jesus Christ, even briefly.",
    "ponder": "When did I last simply and briefly testify of Christ at home?",
+   "photo": "assets/speakers/sat-am-3-causse.webp",
    "big_idea": "Every disciple can bear witness of Christ — a testimony need only be true.",
    "video_embed": null,
    "full_text_permitted": true
@@ -157,6 +160,7 @@ window.CONF = {
    ],
    "invitation": "Don't hold the oracles of God as a light thing; give prophetic words the effort earlier Saints sacrificed for.",
    "ponder": "Do I treat conference as background noise or as an appointment?",
+   "photo": "assets/speakers/sat-am-4-sikahema.webp",
    "big_idea": "Don't take living prophets for granted; earlier Saints sacrificed greatly to hear them.",
    "video_embed": null,
    "full_text_permitted": true
@@ -185,6 +189,7 @@ window.CONF = {
    ],
    "invitation": "Trust that in His time and way, Jesus Christ will deliver you.",
    "ponder": "What am I waiting on the Lord for right now, and what growth might the waiting be producing?",
+   "photo": "assets/speakers/sat-am-5-hathaway.webp",
    "big_idea": "Jesus Christ delivers in His time and way; He has not forgotten you.",
    "video_embed": null,
    "full_text_permitted": true
@@ -213,6 +218,7 @@ window.CONF = {
    ],
    "invitation": "Ponder Isaiah's teachings and embrace the law of the fast more intentionally as worship.",
    "ponder": "Is my fast a skipped meal or an act of worship with a clear purpose?",
+   "photo": "assets/speakers/sat-am-6-soares.webp",
    "big_idea": "Fasting with intentional prayer is worship that draws heaven near.",
    "video_embed": null,
    "full_text_permitted": true
@@ -241,6 +247,7 @@ window.CONF = {
    ],
    "invitation": "Rising generation: place a full-time mission high on your list. Senior missionaries are welcome too.",
    "ponder": "What did the Spirit highlight for me in this talk? What one invitation will I act on this week?",
+   "photo": "assets/speakers/sat-am-7-douglas.webp",
    "big_idea": "Missionary service is the most important work; there's a place reserved for you.",
    "video_embed": null,
    "full_text_permitted": true
@@ -269,6 +276,7 @@ window.CONF = {
    ],
    "invitation": "Refrain from gambling and use the time and resources saved for doing good.",
    "ponder": "What “good cause” could absorb time I currently spend on idle pursuits?",
+   "photo": "assets/speakers/sat-am-8-christofferson.webp",
    "big_idea": "Gambling is morally wrong; live on a higher plane and use time and means for good.",
    "video_embed": null,
    "full_text_permitted": true
@@ -297,6 +305,7 @@ window.CONF = {
    ],
    "invitation": "Remember what the Lord has already done and rely on His promises personally.",
    "ponder": "What is my “cold oatmeal” — the small frustration crowding out a miracle?",
+   "photo": "assets/speakers/sat-pm-1-renlund.webp",
    "big_idea": "Remember what God has already done so you can trust His promises now.",
    "video_embed": null,
    "full_text_permitted": true
@@ -325,6 +334,7 @@ window.CONF = {
    ],
    "invitation": "Pray daily for eyes to see divine appointments and minister to the person in front of you.",
    "ponder": "Who did God place in my path this week that I walked past?",
+   "photo": "assets/speakers/sat-pm-2-farnes.webp",
    "big_idea": "God places people in our path — minister to the person in front of you.",
    "video_embed": null,
    "full_text_permitted": true
@@ -349,6 +359,7 @@ window.CONF = {
    ],
    "invitation": "Always remember scriptures, prayers, sacrament and covenants.",
    "ponder": "Which of the four (scriptures, prayer, sacrament, covenants) is weakest in my week?",
+   "photo": "assets/speakers/sat-pm-3-chigbundu.webp",
    "big_idea": "Scriptures, prayer, sacrament and covenants build spiritual immunity — the armor of God.",
    "video_embed": null,
    "full_text_permitted": true
@@ -375,6 +386,7 @@ window.CONF = {
    ],
    "invitation": "Trust the Lord's promises; don't withhold the blessings of a commandment from others by lowering the standard.",
    "ponder": "Where am I tempted to “make an exception” for someone and withhold the blessing of a commandment?",
+   "photo": "assets/speakers/sat-pm-4-giuffra.webp",
    "big_idea": "Tithing is a law of faith; don't withhold its blessings from anyone.",
    "video_embed": null,
    "full_text_permitted": true
@@ -403,6 +415,7 @@ window.CONF = {
    ],
    "invitation": "Keep reading the Book of Mormon with your family; never give up.",
    "ponder": "Whose covenants have reached after me?",
+   "photo": "assets/speakers/sat-pm-5-morgan.webp",
    "big_idea": "Covenants reach across generations; your family's story isn't finished.",
    "video_embed": null,
    "full_text_permitted": true
@@ -431,6 +444,7 @@ window.CONF = {
    ],
    "invitation": "Turn to Christ today — there is still time.",
    "ponder": "Which labels do I accept above “child of God”?",
+   "photo": "assets/speakers/sat-pm-6-fale.webp",
    "big_idea": "Knowing you are a child of God protects from deception and gives life purpose.",
    "video_embed": null,
    "full_text_permitted": true
@@ -459,6 +473,7 @@ window.CONF = {
    ],
    "invitation": "Seek lift, turn decisively away from sink, and show others where to rise.",
    "ponder": "What are the subtle signs of “sink” in my week?",
+   "photo": "assets/speakers/sat-pm-7-kearon.webp",
    "big_idea": "Seek spiritual lift, turn from sink, and show others where to rise — Jesus lives to lift.",
    "video_embed": null,
    "full_text_permitted": true
@@ -487,6 +502,7 @@ window.CONF = {
    ],
    "invitation": "Give what you can; trust the Savior for the final 10%.",
    "ponder": "Where am I shuffling right now, and what would “lengthening my stride” look like?",
+   "photo": "assets/speakers/sat-pm-8-dunn.webp",
    "big_idea": "Give your 90%; the Savior helps with the final 10% by lengthening our stride.",
    "video_embed": null,
    "full_text_permitted": true
@@ -515,6 +531,7 @@ window.CONF = {
    ],
    "invitation": "Make living worthy of the Holy Ghost's constant companionship a top priority.",
    "ponder": "Where do I turn first for comfort — the Holy Ghost or something else?",
+   "photo": "assets/speakers/sat-pm-9-eyring.webp",
    "big_idea": "In turbulent times, the Holy Ghost is the true source of comfort and hope.",
    "video_embed": null,
    "full_text_permitted": true
@@ -543,6 +560,7 @@ window.CONF = {
    ],
    "invitation": "Turn your despair over to Christ; let go of guilt; keep loving and praying.",
    "ponder": "Whom am I carrying guilt or despair for that I need to give to Christ?",
+   "photo": "assets/speakers/sat-pm-10-rasband.webp",
    "big_idea": "Give your despair for wayward loved ones to Christ, and keep loving like Jesus.",
    "video_embed": null,
    "full_text_permitted": true
@@ -571,6 +589,7 @@ window.CONF = {
    ],
    "invitation": "Join the Lord in keeping His promise — help Him comfort and succor those in distress.",
    "ponder": "Whom is the Lord inviting me to comfort for Him today?",
+   "photo": "assets/speakers/sun-am-1-eyring.webp",
    "big_idea": "The Lord keeps His promise ‘Fear not, I am with thee’ — and trusts us to help comfort others.",
    "video_embed": null,
    "full_text_permitted": true
@@ -598,6 +617,7 @@ window.CONF = {
    ],
    "invitation": "Pray to see others as Heavenly Father sees them; learn the name of someone who may feel unseen.",
    "ponder": "Whom am I labeling instead of seeing as a child of God?",
+   "photo": "assets/speakers/sun-am-2-chibota.webp",
    "big_idea": "See others as children of God — pray to see as He sees, and lift labels with His grace.",
    "video_embed": null,
    "full_text_permitted": true
@@ -626,6 +646,7 @@ window.CONF = {
    ],
    "invitation": "Strengthen your faith in Jesus Christ by believing, following Him, and keeping His commandments.",
    "ponder": "Where do I need spiritual courage right now — and how will I strengthen my faith in Christ to receive it?",
+   "photo": "assets/speakers/sun-am-3-andersen.webp",
    "big_idea": "Faith in Christ gives spiritual courage to choose the right — and courage in turn strengthens that faith.",
    "video_embed": null,
    "full_text_permitted": true
@@ -650,6 +671,7 @@ window.CONF = {
    ],
    "invitation": "Take upon the name of Jesus Christ by covenant — lose yourself in serving others with all your heart, might, mind and strength.",
    "ponder": "Where am I merely wearing His name as a badge, instead of serving Him by lifting and loving others?",
+   "photo": "assets/speakers/sun-am-4-fantone.webp",
    "big_idea": "Take His name by covenant — lose yourself in serving others, and find Him (and yourself).",
    "video_embed": null,
    "full_text_permitted": true
@@ -678,6 +700,7 @@ window.CONF = {
    ],
    "invitation": "Come unto Christ through faith in Him and His Atonement — you do not need to perfect yourself first.",
    "ponder": "What “trespassers” sign has the adversary hung on the gate of my heart that I need to let go of?",
+   "photo": "assets/speakers/sun-am-5-dube.webp",
    "big_idea": "Come unto Christ as you are — He perfects us; we do not perfect ourselves first.",
    "video_embed": null,
    "full_text_permitted": true
@@ -706,6 +729,7 @@ window.CONF = {
    ],
    "invitation": "Live with integrity and virtue; make repentance a constant day-to-day part of your life.",
    "ponder": "Where do I need more integrity and virtue so the Holy Ghost can be my constant companion?",
+   "photo": "assets/speakers/sun-am-6-cook.webp",
    "big_idea": "Integrity, virtue and daily repentance lead to happiness and the Holy Ghost’s companionship.",
    "video_embed": null,
    "full_text_permitted": true
@@ -734,6 +758,7 @@ window.CONF = {
    ],
    "invitation": "Repent of harsh language; choose peacemaking words that uplift, edify and preserve relationships.",
    "ponder": "What harsh words do I need to forgo this week — and what peacemaking words will replace them?",
+   "photo": "assets/speakers/sun-am-7-kyungu.webp",
    "big_idea": "Forgo harsh words; use the language of peacemakers that uplifts and preserves relationships.",
    "video_embed": null,
    "full_text_permitted": true
@@ -758,6 +783,7 @@ window.CONF = {
    ],
    "invitation": "Consider your ways; build a strong relationship with Heavenly Father and Jesus Christ through making and keeping covenants.",
    "ponder": "What “proper adjustments” do I need to make so I can better make and keep my covenants?",
+   "photo": "assets/speakers/sun-am-8-schmeil.webp",
    "big_idea": "Consider your ways — build your relationship with God through covenants, and He will bless you.",
    "video_embed": null,
    "full_text_permitted": true
@@ -786,6 +812,7 @@ window.CONF = {
    ],
    "invitation": "Get closer to the Savior — come unto Christ, and help others do the same. The gospel of Jesus Christ is for all.",
    "ponder": "What concern or struggle am I trying to overcome on my own instead of getting closer to Christ?",
+   "photo": "assets/speakers/sun-am-9-oaks.webp",
    "big_idea": "The gospel of Jesus Christ is for all — overcome by getting closer to the Savior, and help others come unto Him.",
    "video_embed": null,
    "full_text_permitted": true
@@ -814,6 +841,7 @@ window.CONF = {
    ],
    "invitation": "Join the Christ-centered unity; build bridges instead of walls; come closer to Christ and to each other.",
    "ponder": "Where am I building walls instead of bridges — and how can I come closer to Christ so I come closer to others?",
+   "photo": "assets/speakers/sun-pm-1-uchtdorf.webp",
    "big_idea": "Jesus Christ unites His covenant people — the closer we come to Him, the closer we come to each other.",
    "video_embed": null,
    "full_text_permitted": true
@@ -842,6 +870,7 @@ window.CONF = {
    ],
    "invitation": "Choose one of her seven helps to focus on; study the 13th article of faith and create your own list of aspirations; put the Lord first.",
    "ponder": "Which one of her seven invitations will I focus on for the next few weeks?",
+   "photo": "assets/speakers/sun-pm-2-spannaus.webp",
    "big_idea": "Heavenly Father knows you and is at your side — put Him first, and He will guide your righteous desires.",
    "video_embed": null,
    "full_text_permitted": true
@@ -866,6 +895,7 @@ window.CONF = {
    ],
    "invitation": "Trust the Lord's promises and live the law of tithing faithfully, then watch for the temporal and spiritual blessings He pours out.",
    "ponder": "What blessings — temporal or spiritual — have come into my life through paying tithing, and have I recognized them?",
+   "photo": "assets/speakers/sun-pm-3-villanueva.webp",
    "big_idea": "Live the law of tithing and the Lord opens the windows of heaven — blessings both temporal and spiritual.",
    "video_embed": null,
    "full_text_permitted": true
@@ -894,6 +924,7 @@ window.CONF = {
    ],
    "invitation": "Honor your covenants and press forward in faith so your ordinances can be sealed by the Holy Spirit of Promise.",
    "ponder": "Am I keeping my covenant “credentials” valid — and what would help me honor my temple covenants more faithfully?",
+   "photo": "assets/speakers/sun-pm-4-bednar.webp",
    "big_idea": "Ordinances and covenants are spiritual credentials — kept faithfully, they are sealed by the Holy Spirit of Promise.",
    "video_embed": null,
    "full_text_permitted": true
@@ -919,6 +950,7 @@ window.CONF = {
    ],
    "invitation": "Receive more of His light: increase faith in Christ, study the scriptures daily (especially the Book of Mormon), and practice daily repentance.",
    "ponder": "What change — in how I use my time, what I watch or listen to, or how I speak to others — would let more of the Savior’s light into my life?",
+   "photo": "assets/speakers/sun-pm-5-lebethoa.webp",
    "big_idea": "Whatever we face, the answer is always Jesus Christ — faith, daily scripture study and daily repentance let in His light.",
    "video_embed": null,
    "full_text_permitted": true
@@ -947,6 +979,7 @@ window.CONF = {
    ],
    "invitation": "Be quick to help and slow to judge — look to a person's possible, not only their past, especially friends and new members.",
    "ponder": "Whom am I holding hostage to their history — and how could I help them instead of judging them?",
+   "photo": "assets/speakers/sun-pm-6-sinclair.webp",
    "big_idea": "Be quick to help and slow to judge — like Christ at the well, look to a person's possible, not only their past.",
    "video_embed": null,
    "full_text_permitted": true
@@ -975,6 +1008,7 @@ window.CONF = {
    ],
    "invitation": "Love, share and invite — with words and actions — so others can taste the fruit that blesses you.",
    "ponder": "Which gospel truth has become sweetest to me as I've lived it — and whom could I invite to taste it?",
+   "photo": "assets/speakers/sun-pm-7-stevenson.webp",
    "big_idea": "Gospel truths are like a favorite fruit — they grow sweet as we live them; love, share and invite others to taste them.",
    "video_embed": null,
    "full_text_permitted": true
@@ -1003,6 +1037,7 @@ window.CONF = {
    ],
    "invitation": "Come unto the Master Teacher — learn of Him and love Him, and let that love shape how you teach those around you.",
    "ponder": "Whom do I teach — at church, at home or one by one — and how could I come to know and love them better?",
+   "photo": "assets/speakers/sun-pm-8-reid.webp",
    "big_idea": "You are good enough to teach — the Lord will help you, and teaching like the Savior begins with loving like the Savior.",
    "video_embed": null,
    "full_text_permitted": true
@@ -1029,6 +1064,7 @@ window.CONF = {
    ],
    "invitation": "Stand for truth with love — avoid contention, find common ground, be a light, hold to truth, and stay anchored in Jesus Christ.",
    "ponder": "Do I need greater conviction or greater charity to teach truth with love — and where can I start this week?",
+   "photo": "assets/speakers/sun-pm-9-gilbert.webp",
    "big_idea": "Stand for truth with love — for disciples of Jesus Christ, truth and love always walk together.",
    "video_embed": null,
    "full_text_permitted": true
@@ -1053,6 +1089,7 @@ window.CONF = {
    ],
    "invitation": "Revisit the messages of this conference, prayerfully ponder them, and act on the principles taught.",
    "ponder": "Which conference message will I go back to first, and what one principle from it will I act on?",
+   "photo": "assets/speakers/sun-pm-10-oaks.webp",
    "big_idea": "Revisit, ponder and act on what was taught — unto him that receiveth, the Lord will give more.",
    "video_embed": null,
    "full_text_permitted": true

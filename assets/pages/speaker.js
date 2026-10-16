@@ -2,7 +2,8 @@ mount("", true);
 // Initials monogram with "painted light" — no official portraits are copied (Church copyright).
 const initials = n => n.replace(/^(Elder|Sister|President|Bishop)\s+/, "").split(/\s+/).filter(w => !/^[A-Z]\.$/.test(w)).map(w => w[0]).filter((c, i, a) => i === 0 || i === a.length - 1).join("");
 const hue = n => [...n].reduce((a, c) => a + c.charCodeAt(0), 0) % 360;
-const monogram = (n, big) => `<div class="monogram ${big ? "big" : ""}" style="--h:${hue(n)}" aria-hidden="true"><span>${esc(initials(n))}</span></div>`;
+const photoOf = n => CONF.talks.find(t => t.photo && slug(t.speaker) === slug(n));
+const monogram = (n, big) => photoOf(n) ? speakerImg(photoOf(n), "sp-photo" + (big ? " big" : ""), !big) : `<div class="monogram ${big ? "big" : ""}" style="--h:${hue(n)}" aria-hidden="true"><span>${esc(initials(n))}</span></div>`;
 const sl = QS.get("s"), ts = speakerTalks(sl), main = document.getElementById("main");
 const OFFICIAL_LEADERS = "https://www.churchofjesuschrist.org/learn/global-leadership-of-the-church?lang=eng";
 const SPEAKER_INDEX = "https://www.churchofjesuschrist.org/study/general-conference/speakers?lang=eng";

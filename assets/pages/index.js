@@ -31,7 +31,7 @@ html += `<div id="search"></div>${askTalksPanel()}`;
 html += `<div class="section-label" id="totw">Talk of the week</div><h2 class="sr-only">Talk of the Week</h2>
 <article class="card totw">
   <div class="label">This week's focus</div>
-  <h3><a href="talks/${esc(tt.id)}.html" style="text-decoration:none;color:inherit">${esc(tt.title)}</a></h3>
+  ${speakerImg(tt, "sp-photo totw-photo", false)}<h3><a href="talks/${esc(tt.id)}.html" style="text-decoration:none;color:inherit">${esc(tt.title)}</a></h3>
   <p class="speaker"><a href="speaker.html?s=${slug(tt.speaker)}">${esc(tt.speaker)}</a> · ${esc(tt.calling)}</p>
   <p>${esc(tt.big_idea)}</p>
   <blockquote>“${esc(tt.quotes[2])}”</blockquote>
@@ -55,7 +55,7 @@ for (const s of CONF.sessions) {
    <div class="when">${esc(s.when)} · <a href="session.html?s=${s.id}">Session page</a></div>`;
   html += biz.map(b => `<a class="talkcard s-${s.color} biz" href="talks/${esc(b.id)}.html"><span class="num">S</span><span class="tc-body"><span class="t-title">${esc(b.title)}</span><span class="t-speaker">${esc(b.speaker)}</span><span class="t-idea">${esc(b.lead)}</span></span><span class="tc-arrow" aria-hidden="true">→</span></a>`).join("");
   html += ts.length ? `<ol class="talks">` + ts.map(t => `<li><a class="talkcard s-${s.color}" href="talks/${esc(t.id)}.html">
-      <span class="num">${t.order}</span>
+      <span class="num">${t.order}</span>${speakerImg(t)}
       <span class="tc-body"><span class="t-title">${esc(t.title)}</span><span class="t-speaker">${esc(t.speaker)}</span><span class="t-idea">${esc(t.big_idea)}</span></span><span class="tc-arrow" aria-hidden="true">→</span></a></li>`).join("") + `</ol>`
     : `<p class="empty">${esc(s.note)}</p>`;
   html += `</details>`;

@@ -364,7 +364,15 @@
   };
   (window.PHOTOS || []).forEach(p => { LOOKS["photo-" + p.id] = { name: p.name, group: p.group === "temple" ? "Temple photos" : p.group === "art" ? "Christ in art (public domain)" : "Gethsemane & nature", dark: 1, ov: p.ov ?? .5, photo: p.id, fx: p.fx, fy: p.fy, credit: p, paint: photoPaint }; });
   const base = () => window.CARDKIT_BASE || "";
-  function prepare(o) { const L = LOOKS[o.look]; if (!L || !L.photo) return Promise.resolve();
+  // Speaker photo (o.photo = local URL, only set when the user leaves "Speaker photo" on)
+  const spImg = o => { if (!o.photo) return null; const im = IMG["sp:" + o.photo]; return im && im.complete && im.naturalWidth ? im : null; };
+  function prepPhoto(o) { if (!o.photo) return Promise.resolve(); const k = "sp:" + o.photo; if (IMG[k] && IMG[k].complete) return Promise.resolve();
+    return new Promise(res => { const im = IMG[k] || new Image(); IMG[k] = im; im.onload = im.onerror = () => res(); if (!im.src) im.src = base() + o.photo; }); }
+  function portrait(ctx, im, cx, cy, r, th) { ctx.save(); ctx.shadowColor = "rgba(0,0,0,.35)"; ctx.shadowBlur = r * .35; ctx.fillStyle = th.gold;
+    ctx.beginPath(); ctx.arc(cx, cy, r + Math.max(2, r * .07), 0, TAU); ctx.fill(); ctx.shadowColor = "transparent";
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, TAU); ctx.clip(); ctx.drawImage(im, cx - r, cy - r, r * 2, r * 2); ctx.restore(); }
+  function prepare(o) { return Promise.all([prepPhoto(o), prepLook(o)]); }
+  function prepLook(o) { const L = LOOKS[o.look]; if (!L || !L.photo) return Promise.resolve();
     if (IMG[L.photo] && IMG[L.photo].complete) return Promise.resolve();
     return new Promise(res => { const im = IMG[L.photo] || new Image(); IMG[L.photo] = im; im.onload = im.onerror = () => res(); if (!im.src) im.src = base() + L.credit.file; }); }
 
@@ -473,7 +481,9 @@
     const close = !f.qm || f.qm === "curly" ? "”" : qm[1];
     ctx.letterSpacing && setLS(ctx, o, 0);
     lines.forEach((l, i) => rows.push({ h: fs * LH, line: 1, txt: l + (i === lines.length - 1 ? close : ""), font: FONT(fs), color: th.ink, by: fs * .95, ls: f.ls ? f.ls * fs : 0, draw(y, x, al) { ctx.font = FONT(fs); setLS(ctx, o, fs); ctx.fillStyle = th.ink; ctx.textAlign = al; ctx.fillText(l + (i === lines.length - 1 ? close : ""), x, y + fs * .95); setLS(ctx, o, 0); } }));
-    rows.push({ h: u * .17 * k, draw(y, x, al) {
+    const PI_ = spImg(o), pr = u * .062 * k, ph = PI_ ? pr * 2 + u * .03 * k : 0;
+    rows.push({ h: u * .17 * k + ph, draw(y, x, al) {
+      if (PI_) { portrait(ctx, PI_, al === "left" ? x + pr : x, y + u * .035 * k + pr, pr, th); y += ph; }
       const lw = u * .14, lx = al === "left" ? x : x - lw / 2; const lg = ctx.createLinearGradient(lx, 0, lx + lw, 0);
       lg.addColorStop(0, al === "left" ? th.gold : "rgba(216,169,91,0)"); lg.addColorStop(.5, th.gold); lg.addColorStop(1, "rgba(216,169,91,0)");
       ctx.fillStyle = lg; ctx.fillRect(lx, y + u * .04 * k, lw, Math.max(2, u / 520));
@@ -534,6 +544,10 @@
   function block(ctx, F, fontFn, x, y, al, color) { ctx.font = fontFn(F.fs); ctx.fillStyle = color; ctx.textAlign = al; F.lines.forEach((l, i) => ctx.fillText(l, x, y + F.fs * (i * F.lh + .95))); }
   const TH_LIGHT = P => textTheme({ dark: 0 }, P);
   function byline(ctx, o, x, y, al, th, u, s = 1) {
+    const im = spImg(o); if (im) { const r = u * .04 * s, name = String(o.speaker || "").toUpperCase(); ctx.font = `600 ${u * .024 * s}px ${SANS}`;
+      const nw = ctx.measureText(name).width + name.length * u * .005 * s, tw = o.title ? (ctx.font = `italic 500 ${u * .036 * s}px ${SERIF}`, ctx.measureText(o.title).width) : 0, bw = Math.max(nw, tw), gap = u * .022 * s;
+      const left = al === "left" ? x : al === "right" ? x - bw - r * 2 - gap : x - (bw + r * 2 + gap) / 2;
+      portrait(ctx, im, left + r, y + (o.title ? u * .018 * s : -u * .008 * s), r, th); x = left + r * 2 + gap; al = "left"; }
     ctx.fillStyle = th.gold; ctx.font = `600 ${u * .024 * s}px ${SANS}`; spaced(ctx, String(o.speaker || "").toUpperCase(), x, y, u * .005 * s, al);
     if (o.title) { ctx.fillStyle = th.sub; ctx.font = `italic 500 ${u * .036 * s}px ${SERIF}`; ctx.textAlign = al; ctx.fillText(o.title, x, y + u * .05 * s); }
   }

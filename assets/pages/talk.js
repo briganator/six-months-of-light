@@ -29,7 +29,7 @@ else if (t.kind === "business") {
   <p class="crumbs"><a href="index.html">← All talks</a> · <a href="session.html?s=${s.id}">${esc(s.name)}</a>, talk ${t.order}</p>
   ${recapNotice(true, t)}
   <article class="card talk-main s-${s.color}" id="summary">
-    <div class="talk-head"><span class="chip-session s-${s.color}">${esc(s.name)} · Talk ${t.order}</span><h1>${esc(t.title)}</h1>
+    <div class="talk-head"><span class="chip-session s-${s.color}">${esc(s.name)} · Talk ${t.order}</span>${speakerImg(t, "sp-photo talk-photo", false)}<h1>${esc(t.title)}</h1>
       <p class="speaker"><a href="speaker.html?s=${slug(t.speaker)}">${esc(t.speaker)}</a> · ${esc(t.calling)}</p></div>
     <div class="talk-actions">
       <a class="btn gold" href="lessons.html?t=${esc(t.id)}">Build a lesson from this talk</a>

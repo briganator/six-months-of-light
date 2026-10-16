@@ -1316,3 +1316,15 @@ body.post .hero-sky .rays{opacity:.75}
 .fn-pop-b p{margin:.4em 0}
 .fn-more{font:600 13px var(--sans)}
 @media (prefers-reduced-motion:reduce){.readbar span{transition:none}}
+
+/* speaker photos (official talk photos, assets/speakers/) */
+.sp-photo{flex:none;width:52px;height:52px;border-radius:50%;object-fit:cover;background:#e9e2d4;box-shadow:0 0 0 2px rgba(255,253,249,.9),0 0 0 3px color-mix(in srgb,var(--sc,#d8a95b) 55%,transparent),0 8px 20px -10px rgba(28,20,60,.55);position:relative;z-index:1}
+.sp-photo.big{width:120px;height:120px}
+.talk-photo{display:block;width:96px;height:96px;margin:18px 0 0}
+.totw-photo{float:right;width:84px;height:84px;margin:0 0 10px 14px}
+.tile-photo{float:right;width:44px;height:44px;margin:0 0 6px 10px}
+@media (max-width:520px){.talkcard .sp-photo{width:44px;height:44px}.talk-photo{width:80px;height:80px}}
+.sp-opts{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px}
+.sp-opts button{padding:0;border:0;background:none;border-radius:50%;cursor:pointer;line-height:0}
+.sp-opts img{width:52px;height:52px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px rgba(255,253,249,.9),0 0 0 3px rgba(0,0,0,.12);transition:box-shadow .2s}
+.sp-opts button[aria-pressed=true] img{box-shadow:0 0 0 2px #fffdf9,0 0 0 5px #d8a95b}

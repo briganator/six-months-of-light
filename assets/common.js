@@ -283,3 +283,7 @@ window.shareCard = async ({ url, text, file }) => {
   } catch (e) { if (e && e.name === "AbortError") return; }
   openShareSheet({ url, text, file });
 };
+
+// Speaker photo (official ChurchofJesusChrist.org talk photo, stored in assets/speakers/). sm = 160px thumbnail.
+window.speakerPhoto = (t, sm) => t && t.photo ? (sm ? t.photo.replace(/\.webp$/, "-sm.webp") : t.photo) : null;
+window.speakerImg = (t, cls = "sp-photo", sm = true) => { const u = speakerPhoto(t, sm); return u ? `<img class="${cls}" src="${u}" alt="" width="${sm ? 160 : 480}" height="${sm ? 160 : 480}" loading="lazy" decoding="async">` : ""; };

@@ -667,7 +667,10 @@ OFFICIAL_SCRIPTURES = {
   "“Come unto me, and I will give you rest”"
  ]
 }
+_SP = json.load(open(pathlib.Path(__file__).resolve().parent.parent / "assets" / "speakers" / "index.json"))["photos"]
 for _t in talks:
+    # Official speaker photo from the talk page (tools/fetch_speaker_photos.py), face-cropped and stored locally.
+    _t["photo"] = f"assets/speakers/{_t['id']}.webp" if _t["id"] in _SP else None
     _t["big_idea"] = BIG_IDEAS[_t["id"]]
     _t["official_url"] = f"https://www.churchofjesuschrist.org/study/general-conference/2026/10/{OFFICIAL_IDS[_t['id']]}?lang=eng" if _t["id"] in OFFICIAL_IDS else _t["official_url"]
     if _t["id"] in OFFICIAL_SCRIPTURES: _t["scriptures"] = OFFICIAL_SCRIPTURES[_t["id"]]
