@@ -51,7 +51,7 @@ mount("video.html", true);
     let c; try { c = await C.clipForSpan(S.m, S.p0, S.p1, fades()); } catch (e) { msg(e.message); return; } if (tok !== S.tok) return;
     const same = S.pl && S.clip && S.clip.talk === c.talk; if (S.pl) S.pl.stop(); S.playing = false; S.clip = c;
     if (!same) { S.pl = C.player(c); S.pl.v.addEventListener("seeked", frame); } else S.pl = C.player(c);
-    S.pl.music = S.music; S.pl.vol = S.vol; S.pl.ready().then(() => { S.pl.v.currentTime = c.at0 + Math.min(c.vEnd - .1, c.speech[1]); });
+    S.pl.music = S.music; S.pl.vol = S.vol; const pl = S.pl; pl.ready().then(() => { if (S.pl === pl && !S.playing) pl.seekTo(c.at0 + Math.min(c.vEnd - .1, c.speech[1])).then(frame); });
     S.pl.v.addEventListener("seeked", frame); $("#mvPlay").hidden = false; msg(`${c.dur.toFixed(1)} s video`); ui(); frame(); }
   async function find(text) { text = String(text || "").trim(); if (!text) { $("#mvRes").hidden = true; msg(""); return; }
     msg("Finding it…"); const tok = ++S.tok, m = await M.find(text, { base: window.CARDKIT_BASE || "", talk: Q.get("t") && Q.get("sel") === text ? Q.get("t") : null }).catch(() => null); if (tok !== S.tok) return;
@@ -59,8 +59,9 @@ mount("video.html", true);
     const t = talkById(m.talk); S.m = m; S.p0 = m.p0; S.p1 = m.p1; $("#mvRes").hidden = false;
     $("#mvSrc").innerHTML = `<span class="mv-found">Found it</span> ${esc(t.speaker)} · <a href="${esc(talkUrl(t))}">“${esc(t.title)}”</a>${m.score < .8 ? ` <span class="b-help">(close match. Check the words below.)</span>` : ""}`;
     await build(); }
-  const q = $("#mvQ"); let deb; q.addEventListener("input", () => { clearTimeout(deb); deb = setTimeout(() => find(q.value), 450); });
-  $("#mvPaste").addEventListener("click", async () => { try { q.value = await navigator.clipboard.readText(); find(q.value); } catch (e) { q.focus(); msg("Tap and hold in the box, then choose Paste."); } });
+  const q = $("#mvQ"); let deb; q.addEventListener("paste", () => setTimeout(() => { const c = M.clean(q.value); if (c !== q.value.trim()) q.value = c; }, 0));
+  q.addEventListener("input", () => { clearTimeout(deb); deb = setTimeout(() => find(q.value), 450); });
+  $("#mvPaste").addEventListener("click", async () => { try { q.value = M.clean(await navigator.clipboard.readText()); find(q.value); } catch (e) { q.focus(); msg("Tap and hold in the box, then choose Paste."); } });
   $("#mvClear").addEventListener("click", () => { q.value = ""; find(""); q.focus(); });
   document.querySelector(".mv-nudge").addEventListener("click", e => { const b = e.target.closest("button"); if (!b || !S.m) return; const n = S.m.words.length, k = b.dataset.n;
     if (k === "s-") S.p0 = Math.max(0, S.p0 - 1); if (k === "s+") S.p0 = Math.min(S.p1, S.p0 + 1); if (k === "e-") S.p1 = Math.max(S.p0, S.p1 - 1); if (k === "e+") S.p1 = Math.min(n - 1, S.p1 + 1); build(); });

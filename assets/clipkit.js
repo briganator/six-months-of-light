@@ -263,7 +263,17 @@
   }
   // Player: one <video>, one AudioContext. Music gain ducks while the speaker talks.
   function player(clip) {
-    const v = document.createElement("video"); v.src = /^(https?:)?\/\//.test(clip.src) || clip.src.startsWith(base() + "media/") ? clip.src : base() + clip.src; const at0 = clip.at0 || 0; v.preload = "auto"; v.playsInline = true; v.crossOrigin = "anonymous";
+    const v = document.createElement("video"); const at0 = clip.at0 || 0, SRC = /^(https?:)?\/\//.test(clip.src) || clip.src.startsWith(base() + "media/") ? clip.src : base() + clip.src;
+    // crossOrigin must be set before src. The media fragment (#t=) makes iOS Safari fetch the frame at the quote
+    // (it ignores preload=auto and won't load data until asked), and is a fallback if a seek is dropped.
+    v.crossOrigin = "anonymous"; v.playsInline = true; v.setAttribute("playsinline", ""); v.muted = false; v.preload = "auto"; v.src = SRC + "#t=" + at0.toFixed(2); try { v.load(); } catch (e) {}
+    const once = (ev, ms) => new Promise(r => { let done = false; const f = () => { if (!done) { done = true; v.removeEventListener(ev, f); r(true); } }; v.addEventListener(ev, f); if (ms) setTimeout(() => { if (!done) { done = true; v.removeEventListener(ev, f); r(false); } }, ms); });
+    const meta = async () => { if (v.readyState >= 1) return; if (v.networkState !== 2) { try { v.load(); } catch (e) {} } await once("loadedmetadata", 15000); };
+    // Seek and confirm. iOS Safari silently drops a currentTime set before metadata, or resets it on play(); retry, then reload with #t=.
+    async function seekTo(t) { await meta(); for (let k = 0; k < 4; k++) { if (Math.abs(v.currentTime - t) < .25 && !v.seeking) return true;
+        const p = once("seeked", 8000); try { v.currentTime = t; } catch (e) {} await p; if (Math.abs(v.currentTime - t) < .25) return true;
+        if (k === 1) { v.src = SRC + "#t=" + t.toFixed(2); v.load(); await meta(); } }
+      return Math.abs(v.currentTime - t) < .5; }
     let ac, dest, vNode, vGain, mGain, mSrc, buf = {}, music = "none", vol = .35;
     const audio = () => { if (ac) return; ac = new (window.AudioContext || window.webkitAudioContext)(); dest = ac.createMediaStreamDestination();
       vNode = ac.createMediaElementSource(v); vGain = ac.createGain(); vNode.connect(vGain); vGain.connect(ac.destination); vGain.connect(dest); mGain = ac.createGain(); mGain.connect(ac.destination); mGain.connect(dest); };
@@ -275,11 +285,15 @@
       for (let i = 1; i < ws.length; i++) { const gap = ws[i].s - ws[i - 1].e; if (gap > .7) { const a = t0 + ws[i - 1].e; g.setValueAtTime(low, a); g.linearRampToValueAtTime(vol * .45, a + Math.min(.4, gap / 2)); g.linearRampToValueAtTime(low, t0 + ws[i].s - .05); } }
       const tail = Math.max(e0 + .05, D - Math.max(F, .05)); g.setValueAtTime(low, t0 + Math.min(e0, tail)); g.linearRampToValueAtTime(vol * .5, t0 + tail); g.linearRampToValueAtTime(0, t0 + D); }
     async function start() { audio(); await ac.resume(); if (mSrc) { try { mSrc.stop(); } catch (e) {} mSrc = null; }
-      const b = await loadMusic(music); const F = clip.fade || .3; v.currentTime = at0; await new Promise(r => v.seeking ? v.addEventListener("seeked", r, { once: true }) : r()); await v.play(); const t0 = ac.currentTime; T0 = performance.now() - (v.currentTime - at0) * 1000; const VE = clip.vEnd ?? clip.dur, vg = vGain.gain; vg.cancelScheduledValues(t0); vg.setValueAtTime(0, t0); vg.linearRampToValueAtTime(1, t0 + .08); vg.setValueAtTime(1, t0 + Math.max(.1, VE - .3)); vg.linearRampToValueAtTime(0, t0 + VE);
+      const b = await loadMusic(music); const F = clip.fade || .3; if (!(await seekTo(at0))) throw new Error("Couldn't jump to that moment in the talk video. Check your connection and try again."); const playT = () => Promise.race([v.play(), new Promise((_, j) => setTimeout(() => j(new Error("The talk video didn't start. Tap Play again.")), 15000))]);
+      await playT();
+      // iOS can restart from 0 or the fragment start when play() begins; one guarded re-seek fixes it.
+      if (Math.abs(v.currentTime - at0) > 1.5) { v.pause(); await seekTo(at0); await playT(); }
+      if (Math.abs(v.currentTime - at0) > 1.5) { v.pause(); throw new Error("Couldn't jump to that moment in the talk video. Check your connection and try again."); } const t0 = ac.currentTime; T0 = performance.now() - (v.currentTime - at0) * 1000; const VE = clip.vEnd ?? clip.dur, vg = vGain.gain; vg.cancelScheduledValues(t0); vg.setValueAtTime(0, t0); vg.linearRampToValueAtTime(1, t0 + .08); vg.setValueAtTime(1, t0 + Math.max(.1, VE - .3)); vg.linearRampToValueAtTime(0, t0 + VE);
       clearInterval(stopIv); stopIv = setInterval(() => { if (v.currentTime - at0 >= VE) { v.pause(); clearInterval(stopIv); } }, 15);
       if (b) { mSrc = ac.createBufferSource(); mSrc.buffer = b; mSrc.loop = true; mSrc.connect(mGain); mSrc.start(t0); duck(t0); } }
     let stopIv, T0 = null; function stop() { T0 = null; clearInterval(stopIv); v.pause(); if (mSrc) { try { mSrc.stop(); } catch (e) {} mSrc = null; } }
-    return { v, start, stop, set music(x) { music = x; }, get music() { return music; }, set vol(x) { vol = x; }, stream: () => (audio(), dest.stream), t: () => T0 == null ? v.currentTime - at0 : (performance.now() - T0) / 1000, at0, ended: () => T0 == null || (performance.now() - T0) / 1000 >= clip.dur, ready: () => new Promise(r => v.readyState >= 2 ? r() : v.addEventListener("loadeddata", r, { once: true })) };
+    return { v, start, stop, set music(x) { music = x; }, get music() { return music; }, set vol(x) { vol = x; }, stream: () => (audio(), dest.stream), t: () => T0 == null ? v.currentTime - at0 : (performance.now() - T0) / 1000, at0, ended: () => T0 == null || (performance.now() - T0) / 1000 >= clip.dur, ready: () => v.readyState >= 2 ? Promise.resolve() : (meta(), once("loadeddata")), seekTo };
   }
   const recType = () => ["video/mp4;codecs=avc1,mp4a.40.2", "video/mp4;codecs=avc1,opus", "video/mp4;codecs=avc1", "video/mp4", "video/webm;codecs=vp9,opus", "video/webm"].find(t => window.MediaRecorder && MediaRecorder.isTypeSupported(t));
   // Real-time export: plays the clip once while recording the canvas + mixed audio.
@@ -288,7 +302,7 @@
     const st = cv.captureStream(30); pl.stream().getAudioTracks().forEach(t => st.addTrack(t));
     const rec = new MediaRecorder(st, { mimeType: type, videoBitsPerSecond: 6e6, audioBitsPerSecond: 128e3 }), chunks = [];
     rec.ondataavailable = e => e.data.size && chunks.push(e.data);
-    const done = new Promise(r => rec.onstop = r); await pl.start(); if (Math.abs(pl.t()) > 1.5) { pl.stop(); throw new Error("The video server did not allow seeking (needs HTTP range requests)."); } rec.start(250);
+    const done = new Promise(r => rec.onstop = r); await pl.start(); if (Math.abs(pl.t()) > 1.5) { pl.stop(); throw new Error("The talk video started at the wrong spot. Please tap Make video again."); } rec.start(250);
     await new Promise(r => { const iv = setInterval(() => { onP(Math.min(1, pl.t() / clip.dur)); if (pl.ended()) { clearInterval(iv); r(); } }, 100); });
     pl.stop(); rec.stop(); await done; return new Blob(chunks, { type: type.split(";")[0] });
   }
