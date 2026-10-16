@@ -15,3 +15,4 @@ window.CONF_CONFIG = {
 };
 // Add ?mock=1 to any URL to use the local (browser-only) mock backend instead.
 if (new URLSearchParams(location.search).get("mock") === "1") window.CONF_CONFIG.backend = "local";
+window.CLIP_MEDIA_BASE = "https://pub-61fed319631f4fc3b830feae00835d32.r2.dev/";
