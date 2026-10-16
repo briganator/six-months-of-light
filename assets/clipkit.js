@@ -232,7 +232,7 @@
     if (a > 0) { ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = "#0d1326"; ctx.fillRect(0, 0, W, H); ctx.restore(); } }
   function drawInner(ctx, W, H, o, time, video) {
     const u = Math.min(W, H); ctx.save(); ctx.fillStyle = "#0d1326"; ctx.fillRect(0, 0, W, H);
-    if (video && video.videoWidth) { const vw = video.videoWidth, vh = video.videoHeight, story = H > W * 1.3;
+    const vw0 = video && (video.videoWidth || video.displayWidth); if (vw0) { const vw = vw0, vh = video.videoHeight || video.displayHeight, story = H > W * 1.3;
       // vertical: video sits in the upper part, cover-cropped around the speaker; others: full-bleed cover
       const bh = story ? H * .56 : H, s = Math.max(W / vw, bh / vh), dw = vw * s, dh = vh * s;
       const vb = o.vbg || "full"; ctx.save(); if (vb !== "full") ctx.globalAlpha = o.vop ?? .6;
@@ -261,6 +261,11 @@
     if (o.musicCredit) ctx.fillText("Music: " + o.musicCredit, W / 2, H - u * .018);
     ctx.restore();
   }
+  function duckOn(g, clip, vol, t0) { const low = vol * .2, D = clip.dur, F = clip.mfout ?? clip.fade ?? .3, MI = clip.mfin ?? .5; g.cancelScheduledValues(t0); g.setValueAtTime(0, t0);
+      const ws = clip.words || [], s0 = ws.length ? ws[0].s : clip.speech[0], e0 = ws.length ? ws[ws.length - 1].e : clip.speech[1];
+      g.linearRampToValueAtTime(Math.min(vol, low * 2), t0 + Math.max(.05, MI ? Math.min(MI, Math.max(.05, s0 - .05)) : .02)); g.linearRampToValueAtTime(low, t0 + Math.max(.1, s0));
+      for (let i = 1; i < ws.length; i++) { const gap = ws[i].s - ws[i - 1].e; if (gap > .7) { const a = t0 + ws[i - 1].e; g.setValueAtTime(low, a); g.linearRampToValueAtTime(vol * .45, a + Math.min(.4, gap / 2)); g.linearRampToValueAtTime(low, t0 + ws[i].s - .05); } }
+      const tail = Math.max(e0 + .05, D - Math.max(F, .05)); g.setValueAtTime(low, t0 + Math.min(e0, tail)); g.linearRampToValueAtTime(vol * .5, t0 + tail); g.linearRampToValueAtTime(0, t0 + D); }
   // Player: one <video>, one AudioContext. Music gain ducks while the speaker talks.
   function player(clip) {
     const v = document.createElement("video"); const at0 = clip.at0 || 0, SRC = /^(https?:)?\/\//.test(clip.src) || clip.src.startsWith(base() + "media/") ? clip.src : base() + clip.src;
@@ -279,11 +284,7 @@
       vNode = ac.createMediaElementSource(v); vGain = ac.createGain(); vNode.connect(vGain); vGain.connect(ac.destination); vGain.connect(dest); mGain = ac.createGain(); mGain.connect(ac.destination); mGain.connect(dest); };
     async function loadMusic(id) { const m = MUSIC.find(x => x.id === id); if (!m || !m.file) return null; if (!buf[id]) { const r = await fetch(base() + m.file); buf[id] = await ac.decodeAudioData(await r.arrayBuffer()); } return buf[id]; }
     // Music: fade in, duck under speech (lifts a little in pauses > .7 s), swell slightly after the last word, fade out.
-    function duck(t0) { const g = mGain.gain, low = vol * .2, D = clip.dur, F = clip.mfout ?? clip.fade ?? .3, MI = clip.mfin ?? .5; g.cancelScheduledValues(t0); g.setValueAtTime(0, t0);
-      const ws = clip.words || [], s0 = ws.length ? ws[0].s : clip.speech[0], e0 = ws.length ? ws[ws.length - 1].e : clip.speech[1];
-      g.linearRampToValueAtTime(Math.min(vol, low * 2), t0 + Math.max(.05, MI ? Math.min(MI, Math.max(.05, s0 - .05)) : .02)); g.linearRampToValueAtTime(low, t0 + Math.max(.1, s0));
-      for (let i = 1; i < ws.length; i++) { const gap = ws[i].s - ws[i - 1].e; if (gap > .7) { const a = t0 + ws[i - 1].e; g.setValueAtTime(low, a); g.linearRampToValueAtTime(vol * .45, a + Math.min(.4, gap / 2)); g.linearRampToValueAtTime(low, t0 + ws[i].s - .05); } }
-      const tail = Math.max(e0 + .05, D - Math.max(F, .05)); g.setValueAtTime(low, t0 + Math.min(e0, tail)); g.linearRampToValueAtTime(vol * .5, t0 + tail); g.linearRampToValueAtTime(0, t0 + D); }
+    const duck = t0 => duckOn(mGain.gain, clip, vol, t0);
     async function start() { audio(); await ac.resume(); if (mSrc) { try { mSrc.stop(); } catch (e) {} mSrc = null; }
       const b = await loadMusic(music); const F = clip.fade || .3; if (!(await seekTo(at0))) throw new Error("Couldn't jump to that moment in the talk video. Check your connection and try again."); const playT = () => Promise.race([v.play(), new Promise((_, j) => setTimeout(() => j(new Error("The talk video didn't start. Tap Play again.")), 15000))]);
       await playT();
@@ -306,5 +307,14 @@
     await new Promise(r => { const iv = setInterval(() => { onP(Math.min(1, pl.t() / clip.dur)); if (pl.ended()) { clearInterval(iv); r(); } }, 100); });
     pl.stop(); rec.stop(); await done; return new Blob(chunks, { type: type.split(";")[0] });
   }
-  window.ClipKit = { ASPECTS, MUSIC, FADES, applyFades, get, clipFor, clipForSpan, align, timings, timedQuote, draw, player, record, recType };
+  // Frame-exact export straight from the source MP4 (see clipcut.js). Returns null when the browser can't (caller falls back to record()).
+  async function exportExact(clip, { W, H, opts, music = "none", vol = .35, onP } = {}) {
+    if (!window.ClipCut || !(await ClipCut.supported())) return null;
+    const src = /^(https?:)?\/\//.test(clip.src) ? clip.src : new URL(clip.src.startsWith(base()) ? clip.src : base() + clip.src, location.href).href, VE = clip.vEnd ?? clip.dur;
+    return ClipCut.make({ src, clip, W, H, onP, draw: (ctx, w, h, t, f) => draw(ctx, w, h, opts, t, f),
+      mix: async (octx, sb) => { const s = octx.createBufferSource(), vg = octx.createGain(); s.buffer = sb; s.connect(vg); vg.connect(octx.destination);
+        const g = vg.gain; g.setValueAtTime(0, 0); g.linearRampToValueAtTime(1, .08); g.setValueAtTime(1, Math.max(.1, VE - .3)); g.linearRampToValueAtTime(0, VE); s.start(0);
+        const m = MUSIC.find(x => x.id === music); if (m && m.file) { const ab = await (await fetch(base() + m.file)).arrayBuffer(), mb = await octx.decodeAudioData(ab), ms = octx.createBufferSource(), mg = octx.createGain();
+          ms.buffer = mb; ms.loop = true; ms.connect(mg); mg.connect(octx.destination); duckOn(mg.gain, clip, vol, 0); ms.start(0); } } }); }
+  window.ClipKit = { exportExact, ASPECTS, MUSIC, FADES, applyFades, get, clipFor, clipForSpan, align, timings, timedQuote, draw, player, record, recType };
 })();

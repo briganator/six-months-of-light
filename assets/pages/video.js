@@ -75,8 +75,10 @@ mount("video.html", true);
   $("#mvVol").addEventListener("input", e => { S.vol = +e.target.value / 100; if (S.pl) S.pl.vol = S.vol; });
   $("#mvCap").addEventListener("change", e => { S.captions = e.target.checked; frame(); });
   // Two taps on purpose: recording takes as long as the clip, and phones only allow the share sheet right after a tap.
-  $("#mvMake").addEventListener("click", async () => { if (S.busy || !S.clip) return; S.busy = true; S.pl.stop(); S.playing = true; $("#mvPlay").hidden = true; $("#mvMake").disabled = true; loop();
-    try { const blob = await C.record(cv, S.pl, S.clip, p => msg(`Making your video… ${Math.round(p * 100)}%`)); const ext = blob.type.includes("mp4") ? "mp4" : "webm";
+  $("#mvMake").addEventListener("click", async () => { if (S.busy || !S.clip) return; S.busy = true; S.pl.stop(); $("#mvPlay").hidden = true; $("#mvMake").disabled = true;
+    try { const onP = p => msg(`Making your video… ${Math.round(p * 100)}%`); let blob = null;
+      try { blob = await C.exportExact(S.clip, { W: cv.width, H: cv.height, opts: opts(), music: S.music, vol: S.vol, onP }); } catch (e) { console.warn("exact export failed, recording instead", e); blob = null; }
+      if (!blob) { S.playing = true; loop(); blob = await C.record(cv, S.pl, S.clip, onP); } const ext = blob.type.includes("mp4") ? "mp4" : "webm";
       S.file = new File([blob], `six-months-of-light-${S.clip.talk}.${ext}`, { type: blob.type }); msg(`Ready · ${(blob.size / 1048576).toFixed(1)} MB`); $("#mvMake").hidden = true; $("#mvDone").hidden = false; }
     catch (e) { msg(e.message); } finally { S.busy = false; S.playing = false; $("#mvMake").disabled = false; $("#mvPlay").hidden = false; frame(); } });
   const dl = f => { const a = document.createElement("a"); a.href = URL.createObjectURL(f); a.download = f.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4e4); };
