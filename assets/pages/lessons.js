@@ -3,8 +3,8 @@ mount("lessons.html", true);
 // Template-based questions; no talk text and no invented doctrine. Leaders prepare from the official text and the Spirit.
 const MODES = {
   fhe: { tab: "Family night", name: "Family home evening", time: "15–20 min", open: "Sing a favorite hymn or Primary song, then ask:", act: "Let each family member share one experience or idea connected to the message. Younger children can draw it.", close: "Choose one small family goal and check in at dinner during the week.", nq: 2, present: "Tonight's talk" },
-  eqrs: { tab: "Elders Quorum & Relief Society", name: "Elders Quorum & Relief Society", time: "about 45 min", fmt: "For second- and fourth-Sunday lessons that counsel together about a recent general conference message.", open: "Welcome everyone, invite someone to read the key quote, then give a minute to ponder:", act: "In small groups, take one question each, then share what you discussed with everyone.", close: "Consider how members could help one another act on it this week, including through ministering.", nq: 5, present: "Today's message" },
-  youth: { tab: "Youth", name: "Youth classes", sub: "Young Women classes and Aaronic Priesthood quorums", time: "25–30 min", open: "Write the ponder question on the board and give 1 minute of quiet thinking:", act: "In pairs, read a quote and discuss: What does it mean? Where have we seen it in real life? Then share with the class.", close: "Invite each youth to privately write one action they'll take this week.", nq: 3, present: "Today's message" },
+  eqrs: { tab: "Elders Quorum & Relief Society", name: "Elders Quorum & Relief Society", time: "25 min", timed: true, fmt: "Weekly 25-minute meeting (since Sept. 6, 2026). Begin and end with prayer, start the discussion quickly, and counsel together during the lesson. There is no separate counseling topic beforehand.", conducts: "Presidency", nq: 3, present: "Today's message" },
+  youth: { tab: "Youth", name: "Youth classes", sub: "Young Women classes and Aaronic Priesthood quorums", time: "25 min", timed: true, fmt: "Sunday youth classes now study the For the Strength of Youth guide (one chapter a month). Use this outline when leaders choose a conference message, such as a combined class, a fifth Sunday the bishopric assigns, a devotional or an activity.", conducts: "Class or quorum presidency", nq: 3, present: "Today's message" },
   talk: { tab: "Sacrament talk", name: "Sacrament meeting talk", time: "5–8 min", open: "Open with a brief personal experience related to the message, then introduce:", act: "Teach the message using one scripture and one quote, adding your own testimony and experience.", close: "Close by extending the invitation and bearing testimony of Jesus Christ.", nq: 0, present: "My talk" },
 };
 const LIB_OK = () => !!window.Library;
@@ -13,7 +13,7 @@ if (QS.get("t") && !QS.get("c") && !talkById(tid)) conf = "";   // library talk 
 const main = document.getElementById("main");
 main.innerHTML = `
   <h1 style="margin-top:38px">Lesson helps</h1>
-  <p class="lede" style="margin-top:-4px">A ready outline for any general conference talk: family night, Elders Quorum and Relief Society, youth classes or a sacrament talk.</p>
+  <p class="lede" style="margin-top:-4px">A ready outline for any general conference talk: family night, a 25-minute Elders Quorum or Relief Society lesson, youth classes or a sacrament talk.</p>
   <div class="notice"><strong>Starter outline.</strong> Built from this site's summaries, verified quotes and the scriptures each talk cites. The full talk is on the talk page, with text from ChurchofJesusChrist.org. Prepare with that text, and follow the Spirit.</div>
   <div class="card no-print">
     <div class="ls-pick">
@@ -61,10 +61,93 @@ function questions(n, m) {
   q.push(m === "eqrs" ? `How can we help one another act on this, including in our ministering?` : m === "youth" ? `What is one small thing you could do this week because of this message?` : `What will we try as a family this week?`);
   return q.slice(0, m === "fhe" ? 2 : m === "youth" ? 4 : 5);
 }
+// ---- 25-minute timed flow (Elders Quorum & Relief Society, youth) ----
+// Shape follows the Church's guidance for the 25-minute meetings: a simple welcome and prayer, start the
+// discussion quickly, a few principles that build faith in Jesus Christ, counsel together about applying them,
+// invitations, closing prayer. One core truth per lesson. Sources: research/rs-eq-25min-guidance.md
+const mm = x => `${x}:00`;
+function timedPlan(n, mk) {
+  const yth = mk === "youth", ref = n.refs.map(ScripRef.first).find(Boolean) || "", quote = n.quotes[0] || n.keyStatement || n.big;
+  const core = n.big || n.keyStatement || n.overview;
+  const q = [];
+  if (ref) q.push(`Read <strong>${esc(ref)}</strong> together. How does it help us understand this truth about following Jesus Christ?`);
+  else q.push(`What does this truth teach us about Jesus Christ and how we follow Him?`);
+  q.push(yth ? `When have you seen this truth make a difference for someone your age?` : `When have you seen this truth at work in your own life or family?`);
+  q.push(yth ? `What would living this look like at school, online or with friends this week?` : `What challenges or opportunities in our ward does this speak to? How could we help one another, including through our ministering and in our homes?`);
+  const segs = [
+    { a: 0, b: 2, k: "Welcome & prayer", who: MODES[mk].conducts, items: [yth ? "A youth from the class or quorum presidency welcomes everyone and invites someone to pray." : "A simple welcome, then invite someone to give the opening prayer.", "Keep business to what can't wait; no separate counseling topic. Then start right away."] },
+    { a: 2, b: 5, k: "Open", who: "Teacher", items: [`Ask: <em>${esc(n.ponder)}</em>`, `Invite someone to read: <q>${esc(quote)}</q>`, "Give a quiet moment to ponder before anyone answers."] },
+    { a: 5, b: 20, k: "Discuss one core truth", who: "Everyone", core, items: [
+      ...q.slice(0, 2).map((x, i) => `<b>Q${i + 1}.</b> ${i ? esc(x) : x}`),
+      `<span class="tl-opt">Optional, about 3 min</span> Turn to someone nearby and share your answer to Q2, then invite two or three people to share with everyone.`,
+      `<b>Q3.</b> ${esc(q[2])}`,
+      "Let members answer one another. Resist answering every question yourself." ] },
+    { a: 20, b: 24, k: "Invite, testify, follow up", who: "Teacher", items: [`From the talk: <strong>${esc(n.invitation)}</strong>`, `Ask: “What do you feel impressed to do?” Give a minute to write it down privately.`, "Bear brief testimony of Jesus Christ and this truth, or invite someone to.", yth ? "Next week, invite one or two youth to share how it went." : "Next week, open by inviting one or two people to share how it went."] },
+    { a: 24, b: 25, k: "Closing prayer", who: MODES[mk].conducts, items: ["Invite someone to give the closing prayer. End on time."] },
+  ];
+  return { segs, q: q.map(x => x.replace(/<[^>]+>/g, "")), ref, quote, core };
+}
+function renderTimed(n, m, mk) {
+  const P = timedPlan(n, mk), out = $("out");
+  const bar = `<div class="tl-bar" aria-hidden="true">${P.segs.map(s => `<i style="flex:${s.b - s.a}" title="${esc(s.k)}"><span>${s.b - s.a}</span></i>`).join("")}</div>`;
+  const others = n.refs.slice(0, 6).filter(r => (ScripRef.first(r) || r) !== P.ref);
+  out.innerHTML = `
+    <div class="ls-kicker">${esc(m.name)} · ${esc(m.time)}</div>${m.sub ? `<p class="speaker" style="margin:2px 0 0">${esc(m.sub)}</p>` : ""}
+    <h2 style="margin:6px 0 2px">${esc(n.title)}</h2><p class="speaker">${esc(n.speaker)} · ${esc(n.conf)} general conference</p>
+    <p class="src" style="margin-top:6px">${esc(m.fmt)}</p>
+    <div class="tl-core"><div class="tl-ck">One core truth</div><p>${esc(P.core)}</p></div>
+    ${bar}
+    <div class="tl-clock no-print"><button class="btn secondary small" id="clk">▶ Start 25-min clock</button><span id="clkv" aria-live="polite"></span></div>
+    <ol class="tl">${P.segs.map((s, i) => `<li class="tl-seg" data-a="${s.a}" data-b="${s.b}"><div class="tl-t"><b>${mm(s.a)}–${mm(s.b)}</b><span>${s.b - s.a} min</span></div><div class="tl-body"><h3>${esc(s.k)} <small>${esc(s.who)}</small></h3>${s.core ? `<p class="tl-truth">${esc(s.core)}</p>` : ""}<ul>${s.items.map(x => `<li>${x}</li>`).join("")}</ul></div></li>`).join("")}</ol>
+    <details class="tl-prep no-print"><summary>Before Sunday</summary>
+      <p>${esc(n.overview)}</p><p class="src">${esc(n.overviewSrc)}</p>
+      <ul><li>Read the full talk and pray about what your ${mk === "youth" ? "class" : "quorum or Relief Society"} needs from it.</li><li>Share the talk link a few days early so members come having read it.</li><li>Teach one truth well. Meaningful discussion matters more than covering everything.</li>${others.length ? `<li>Other scriptures the talk cites: ${others.map(esc).join("; ")}</li>` : ""}</ul></details>
+    <div class="links">
+      <button class="btn gold small" id="present">▶ Present</button>
+      <button class="btn secondary small" id="p1">Print this one page</button>
+      <button class="btn secondary small" id="ph">Print handout</button>
+      <button class="btn secondary small" id="cp">Copy outline</button>
+      ${n.local ? `<a class="btn secondary small" href="${esc(n.local)}">Read this talk</a>` : ""}
+    </div>
+    <p class="src talk-source">Source: <a href="${esc(n.official || n.session)}" rel="noopener">Official text on ChurchofJesusChrist.org</a>${n.local ? ". The full talk is on this site." : ""} Timing follows the Church's 25-minute meeting guidance; adapt it as the Spirit directs.</p>`;
+  $("handout").innerHTML = `<div class="ho-head"><div class="ho-k">${esc(m.name)}</div><h2>${esc(n.title)}</h2><p>${esc(n.speaker)} · ${esc(n.conf)} general conference</p></div>
+    <h3>One core truth</h3><blockquote>${esc(P.core)}</blockquote>
+    <h3>From the talk</h3><blockquote>“${esc(P.quote)}”</blockquote>
+    ${P.ref ? `<h3>Scripture</h3><p>${esc(P.ref)}</p>` : ""}
+    <h3>To ponder and discuss</h3><ol>${P.q.map(x => `<li>${esc(x)}</li>`).join("")}</ol>
+    <h3>This week</h3><p>${esc(n.invitation)}</p><p>What do I feel impressed to do? ______________________________</p>
+    <p class="ho-foot">Talk text from ChurchofJesusChrist.org · Handout from sixmonthsoflight.com (not an official Church site)</p>`;
+  const printAs = c => { document.body.classList.add(c); print(); setTimeout(() => document.body.classList.remove(c), 500); };
+  $("p1").onclick = () => printAs("print-onepage");
+  $("ph").onclick = () => printAs("print-handout");
+  $("cp").onclick = () => navigator.clipboard.writeText([`${m.name} · 25 min`, `${n.title} · ${n.speaker}`, `One core truth: ${P.core}`, ...P.segs.map(s => `${mm(s.a)}–${mm(s.b)} ${s.k} (${s.who}): ` + s.items.map(x => x.replace(/<[^>]+>/g, "")).join(" "))].join("\n")).then(() => window.toast?.("Outline copied"));
+  $("present").onclick = () => present([
+    [m.present, n.title, n.speaker],
+    ["2:00 · Let's ponder", n.ponder, ""], ["Read aloud", "“" + P.quote + "”", n.speaker],
+    ["5:00 · One core truth", P.core, P.ref ? "Scripture: " + P.ref : ""],
+    ...P.q.map((x, i) => [`Discuss · ${i + 1}`, x, i === 1 ? "Optional: share with someone nearby first." : ""]),
+    ["20:00 · This week", n.invitation, "What do you feel impressed to do?"]]);
+  clockWire();
+}
+let clkT = null;
+function clockWire() {
+  if (clkT) { clearInterval(clkT); clkT = null; }
+  const b = $("clk"); if (!b) return;
+  b.onclick = () => {
+    if (clkT) { clearInterval(clkT); clkT = null; b.textContent = "▶ Start 25-min clock"; $("clkv").textContent = ""; document.querySelectorAll(".tl-seg").forEach(x => x.classList.remove("now", "done")); return; }
+    const t0 = Date.now(); b.textContent = "■ Stop clock";
+    const tick = () => { const sec = Math.floor((Date.now() - t0) / 1000), min = sec / 60;
+      $("clkv").textContent = `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, "0")} of 25:00`;
+      document.querySelectorAll(".tl-seg").forEach(x => { const a = +x.dataset.a, z = +x.dataset.b; x.classList.toggle("now", min >= a && min < z); x.classList.toggle("done", min >= z); }); };
+    tick(); clkT = setInterval(tick, 1000);
+  };
+}
 function gen() {
   const n = norm(), m = MODES[mode], out = $("out");
   setURL(`?mode=${mode}&c=${encodeURIComponent(conf)}&t=${encodeURIComponent(tid || "")}`);
   if (!n) { out.innerHTML = `<p class="empty">Loading talks…</p>`; return; }
+  if (m.timed) return renderTimed(n, m, mode);
+  clockWire();
   const qs = m.nq ? questions(n, mode) : [], quotes = n.quotes.slice(0, mode === "eqrs" ? 3 : 2), refs = n.refs.slice(0, 8);
   const refList = refs.map(r => `<li>${esc(r)}</li>`).join("") + (n.refs.length > refs.length ? `<li class="speaker">and ${n.refs.length - refs.length} more in the official footnotes</li>` : "");
   const quoteBlock = quotes.length ? `<ul>${quotes.map(q => `<li>“${esc(q)}”</li>`).join("")}</ul><p class="src">${esc(n.quoteSrc)}</p>`
@@ -105,7 +188,7 @@ function gen() {
     ...(refs.length ? [["Scripture", refs.map(r => ScripRef.first(r) || r).slice(0, 3).join(" · "), "Read it together from your scriptures."]] : []),
     ...qs.slice(1).map((x, i) => [`Discuss · ${i + 1}`, x, ""]), [mode === "eqrs" ? "Counsel together" : "Activity", m.act, ""], ["This week", n.invitation, m.close]]);
 }
-window.addEventListener("afterprint", () => document.body.classList.remove("print-handout"));
+window.addEventListener("afterprint", () => document.body.classList.remove("print-handout", "print-onepage"));
 // Big-type slides for a TV or a phone passed around the room. Arrow keys, swipe or tap the sides; Esc closes.
 function present(slides) {
   let i = 0; const ov = document.createElement("div"); ov.className = "present"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true"); ov.setAttribute("aria-label", "Lesson slides");
