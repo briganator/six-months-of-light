@@ -405,9 +405,12 @@
       while (lines.length > 3 && fs > u * .03) { fs *= .92; ctx.font = `500 ${fs}px ${SERIF}`; lines = wrapPlain(ctx, o.title || "", W * .82); }
       let y = H * .21; lines.forEach(l => { ctx.fillText(l, W / 2, y); y += fs * 1.12; });
       ctx.fillStyle = P.gold; ctx.font = `600 ${u * .022}px ${SANS}`; ctx.fillText(String(o.speaker || "").toUpperCase(), W / 2, y + u * .02);
-      const url = o.url || "", qs = u * (story ? .3 : .24), qx = (W - qs) / 2, qy = y + u * .05; paintQr(ctx, url, qx, qy, qs);
-      ctx.fillStyle = P.sub; ctx.font = `500 ${u * .02}px ${SANS}`; const host = String(url).replace(/^https?:\/\//, "");
-      wrapPlain(ctx, host, W * .84).slice(0, 2).forEach((l, i) => ctx.fillText(l, W / 2, qy + qs + u * .055 + i * u * .03));
+      const url = o.url || "", qs = u * (story ? .28 : .22), qx = (W - qs) / 2, qy = y + u * .045; paintQr(ctx, url, qx, qy, qs);
+      const shown = String(url).replace(/^https?:\/\//, ""), cut = shown.indexOf("/");
+      const host = cut < 0 ? shown : shown.slice(0, cut), path = cut < 0 ? "" : shown.slice(cut + 1);
+      ctx.fillStyle = P.sub; ctx.font = `500 ${u * .02}px ${SANS}`;
+      ctx.fillText(host, W / 2, qy + qs + u * .05);
+      if (path) { ctx.fillStyle = P.ink; ctx.font = `600 ${u * .02}px ${SANS}`; ctx.fillText(path, W / 2, qy + qs + u * .078); }
     } else {
       let hook = String(o.hook || "").replace(/\s+/g, " ").trim(), own = !!o.own;
       const font = o.font || "serif"; let fs = u * (story ? .058 : .048) * (o.scale || 1);
