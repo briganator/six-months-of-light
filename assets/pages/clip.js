@@ -151,7 +151,7 @@
     if (k === "size") return ["Shape", `<div class="ce-row">${Object.entries(C.ASPECTS).map(([k, a]) => swatch("aspect=" + k, a[2], a[2].split(" ")[0])).join("")}</div>
       <label class="ce-chk"><input type="checkbox" id="ceEnd" ${S.endOn ? "checked" : ""}> End card with the talk link and QR</label>
       <p class="ce-help">End card links to ${esc(talkLink())}.</p>
-      <h3>Video hosting</h3><p class="ce-help">The editor reads <code>{talk-id}.mp4</code> from <code>window.CLIP_MEDIA_BASE</code> (set in assets/config.js). The file must share the official video’s timeline, allow cross-origin reads (CORS), and answer HTTP range requests so export can grab just this moment. The Church CDN does not send CORS, so a canvas export cannot use it directly. A same-origin folder works for a local preview via <code>?media=media/</code>.</p>`];
+      <h3>Video hosting</h3><p class="ce-help">The editor reads <code>{talk-id}.mp4</code> from <code>window.CLIP_MEDIA_BASE</code> (set in assets/config.js), on the same timeline as the word timings. The bucket allows https://sixmonthsoflight.com, https://www.sixmonthsoflight.com, and http://localhost:8000, and it answers range requests. Other origins, including 127.0.0.1, are refused. The Church CDN does not send CORS, so a canvas export cannot use it. Another origin can pass <code>?media=media/</code> for a same-origin folder.</p>`];
     return ["Style", ""];
   }
   function openTool(k) {
