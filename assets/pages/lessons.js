@@ -104,8 +104,8 @@ function renderTimed(n, m, mk) {
       <ul><li>Read the full talk and pray about what your ${mk === "youth" ? "class" : "quorum or Relief Society"} needs from it.</li><li>Share the talk link a few days early so members come having read it.</li><li>Teach one truth well. Meaningful discussion matters more than covering everything.</li>${others.length ? `<li>Other scriptures the talk cites: ${others.map(esc).join("; ")}</li>` : ""}</ul></details>
     <div class="links">
       <button class="btn gold small" id="present">▶ Present</button>
-      <button class="btn secondary small" id="p1">Print this one page</button>
-      <button class="btn secondary small" id="ph">Print handout</button>
+      <a class="btn secondary small" id="p1" href="#" target="_blank" rel="noopener">Print this one page</a>
+      <a class="btn secondary small" id="ph" href="#" target="_blank" rel="noopener">Print handout</a>
       <button class="btn secondary small" id="cp">Copy outline</button>
       ${n.local ? `<a class="btn secondary small" href="${esc(n.local)}">Read this talk</a>` : ""}
     </div>
@@ -117,8 +117,15 @@ function renderTimed(n, m, mk) {
     <h3>To ponder and discuss</h3><ol>${P.q.map(x => `<li>${esc(x)}</li>`).join("")}</ol>
     <h3>This week</h3><p>${esc(n.invitation)}</p><p>What do I feel impressed to do? ______________________________</p>
     <p class="ho-foot">Talk text from ChurchofJesusChrist.org · Handout from sixmonthsoflight.com (not an official Church site)</p>`;
-  $("p1").onclick = () => doPrint("onepage");
-  $("ph").onclick = () => doPrint("handout");
+  const strip = x => x.replace(/<\/span>\s*/g, ": ").replace(/<q>/g, "“").replace(/<\/q>/g, "”").replace(/<[^>]+>/g, "").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+  const head = { kicker: `${m.name} · 25 min`, title: n.title, byline: `${n.speaker} · ${n.conf} general conference`, foot: PDF_FOOT, fit: true };
+  wirePrint({
+    onepage: () => ({ ...head, blocks: [{ t: "core", text: P.core }, ...P.segs.map(sg => ({ t: "seg", time: `${mm(sg.a)}–${mm(sg.b)}`, text: sg.k, who: sg.who, items: sg.items.map(strip) })),
+      { t: "src", text: "Timing follows the Church's 25-minute meeting guidance; adapt it as the Spirit directs. Read the full talk at ChurchofJesusChrist.org." }] }),
+    handout: () => ({ ...head, kicker: m.name, blocks: [{ t: "core", text: P.core }, { t: "h", text: "From the talk" }, { t: "q", text: P.quote },
+      ...(P.ref ? [{ t: "h", text: "Scripture" }, { t: "p", text: P.ref }] : []), { t: "h", text: "To ponder and discuss" }, ...P.q.map((x, i) => ({ t: "li", n: i + 1, text: x })),
+      { t: "h", text: "This week" }, { t: "p", text: n.invitation }, { t: "line", text: "What do I feel impressed to do?" }] }),
+  });
   $("cp").onclick = () => navigator.clipboard.writeText([`${m.name} · 25 min`, `${n.title} · ${n.speaker}`, `One core truth: ${P.core}`, ...P.segs.map(s => `${mm(s.a)}–${mm(s.b)} ${s.k} (${s.who}): ` + s.items.map(x => x.replace(/<[^>]+>/g, "")).join(" "))].join("\n")).then(() => window.toast?.("Outline copied"));
   $("present").onclick = () => present([
     [m.present, n.title, n.speaker],
@@ -165,8 +172,8 @@ function gen() {
     ${h("Suggested invitation")}<p><strong>${esc(n.invitation)}</strong> ${esc(m.close)}</p>${n.invSrc ? `<p class="src">${esc(n.invSrc)}</p>` : ""}
     <div class="links">
       <button class="btn gold small" id="present">▶ Present</button>
-      ${mode !== "talk" ? `<button class="btn secondary small" id="ph">Print handout</button>` : ""}
-      <button class="btn secondary small" id="po">Print outline</button>
+      ${mode !== "talk" ? `<a class="btn secondary small" id="ph" href="#" target="_blank" rel="noopener">Print handout</a>` : ""}
+      <a class="btn secondary small" id="po" href="#" target="_blank" rel="noopener">Print outline</a>
       <button class="btn secondary small" id="cp">Copy outline</button>
       ${n.local ? `<a class="btn secondary small" href="${esc(n.local)}">Read this talk</a>` : ""}
     </div>
@@ -179,8 +186,19 @@ function gen() {
     <h3>This week</h3><p>${esc(n.invitation)}</p>
     <p class="ho-foot">Talk text from ChurchofJesusChrist.org · Handout from sixmonthsoflight.com (not an official Church site)</p>`;
   $("cp").onclick = () => navigator.clipboard.writeText(out.innerText).then(() => window.toast?.("Outline copied"));
-  $("po").onclick = () => doPrint("outline");
-  if ($("ph")) $("ph").onclick = () => doPrint("handout");
+  const head = { kicker: `${m.name} · ${m.time}`, title: n.title, byline: `${n.speaker} · ${n.conf} general conference`, foot: PDF_FOOT, fit: true };
+  const quoteBlocks = quotes.length ? quotes.map(q => ({ t: "q", text: q })) : [{ t: "q", text: n.keyStatement }];
+  const pm = {
+    outline: () => ({ ...head, blocks: [{ t: "h", text: "1. Talk overview" }, { t: "p", text: n.overview }, { t: "src", text: n.overviewSrc },
+      { t: "h", text: "2. Open" }, { t: "p", text: `${m.open} ${n.ponder}` }, { t: "h", text: quotes.length ? "3. Key quotes" : "3. Key statement" }, ...quoteBlocks,
+      { t: "h", text: "4. Scriptures cited" }, ...(refs.length ? refs.map(r => ({ t: "li", text: r })) : [{ t: "p", text: "No verse reported yet." }]),
+      ...(qs.length ? [{ t: "h", text: "5. Discussion questions" }, ...qs.map((x, i) => ({ t: "li", n: i + 1, text: x }))] : []),
+      { t: "h", text: (qs.length ? "6. " : "5. ") + "Activity" }, { t: "p", text: m.act }, { t: "h", text: (qs.length ? "7. " : "6. ") + "Suggested invitation" }, { t: "p", text: `${n.invitation} ${m.close}` }] }),
+  };
+  if (mode !== "talk") pm.handout = () => ({ ...head, kicker: m.name, blocks: [{ t: "h", text: quotes.length ? "Key quotes" : "Key statement" }, ...quoteBlocks,
+    ...(refs.length ? [{ t: "h", text: "Scriptures to read" }, { t: "p", text: refs.map(r => ScripRef.first(r) || r).join(" · ") }] : []),
+    ...(qs.length ? [{ t: "h", text: "To ponder and discuss" }, ...qs.map((x, i) => ({ t: "li", n: i + 1, text: x }))] : []), { t: "h", text: "This week" }, { t: "p", text: n.invitation }] });
+  wirePrint(pm);
   $("present").onclick = () => present([
     [m.present, n.title, n.speaker], ["Let's ponder", n.ponder, ""], ["The big idea", n.big, ""],
     ...(quotes.length ? quotes.map(q => ["Read aloud", "“" + q + "”", n.speaker + (conf === "2026-10" && !OFFICIAL_TEXT() ? " (from the recap)" : "")]) : [["Key statement", n.keyStatement, n.speaker]]),
@@ -188,34 +206,44 @@ function gen() {
     ...qs.slice(1).map((x, i) => [`Discuss · ${i + 1}`, x, ""]), [mode === "eqrs" ? "Counsel together" : "Activity", m.act, ""], ["This week", n.invitation, m.close]]);
 }
 // ---- Printing ----
-// Safari (iOS and recent macOS) and Chrome on Android return from print() at once and lay out the page later, so the
-// print-mode class must stay on until the print actually ends (afterprint), never be removed on a timer.
-// The iOS home-screen app (standalone) ignores print() entirely, so there we open a printable copy in Safari instead.
+// Phones (iPhone Safari especially) get a real PDF file behind a normal link: iOS opens it in its PDF viewer, where
+// Share → Print always works. Desktops keep window.print(), called directly in the click handler (never after an
+// await or timer), with the print layout kept on until afterprint because Safari's print() returns at once.
+// October 2026 lessons use PDFs pre-built by tools/build_lesson_pdfs.py (same builder); other talks are built here.
 const PRINT_KINDS = ["onepage", "handout", "outline"], PRINT_VIEW = PRINT_KINDS.includes(QS.get("print")) ? QS.get("print") : "";
-const standalone = () => navigator.standalone === true || matchMedia("(display-mode: standalone)").matches;
+const PDF_V = "1", PDF_FOOT = "Talk text from ChurchofJesusChrist.org · sixmonthsoflight.com (personal study site, not an official Church site)";
+const PHONE = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) || matchMedia("(pointer: coarse)").matches;
+const BTN_KIND = { p1: "onepage", ph: "handout", po: "outline" };
+let MODELS = {}, blobUrls = [], buildSeq = 0;
 function setPrintMode(kind) { PRINT_KINDS.forEach(k => document.body.classList.toggle("print-" + k, k === kind)); }
-function printableUrl(kind) { const u = new URL(location.href); u.searchParams.set("print", kind); return u.href; }
-function printFallback(kind) {
-  let d = document.getElementById("printHelp"); if (!d) { d = document.createElement("div"); d.id = "printHelp"; d.className = "print-help no-print"; d.setAttribute("role", "status"); $("out").before(d); }
-  d.innerHTML = `<strong>Print didn't open?</strong> The home-screen app can't print on some iPhones. <a href="${esc(printableUrl(kind))}" target="_blank" rel="noopener">Open the printable page in Safari</a>, then tap Print (or Share → Print).`;
-  d.scrollIntoView({ block: "nearest" });
-}
-function doPrint(kind) {
-  setPrintMode(kind);
-  if (standalone() && !PRINT_VIEW) { window.open(printableUrl(kind), "_blank"); printFallback(kind); return; }
-  let started = false; const mark = () => { started = true; };
-  addEventListener("beforeprint", mark, { once: true });
-  try { window.print(); } catch (e) { printFallback(kind); return; }
-  setTimeout(() => { if (!started && !matchMedia("print").matches) printFallback(kind); }, 3000);
+const pdfName = kind => `${(mode + "-" + (tid || "lesson") + "-" + kind).replace(/[^a-z0-9-]+/gi, "-")}.pdf`;
+const staticPdf = kind => conf === "2026-10" && talkById(tid) ? `assets/lesson-pdf/${pdfName(kind)}?v=${PDF_V}` : "";
+async function pdfBlobUrl(kind) { await LessonPDF.ready(); const bytes = await LessonPDF.build(MODELS[kind]()); const u = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" })); blobUrls.push(u); return u; }
+window.__lessonPdf = async kind => { await LessonPDF.ready(); const b = await LessonPDF.build(MODELS[kind]()); let s = ""; b.forEach(x => s += String.fromCharCode(x)); return btoa(s); };   // used by the build script
+function wirePrint(models) {
+  MODELS = models; blobUrls.forEach(u => URL.revokeObjectURL(u)); blobUrls = []; const seq = ++buildSeq;
+  Object.entries(BTN_KIND).forEach(([id, kind]) => {
+    const a = $(id); if (!a || !models[kind]) return;
+    if (!PHONE) { a.removeAttribute("target"); a.onclick = e => { e.preventDefault(); setPrintMode(kind); window.print(); }; return; }
+    const st = staticPdf(kind);
+    if (st) { a.href = st; a.type = "application/pdf"; return; }               // plain link to a real file
+    a.removeAttribute("target"); a.setAttribute("download", pdfName(kind)); a.dataset.state = "making";
+    a.onclick = e => { if (a.dataset.state !== "ready") { e.preventDefault(); window.toast?.("Making the PDF… tap again in a moment"); } };
+    pdfBlobUrl(kind).then(u => { if (seq !== buildSeq) return; a.href = u; a.dataset.state = "ready"; }).catch(() => { a.dataset.state = "error"; });
+  });
 }
 addEventListener("afterprint", () => { if (!PRINT_VIEW) setPrintMode(""); });
-// Printable copy (?print=onepage|handout|outline): keep that layout on for the browser's own Print and Share → Print.
+// Old printable-copy links (?print=…): show the layout, with a real PDF link on phones. No automatic print().
 if (PRINT_VIEW) {
   setPrintMode(PRINT_VIEW);
   const bar = document.createElement("div"); bar.className = "print-bar no-print";
-  bar.innerHTML = `<span>Printable ${PRINT_VIEW === "onepage" ? "one-page lesson" : PRINT_VIEW}</span><button class="btn gold small" id="pvGo">Print</button><a class="btn secondary small" href="${esc(location.href.replace(/([?&])print=[^&]*&?/, "$1").replace(/[?&]$/, ""))}">Back to lesson</a>`;
-  main.prepend(bar); $("pvGo").onclick = () => window.print();
-  (document.fonts?.ready || Promise.resolve()).then(() => setTimeout(() => { try { window.print(); } catch (e) {} }, 400));
+  const back = esc(location.href.replace(/([?&])print=[^&]*&?/, "$1").replace(/[?&]$/, ""));
+  bar.innerHTML = `<span>Printable ${PRINT_VIEW === "onepage" ? "one-page lesson" : PRINT_VIEW}</span><a class="btn gold small" id="pvGo" href="#" target="_blank" rel="noopener">${PHONE ? "Open PDF" : "Print"}</a><a class="btn secondary small" href="${back}">Back to lesson</a>`;
+  main.prepend(bar);
+  const sync = () => { const src = $(Object.keys(BTN_KIND).find(id => BTN_KIND[id] === PRINT_VIEW)); const go = $("pvGo"); if (!src || !go) return;
+    if (!PHONE) { go.removeAttribute("target"); go.onclick = e => { e.preventDefault(); window.print(); }; return; }
+    go.href = src.href; if (src.hasAttribute("download")) { go.setAttribute("download", src.getAttribute("download")); go.removeAttribute("target"); } go.onclick = e => src.onclick ? src.onclick(e) : null; };
+  new MutationObserver(sync).observe($("out"), { childList: true }); setInterval(sync, 1500); sync();
 }
 // Big-type slides for a TV or a phone passed around the room. Arrow keys, swipe or tap the sides; Esc closes.
 function present(slides) {

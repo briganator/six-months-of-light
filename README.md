@@ -42,6 +42,7 @@ A personal study and sharing site for the 196th Semiannual General Conference (i
 - My Conference (`my.html`): saved quotes, private notes per talk, commitments and a JSON export
 - Lesson helps (`lessons.html`): a template-based outline **stub** for FHE, youth classes and sacrament talks, built only from the talk data; nothing is generated.
 - **25-minute Elders Quorum & Relief Society (and Youth) lessons** follow the Sept. 2026 schedule: one core truth, minute markers (0–2 welcome and prayer, 2–5 open, 5–20 discuss, 20–24 invite, testify and follow up, 24–25 closing prayer), an optional pair share, a live 25-minute clock, a one-page print and a handout. Sources: `research/rs-eq-25min-guidance.md`. The subscription feed (`supabase/functions/_shared/content.ts`) uses the same flow.
+- **Lesson print buttons:** phones get a real PDF behind a normal link (iPhone opens its PDF viewer; Share → Print). October 2026 PDFs are pre-built in `assets/lesson-pdf/` by `tools/build_lesson_pdfs.py` (rerun it and bump `PDF_V` in `assets/pages/lessons.js` after changing lesson text, talk data or `assets/lessonpdf.js`); other talks build the PDF in the browser (pdf-lib, `assets/vendor/`). Desktops use `window.print()` directly in the click handler.
 
 **Share**
 - "What stuck with me" under each talk: optional name and one line (up to 280 characters), moderated

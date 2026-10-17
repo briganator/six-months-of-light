@@ -16,6 +16,7 @@ document.getElementById("main").innerHTML = `
   <ul>${(window.ClipKit ? ClipKit.MUSIC : []).filter(m => m.file).map(m => `<li><b>${esc(m.name)}</b>: ${esc(m.credit)}${m.src ? ` · <a href="${esc(m.src)}" rel="noopener">source ↗</a>` : ""} · <a href="${esc(m.lurl)}" rel="noopener">${esc(m.license)}</a></li>`).join("")}</ul>
   <h2>Fonts &amp; code</h2>
   <ul><li>Cormorant Garamond and Inter: SIL Open Font License 1.1, self-hosted.</li>
+  <li>Lesson PDFs are made with <a href="assets/vendor/pdf-lib.LICENSE.md">pdf-lib</a> (MIT License, self-hosted).</li>
   <li>Card Studio fonts (Playfair Display, Lora, EB Garamond, Libre Baskerville, Cinzel, DM Serif Display, Merriweather, Abril Fatface, Montserrat, Raleway, Josefin Sans, Poppins, Great Vibes, Dancing Script): Google Fonts, SIL Open Font License 1.1, self-hosted and loaded only when chosen. See <a href="assets/fonts/g/OFL-NOTICE.txt">the license notice</a>.</li>
   <li>QR code generator (qrcode-generator by Kazuhiko Arase): MIT License.</li>
   <li>Logo, temple-silhouette illustrations and all card backgrounds: original to Six Months of Light.</li></ul>
