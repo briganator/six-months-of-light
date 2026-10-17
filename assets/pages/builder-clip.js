@@ -4,7 +4,7 @@
   const cs = { aspect: QS.get("ca") && C.ASPECTS[QS.get("ca")] ? QS.get("ca") : "story", music: QS.get("cm") || "dreamy-flashback", vol: .35, captions: true, vbg: "full", vop: .6, sel: QS.get("sel") || "", dyn: null, key: null, pl: null, busy: false, playing: false };
   const box = document.createElement("section"); box.className = "card clip-panel"; box.id = "clipPanel"; box.hidden = true;
   box.innerHTML = `<div class="clip-head"><div><div class="label">Video clip <span class="pill">new</span></div><h2 style="margin:4px 0 2px">Hear it in their voice</h2>
-    <p class="b-help">The moment this quote was spoken, from the official conference video, with the words on screen. <a href="video.html">Paste any quote to make a video →</a></p></div></div>
+    <p class="b-help">The moment this quote was spoken, from the official conference video, with the words on screen. <a href="video.html">Paste any quote to make a video →</a> <a href="moments.html">Best moments →</a></p></div></div>
     <div class="clip-grid"><div class="clip-stage"><canvas id="clipCv" aria-label="Video clip preview"></canvas></div>
     <div class="clip-ctl">
       <div class="b-label">Shape</div><div class="seg" id="clipAspect" role="group" aria-label="Clip shape">${Object.entries(C.ASPECTS).map(([k, a]) => `<button type="button" data-k="${k}">${a[2]}</button>`).join("")}</div>
