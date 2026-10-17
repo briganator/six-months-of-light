@@ -88,9 +88,15 @@ function timedPlan(n, mk) {
   return { segs, q: q.map(x => x.replace(/<[^>]+>/g, "")), ref, quote, core };
 }
 // One clear print area, shown near the top and again at the bottom of every lesson.
+let CAN_SHARE_CACHE; const canShareFiles = () => CAN_SHARE_CACHE ??= (() => { try { return PHONE && !!navigator.share && !!navigator.canShare && navigator.canShare({ files: [new File(["%PDF-"], "lesson.pdf", { type: "application/pdf" })] }); } catch (e) { return false; } })();
+const PP_ICON = `<svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>`;
+const ppBtns = (attr, cls) => ["outline", "handout", "onepage"].map(k => `<a class="btn ${cls} small" ${attr}="${k}" href="#" target="_blank" rel="noopener">${{ outline: "Outline", handout: "Handout", onepage: "One page" }[k]}</a>`).join("");
+// One clear print area, shown near the top and again at the bottom of every lesson.
+// Phones with file sharing get "Share / Print" first (opens the iOS share sheet, where Print is listed), then "Open PDF".
 const printPanel = where => `<div class="print-panel ${where}" role="group" aria-label="Print or save this lesson">
-  <div class="pp-k"><b><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg> ${PHONE ? "Print or save as PDF" : "Print this lesson"}</b><small>${PHONE ? "Opens a PDF. Then tap Share → Print." : "Letter size, one page"}</small></div>
-  <div class="pp-btns"><a class="btn secondary small" data-print="outline" href="#" target="_blank" rel="noopener">Outline</a><a class="btn secondary small" data-print="handout" href="#" target="_blank" rel="noopener">Handout</a><a class="btn secondary small" data-print="onepage" href="#" target="_blank" rel="noopener">One page</a></div></div>`;
+  <div class="pp-k"><b>${PP_ICON} ${PHONE ? "Print or save as PDF" : "Print this lesson"}</b><small>${canShareFiles() ? "Share / Print opens your share sheet. Choose Print." : PHONE ? "Opens a PDF. Then tap Share → Print." : "Letter size, one page"}</small></div>
+  ${canShareFiles() ? `<div class="pp-row"><span class="pp-l">Share / Print</span><div class="pp-btns pp-share">${ppBtns("data-share", "gold")}</div></div>` : ""}
+  <div class="pp-row">${PHONE ? `<span class="pp-l">Open PDF</span>` : ""}<div class="pp-btns">${ppBtns("data-print", "secondary")}</div></div></div>`;
 function renderTimed(n, m, mk) {
   const P = timedPlan(n, mk), out = $("out");
   const bar = `<div class="tl-bar" aria-hidden="true">${P.segs.map(s => `<i style="flex:${s.b - s.a}" title="${esc(s.k)}"><span>${s.b - s.a}</span></i>`).join("")}</div>`;
@@ -233,8 +239,19 @@ const pdfName = kind => `${(mode + "-" + (tid || "lesson") + "-" + kind).replace
 const staticPdf = kind => conf === "2026-10" && talkById(tid) ? `assets/lesson-pdf/${pdfName(kind)}?v=${PDF_V}` : "";
 async function pdfBlobUrl(kind) { await LessonPDF.ready(); const bytes = await LessonPDF.build(MODELS[kind]()); const u = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" })); blobUrls.push(u); return u; }
 window.__lessonPdf = async kind => { await LessonPDF.ready(); const b = await LessonPDF.build(MODELS[kind]()); let s = ""; b.forEach(x => s += String.fromCharCode(x)); return btoa(s); };   // used by the build script
+let FILES = {}, PDF_P = {};
+const pdfTitle = kind => { const t = MODELS.__title || "Lesson"; return `${t} · ${{ outline: "Outline", handout: "Handout", onepage: "One page" }[kind]}`; };
+// Prefetch every PDF as a File while the panel renders, so a tap can call navigator.share() at once (iOS needs the tap).
+function pdfFile(kind, seq) {
+  if (!PDF_P[kind]) { const st = staticPdf(kind);
+    PDF_P[kind] = (st ? fetch(st).then(r => { if (!r.ok) throw new Error(r.status); return r.blob(); }) : LessonPDF.ready().then(() => LessonPDF.build(MODELS[kind]())).then(b => new Blob([b], { type: "application/pdf" })))
+      .then(blob => { if (seq !== buildSeq) return null; const f = new File([blob], pdfName(kind), { type: "application/pdf" }); FILES[kind] = f; return f; }); }
+  return PDF_P[kind];
+}
 function wirePrint(models) {
-  MODELS = models; blobUrls.forEach(u => URL.revokeObjectURL(u)); blobUrls = []; const seq = ++buildSeq;
+  MODELS = models; blobUrls.forEach(u => URL.revokeObjectURL(u)); blobUrls = []; FILES = {}; PDF_P = {}; const seq = ++buildSeq;
+  MODELS.__title = $("out").querySelector("h2")?.textContent || "Lesson";
+  const blobFor = {};   // one in-browser PDF per kind (library talks), shared by both panels
   document.querySelectorAll("#out [data-print]").forEach(a => {
     const kind = a.dataset.print; if (!models[kind]) { a.hidden = true; return; }
     if (!PHONE) { a.removeAttribute("target"); a.onclick = e => { e.preventDefault(); setPrintMode(kind); window.print(); }; return; }
@@ -242,7 +259,24 @@ function wirePrint(models) {
     if (st) { a.href = st; a.type = "application/pdf"; return; }               // plain link to a real file
     a.removeAttribute("target"); a.setAttribute("download", pdfName(kind)); a.dataset.state = "making";
     a.onclick = e => { if (a.dataset.state !== "ready") { e.preventDefault(); window.toast?.("Making the PDF… tap again in a moment"); } };
-    pdfBlobUrl(kind).then(u => { if (seq !== buildSeq) return; a.href = u; a.dataset.state = "ready"; }).catch(() => { a.dataset.state = "error"; });
+    (blobFor[kind] ||= pdfFile(kind, seq).then(f => { if (!f) return null; const u = URL.createObjectURL(f); blobUrls.push(u); return u; }))
+      .then(u => { if (!u) return; a.href = u; a.dataset.state = "ready"; }).catch(() => { a.dataset.state = "error"; });
+  });
+  document.querySelectorAll("#out [data-share]").forEach(a => {
+    const kind = a.dataset.share; if (!models[kind]) { a.hidden = true; return; }
+    const open = document.querySelector(`#out [data-print="${kind}"]`);
+    pdfFile(kind, seq).catch(() => {});
+    a.onclick = e => {
+      const f = FILES[kind], data = f && { files: [f], title: pdfTitle(kind) };
+      if (data && navigator.canShare?.(data)) {                                    // called right inside the tap: no await before share()
+        e.preventDefault();
+        navigator.share(data).catch(err => { if (err?.name !== "AbortError") window.toast?.("Sharing didn't open. Tap Open PDF instead."); });
+        return;
+      }
+      // Not ready or not supported: behave like the Open PDF link (same href, opened by this tap)
+      if (open && open.href && !open.href.endsWith("#")) { a.href = open.href; if (open.hasAttribute("download")) a.setAttribute("download", open.getAttribute("download")); else a.removeAttribute("download"); return; }
+      e.preventDefault(); window.toast?.("Getting the PDF ready… tap again in a moment");
+    };
   });
 }
 addEventListener("afterprint", () => { if (!PRINT_VIEW) setPrintMode(""); });

@@ -1421,3 +1421,7 @@ ol.tl{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:10px}
 .print-panel .pp-btns .btn[hidden]{display:none}
 @media (max-width:560px){.print-panel .pp-btns{flex-basis:100%}}
 @media print{.print-panel{display:none!important}}
+.print-panel .pp-row{display:flex;flex-direction:column;gap:5px;flex:2 1 260px}
+.print-panel .pp-l{font:600 11.5px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:#86601f}
+.print-panel .pp-share .btn{background:linear-gradient(180deg,#f1d394,#d8a95b);border-color:#c08a3e;color:#1d1b22}
+@media (max-width:560px){.print-panel .pp-row{flex-basis:100%}}

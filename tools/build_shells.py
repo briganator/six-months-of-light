@@ -24,7 +24,7 @@ pages = {
  "privacy": ("Privacy · Six Months of Light", [], []),
 }
 # Cache-busting: pages listed here get ?v=<version> on their CSS and JS so phones fetch new code after a change.
-VERSIONED = {"lessons": "20261017-print2"}
+VERSIONED = {"lessons": "20261017-share3"}
 import sys
 ONLY = set(sys.argv[1:])   # e.g. python3 tools/build_shells.py lessons   (writes only that page)
 for name, (title, pre, libs) in pages.items():
