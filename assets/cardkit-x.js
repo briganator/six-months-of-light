@@ -65,30 +65,41 @@
   Object.values(K.LOOKS).forEach(L => { const p = L.paint; L.paint = function () { const r = p.apply(this, arguments); bgDone = true; return r; }; });
 
   const origDraw = K.drawCard;
+  // HITS: what was drawn on the live preview (#cv), so taps can find the words and the ornament.
+  const HITS = { text: [], orn: null, W: 0, H: 0 };
+  const WORD = /[A-Za-zÀ-ÿ’'\-]+/g, normW = w => w.toLowerCase().replace(/[’']/g, "'").replace(/^[-']+|[-']+$/g, "");
   K.drawCard = function (ctx, W, H, o, time) {
     const f = (o && o.fmt) || {}; curFmt = f;
-    const tfx = TFX[f.tfx] && f.tfx !== "none" ? f.tfx : null;
-    let restore = null;
-    if (tfx) { const ft = ctx.fillText, u = Math.min(W, H); bgDone = false;
-      ctx.fillText = function (s, x, y, mw) {
-        if (!bgDone) return mw === undefined ? ft.call(this, s, x, y) : ft.call(this, s, x, y, mw);
-        const call = () => mw === undefined ? ft.call(this, s, x, y) : ft.call(this, s, x, y, mw);
-        this.save(); const fs = parseFloat((/(\d+(\.\d+)?)px/.exec(this.font) || [0, 30])[1]), dark = lum(String(this.fillStyle).startsWith("#") ? this.fillStyle : "#ffffff") > .5;
-        if (tfx === "shadow") { this.shadowColor = dark ? "rgba(0,0,0,.55)" : "rgba(0,0,0,.25)"; this.shadowBlur = fs * .35; this.shadowOffsetY = fs * .06; call(); }
-        else if (tfx === "lift") { this.shadowColor = dark ? "rgba(0,0,0,.7)" : "rgba(60,40,20,.35)"; this.shadowBlur = 0; this.shadowOffsetX = fs * .04; this.shadowOffsetY = fs * .05; call(); }
-        else if (tfx === "glow") { this.shadowColor = dark ? "rgba(255,236,190,.85)" : "rgba(255,255,255,.95)"; this.shadowBlur = fs * .5; call(); this.shadowBlur = fs * .2; call(); }
-        else if (tfx === "outline") { this.lineWidth = Math.max(1, fs * .09); this.lineJoin = "round"; this.strokeStyle = dark ? "rgba(10,12,24,.85)" : "rgba(255,255,255,.9)"; mw === undefined ? this.strokeText(s, x, y) : this.strokeText(s, x, y, mw); call(); }
-        else if (tfx === "emboss") { const fsS = this.fillStyle; this.fillStyle = dark ? "rgba(0,0,0,.5)" : "rgba(255,255,255,.8)"; mw === undefined ? ft.call(this, s, x, y + fs * .035) : ft.call(this, s, x, y + fs * .035, mw); this.fillStyle = fsS; call(); }
-        else call();
-        this.restore(); };
-      restore = () => { delete ctx.fillText; if (ctx.fillText !== ft) ctx.fillText = ft; }; }
-    try { origDraw.call(this, ctx, W, H, o, time); } finally { restore && restore(); }
-    // ornament on top (fades in with animated cards)
-    if (f.stk && ORN[f.stk] && f.stk !== "none") { const u = Math.min(W, H), L = K.LOOKS[o.look] || {}, P = K.PALETTES[o.palette] || K.PALETTES.gold;
-      const col = f.acc || (L.dark ? P.acc : P.dk), r = u * .055 * (f.sz || 1), [x, y] = spotXY(f.sp, W, H, u);
+    const tfx = TFX[f.tfx] && f.tfx !== "none" ? f.tfx : null, u = Math.min(W, H), L = K.LOOKS[o.look] || {}, P = K.PALETTES[o.palette] || K.PALETTES.gold;
+    const acc = f.acc || (L.dark ? P.acc : P.dk), hl = new Set(String(f.hl || "").split(",").filter(Boolean));
+    const live = ctx.canvas && ctx.canvas.id === "cv"; if (live) { HITS.text = []; HITS.orn = null; HITS.W = W; HITS.H = H; }
+    const ft = ctx.fillText; bgDone = false;
+    ctx.fillText = function (s, x, y, mw) {
+      const call = (str = s, xx = x) => mw === undefined ? ft.call(this, str, xx, y) : ft.call(this, str, xx, y, mw);
+      if (!bgDone) return call();
+      const fs = parseFloat((/(\d+(\.\d+)?)px/.exec(this.font) || [0, 30])[1]), lightInk = lum(String(this.fillStyle).startsWith("#") ? this.fillStyle : "#ffffff") > .5;
+      this.save();
+      if (tfx === "shadow") { this.shadowColor = lightInk ? "rgba(0,0,0,.55)" : "rgba(60,40,20,.38)"; this.shadowBlur = fs * .35; this.shadowOffsetY = fs * .06; call(); }
+      else if (tfx === "lift") { this.shadowColor = lightInk ? "rgba(0,0,0,.7)" : "rgba(60,40,20,.4)"; this.shadowOffsetX = fs * .04; this.shadowOffsetY = fs * .05; call(); }
+      else if (tfx === "glow") { // light text: warm white halo; dark text on light cards: a golden halo that actually shows
+        this.shadowColor = lightInk ? "rgba(255,236,190,.85)" : "rgba(216,160,70,.8)"; this.shadowBlur = fs * .5; call(); this.shadowBlur = fs * .22; call(); }
+      else if (tfx === "outline") { this.lineWidth = Math.max(1, fs * .09); this.lineJoin = "round"; this.strokeStyle = lightInk ? "rgba(10,12,24,.85)" : "rgba(255,255,255,.95)"; mw === undefined ? this.strokeText(s, x, y) : this.strokeText(s, x, y, mw); call(); }
+      else if (tfx === "emboss") { const k = this.fillStyle; this.fillStyle = lightInk ? "rgba(0,0,0,.5)" : "rgba(255,255,255,.85)"; mw === undefined ? ft.call(this, s, x, y + fs * .035) : ft.call(this, s, x, y + fs * .035, mw); this.fillStyle = k; call(); }
+      else call();
+      this.restore();
+      const str = String(s), big = fs > u * .03 && str.length > 2;
+      if ((hl.size && big) || live) { const w = this.measureText(str).width, al = this.textAlign, x0 = al === "center" ? x - w / 2 : al === "right" || al === "end" ? x - w : x;
+        if (hl.size && big) { let m; WORD.lastIndex = 0; while ((m = WORD.exec(str))) if (hl.has(normW(m[0]))) { const px = this.measureText(str.slice(0, m.index)).width; this.save(); this.textAlign = "left"; this.shadowColor = "transparent"; this.fillStyle = acc; ft.call(this, m[0], x0 + px, y); this.restore(); } }
+        if (live && big) { const T = this.getTransform(), mx = v => T.a * v + T.e, my = v => T.d * v + T.f; HITS.text.push({ s: str, fs: fs * T.d, x0: mx(x0), x1: mx(x0 + w), y0: my(y - fs * .85), y1: my(y + fs * .25), al, xs: str ? [...str.matchAll(WORD)].map(mm => ({ w: normW(mm[0]), a: mx(x0 + this.measureText(str.slice(0, mm.index)).width), b: mx(x0 + this.measureText(str.slice(0, mm.index + mm[0].length)).width) })) : [] }); } }
+    };
+    try { origDraw.call(this, ctx, W, H, o, time); } finally { delete ctx.fillText; if (ctx.fillText !== ft) ctx.fillText = ft; }
+    if (f.stk && ORN[f.stk] && f.stk !== "none") {
+      const r = u * .055 * (f.sz || 1), [x, y] = isFinite(f.ox) && isFinite(f.oy) ? [f.ox * W, f.oy * H] : spotXY(f.sp, W, H, u);
       const a = (f.so == null ? .9 : f.so) * (isFinite(time) && o.anim && o.anim !== "none" ? ease(((time % 10) - .3) / 1.2) : 1);
-      ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = a; ctx.shadowColor = L.dark ? "rgba(0,0,0,.35)" : "rgba(0,0,0,.12)"; ctx.shadowBlur = r * .3; ornament(ctx, f.stk, x, y, r, col); ctx.restore(); }
+      ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = a; ctx.shadowColor = L.dark ? "rgba(0,0,0,.35)" : "rgba(0,0,0,.12)"; ctx.shadowBlur = r * .3; ornament(ctx, f.stk, x, y, r, f.oc || acc); ctx.restore();
+      if (live) HITS.orn = { x, y, r: r * 1.3 }; }
   };
+  K.HITS = HITS;
   // fillText is an own property only while patched; prototype method otherwise
   K.X = { FILTERS, TFX, ORN, SPOTS, ornament, applyFilter, lum };
 })();
