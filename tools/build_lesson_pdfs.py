@@ -8,7 +8,7 @@ import asyncio, base64, os, sys
 from playwright.async_api import async_playwright
 BASE = os.environ.get("BASE", "http://localhost:8765/")
 OUT = os.path.join(os.path.dirname(__file__), "..", "assets", "lesson-pdf")
-KINDS = {"eqrs": ["onepage", "handout"], "youth": ["onepage", "handout"], "fhe": ["outline", "handout"], "talk": ["outline"]}
+KINDS = {m: ["outline", "handout", "onepage"] for m in ["fhe", "eqrs", "youth", "talk"]}
 async def main():
     os.makedirs(OUT, exist_ok=True)
     async with async_playwright() as p:

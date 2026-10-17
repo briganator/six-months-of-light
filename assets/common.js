@@ -15,7 +15,7 @@ window.speakerTalks = sl => CONF.talks.filter(t => slug(t.speaker) === sl);
 window.fmtDate = iso => new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" });
 // Lazy-load the multi-conference library (only where it's used).
 window.loadLib = () => window.__libP || (window.__libP = ["themes3.js", "library-data.js", "library.js", "scripref.js", "search.js"].filter(f => !(f === "themes3.js" && window.THEMES3) && !(f === "library-data.js" && window.LIB) && !(f === "library.js" && window.Library) && !(f === "scripref.js" && window.ScripRef) && !(f === "search.js" && window.InsightSearch))
-  .reduce((p, f) => p.then(() => new Promise((ok, no) => { const s = document.createElement("script"); s.src = (document.querySelector('script[src*="assets/common.js"]')?.getAttribute("src") || "assets/common.js").replace("common.js", "") + f; s.onload = ok; s.onerror = no; document.head.appendChild(s); })), Promise.resolve()).then(() => window.Library));
+  .reduce((p, f) => p.then(() => new Promise((ok, no) => { const s = document.createElement("script"); s.src = (document.querySelector('script[src*="assets/common.js"]')?.getAttribute("src") || "assets/common.js").replace(/common\.js.*$/, "") + f; s.onload = ok; s.onerror = no; document.head.appendChild(s); })), Promise.resolve()).then(() => window.Library));
 window.QS = new URLSearchParams(location.search);
 // Group links: ?g=smith-family is carried across pages and tags shared posts.
 window.GROUP = (QS.get("g") || sessionStorage.getItem("conf-group") || "").toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 40) || null;

@@ -87,6 +87,10 @@ function timedPlan(n, mk) {
   ];
   return { segs, q: q.map(x => x.replace(/<[^>]+>/g, "")), ref, quote, core };
 }
+// One clear print area, shown near the top and again at the bottom of every lesson.
+const printPanel = where => `<div class="print-panel ${where}" role="group" aria-label="Print or save this lesson">
+  <div class="pp-k"><b><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg> ${PHONE ? "Print or save as PDF" : "Print this lesson"}</b><small>${PHONE ? "Opens a PDF. Then tap Share → Print." : "Letter size, one page"}</small></div>
+  <div class="pp-btns"><a class="btn secondary small" data-print="outline" href="#" target="_blank" rel="noopener">Outline</a><a class="btn secondary small" data-print="handout" href="#" target="_blank" rel="noopener">Handout</a><a class="btn secondary small" data-print="onepage" href="#" target="_blank" rel="noopener">One page</a></div></div>`;
 function renderTimed(n, m, mk) {
   const P = timedPlan(n, mk), out = $("out");
   const bar = `<div class="tl-bar" aria-hidden="true">${P.segs.map(s => `<i style="flex:${s.b - s.a}" title="${esc(s.k)}"><span>${s.b - s.a}</span></i>`).join("")}</div>`;
@@ -95,6 +99,7 @@ function renderTimed(n, m, mk) {
     <div class="ls-kicker">${esc(m.name)} · ${esc(m.time)}</div>${m.sub ? `<p class="speaker" style="margin:2px 0 0">${esc(m.sub)}</p>` : ""}
     <h2 style="margin:6px 0 2px">${esc(n.title)}</h2><p class="speaker">${esc(n.speaker)} · ${esc(n.conf)} general conference</p>
     <p class="src" style="margin-top:6px">${esc(m.fmt)}</p>
+    ${printPanel("top")}
     <div class="tl-core"><div class="tl-ck">One core truth</div><p>${esc(P.core)}</p></div>
     ${bar}
     <div class="tl-clock no-print"><button class="btn secondary small" id="clk">▶ Start 25-min clock</button><span id="clkv" aria-live="polite"></span></div>
@@ -104,11 +109,10 @@ function renderTimed(n, m, mk) {
       <ul><li>Read the full talk and pray about what your ${mk === "youth" ? "class" : "quorum or Relief Society"} needs from it.</li><li>Share the talk link a few days early so members come having read it.</li><li>Teach one truth well. Meaningful discussion matters more than covering everything.</li>${others.length ? `<li>Other scriptures the talk cites: ${others.map(esc).join("; ")}</li>` : ""}</ul></details>
     <div class="links">
       <button class="btn gold small" id="present">▶ Present</button>
-      <a class="btn secondary small" id="p1" href="#" target="_blank" rel="noopener">Print this one page</a>
-      <a class="btn secondary small" id="ph" href="#" target="_blank" rel="noopener">Print handout</a>
       <button class="btn secondary small" id="cp">Copy outline</button>
       ${n.local ? `<a class="btn secondary small" href="${esc(n.local)}">Read this talk</a>` : ""}
     </div>
+    ${printPanel("bottom")}
     <p class="src talk-source">Source: <a href="${esc(n.official || n.session)}" rel="noopener">Official text on ChurchofJesusChrist.org</a>${n.local ? ". The full talk is on this site." : ""} Timing follows the Church's 25-minute meeting guidance; adapt it as the Spirit directs.</p>`;
   $("handout").innerHTML = `<div class="ho-head"><div class="ho-k">${esc(m.name)}</div><h2>${esc(n.title)}</h2><p>${esc(n.speaker)} · ${esc(n.conf)} general conference</p></div>
     <h3>One core truth</h3><blockquote>${esc(P.core)}</blockquote>
@@ -119,7 +123,13 @@ function renderTimed(n, m, mk) {
     <p class="ho-foot">Talk text from ChurchofJesusChrist.org · Handout from sixmonthsoflight.com (not an official Church site)</p>`;
   const strip = x => x.replace(/<\/span>\s*/g, ": ").replace(/<q>/g, "“").replace(/<\/q>/g, "”").replace(/<[^>]+>/g, "").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
   const head = { kicker: `${m.name} · 25 min`, title: n.title, byline: `${n.speaker} · ${n.conf} general conference`, foot: PDF_FOOT, fit: true };
+  const segBlocks = () => P.segs.map(sg => ({ t: "seg", time: `${mm(sg.a)}–${mm(sg.b)}`, text: sg.k, who: sg.who, items: sg.items.map(strip) }));
   wirePrint({
+    outline: () => ({ ...head, blocks: [{ t: "p", text: m.fmt }, { t: "core", text: P.core }, ...segBlocks(),
+      { t: "h", text: "Before Sunday" }, { t: "p", text: n.overview }, { t: "li", text: `Read the full talk and pray about what your ${mk === "youth" ? "class" : "quorum or Relief Society"} needs from it.` },
+      { t: "li", text: "Share the talk link a few days early so members come having read it." }, { t: "li", text: "Teach one truth well. Meaningful discussion matters more than covering everything." },
+      ...(others.length ? [{ t: "li", text: "Other scriptures the talk cites: " + others.join("; ") }] : []),
+      { t: "src", text: "Timing follows the Church's 25-minute meeting guidance; adapt it as the Spirit directs. Read the full talk at ChurchofJesusChrist.org." }] }),
     onepage: () => ({ ...head, blocks: [{ t: "core", text: P.core }, ...P.segs.map(sg => ({ t: "seg", time: `${mm(sg.a)}–${mm(sg.b)}`, text: sg.k, who: sg.who, items: sg.items.map(strip) })),
       { t: "src", text: "Timing follows the Church's 25-minute meeting guidance; adapt it as the Spirit directs. Read the full talk at ChurchofJesusChrist.org." }] }),
     handout: () => ({ ...head, kicker: m.name, blocks: [{ t: "core", text: P.core }, { t: "h", text: "From the talk" }, { t: "q", text: P.quote },
@@ -163,6 +173,7 @@ function gen() {
     <div class="ls-kicker">${esc(m.name)} · ${esc(m.time)}</div>${m.sub ? `<p class="speaker" style="margin:2px 0 0">${esc(m.sub)}</p>` : ""}
     <h2 style="margin:6px 0 2px">${esc(n.title)}</h2><p class="speaker">${esc(n.speaker)} · ${esc(n.conf)} general conference</p>
     ${m.fmt ? `<p class="src" style="margin-top:6px">${esc(m.fmt)}</p>` : ""}
+    ${printPanel("top")}
     ${h("Talk overview")}<p>${esc(n.overview)}</p><p class="src">${esc(n.overviewSrc)}</p>
     ${h("Open")}<p>${esc(m.open)} <em>${esc(n.ponder)}</em></p>
     ${h(quotes.length ? "Key quotes" : "Key statement")}${quoteBlock}
@@ -172,11 +183,10 @@ function gen() {
     ${h("Suggested invitation")}<p><strong>${esc(n.invitation)}</strong> ${esc(m.close)}</p>${n.invSrc ? `<p class="src">${esc(n.invSrc)}</p>` : ""}
     <div class="links">
       <button class="btn gold small" id="present">▶ Present</button>
-      ${mode !== "talk" ? `<a class="btn secondary small" id="ph" href="#" target="_blank" rel="noopener">Print handout</a>` : ""}
-      <a class="btn secondary small" id="po" href="#" target="_blank" rel="noopener">Print outline</a>
       <button class="btn secondary small" id="cp">Copy outline</button>
       ${n.local ? `<a class="btn secondary small" href="${esc(n.local)}">Read this talk</a>` : ""}
     </div>
+    ${printPanel("bottom")}
     <p class="src talk-source">Source: <a href="${esc(n.official || n.session)}" rel="noopener">Official text on ChurchofJesusChrist.org</a>${n.local ? ". The full talk is on this site." : ""}</p>`;
   // Class-member handout: one page, big enough to read, no leader notes
   $("handout").innerHTML = `<div class="ho-head"><div class="ho-k">${esc(m.name)}</div><h2>${esc(n.title)}</h2><p>${esc(n.speaker)} · ${esc(n.conf)} general conference</p></div>
@@ -195,7 +205,11 @@ function gen() {
       ...(qs.length ? [{ t: "h", text: "5. Discussion questions" }, ...qs.map((x, i) => ({ t: "li", n: i + 1, text: x }))] : []),
       { t: "h", text: (qs.length ? "6. " : "5. ") + "Activity" }, { t: "p", text: m.act }, { t: "h", text: (qs.length ? "7. " : "6. ") + "Suggested invitation" }, { t: "p", text: `${n.invitation} ${m.close}` }] }),
   };
-  if (mode !== "talk") pm.handout = () => ({ ...head, kicker: m.name, blocks: [{ t: "h", text: quotes.length ? "Key quotes" : "Key statement" }, ...quoteBlocks,
+  pm.onepage = () => ({ ...head, blocks: [{ t: "h", text: "Open" }, { t: "p", text: `${m.open} ${n.ponder}` }, { t: "h", text: quotes.length ? "Key quote" : "Key statement" }, quoteBlocks[0],
+    ...(refs.length ? [{ t: "h", text: "Scriptures" }, { t: "p", text: refs.slice(0, 4).map(r => ScripRef.first(r) || r).join(" · ") }] : []),
+    ...(qs.length ? [{ t: "h", text: "Discuss" }, ...qs.map((x, i) => ({ t: "li", n: i + 1, text: x }))] : []),
+    { t: "h", text: mode === "talk" ? "Teach" : "Activity" }, { t: "p", text: m.act }, { t: "h", text: "Invitation" }, { t: "p", text: `${n.invitation} ${m.close}` }] });
+  pm.handout = () => ({ ...head, kicker: m.name, blocks: [{ t: "h", text: quotes.length ? "Key quotes" : "Key statement" }, ...quoteBlocks,
     ...(refs.length ? [{ t: "h", text: "Scriptures to read" }, { t: "p", text: refs.map(r => ScripRef.first(r) || r).join(" · ") }] : []),
     ...(qs.length ? [{ t: "h", text: "To ponder and discuss" }, ...qs.map((x, i) => ({ t: "li", n: i + 1, text: x }))] : []), { t: "h", text: "This week" }, { t: "p", text: n.invitation }] });
   wirePrint(pm);
@@ -211,9 +225,8 @@ function gen() {
 // await or timer), with the print layout kept on until afterprint because Safari's print() returns at once.
 // October 2026 lessons use PDFs pre-built by tools/build_lesson_pdfs.py (same builder); other talks are built here.
 const PRINT_KINDS = ["onepage", "handout", "outline"], PRINT_VIEW = PRINT_KINDS.includes(QS.get("print")) ? QS.get("print") : "";
-const PDF_V = "1", PDF_FOOT = "Talk text from ChurchofJesusChrist.org · sixmonthsoflight.com (personal study site, not an official Church site)";
+const PDF_V = "2", PDF_FOOT = "Talk text from ChurchofJesusChrist.org · sixmonthsoflight.com (personal study site, not an official Church site)";
 const PHONE = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) || matchMedia("(pointer: coarse)").matches;
-const BTN_KIND = { p1: "onepage", ph: "handout", po: "outline" };
 let MODELS = {}, blobUrls = [], buildSeq = 0;
 function setPrintMode(kind) { PRINT_KINDS.forEach(k => document.body.classList.toggle("print-" + k, k === kind)); }
 const pdfName = kind => `${(mode + "-" + (tid || "lesson") + "-" + kind).replace(/[^a-z0-9-]+/gi, "-")}.pdf`;
@@ -222,8 +235,8 @@ async function pdfBlobUrl(kind) { await LessonPDF.ready(); const bytes = await L
 window.__lessonPdf = async kind => { await LessonPDF.ready(); const b = await LessonPDF.build(MODELS[kind]()); let s = ""; b.forEach(x => s += String.fromCharCode(x)); return btoa(s); };   // used by the build script
 function wirePrint(models) {
   MODELS = models; blobUrls.forEach(u => URL.revokeObjectURL(u)); blobUrls = []; const seq = ++buildSeq;
-  Object.entries(BTN_KIND).forEach(([id, kind]) => {
-    const a = $(id); if (!a || !models[kind]) return;
+  document.querySelectorAll("#out [data-print]").forEach(a => {
+    const kind = a.dataset.print; if (!models[kind]) { a.hidden = true; return; }
     if (!PHONE) { a.removeAttribute("target"); a.onclick = e => { e.preventDefault(); setPrintMode(kind); window.print(); }; return; }
     const st = staticPdf(kind);
     if (st) { a.href = st; a.type = "application/pdf"; return; }               // plain link to a real file
@@ -240,7 +253,7 @@ if (PRINT_VIEW) {
   const back = esc(location.href.replace(/([?&])print=[^&]*&?/, "$1").replace(/[?&]$/, ""));
   bar.innerHTML = `<span>Printable ${PRINT_VIEW === "onepage" ? "one-page lesson" : PRINT_VIEW}</span><a class="btn gold small" id="pvGo" href="#" target="_blank" rel="noopener">${PHONE ? "Open PDF" : "Print"}</a><a class="btn secondary small" href="${back}">Back to lesson</a>`;
   main.prepend(bar);
-  const sync = () => { const src = $(Object.keys(BTN_KIND).find(id => BTN_KIND[id] === PRINT_VIEW)); const go = $("pvGo"); if (!src || !go) return;
+  const sync = () => { const src = document.querySelector(`#out [data-print="${PRINT_VIEW}"]`); const go = $("pvGo"); if (!src || !go) return;
     if (!PHONE) { go.removeAttribute("target"); go.onclick = e => { e.preventDefault(); window.print(); }; return; }
     go.href = src.href; if (src.hasAttribute("download")) { go.setAttribute("download", src.getAttribute("download")); go.removeAttribute("target"); } go.onclick = e => src.onclick ? src.onclick(e) : null; };
   new MutationObserver(sync).observe($("out"), { childList: true }); setInterval(sync, 1500); sync();

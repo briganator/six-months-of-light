@@ -1411,3 +1411,13 @@ ol.tl{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:10px}
 .print-bar{position:sticky;top:var(--hdrH,60px);z-index:20;display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:14px 0 0;padding:10px 14px;border-radius:14px;background:#fff8e8;border:1px solid rgba(216,169,91,.55);box-shadow:0 8px 20px -14px rgba(13,19,38,.5)}
 .print-bar span{font:600 14px var(--sans);flex:1;min-width:140px}
 .print-help{margin:12px 0;padding:10px 14px;border-radius:12px;background:#fff8e8;border:1px solid rgba(216,169,91,.55);font-size:14.5px}
+/* ---- Lesson print area (top and bottom of every lesson) ---- */
+.print-panel{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:14px 0;padding:12px 14px;border-radius:16px;background:linear-gradient(135deg,#fff6df,#fdeee6);border:1.5px solid rgba(216,169,91,.65);box-shadow:0 6px 18px -14px rgba(13,19,38,.45)}
+.print-panel .pp-k{display:flex;flex-direction:column;font:700 15px var(--sans);color:var(--midnight-2);flex:1 1 170px}
+.print-panel .pp-k b{display:flex;align-items:center;gap:7px}.print-panel .pp-k svg{flex:none;color:#a87a35}
+.print-panel .pp-k small{font:500 12.5px var(--sans);color:var(--muted);margin-top:1px}
+.print-panel .pp-btns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;flex:2 1 260px}
+.print-panel .pp-btns .btn{justify-content:center;min-height:44px;font-weight:600;white-space:nowrap;padding-left:8px;padding-right:8px;background:#fff;border-color:rgba(168,122,53,.55);color:var(--midnight-2)}
+.print-panel .pp-btns .btn[hidden]{display:none}
+@media (max-width:560px){.print-panel .pp-btns{flex-basis:100%}}
+@media print{.print-panel{display:none!important}}
