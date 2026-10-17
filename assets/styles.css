@@ -1408,3 +1408,6 @@ ol.tl{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:10px}
   body.print-onepage .tl-body q{font-size:10.5pt}
   .tl-seg{break-inside:avoid}
 }
+.print-bar{position:sticky;top:var(--hdrH,60px);z-index:20;display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:14px 0 0;padding:10px 14px;border-radius:14px;background:#fff8e8;border:1px solid rgba(216,169,91,.55);box-shadow:0 8px 20px -14px rgba(13,19,38,.5)}
+.print-bar span{font:600 14px var(--sans);flex:1;min-width:140px}
+.print-help{margin:12px 0;padding:10px 14px;border-radius:12px;background:#fff8e8;border:1px solid rgba(216,169,91,.55);font-size:14.5px}

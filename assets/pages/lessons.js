@@ -117,9 +117,8 @@ function renderTimed(n, m, mk) {
     <h3>To ponder and discuss</h3><ol>${P.q.map(x => `<li>${esc(x)}</li>`).join("")}</ol>
     <h3>This week</h3><p>${esc(n.invitation)}</p><p>What do I feel impressed to do? ______________________________</p>
     <p class="ho-foot">Talk text from ChurchofJesusChrist.org · Handout from sixmonthsoflight.com (not an official Church site)</p>`;
-  const printAs = c => { document.body.classList.add(c); print(); setTimeout(() => document.body.classList.remove(c), 500); };
-  $("p1").onclick = () => printAs("print-onepage");
-  $("ph").onclick = () => printAs("print-handout");
+  $("p1").onclick = () => doPrint("onepage");
+  $("ph").onclick = () => doPrint("handout");
   $("cp").onclick = () => navigator.clipboard.writeText([`${m.name} · 25 min`, `${n.title} · ${n.speaker}`, `One core truth: ${P.core}`, ...P.segs.map(s => `${mm(s.a)}–${mm(s.b)} ${s.k} (${s.who}): ` + s.items.map(x => x.replace(/<[^>]+>/g, "")).join(" "))].join("\n")).then(() => window.toast?.("Outline copied"));
   $("present").onclick = () => present([
     [m.present, n.title, n.speaker],
@@ -144,7 +143,7 @@ function clockWire() {
 }
 function gen() {
   const n = norm(), m = MODES[mode], out = $("out");
-  setURL(`?mode=${mode}&c=${encodeURIComponent(conf)}&t=${encodeURIComponent(tid || "")}`);
+  setURL(`?mode=${mode}&c=${encodeURIComponent(conf)}&t=${encodeURIComponent(tid || "")}${PRINT_VIEW ? "&print=" + PRINT_VIEW : ""}`);
   if (!n) { out.innerHTML = `<p class="empty">Loading talks…</p>`; return; }
   if (m.timed) return renderTimed(n, m, mode);
   clockWire();
@@ -180,15 +179,44 @@ function gen() {
     <h3>This week</h3><p>${esc(n.invitation)}</p>
     <p class="ho-foot">Talk text from ChurchofJesusChrist.org · Handout from sixmonthsoflight.com (not an official Church site)</p>`;
   $("cp").onclick = () => navigator.clipboard.writeText(out.innerText).then(() => window.toast?.("Outline copied"));
-  $("po").onclick = () => print();
-  if ($("ph")) $("ph").onclick = () => { document.body.classList.add("print-handout"); print(); setTimeout(() => document.body.classList.remove("print-handout"), 500); };
+  $("po").onclick = () => doPrint("outline");
+  if ($("ph")) $("ph").onclick = () => doPrint("handout");
   $("present").onclick = () => present([
     [m.present, n.title, n.speaker], ["Let's ponder", n.ponder, ""], ["The big idea", n.big, ""],
     ...(quotes.length ? quotes.map(q => ["Read aloud", "“" + q + "”", n.speaker + (conf === "2026-10" && !OFFICIAL_TEXT() ? " (from the recap)" : "")]) : [["Key statement", n.keyStatement, n.speaker]]),
     ...(refs.length ? [["Scripture", refs.map(r => ScripRef.first(r) || r).slice(0, 3).join(" · "), "Read it together from your scriptures."]] : []),
     ...qs.slice(1).map((x, i) => [`Discuss · ${i + 1}`, x, ""]), [mode === "eqrs" ? "Counsel together" : "Activity", m.act, ""], ["This week", n.invitation, m.close]]);
 }
-window.addEventListener("afterprint", () => document.body.classList.remove("print-handout", "print-onepage"));
+// ---- Printing ----
+// Safari (iOS and recent macOS) and Chrome on Android return from print() at once and lay out the page later, so the
+// print-mode class must stay on until the print actually ends (afterprint), never be removed on a timer.
+// The iOS home-screen app (standalone) ignores print() entirely, so there we open a printable copy in Safari instead.
+const PRINT_KINDS = ["onepage", "handout", "outline"], PRINT_VIEW = PRINT_KINDS.includes(QS.get("print")) ? QS.get("print") : "";
+const standalone = () => navigator.standalone === true || matchMedia("(display-mode: standalone)").matches;
+function setPrintMode(kind) { PRINT_KINDS.forEach(k => document.body.classList.toggle("print-" + k, k === kind)); }
+function printableUrl(kind) { const u = new URL(location.href); u.searchParams.set("print", kind); return u.href; }
+function printFallback(kind) {
+  let d = document.getElementById("printHelp"); if (!d) { d = document.createElement("div"); d.id = "printHelp"; d.className = "print-help no-print"; d.setAttribute("role", "status"); $("out").before(d); }
+  d.innerHTML = `<strong>Print didn't open?</strong> The home-screen app can't print on some iPhones. <a href="${esc(printableUrl(kind))}" target="_blank" rel="noopener">Open the printable page in Safari</a>, then tap Print (or Share → Print).`;
+  d.scrollIntoView({ block: "nearest" });
+}
+function doPrint(kind) {
+  setPrintMode(kind);
+  if (standalone() && !PRINT_VIEW) { window.open(printableUrl(kind), "_blank"); printFallback(kind); return; }
+  let started = false; const mark = () => { started = true; };
+  addEventListener("beforeprint", mark, { once: true });
+  try { window.print(); } catch (e) { printFallback(kind); return; }
+  setTimeout(() => { if (!started && !matchMedia("print").matches) printFallback(kind); }, 3000);
+}
+addEventListener("afterprint", () => { if (!PRINT_VIEW) setPrintMode(""); });
+// Printable copy (?print=onepage|handout|outline): keep that layout on for the browser's own Print and Share → Print.
+if (PRINT_VIEW) {
+  setPrintMode(PRINT_VIEW);
+  const bar = document.createElement("div"); bar.className = "print-bar no-print";
+  bar.innerHTML = `<span>Printable ${PRINT_VIEW === "onepage" ? "one-page lesson" : PRINT_VIEW}</span><button class="btn gold small" id="pvGo">Print</button><a class="btn secondary small" href="${esc(location.href.replace(/([?&])print=[^&]*&?/, "$1").replace(/[?&]$/, ""))}">Back to lesson</a>`;
+  main.prepend(bar); $("pvGo").onclick = () => window.print();
+  (document.fonts?.ready || Promise.resolve()).then(() => setTimeout(() => { try { window.print(); } catch (e) {} }, 400));
+}
 // Big-type slides for a TV or a phone passed around the room. Arrow keys, swipe or tap the sides; Esc closes.
 function present(slides) {
   let i = 0; const ov = document.createElement("div"); ov.className = "present"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true"); ov.setAttribute("aria-label", "Lesson slides");
