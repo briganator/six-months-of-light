@@ -86,7 +86,9 @@
       d = cfg.codec === "opus" ? 0 : Math.max(0, Math.min(4096, bi - (at + 24))); } catch (e) { d = 0; }
     return (PRIME[cfg.codec] = d); }
   // make({ src, clip, W, H, draw(ctx, W, H, t, frame), mix(octx, speechBuffer) -> Promise, onP })
-  async function make({ src, clip, W, H, draw, mix, onP = () => {} }) {
+  // lead/tail add still frames (title card, end card) around the speech. Both default to 0, which keeps the original timing.
+  async function make({ src, clip, W, H, draw, mix, onP = () => {}, lead = 0, tail = 0 }) {
+    const preT = Math.max(0, +lead || 0), postT = Math.max(0, +tail || 0);
     await loadMux(); const M = await moov(src), V = M.v, A = M.a, at0 = clip.at0, dur = clip.dur, vEnd = clip.vEnd ?? dur;
     const vc = await avcCfg(W, H), ac = await audCfg(); if (!vc || !ac) throw new Error("unsupported");
     // Video samples: from the keyframe at/before at0 to just past the last needed frame.
@@ -97,7 +99,7 @@
     aIdx.forEach(i => { lo = Math.min(lo, A.off[i]); hi = Math.max(hi, A.off[i] + A.size[i]); });
     onP(.02); const buf = await range(src, lo, hi - 1); onP(.15);
     // Audio: decode the exact segment, then the offline mix (speech gain envelope + music ducking).
-    const sp = await speech(src, A, buf, lo, at0, dur), octx = new OfflineAudioContext(2, Math.ceil(dur * SR), SR), sb = octx.createBuffer(sp.ch, sp.out[0].length, sp.sr);
+    const sp = await speech(src, A, buf, lo, at0, dur), octx = new OfflineAudioContext(2, Math.ceil((dur + preT + postT) * SR), SR), sb = octx.createBuffer(sp.ch, sp.out[0].length, sp.sr);
     sp.out.forEach((x, c) => sb.copyToChannel(x, c)); await mix(octx, sb); const mixed = await octx.startRendering(); onP(.25);
     const muxer = new Mp4Muxer.Muxer({ target: new Mp4Muxer.ArrayBufferTarget(), fastStart: "in-memory", firstTimestampBehavior: "offset",
       video: { codec: "avc", width: W, height: H }, audio: { codec: ac.mux, numberOfChannels: 2, sampleRate: SR } });
@@ -106,7 +108,8 @@
     // Source frames are kept as they are (no frame-rate conversion): each decoded frame is drawn once at its own
     // presentation time minus at0, so the picture can't drift from the audio. After vEnd the last frame is held.
     let n = 0, last = -1, prev = null, started = false; const step = V.dur[k0] || 1 / FPS;
-    const emit = (f, t) => { if (t <= last + 1e-4) return; draw(ctx, W, H, t, f); const vf = new VideoFrame(cv, { timestamp: Math.round(t * 1e6) }); ve.encode(vf, { keyFrame: n % (FPS * 2) === 0 }); vf.close(); n++; last = t; onP(.25 + .7 * Math.min(1, t / dur)); };
+    const emit = (f, t) => { if (t <= last + 1e-4) return; draw(ctx, W, H, t + preT, f); const vf = new VideoFrame(cv, { timestamp: Math.round((t + preT) * 1e6) }); ve.encode(vf, { keyFrame: n % (FPS * 2) === 0 }); vf.close(); n++; last = t; onP(.25 + .7 * Math.min(1, (t + preT) / (dur + preT + postT))); };
+    if (preT > .02) { const stepL = 1 / FPS; for (let t = 0; t < preT - 1e-3; t += stepL) { draw(ctx, W, H, t, null); const vf = new VideoFrame(cv, { timestamp: Math.round(t * 1e6), duration: Math.round(1e6 / FPS) }); ve.encode(vf, { keyFrame: n % (FPS * 2) === 0 }); vf.close(); n++; if (n % 10 === 0) await sleep(0); } }
     const vd = new VideoDecoder({ output: f => { try { const t = f.timestamp / 1e6 - at0;
         if (t <= 1e-4) { if (prev) prev.close(); prev = f; return; }
         if (!started) { started = true; emit(prev || f, 0); }
@@ -114,7 +117,9 @@
     vd.configure({ codec: V.codec, description: V.desc, codedWidth: V.w, codedHeight: V.h });
     for (let s = k0; s <= k1; s++) { if (err) throw err; vd.decode(new EncodedVideoChunk({ type: V.key[s] ? "key" : "delta", timestamp: Math.round(V.pts[s] * 1e6), duration: Math.round(V.dur[s] * 1e6), data: new Uint8Array(buf, V.off[s] - lo, V.size[s]) }));
       while ((vd.decodeQueueSize > 2 || ve.encodeQueueSize > 3) && !err) await sleep(2); if (s % 8 === 0) await sleep(0); }
-    await vd.flush(); if (prev) { if (!started) emit(prev, 0); for (let t = last + step; t < dur - 1e-3; t += step) emit(prev, t); prev.close(); } vd.close(); if (err) throw err;
+    await vd.flush(); if (prev) { if (!started) emit(prev, 0); for (let t = last + step; t < dur - 1e-3; t += step) emit(prev, t); }
+    if (postT > .02) { const stepT = 1 / FPS, frame = prev; for (let i = 0; i < Math.round(postT * FPS); i++) { const tOut = preT + dur + i * stepT; draw(ctx, W, H, tOut, frame); const vf = new VideoFrame(cv, { timestamp: Math.round(tOut * 1e6), duration: Math.round(1e6 / FPS) }); ve.encode(vf, { keyFrame: n % (FPS * 2) === 0 }); vf.close(); n++; if (i % 10 === 0) await sleep(0); } }
+    if (prev) prev.close(); vd.close(); if (err) throw err;
     // Audio: encode the rendered mix in 1024-frame blocks, timestamps from the sample count.
     const ae = new AudioEncoder({ output: (c, m) => muxer.addAudioChunk(c, m), error: e => err = e }); ae.configure(ac.c);
     const pre = await priming(ac.c), L0 = mixed.getChannelData(0), R0 = mixed.getChannelData(1), T = mixed.length;

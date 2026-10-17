@@ -17,6 +17,12 @@ A personal study and sharing site for the 196th Semiannual General Conference (i
 - Speaker pages and talks show official speaker photos stored locally (see Speaker photos below). Card photos are openly licensed, not Church photos. Talk pages hotlink official audio, video and any illustration in the talk; those files stay on the Church's servers.
 
 ## Features
+**Best moments and the clip editor** (`moments.html`, `clip.html`)
+- Best moments lists short passages from October 2026 talks (`assets/moments.json`). Each one opens in a full-screen editor with its own starting look. The eight looks — Classic gold, Rose pill, Teal pop, Sage lower, Silver serif, Ember pop, Gold pill, Rose lower — cycle in that order through a talk.
+- Caption styles: word highlight (white words, current word in the theme color), pill, big-word pop, and lower third. Fonts are Cormorant Garamond and Inter. A 1 second title card fades into the speech. The end card carries `https://sixmonthsoflight.com/talks/<id>.html` and a QR code.
+- Captions are official words. A hook you rewrite is labeled as your own words when it still fits on the title card. Every frame says “Personal study site · Not an official Church site.” CC BY music credits are burned into the export and listed on `credits.html`.
+- The talk video is loaded from `window.CLIP_MEDIA_BASE` (`assets/config.js`): one `{talk-id}.mp4` per talk, same timeline as `assets/timings/`, with CORS and HTTP range requests. The Church CDN cannot be used for export. If the file is unreachable, the editor says so and links the official talk; the SRT download still works. For a local file, open `clip.html?m=<talk-id>:<moment-id>&media=media/`.
+
 **Card Studio** (`builder.html`; `quote.html` redirects here)
 - Pick a talk. The top 3 verified quotes from that talk are one-tap choices. You can also paste or type your own quote (up to 360 characters, extra whitespace stripped). A custom card is labeled “Your own words,” not as official text.
 - Choose a background (light rays, dawn mountains, aurora, soft glow), a theme (dusk, midnight, dawn), a font (classic serif, italic serif, modern sans), a size (1:1, 4:5, 9:16), and still or animated.

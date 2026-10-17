@@ -9,7 +9,7 @@ mount("video.html", true);
   document.getElementById("main").innerHTML = `
   <section class="mv">
     <h1 class="mv-h">Make a video</h1>
-    <p class="mv-sub">Paste a line from any October 2026 talk. We'll find it and cut the video to the moment it was spoken.</p>
+    <p class="mv-sub">Paste a line from any October 2026 talk. We'll find it and cut the video to the moment it was spoken. Or open a ready-made passage in the <a href="moments.html">best moments</a> editor.</p>
     <div class="mv-in"><textarea id="mvQ" rows="3" placeholder="Paste a quote here…" aria-label="Quote"></textarea>
       <div class="mv-in-btns"><button type="button" class="btn secondary small" id="mvPaste">Paste</button><button type="button" class="btn secondary small" id="mvClear">Clear</button></div></div>
     <p class="mv-msg" id="mvMsg" aria-live="polite"></p>

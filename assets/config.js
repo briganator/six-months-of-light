@@ -15,4 +15,8 @@ window.CONF_CONFIG = {
 };
 // Add ?mock=1 to any URL to use the local (browser-only) mock backend instead.
 if (new URLSearchParams(location.search).get("mock") === "1") window.CONF_CONFIG.backend = "local";
+// Talk video for clips. Files are {talk-id}.mp4 and must share the timeline in assets/timings/.
+// The host has to send Access-Control-Allow-Origin for this site (or *) on GET and HEAD, and honor
+// HTTP range requests (206). The Church CDN does not send CORS, so a canvas export cannot use it.
+// A same-origin folder works locally: clip.html?m=talk:moment&media=media/
 window.CLIP_MEDIA_BASE = "https://pub-61fed319631f4fc3b830feae00835d32.r2.dev/";
