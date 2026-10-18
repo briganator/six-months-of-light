@@ -33,6 +33,7 @@ else if (t.kind === "business") {
       <p class="speaker"><a href="speaker.html?s=${slug(t.speaker)}">${esc(t.speaker)}</a> · ${esc(t.calling)}</p></div>
     <div class="talk-actions">
       <a class="btn gold" href="lessons.html?t=${esc(t.id)}">Build a lesson from this talk</a>
+      <a class="btn secondary" href="moments.html?t=${esc(t.id)}">Best moments</a>
       <a class="btn secondary" href="quiz.html?t=${esc(t.id)}">Quiz yourself</a>
     </div>
     <section class="recap60" aria-label="60-second recap">
