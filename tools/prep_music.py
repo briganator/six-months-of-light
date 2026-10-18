@@ -4,7 +4,8 @@ Run: python3 tools/prep_music.py <src_dir>"""
 import subprocess, sys, os, numpy as np
 SRC=sys.argv[1]; OUT=os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'assets','music')
 T={'pd-amazing-grace.src':'amazing-grace-strings','pd-nearer.src':'nearer-my-god','pd-canon.src':'canon-strings','pd-eternal-father.src':'eternal-father','pd-ode-to-joy.src':'ode-to-joy-band',
-   'inc-Meditation Impromptu 02.mp3':'meditation-impromptu','inc-Dreamy Flashback.mp3':'dreamy-flashback','inc-Lasting Hope.mp3':'lasting-hope','inc-Heartwarming.mp3':'heartwarming','inc-Touching Moments Two - Higher.mp3':'touching-moments','inc-Long Note Two.mp3':'long-note'}
+   'inc-Meditation Impromptu 02.mp3':'meditation-impromptu','inc-Dreamy Flashback.mp3':'dreamy-flashback','inc-Lasting Hope.mp3':'lasting-hope','inc-Heartwarming.mp3':'heartwarming','inc-Touching Moments Two - Higher.mp3':'touching-moments','inc-Long Note Two.mp3':'long-note',
+   'inc-Comfortable Mystery.mp3':'comfortable-mystery','inc-Frozen Star.mp3':'frozen-star','inc-Moonlight Hall.mp3':'moonlight-hall','inc-Water Lily.mp3':'water-lily','inc-Daybreak.mp3':'daybreak','inc-Gymnopedie No 1.mp3':'gymnopedie','inc-Enchanted Journey.mp3':'enchanted-journey','inc-Bittersweet.mp3':'bittersweet','inc-Clean Soul.mp3':'clean-soul','inc-Serene.mp3':'serene','inc-Gymnopedie No 3.mp3':'gymnopedie-3','inc-Deliberate Thought.mp3':'deliberate-thought','inc-Floating Cities.mp3':'floating-cities','inc-Healing.mp3':'healing'}
 SEG=90
 for f,n in T.items():
     p=os.path.join(SRC,f); pcm=np.frombuffer(subprocess.run(['ffmpeg','-loglevel','error','-i',p,'-ac','1','-ar','8000','-f','f32le','-'],capture_output=True,check=True).stdout,np.float32)

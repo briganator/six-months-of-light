@@ -63,9 +63,10 @@ window.downloadReminder = (talk, text) => {
 window.LOGO_RAYS = [[17.73, 39.36, 13.45, 37.97, 0.38, 1.6], [21.73, 33.07, 16.87, 27.89, 0.5, 1.78], [28.27, 29.47, 25.86, 20.08, 0.63, 1.96], [35.73, 29.47, 38.79, 17.56, 0.75, 2.14], [42.27, 33.07, 52.47, 22.2, 0.88, 2.32], [46.27, 39.36, 62.91, 33.96, 1.0, 2.5]];
 window.LOGO_MARK = (size = 40) => `<svg class="mark" width="${size}" height="${size}" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lmg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3a693"/><stop offset=".55" stop-color="#f1d394"/><stop offset="1" stop-color="#fff3d1"/></linearGradient></defs><g stroke="url(#lmg)" stroke-linecap="round">${LOGO_RAYS.map(([a,b,c,d,o,w],i) => `<line class="ray r${i}" x1="${a}" y1="${b}" x2="${c}" y2="${d}" stroke-opacity="${o}" stroke-width="${w}"/>`).join("")}</g><path d="M21 44a11 11 0 0 1 22 0z" fill="url(#lmg)"/><line x1="6" y1="44" x2="58" y2="44" stroke="url(#lmg)" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="50" x2="46" y2="50" stroke="url(#lmg)" stroke-width="1.3" stroke-linecap="round" opacity=".55"/></svg>`;
 window.WORDMARK = () => `<span class="wordmark">${LOGO_MARK(36)}<span class="wm-text">Six Months <em>of</em> Light</span></span>`;
-const NAV = [["index.html","Home"],["study.html","Study"],["lessons.html","Lessons"],["builder.html","Make a card"],["video.html","Make a video"],["insights.html","Insights"],["quiz.html","Quiz"],["my.html","My Conference"]];
+const CREATE_NAME = window.CREATE_NAME || "Share light";
+const NAV = [["index.html","Home"],["study.html","Study"],["lessons.html","Lessons"],["create.html",CREATE_NAME],["insights.html","Insights"],["quiz.html","Quiz"],["my.html","My Conference"]];
 const ICON = { study: '<path d="M4 5.5C6.5 4 9.5 4 12 5.8 14.5 4 17.5 4 20 5.5V19c-2.5-1.4-5.5-1.4-8 .4-2.5-1.8-5.5-1.8-8-.4zM12 5.8v13.6"/>', home: '<path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/>', talks: '<path d="M5 4h10l4 4v12H5zM8 11h8M8 15h8M8 7h5"/>', studio: '<path d="M12 3v3M5.6 5.6l2.1 2.1M3 12h3M18.4 5.6l-2.1 2.1M21 12h-3M7 16a5 5 0 0 1 10 0zM3 19h18"/>', insights: '<path d="M5 20V10M10 20V4M15 20v-7M20 20v-11"/>', me: '<path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0"/>', quiz: '<circle cx="12" cy="12" r="8"/><path d="M9.2 9.2a2.6 2.6 0 1 1 3.4 2.5c-.8.4-1.3 1-1.3 1.8V14.2M12 17h.01"/>', lessons: '<path d="M6 4h9a3 3 0 0 1 3 3v13H9a3 3 0 0 0-3 3z"/><path d="M6 4v16M10 9h5M10 13h4"/>' };
-const TABS = [["index.html","Home","home"],["study.html","Study","study"],["builder.html","Create","studio"],["insights.html","Insights","insights"],["my.html","Me","me"]];
+const TABS = [["index.html","Home","home"],["study.html","Study","study"],["create.html",CREATE_NAME,"studio"],["insights.html","Insights","insights"],["my.html","Me","me"]];
 window.TAB_ICON = ICON;
 window.tabbarHTML = (active) => `<nav class="tabbar" aria-label="Quick">${TABS.map(([h,l,i]) => `<a href="${h}" class="${i === "studio" ? "tb-main" : ""}" ${active === h ? 'aria-current="page"' : ""}><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICON[i]}</svg><span>${l}</span></a>`).join("")}</nav>`;
 // After conference: from 4:15 pm MDT on Oct 4, 2026. ?post=1 / ?post=0 force it for testing.
@@ -86,8 +87,7 @@ window.postHeroHTML = () => `<div class="post-hero">
       <p class="hero-how">Six months to study, apply and share these words before April.</p>
       <div class="post-actions"><a class="btn gold big" href="plan.html">Start studying</a><a class="btn glass btn-keep" href="subscribe.html">${KEEP_ICON(18)}Remind me until April</a><button type="button" class="btn ghost-link" id="pickInvite">Choose one invitation</button></div>
       ${countdownHTML()}
-      <a class="hero-link post-share" href="builder.html?ins=spoken">Share this as a card →</a>
-      <a class="hero-link post-share" href="moments.html">Best moments →</a></div>`;
+      <a class="btn gold big post-share" href="create.html">${esc(CREATE_NAME)}</a></div>`;
 window.headerHTML = (active, small) => `
   <div class="unofficial" role="note">Not an official Church site<span class="uo-more"> · Personal study page · ${OFFICIAL_TEXT() ? "Talk text from ChurchofJesusChrist.org" : "Quotes from recaps; confirm with official text"}</span></div>
   <div class="sitebar" id="sitebar"><nav class="topbar wrap" aria-label="Main">
@@ -95,7 +95,7 @@ window.headerHTML = (active, small) => `
       <a class="brand" href="index.html" aria-label="Six Months of Light home">${WORDMARK()}</a>
       <div class="navlinks">${NAV.map(([h,l]) => `<a href="${h}" ${active===h?'aria-current="page"':""}>${l}</a>`).join("")}</div>
       ${active === "subscribe.html" ? "" : `<a class="sb-keep${NOTABS.includes(active) ? " sb-keep-c" : ""}" href="subscribe.html" aria-label="Remind me: Keep the Light conference reminders">${KEEP_ICON(18)}<span class="kl">Keep the Light</span><span class="ks">Remind me</span></a>`}
-      ${active === "builder.html" ? "" : `<a class="btn gold small sb-cta" href="builder.html" aria-label="Make a card"><svg class="sb-ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M8.5 15.5h7M8.5 18h4.5"/><path d="M12 6.5l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z"/></svg><span class="sb-lbl">Make a card</span></a>`}
+      ${active === "create.html" || active === "builder.html" ? "" : `<a class="btn gold small sb-cta" href="create.html" aria-label="${esc(CREATE_NAME)}"><svg class="sb-ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M5.6 5.6l2.1 2.1M3 12h3M18.4 5.6l-2.1 2.1M21 12h-3"/><path d="M7 16a5 5 0 0 1 10 0zM4 20h16"/></svg><span class="sb-lbl">${esc(CREATE_NAME)}</span></a>`}
     </nav></div>
   <header class="hero ${small ? "hero-sm" : "hero-lg"}">
     <div class="hero-sky" aria-hidden="true"><span class="rays"></span><span class="glow g1"></span><span class="glow g2"></span><span class="sun"></span>${LANDSCAPE()}<span class="motes"></span><span class="horizon"></span></div>
@@ -104,7 +104,7 @@ window.headerHTML = (active, small) => `
       <h1 class="display"><span class="d1">Six Months</span> <em>of</em> <span class="d2">Light</span></h1>
       <p class="tagline">${esc(CONF.tagline)}</p>`}
       ${active === "index.html" && POSTCONF ? postHeroHTML() : `<p class="hero-how">Find a line from conference. Make it beautiful. Share it.</p>
-      <div class="hero-actions"><a class="btn gold big" href="builder.html">Make a card</a><a class="btn secondary big" href="video.html">🎬 Make a video</a><a class="hero-link" href="moments.html">Best moments</a><a class="hero-link" href="${active === "index.html" ? "" : "index.html"}#sessions">or browse the talks ↓</a></div>`}
+      <div class="hero-actions"><a class="btn gold big" href="create.html">${esc(CREATE_NAME)}</a><a class="hero-link" href="${active === "index.html" ? "" : "index.html"}#sessions">or browse the talks ↓</a></div>`}
       ${active === "index.html" && POSTCONF ? "" : countdownHTML()}
     </div>`}
     ${GROUP ? `<p class="grouptag wrap">Group: <strong>${esc(GROUP)}</strong> · <a href="?g=">leave group</a></p>` : ""}
@@ -134,7 +134,7 @@ window.footerHTML = () => `
     <p class="big"><strong>This is not an official website of The Church of Jesus Christ of Latter-day Saints.</strong></p>
     <p>Six Months of Light is a personal study page. It is not affiliated with or endorsed by the Church. For official talks, audio and video, visit <a href="${esc(CONF.conference_url)}" rel="noopener">ChurchofJesusChrist.org</a>.</p>
     <p>${OFFICIAL_TEXT() ? "Full talk text comes from ChurchofJesusChrist.org. This is a personal study site, not an official Church site. Each talk links its official page on ChurchofJesusChrist.org. Summaries are this site's own." : "Summaries and quotes come from Church News / Church Newsroom recaps; confirm with official text. Full talk text is not reproduced."} Your saved quotes, notes and commitments stay on this device.</p>
-    <p class="foot-links"><a href="builder.html?src=promo"><strong>Share this site</strong></a> · <a href="moments.html">Best moments</a> · <a href="quiz.html">Who said it? quiz</a> · <a href="lessons.html">Lesson helps</a> · <a href="challenge.html">Challenge</a> · <a href="groups.html">Family &amp; ward group links</a> · <a href="subscribe.html"><strong>Keep the Light</strong> (reminders)</a> · <a href="credits.html">Photo credits</a> · <a href="privacy.html">Privacy</a></p>
+    <p class="foot-links"><a href="create.html"><strong>${esc(CREATE_NAME)}</strong></a> · <a href="builder.html?src=promo">Share this site</a> · <a href="quiz.html">Who said it? quiz</a> · <a href="lessons.html">Lesson helps</a> · <a href="challenge.html">Challenge</a> · <a href="groups.html">Family &amp; ward group links</a> · <a href="subscribe.html"><strong>Keep the Light</strong> (reminders)</a> · <a href="credits.html">Credits</a> · <a href="privacy.html">Privacy</a></p>
   </div></footer>`;
 window.recapNotice = (compact, t) => (t ? t.official_url : OFFICIAL_TEXT()) ? "" : compact ? `<p class="notice-sm" role="note"><span class="pill pending">Recap</span> Quotes and summary from Church News / Newsroom recaps; confirm with official text.</p>` : `<div class="notice" role="note"><strong>Quotes from recaps; confirm with official text.</strong> Official talk text isn't posted yet. Summaries and quotes here come from Church News and Church Newsroom recaps.</div>`;
 window.mount = (active, small) => {

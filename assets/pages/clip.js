@@ -31,7 +31,7 @@
         <div class="ce-wrap" id="ceWrap"><canvas id="ceCv" aria-label="Clip preview"></canvas><button type="button" class="ce-play" id="cePlay" aria-label="Play preview">▶</button></div>
         <div class="ce-miss" id="ceMiss" hidden></div>
         <div class="ce-toast" id="ceToast" role="status" aria-live="polite"></div>
-        <div class="ce-prog" id="ceProg" hidden>Preparing…</div>
+        <div class="ce-prog" id="ceProg" hidden><b id="ceProgT">Saving…</b><span><i id="ceProgI"></i></span></div>
       </div>
       <div class="ce-side">
         <div class="ce-phase" id="cePhase" role="group" aria-label="Which part to preview">
@@ -93,10 +93,12 @@
   function toast(msg) { const t = $("ceToast"); t.textContent = msg; t.classList.add("on"); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("on"), 3200); }
   function fit() {
     const [W, H] = C.ASPECTS[S.aspect] || C.ASPECTS.story;
-    if (cv.width !== W) cv.width = W; if (cv.height !== H) cv.height = H;
-    const st = $("ceStage"), maxW = st.clientWidth - 8, maxH = st.clientHeight - 8, r = W / H;
+    const st = $("ceStage"), maxW = Math.max(80, st.clientWidth), maxH = Math.max(80, st.clientHeight), r = W / H;
     let w = maxW, h = w / r; if (h > maxH) { h = maxH; w = h * r; }
-    $("ceWrap").style.width = Math.max(80, Math.round(w)) + "px"; $("ceWrap").style.height = Math.max(80, Math.round(h)) + "px";
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const cw = Math.max(2, Math.round(w * dpr)), ch = Math.max(2, Math.round(h * dpr));
+    if (cv.width !== cw) cv.width = cw; if (cv.height !== ch) cv.height = ch;
+    $("ceWrap").style.width = Math.round(w) + "px"; $("ceWrap").style.height = Math.round(h) + "px";
   }
   function paintAt(phase, time) {
     if (!S.clip && phase === "speech") { ctx.fillStyle = "#0d1326"; ctx.fillRect(0, 0, cv.width || 1080, cv.height || 1920); return; }
@@ -138,7 +140,7 @@
     if (k === "color") return ["Color theme", `<div class="ce-row">${Y.THEMES.map(id => swatch("theme=" + id, id[0].toUpperCase() + id.slice(1), dot(THEME_DOT[id]))).join("")}</div>`];
     if (k === "music") return ["Music", `<p class="ce-help">Each look starts with a bed that fits its mood. Music ducks under the speaker. CC BY lines are burned into the video and listed on the credits page.</p>
       <label class="ce-chk"><input type="checkbox" id="ceMute" ${S.music === "none" ? "checked" : ""}> No music</label>
-      <div class="ce-row">${C.MUSIC.filter(m => m.id !== "none").map(m => `<button type="button" class="ce-sw ce-mus" data-set="music=${m.id}"><span>♪</span><span>${esc(m.name.replace(/\s*\(synth\)/, ""))}</span><small>${esc((m.mood || "").split(" · ")[0])}</small></button>`).join("")}</div>
+      <div class="ce-row">${C.MUSIC.filter(m => m.id !== "none").map(m => `<button type="button" class="ce-sw ce-mus" data-set="music=${m.id}"><span>♪</span><span>${esc(m.name.replace(/\s*\(synth\)/, ""))}</span><small>${esc((m.mood || "").split(" · ")[0])}</small><b class="ce-hear" data-hear="${m.id}" aria-label="Preview ${esc(m.name)}">▶</b></button>`).join("")}</div>
       <label class="ce-field">Volume <input id="ceVol" type="range" min="0" max="80" step="5" value="${Math.round(S.vol * 100)}"></label><p class="ce-lic" id="ceLic"></p>`];
     if (k === "look") return ["Video look", `<div class="ce-row">${[["full", "Full"], ["blur", "Soft blur"], ["dim", "Dimmed"], ["duotone", "Duotone"]].map(([id, n]) => swatch("vbg=" + id, n, "▣")).join("")}</div>
       <label class="ce-field">Look strength <input id="ceVop" type="range" min="10" max="100" step="5" value="${Math.round(S.vop * 100)}"></label>
@@ -171,7 +173,7 @@
     S.mediaOk = false; const v = S.pl && S.pl.v; if (!v) return;
     const fail = (why) => { if (S.mediaOk) return; S.mediaMsg = why; showMiss(); paint(); };
     v.addEventListener("error", () => fail("error"));
-    v.addEventListener("loadeddata", () => { if (v.videoWidth) { S.mediaOk = true; $("ceMiss").hidden = true; paint(); } });
+    v.addEventListener("loadeddata", () => { if (v.videoWidth) { S.mediaOk = true; $("ceMiss").hidden = true; paint(); if (!S.didAuto && !matchMedia("(prefers-reduced-motion: reduce)").matches) { S.didAuto = true; play(); } } });
     S.pl.ready().then(() => { if (v.videoWidth) { S.mediaOk = true; $("ceMiss").hidden = true; const at = S.clip.at0 + Math.min(S.clip.dur * .35, S.clip.speech[1]); S.pl.seekTo(at).then(() => { if (!S.playing) paint(); }); } }).catch(() => fail("timeout"));
     setTimeout(() => { if (!S.mediaOk && v.readyState < 2) fail("timeout"); }, 7000);
   }
@@ -210,21 +212,25 @@
     if (alpha <= .01) return; ctx.save(); ctx.globalAlpha = alpha;
     C.draw(ctx, cv.width, cv.height, Object.assign(baseOpts(), { phase: "title", guides: false }), 0, null); ctx.restore();
   }
-  async function play() {
-    if (S.busy || !S.clip) return; stopPlay(); S.playing = true; $("cePlay").hidden = true; S.guides = false;
-    ensureBed(); if (bed && S.music !== "none") { try { bed.currentTime = 0; bed.volume = S.vol; await bed.play(); } catch (e) {} }
-    const pre = audioLead(), fade = S.titleOn ? Y.TITLE_FADE : 0;
-    if (S.titleOn && pre > 0) await runFor(pre, () => paintAt("title", 0));
+  async function play(opts) {
+    const again = opts && opts.again;
+    if (S.busy || !S.clip) return;
+    if (!again) { stopPlay(); S.playing = true; $("cePlay").hidden = true; S.guides = false;
+      ensureBed(); if (bed && S.music !== "none") { try { bed.currentTime = 0; bed.volume = S.vol; await bed.play(); } catch (e) {} } }
+    const pre = again ? 0 : audioLead(), fade = !again && S.titleOn ? Y.TITLE_FADE : 0;
+    if (!again && S.titleOn && pre > 0) await runFor(pre, () => paintAt("title", 0));
     if (!S.playing) return;
-    if (S.mediaOk) { try { await S.pl.start(); } catch (e) { toast(e.message || "Couldn’t play the video."); stopPlay(); paint(); return; } }
-    else toast("Playing captions only. The talk video isn’t reachable.");
+    if (S.mediaOk) { try { if (again) await S.pl.seekTo(S.pl.at0); await S.pl.start(); } catch (e) { toast(e.message || "Couldn’t play the video."); stopPlay(); paint(); return; } }
+    else if (!again) toast("Playing captions only. The talk video isn’t reachable.");
     if (fade > 0) await runFor(fade, t => { const st = S.mediaOk ? S.pl.t() : t; duck(st, true); paintAt("speech", st); paintTitleOver(1 - t / fade); });
     if (!S.playing) return;
     if (S.mediaOk) {
       await new Promise(resolve => { const loop = () => { if (!S.playing) return resolve(); const t = S.pl.t(); duck(t, true); paintAt("speech", t); if (S.pl.ended() || t >= S.clip.dur - .02) return resolve(); requestAnimationFrame(loop); }; loop(); });
-      S.pl.stop();
+      if (S.pl) S.pl.stop();
     } else await runFor(Math.max(0, Math.min(8, S.clip.dur) - fade), t => { duck(t + fade, true); paintAt("speech", t + fade); });
-    if (S.endOn && S.playing) await runFor(tail(), t => { if (bed) bed.volume = S.vol * Math.max(0, 1 - t / tail()); paintAt("end", 0); });
+    if (S.endOn && S.playing && !again) await runFor(Math.min(1.15, tail()), t => { if (bed) bed.volume = S.vol * Math.max(0, 1 - t / Math.min(1.15, tail())); paintAt("end", 0); });
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (S.playing && S.mediaOk && !S.exporting && !reduce) return play({ again: true });
     stopPlay(); paint();
   }
   async function mixAudio(octx, sb, pre, post) {
@@ -255,7 +261,7 @@
     if (!S.mediaOk) { toast("Can’t export until the talk video loads. You can still download the SRT."); showMiss(); return null; }
     S.busy = true; S.exporting = true; stopPlay(); $("ceProg").hidden = false; $("ceSave").disabled = true;
     const [W, H] = C.ASPECTS[S.aspect];
-    const setP = p => { $("ceProg").textContent = "Exporting… " + Math.round(p * 100) + "%"; };
+    const setP = p => { $("ceProg").hidden = false; $("ceProgT").textContent = "Saving… " + Math.round(p * 100) + "%"; $("ceProgI").style.width = Math.round(Math.max(0, Math.min(1, p)) * 100) + "%"; };
     try {
       let blob = null;
       if (window.ClipCut && await ClipCut.supported()) {
@@ -284,6 +290,7 @@
       else if (named.dataset.i != null) { const p = Y.NAMED[+named.dataset.i][1]; Object.assign(S, p); S.tx = 0; S.ty = 0; S.scale = 1; S.panX = null; S.panY = null; toast(Y.NAMED[+named.dataset.i][0]); }
       touch(); refreshTool(); return;
     }
+    const hear = e.target.closest("[data-hear]"); if (hear) { e.preventDefault(); e.stopPropagation(); const m = C.MUSIC.find(x => x.id === hear.dataset.hear); if (m && m.file) { if (window.__bedPrev) window.__bedPrev.pause(); const a = window.__bedPrev = new Audio(m.file); a.volume = .8; a.play().catch(() => {}); setTimeout(() => { if (window.__bedPrev === a) a.pause(); }, 9000); } return; }
     const set = e.target.closest("[data-set]"); if (set && set.closest("#ceSheet")) { const [k, v] = set.dataset.set.split("="); S[k] = v; if (k === "music" && v !== "none") S.musicWas = v; if (k === "aspect") fit(); touch(); sync(); return; }
     const n = e.target.closest("[data-n]"); if (n) { const w = words(), k = n.dataset.n;
       if (k === "s-") S.p0 = Math.max(0, S.p0 - 1); if (k === "s+") S.p0 = Math.min(S.p1, S.p0 + 1);

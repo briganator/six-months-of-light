@@ -14,7 +14,12 @@ const st = {
   pfx: (() => { const f = {}, ok = { size: ["sm", "md", "lg", "bleed"], pos: ["byline", "top", "tl", "tr", "bl", "br"], shape: ["circle", "rounded", "square", "none"], bg: ["none", "blur", "dim", "duotone"] };
     String(P.get("pf") || "").split(";").forEach(kv => { const [k, v] = kv.split(":"); if (ok[k] && ok[k].includes(v)) f[k] = v; else if (k === "op" && isFinite(+v)) f.op = Math.min(1, Math.max(0, +v)); }); return f; })(),
   sp: P.get("sp") !== "0", pi: Math.max(0, parseInt(P.get("pi") || "0", 10) || 0), own: "", ownOn: false, ownSp: "", ownTi: "", attrTouched: false,
+  passage: "",
 };
+{
+  const sel = (P.get("sel") || "").replace(/\s+/g, " ").trim();
+  if (sel && P.has("t") && talkById(P.get("t"))) st.passage = sel.slice(0, 900);
+}
 // Advanced formatting: fx=size:1.1;ls:0.05;box:glass ... (whitelisted keys and values)
 const FMT_NUM = { size: [.6, 1.5], lh: [.8, 1.6], ls: [0, .25], vig: [0, 1], grain: [0, 1], blur: [0, 6], dx: [-.3, .3], dy: [-.3, .3] };
 const FMT_OPT = { weight: ["300", "400", "500", "600", "700", "800"], cs: ["upper", "lower", "title"], qm: ["curly", "none", "guillemet", "straight", "bar"], box: ["none", "glass", "solid", "band", "outline"], border: ["corners", "none", "thin", "double", "rounded", "ornate"] };
@@ -344,12 +349,14 @@ const spPick = t => { const o = spOpts(t); return o.length ? (o[st.pi] || o[0]).
 function renderSpOpts() { const t = talk(), o = spOpts(t), box = $("spOpts"); if (!box) return; if (st.pi >= o.length) st.pi = 0;
   box.hidden = !st.sp || o.length < 2;
   box.innerHTML = o.map((x, i) => `<button type="button" data-i="${i}" aria-pressed="${i === st.pi}" title="${esc(x.label)}"><img src="${esc(x.sm)}" alt="${esc(t.speaker)}, photo ${i + 1} (${esc(x.label)})" width="160" height="160" loading="lazy"></button>`).join(""); }
-const usingOwn = () => st.src === "quote" && st.ownOn && !!st.own;
+const usingOwn = () => st.src === "quote" && st.ownOn && !!st.own && !st.passage;
+const usingPassage = () => st.src === "quote" && !!st.passage && !st.ownOn;
 const opts = () => { const x = ins(), t = talk();
   const base = { look: st.look, palette: st.pal, font: st.font, align: st.align, overlay: st.ov ?? undefined, anim: st.anim === "none" ? "fade" : st.anim, sticker: st.sticker && st.size === "story", layout: st.layout, fmt: st.fmt, pfx: st.pfx };
   if (st.src === "promo") { const pr = PROMOS.get(st.promo), o = promoObj(pr.carousel ? 0 : null); return { ...base, kind: "insight", ins: o, eyebrow: o.eyebrow, url: o.url }; }
   if (x) return { ...base, kind: "insight", ins: x, eyebrow: x.eyebrow || (x.id === "daily" ? "SIX MONTHS OF LIGHT · DAILY" : "OCTOBER 2026 · CONFERENCE INSIGHT"), url: x.url || (x.id.startsWith("spot-") ? talkUrl(talkById(x.id.slice(5))) : CONF.site_url + "insights.html#" + x.id) };
   if (usingOwn()) return { ...base, kind: "quote", quote: st.own, speaker: st.ownSp || t.speaker, title: st.ownTi || "", url: talkUrl(t), note: st.note, foot: "Your own words", photo: st.sp && !st.ownSp ? spPick(t) : null, stat: null, daily: st.layout === "daily" ? dailyInfo() : null };
+  if (usingPassage()) return { ...base, kind: "quote", quote: st.passage, speaker: t.speaker, title: t.title, url: talkUrl(t), note: st.note, photo: st.sp ? spPick(t) : null, stat: null, daily: st.layout === "daily" ? dailyInfo() : null };
   return { ...base, kind: "quote", quote: t.quotes[st.q], speaker: t.speaker, title: t.title, url: talkUrl(t) + "#q" + (st.q + 1), photo: st.sp ? spPick(t) : null, note: st.note, stat: st.layout === "stat" ? statFor(t) : null, daily: st.layout === "daily" ? dailyInfo() : null }; };
 let raf, t0;
 function render(time) { const [W, H] = S[st.size]; if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; } K.drawCard(ctx, W, H, opts(), time); }
@@ -365,9 +372,9 @@ async function draw(changed) {
   $("replay").hidden = !an; syncMode();
   $("hint").innerHTML = an ? (vt || window.VideoEncoder ? `${K.ANIMS[st.anim]}: with <b>Animated</b> on (next to Share), <b>Share video</b> sends an 8-second MP4 that loops cleanly, made on your device. It ends on the site name and a QR code that opens this quote. Choose <b>Still</b> to share the image instead.${reduce ? " The preview stays still because your device asks for reduced motion; tap Replay to watch once." : ""}` : "This browser can't record video; Save will download a still image.") : "Saves a still image. Choose an animation above for a video.";
   const x = ins(), t = talk();
-  const shown = usingOwn() ? st.own : t.quotes[st.q];
+  const shown = usingOwn() ? st.own : usingPassage() ? st.passage : t.quotes[st.q];
   if (st.src === "promo") cv.setAttribute("aria-label", `Card preview: ${promoObj(null).title}. ${look.name}, ${S[st.size][2]}.`); else cv.setAttribute("aria-label", x ? `Card preview: ${x.title}. ${look.name}, ${S[st.size][2]}.` : `Card preview: “${String(shown).slice(0, 180)}” by ${usingOwn() ? (st.ownSp || t.speaker) : t.speaker}. ${look.name}, ${S[st.size][2]}.`);
-  const q = new URLSearchParams(st.libT ? { lt: st.libT.c + "/" + st.libT.id } : x ? { ins: st.ins } : { t: st.t, q: st.q }); if (st.libT && st.libNote) q.set("ln", st.libNote); q.set("look", st.look); if (st.pal !== "gold") q.set("pal", st.pal); if (st.font !== "classic") q.set("font", st.font); if (st.align !== "center") q.set("align", "left"); q.set("size", st.size); if (st.ov != null) q.set("ov", Math.round(st.ov * 100)); if (st.anim !== "none") q.set("anim", st.anim); if (st.sticker && st.size === "story") q.set("ig", "1"); if (st.theme !== "all") q.set("theme", st.theme); if (st.layout !== "classic") q.set("layout", st.layout); if (!st.sp) q.set("sp", "0"); else { if (st.pi) q.set("pi", st.pi); const pf = Object.entries(st.pfx).map(([k, v]) => k + ":" + v).join(";"); if (pf) q.set("pf", pf); } $("pfxBox").hidden = !st.sp; renderSpOpts(); $("spRow").hidden = !(st.src === "quote" && !st.libT && speakerPhoto(talk())); { const fx = encFmt(st.fmt); if (fx) q.set("fx", fx); }
+  const q = new URLSearchParams(st.libT ? { lt: st.libT.c + "/" + st.libT.id } : x ? { ins: st.ins } : usingPassage() ? { t: st.t, sel: st.passage } : { t: st.t, q: st.q }); if (st.libT && st.libNote) q.set("ln", st.libNote); q.set("look", st.look); if (st.pal !== "gold") q.set("pal", st.pal); if (st.font !== "classic") q.set("font", st.font); if (st.align !== "center") q.set("align", "left"); q.set("size", st.size); if (st.ov != null) q.set("ov", Math.round(st.ov * 100)); if (st.anim !== "none") q.set("anim", st.anim); if (st.sticker && st.size === "story") q.set("ig", "1"); if (st.theme !== "all") q.set("theme", st.theme); if (st.layout !== "classic") q.set("layout", st.layout); if (!st.sp) q.set("sp", "0"); else { if (st.pi) q.set("pi", st.pi); const pf = Object.entries(st.pfx).map(([k, v]) => k + ":" + v).join(";"); if (pf) q.set("pf", pf); } $("pfxBox").hidden = !st.sp; renderSpOpts(); $("spRow").hidden = !(st.src === "quote" && !st.libT && speakerPhoto(talk())); { const fx = encFmt(st.fmt); if (fx) q.set("fx", fx); }
   if (st.src === "promo") { q.delete("t"); q.delete("q"); q.set("promo", st.promo); if (st.hl) q.set("hl", st.hl); }
   $("layHelp").textContent = st.src === "quote" ? (st.layout !== "classic" && st.note ? "· your takeaway shows on the Classic layout" : "") : "· layouts apply to quote cards";
   $("carQ").hidden = !!st.libT || usingOwn(); $("carQh").hidden = !!st.libT || usingOwn(); $("carQh").textContent = `${talk().quotes.length + 2} slides: a cover, ${talk().quotes.length} quotes in your layout, and a closing slide.`;
