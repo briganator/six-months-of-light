@@ -7,18 +7,18 @@
   const LOOKS = ["full", "blur", "dim", "duotone"];
   const ASPECTS = ["story", "post", "square", "wide"];
   // Same beds as ClipKit.MUSIC, minus "No music".
-  const BEDS = ["meditation-impromptu", "dreamy-flashback", "touching-moments", "lasting-hope", "heartwarming", "long-note", "amazing-grace-strings", "nearer-my-god", "eternal-father", "canon-strings", "ode-to-joy-band", "morning-light", "chorale-of-faith"];
+  const BEDS = ["meditation-impromptu", "dreamy-flashback", "touching-moments", "lasting-hope", "heartwarming", "long-note", "amazing-grace-strings", "nearer-my-god", "eternal-father", "canon-strings", "ode-to-joy-band", "comfortable-mystery", "frozen-star", "moonlight-hall", "water-lily", "daybreak", "gymnopedie", "enchanted-journey", "bittersweet", "clean-soul", "serene", "gymnopedie-3", "deliberate-thought", "floating-cities", "healing"];
   // Eight starting looks. Each pairs a caption style, a color theme, Cormorant (serif) or Inter (sans), and a video tone.
   // beds[0] is the mood match; later cycles of the same look take the next bed so a long talk doesn't repeat one track.
   const NAMED = [
     ["Classic gold", { look: "classic-gold", cap: "highlight", theme: "midnight", font: "serif", vbg: "full", music: "lasting-hope", beds: ["lasting-hope", "dreamy-flashback"], zoom: 1 }],
     ["Rose pill", { look: "rose-pill", cap: "pill", theme: "rose", font: "sans", vbg: "dim", music: "heartwarming", beds: ["heartwarming", "touching-moments"], zoom: 1 }],
-    ["Teal pop", { look: "teal-pop", cap: "pop", theme: "teal", font: "sans", vbg: "full", music: "morning-light", beds: ["morning-light", "ode-to-joy-band"], zoom: 1 }],
+    ["Teal pop", { look: "teal-pop", cap: "pop", theme: "teal", font: "sans", vbg: "full", music: "daybreak", beds: ["daybreak", "serene"], zoom: 1 }],
     ["Sage lower", { look: "sage-lower", cap: "lower", theme: "sage", font: "sans", vbg: "full", music: "meditation-impromptu", beds: ["meditation-impromptu", "nearer-my-god"], zoom: 1 }],
     ["Silver serif", { look: "silver-serif", cap: "highlight", theme: "silver", font: "serif", vbg: "dim", music: "long-note", beds: ["long-note", "canon-strings"], zoom: 1 }],
     ["Ember pop", { look: "ember-pop", cap: "pop", theme: "ember", font: "serif", vbg: "duotone", music: "amazing-grace-strings", beds: ["amazing-grace-strings", "eternal-father"], zoom: 1 }],
-    ["Gold pill", { look: "gold-pill", cap: "pill", theme: "gold", font: "serif", vbg: "dim", music: "touching-moments", beds: ["touching-moments", "chorale-of-faith"], zoom: 1 }],
-    ["Rose lower", { look: "rose-lower", cap: "lower", theme: "rose", font: "serif", vbg: "blur", music: "chorale-of-faith", beds: ["chorale-of-faith", "heartwarming"], zoom: 1 }],
+    ["Gold pill", { look: "gold-pill", cap: "pill", theme: "gold", font: "serif", vbg: "dim", music: "touching-moments", beds: ["touching-moments", "gymnopedie"], zoom: 1 }],
+    ["Rose lower", { look: "rose-lower", cap: "lower", theme: "rose", font: "serif", vbg: "blur", music: "healing", beds: ["healing", "heartwarming"], zoom: 1 }],
   ];
   function hash(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
   // salt is the moment's place in its talk (0, 1, 2…). Looks cycle in NAMED order. Shuffle adds 1.

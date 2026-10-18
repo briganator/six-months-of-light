@@ -144,28 +144,172 @@
   "attr": false
  },
  {
-  "id": "morning-light",
-  "name": "Morning Light (synth)",
-  "mood": "Calm · ambient (original)",
-  "file": "assets/music/morning-light.m4a",
-  "lic": "Original, Six Months of Light · CC0",
-  "credit": "Original, Six Months of Light · CC0",
-  "src": "",
-  "license": "CC0",
-  "lurl": "https://creativecommons.org/publicdomain/zero/1.0/",
-  "attr": false
+  "id": "comfortable-mystery",
+  "name": "Comfortable Mystery",
+  "mood": "Calm · piano",
+  "file": "assets/music/comfortable-mystery.m4a",
+  "lic": "“Comfortable Mystery” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "credit": "“Comfortable Mystery” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "src": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Comfortable%20Mystery.mp3",
+  "license": "CC BY 4.0",
+  "lurl": "https://creativecommons.org/licenses/by/4.0/",
+  "attr": true
  },
  {
-  "id": "chorale-of-faith",
-  "name": "Chorale of Faith (synth)",
-  "mood": "Reverent · hymn-style (original)",
-  "file": "assets/music/chorale-of-faith.m4a",
-  "lic": "Original, Six Months of Light · CC0",
-  "credit": "Original, Six Months of Light · CC0",
-  "src": "",
-  "license": "CC0",
-  "lurl": "https://creativecommons.org/publicdomain/zero/1.0/",
-  "attr": false
+  "id": "frozen-star",
+  "name": "Frozen Star",
+  "mood": "Still · ambient",
+  "file": "assets/music/frozen-star.m4a",
+  "lic": "“Frozen Star” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "credit": "“Frozen Star” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "src": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Frozen%20Star.mp3",
+  "license": "CC BY 4.0",
+  "lurl": "https://creativecommons.org/licenses/by/4.0/",
+  "attr": true
+ },
+ {
+  "id": "moonlight-hall",
+  "name": "Moonlight Hall",
+  "mood": "Gentle · piano",
+  "file": "assets/music/moonlight-hall.m4a",
+  "lic": "“Moonlight Hall” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "credit": "“Moonlight Hall” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "src": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Moonlight%20Hall.mp3",
+  "license": "CC BY 4.0",
+  "lurl": "https://creativecommons.org/licenses/by/4.0/",
+  "attr": true
+ },
+ {
+  "id": "water-lily",
+  "name": "Water Lily",
+  "mood": "Tender · piano",
+  "file": "assets/music/water-lily.m4a",
+  "lic": "“Water Lily” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "credit": "“Water Lily” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "src": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Water%20Lily.mp3",
+  "license": "CC BY 4.0",
+  "lurl": "https://creativecommons.org/licenses/by/4.0/",
+  "attr": true
+ },
+ {
+  "id": "daybreak",
+  "name": "Daybreak",
+  "mood": "Dawn · cinematic",
+  "file": "assets/music/daybreak.m4a",
+  "lic": "“Daybreak” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "credit": "“Daybreak” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "src": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Daybreak.mp3",
+  "license": "CC BY 4.0",
+  "lurl": "https://creativecommons.org/licenses/by/4.0/",
+  "attr": true
+ },
+ {
+  "id": "gymnopedie",
+  "name": "Gymnopédie No. 1",
+  "mood": "Peaceful · solo piano",
+  "file": "assets/music/gymnopedie.m4a",
+  "lic": "“Gymnopedie No 1” Kevin MacLeod (incompetech.com) · CC BY 4.0 · Satie, public domain",
+  "credit": "“Gymnopedie No 1” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "src": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Gymnopedie%20No%201.mp3",
+  "license": "CC BY 4.0",
+  "lurl": "https://creativecommons.org/licenses/by/4.0/",
+  "attr": true
+ },
+ {
+  "id": "enchanted-journey",
+  "name": "Enchanted Journey",
+  "mood": "Hopeful · strings",
+  "file": "assets/music/enchanted-journey.m4a",
+  "lic": "“Enchanted Journey” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "credit": "“Enchanted Journey” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "src": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Enchanted%20Journey.mp3",
+  "license": "CC BY 4.0",
+  "lurl": "https://creativecommons.org/licenses/by/4.0/",
+  "attr": true
+ },
+ {
+  "id": "bittersweet",
+  "name": "Bittersweet",
+  "mood": "Reflective · piano",
+  "file": "assets/music/bittersweet.m4a",
+  "lic": "“Bittersweet” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "credit": "“Bittersweet” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "src": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Bittersweet.mp3",
+  "license": "CC BY 4.0",
+  "lurl": "https://creativecommons.org/licenses/by/4.0/",
+  "attr": true
+ },
+ {
+  "id": "clean-soul",
+  "name": "Clean Soul",
+  "mood": "Warm · ambient",
+  "file": "assets/music/clean-soul.m4a",
+  "lic": "“Clean Soul” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "credit": "“Clean Soul” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "src": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Clean%20Soul.mp3",
+  "license": "CC BY 4.0",
+  "lurl": "https://creativecommons.org/licenses/by/4.0/",
+  "attr": true
+ },
+ {
+  "id": "serene",
+  "name": "Serene",
+  "mood": "Quiet · piano",
+  "file": "assets/music/serene.m4a",
+  "lic": "“Serene” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "credit": "“Serene” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "src": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Serene.mp3",
+  "license": "CC BY 4.0",
+  "lurl": "https://creativecommons.org/licenses/by/4.0/",
+  "attr": true
+ },
+ {
+  "id": "gymnopedie-3",
+  "name": "Gymnopédie No. 3",
+  "mood": "Soft · solo piano",
+  "file": "assets/music/gymnopedie-3.m4a",
+  "lic": "“Gymnopedie No 3” Kevin MacLeod (incompetech.com) · CC BY 4.0 · Satie, public domain",
+  "credit": "“Gymnopedie No 3” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "src": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Gymnopedie%20No%203.mp3",
+  "license": "CC BY 4.0",
+  "lurl": "https://creativecommons.org/licenses/by/4.0/",
+  "attr": true
+ },
+ {
+  "id": "deliberate-thought",
+  "name": "Deliberate Thought",
+  "mood": "Thoughtful · piano",
+  "file": "assets/music/deliberate-thought.m4a",
+  "lic": "“Deliberate Thought” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "credit": "“Deliberate Thought” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "src": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Deliberate%20Thought.mp3",
+  "license": "CC BY 4.0",
+  "lurl": "https://creativecommons.org/licenses/by/4.0/",
+  "attr": true
+ },
+ {
+  "id": "floating-cities",
+  "name": "Floating Cities",
+  "mood": "Airy · ambient",
+  "file": "assets/music/floating-cities.m4a",
+  "lic": "“Floating Cities” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "credit": "“Floating Cities” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "src": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Floating%20Cities.mp3",
+  "license": "CC BY 4.0",
+  "lurl": "https://creativecommons.org/licenses/by/4.0/",
+  "attr": true
+ },
+ {
+  "id": "healing",
+  "name": "Healing",
+  "mood": "Tender · cinematic",
+  "file": "assets/music/healing.m4a",
+  "lic": "“Healing” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "credit": "“Healing” Kevin MacLeod (incompetech.com) · CC BY 4.0",
+  "src": "https://incompetech.com/music/royalty-free/mp3-royaltyfree/Healing.mp3",
+  "license": "CC BY 4.0",
+  "lurl": "https://creativecommons.org/licenses/by/4.0/",
+  "attr": true
  }
 ];
   const base = () => window.CARDKIT_BASE || "";
@@ -242,7 +386,42 @@
   function rr(ctx, x, y, w, h, r) { const rad = Math.max(0, Math.min(r, w / 2, h / 2)); ctx.beginPath(); ctx.moveTo(x + rad, y); ctx.arcTo(x + w, y, x + w, y + h, rad); ctx.arcTo(x + w, y + h, x, y + h, rad); ctx.arcTo(x, y + h, x, y, rad); ctx.arcTo(x, y, x + w, y, rad); ctx.closePath(); }
   function wrapPlain(ctx, text, maxW) { const words = String(text || "").split(/\s+/).filter(Boolean), lines = []; let cur = "";
     words.forEach(w => { const t = cur ? cur + " " + w : w; if (cur && ctx.measureText(t).width > maxW) { lines.push(cur); cur = w; } else cur = t; }); if (cur) lines.push(cur); return lines; }
-  function wordAt(words, time) { let i = -1; for (let k = 0; k < words.length; k++) if (time >= words[k].s - .04) i = k; return i; }
+  // Switch on the spoken onset. A 40 ms early bias read as the caption leading the voice.
+  function wordAt(words, time) { let i = -1; for (let k = 0; k < words.length; k++) if (time + 1e-3 >= words[k].s) i = k; return i; }
+  const BREAK_AFTER = /[.!?;:,]$/;
+  const CONJ = { and: 1, but: 1, or: 1, so: 1, because: 1, that: 1, which: 1, when: 1, while: 1, if: 1, as: 1 };
+  // 2–5 words, broken on punctuation, a pause, or before a conjunction. A one-word line joins its neighbor.
+  function phraseBlocks(words) {
+    const lines = []; let cur = [];
+    const flush = () => { if (cur.length) { lines.push(cur); cur = []; } };
+    words.forEach((w, i) => {
+      const bare = String(w.t || "").replace(/[“”"'’]/g, "");
+      const gap = i > 0 && w.s - words[i - 1].e > .26;
+      if (gap && cur.length >= 2) flush();
+      cur.push({ ...w, k: i });
+      const next = words[i + 1];
+      const nextConj = next && CONJ[String(next.t).toLowerCase().replace(/[^a-z]/g, "")];
+      if (cur.length >= 5 || (BREAK_AFTER.test(bare) && cur.length >= 2) || (cur.length >= 3 && nextConj)) flush();
+    });
+    flush();
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i].length !== 1) continue;
+      if (i > 0 && lines[i - 1].length < 5) { lines[i - 1] = lines[i - 1].concat(lines[i]); lines.splice(i, 1); i--; }
+      else if (i + 1 < lines.length && lines[i].length + lines[i + 1].length <= 5) { lines[i + 1] = lines[i].concat(lines[i + 1]); lines.splice(i, 1); i--; }
+      else if (i > 0 && lines[i - 1].length > 2) lines[i] = [lines[i - 1].pop()].concat(lines[i]);
+      else if (i + 1 < lines.length && lines[i + 1].length > 2) lines[i] = lines[i].concat([lines[i + 1].shift()]);
+    }
+    return lines;
+  }
+  function activePhrase(words, time) {
+    const lines = phraseBlocks(words), cur = Math.max(0, wordAt(words, time));
+    let li = lines.findIndex(L => L.some(w => w.k === cur)); if (li < 0) li = 0;
+    return { line: lines[li] || [], cur };
+  }
+  function inkWord(ctx, text, x, y, fs, fill) {
+    ctx.lineJoin = "round"; ctx.miterLimit = 2; ctx.lineWidth = Math.max(3, fs * .14);
+    ctx.strokeStyle = "rgba(0,0,0,.78)"; ctx.strokeText(text, x, y); ctx.fillStyle = fill; ctx.fillText(text, x, y);
+  }
   function fitLines(ctx, words, maxW, font, fs0, avail) { let fs = fs0, lines; for (let k = 0; k < 28; k++) { ctx.font = face(fs, font); lines = wrapWords(ctx, words, maxW); if (lines.length * fs * 1.22 <= avail || fs < 18) break; fs *= .94; } return { fs, lines }; }
   function paintQr(ctx, text, x, y, size) { if (typeof qrcode !== "function" || !text) return; const q = qrcode(0, "M"); q.addData(text); q.make();
     const n = q.getModuleCount(), pad = size * .08, cell = (size - pad * 2) / n; ctx.save(); ctx.fillStyle = "#fffdf8"; rr(ctx, x, y, size, size, size * .08); ctx.fill(); ctx.fillStyle = "#1d1b2e";
@@ -255,17 +434,18 @@
   function drawVideo(ctx, W, H, o, video, P) {
     const u = Math.min(W, H); ctx.fillStyle = P.bg; ctx.fillRect(0, 0, W, H);
     const vw0 = video && (video.videoWidth || video.displayWidth); if (!vw0) return;
-    const vw = vw0, vh = video.videoHeight || video.displayHeight, story = H > W * 1.3, bh = story ? H * .56 : H;
+    const vw = vw0, vh = video.videoHeight || video.displayHeight, story = H > W * 1.3, cover = !!o.cap, bh = cover ? H : (story ? H * .56 : H);
     const z = Math.max(1, Math.min(2.2, +o.zoom || 1)), moved = z !== 1 || o.panX != null || o.panY != null;
-    const s = Math.max(W / vw, bh / vh) * (moved ? z : 1); let dw = vw * s, dh = vh * s, dx = (W - dw) / 2, dy = story ? H * .07 : (H - dh) / 2;
+    const s = Math.max(W / vw, bh / vh) * (moved ? z : 1); let dw = vw * s, dh = vh * s, dx = (W - dw) / 2, dy = cover ? (H - dh) / 2 : (story ? H * .07 : (H - dh) / 2);
     if (moved) { const px = o.panX == null ? .5 : Math.max(0, Math.min(1, +o.panX)), py = o.panY == null ? .4 : Math.max(0, Math.min(1, +o.panY));
       dx = -(Math.max(0, dw - W) * px); dy = story ? H * .07 - Math.max(0, dh - bh) * py : -(Math.max(0, dh - H) * py); }
     const vb = o.vbg || "full"; ctx.save(); if (vb !== "full") ctx.globalAlpha = o.vop ?? .6;
     if (vb === "blur") ctx.filter = `blur(${Math.round(u * .015)}px)`; else if (vb === "duotone") ctx.filter = "grayscale(1) contrast(1.15)"; else if (vb === "dim") ctx.filter = "brightness(.55)";
     ctx.drawImage(video, dx, dy, dw, dh); ctx.filter = "none";
     if (vb === "duotone") { ctx.globalAlpha = 1; ctx.globalCompositeOperation = "color"; ctx.fillStyle = P.gold2; ctx.fillRect(0, 0, W, H); ctx.globalCompositeOperation = "source-over"; } ctx.restore();
-    const veil = P.veil, storyG = story;
-    if (storyG) { const g = ctx.createLinearGradient(0, H * .07, 0, H * .63); g.addColorStop(0, `rgba(${veil},0)`); g.addColorStop(.75, `rgba(${veil},.35)`); g.addColorStop(1, `rgba(${veil},1)`); ctx.fillStyle = g; ctx.fillRect(0, H * .07, W, H * .56);
+    const veil = P.veil, storyG = story && !cover;
+    if (cover) { const g = ctx.createLinearGradient(0, H * .42, 0, H); g.addColorStop(0, "rgba(0,0,0,0)"); g.addColorStop(.55, "rgba(0,0,0,.28)"); g.addColorStop(1, "rgba(0,0,0,.62)"); ctx.fillStyle = g; ctx.fillRect(0, H * .42, W, H * .58); }
+    else if (storyG) { const g = ctx.createLinearGradient(0, H * .07, 0, H * .63); g.addColorStop(0, `rgba(${veil},0)`); g.addColorStop(.75, `rgba(${veil},.35)`); g.addColorStop(1, `rgba(${veil},1)`); ctx.fillStyle = g; ctx.fillRect(0, H * .07, W, H * .56);
       const g2 = ctx.createLinearGradient(0, 0, 0, H * .12); g2.addColorStop(0, `rgba(${veil},1)`); g2.addColorStop(1, `rgba(${veil},0)`); ctx.fillStyle = g2; ctx.fillRect(0, 0, W, H * .12); }
     else { const wide = W > H * 1.3, g = ctx.createLinearGradient(0, H * (wide ? .3 : .25), 0, H); g.addColorStop(0, `rgba(${veil},0)`); g.addColorStop(.55, `rgba(${veil},.78)`); g.addColorStop(1, `rgba(${veil},.95)`); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
   }
@@ -304,88 +484,111 @@
     return best || wrapWords(ctx, all.slice(Math.max(0, c - 4), Math.min(all.length, c + 6)), maxW).slice(0, want);
   }
   function drawHighlight(ctx, W, H, o, time, P) {
-    const words = o.timed || []; if (!words.length) return H * .7; const u = Math.min(W, H), story = H > W * 1.3, wide = W > H * 1.3, font = o.font || "serif", sc = o.scale || 1;
-    const cw = wide ? W * .78 : W - u * .16, top = (story ? H * .58 : H * (wide ? .5 : .46)) + (o.ty || 0) * H, avail = Math.max(u * .16, (story ? H * .76 : H * .8) - top);
-    const fit = fitLines(ctx, words, cw, font, u * (story ? .058 : wide ? .048 : .052) * sc, avail), fs = fit.fs, lines = fit.lines, sp = ctx.measureText(" ").width, cur = wordAt(words, time);
-    let y = top + Math.max(0, (avail - lines.length * fs * 1.18) / 2) + fs; ctx.textBaseline = "alphabetic"; ctx.shadowColor = "rgba(0,0,0,.55)"; ctx.shadowBlur = u * .014; ctx.font = face(fs, font);
-    lines.forEach(L => { const lw = L.reduce((a, x) => a + x.ww, 0) + sp * (L.length - 1); let x = (W - lw) / 2 + (o.tx || 0) * W;
-      L.forEach(w => { const on = time + 1e-6 >= w.s - .05, hot = w.i === cur && o.captions !== false;
-        ctx.globalAlpha = o.captions === false ? 1 : (on ? 1 : .42); ctx.fillStyle = hot ? P.gold : "#fffaf0"; ctx.textAlign = "left"; ctx.fillText(w.t, x, y); x += w.ww + sp; }); y += fs * 1.18; });
-    ctx.globalAlpha = 1; return y;
+    const words = o.timed || []; if (!words.length) return H * .7;
+    const u = Math.min(W, H), sc = o.scale || 1, phrase = activePhrase(words, time), line = phrase.line, cur = phrase.cur;
+    let fs = u * (H > W ? .078 : .064) * sc;
+    const maxW = W * .88;
+    const layout = () => {
+      ctx.font = `800 ${fs}px ${SANS}`;
+      const sp = ctx.measureText(" ").width;
+      const widths = line.map(w => ctx.measureText(w.t).width);
+      return { sp, widths, width: widths.reduce((a, b) => a + b, 0) + sp * Math.max(0, line.length - 1) };
+    };
+    let lay = layout();
+    while (lay.width > maxW && fs > u * .04) { fs *= .92; lay = layout(); }
+    const y = H * (H > W * 1.3 ? .72 : .64) + (o.ty || 0) * H;
+    let x = (W - lay.width) / 2 + (o.tx || 0) * W;
+    ctx.textBaseline = "alphabetic"; ctx.textAlign = "left"; ctx.font = `800 ${fs}px ${SANS}`;
+    line.forEach((w, i) => {
+      const hot = w.k === cur && o.captions !== false;
+      const dur = Math.max(.08, (w.e || w.s + .2) - w.s);
+      const p = hot ? Math.max(0, Math.min(1, (time - w.s) / dur)) : (time >= w.s ? 1 : 0);
+      const ww = lay.widths[i];
+      ctx.save();
+      inkWord(ctx, w.t, x, y, fs, "rgba(255,250,240,.92)");
+      if (hot && p > 0 && !calm()) {
+        ctx.beginPath(); ctx.rect(x - fs * .08, y - fs * 1.15, ww * p + fs * .16, fs * 1.45); ctx.clip();
+        inkWord(ctx, w.t, x, y, fs, P.gold);
+      } else if (hot) inkWord(ctx, w.t, x, y, fs, P.gold);
+      ctx.restore();
+      x += ww + lay.sp;
+    });
+    return y + fs * .2;
   }
   function drawPill(ctx, W, H, o, time, P) {
     const src = o.timed || []; if (!src.length) return H * .7;
     const u = Math.min(W, H), story = H > W * 1.3, wide = W > H * 1.3, font = o.font || "sans", sc = o.scale || 1;
-    const cur = Math.max(0, wordAt(src, time)), maxW = wide ? W * .78 : W - u * .18;
-    let fs = u * (story ? .052 : .046) * sc; ctx.font = face(fs, font);
-    let line = oneLine(ctx, src, cur, maxW);
-    while (line.width > maxW && fs > u * .028) { fs *= .92; ctx.font = face(fs, font); line = oneLine(ctx, src, cur, maxW); }
+    const phrase = activePhrase(src, time), cur = phrase.cur, maxW = wide ? W * .78 : W - u * .18;
+    let fs = u * (story ? .062 : .054) * sc; ctx.font = `800 ${fs}px ${SANS}`;
+    let line = { slice: phrase.line, sp: ctx.measureText(" ").width, width: 0 };
+    line.width = line.slice.reduce((s, w) => s + ctx.measureText(w.t).width, 0) + line.sp * Math.max(0, line.slice.length - 1);
+    while (line.width > maxW && fs > u * .034) { fs *= .92; ctx.font = `800 ${fs}px ${SANS}`; line.sp = ctx.measureText(" ").width; line.width = line.slice.reduce((s, w) => s + ctx.measureText(w.t).width, 0) + line.sp * Math.max(0, line.slice.length - 1); }
     const bh = fs * 1.55, bw = Math.min(W * .9, Math.max(u * .34, line.width + u * .09));
     const x0 = (W - bw) / 2 + (o.tx || 0) * W, y0 = (story ? H * .62 : H * (wide ? .58 : .54)) + (o.ty || 0) * H;
     ctx.save(); ctx.shadowColor = "rgba(0,0,0,.35)"; ctx.shadowBlur = u * .016; ctx.fillStyle = P.pill || "#fffaf0"; rr(ctx, x0, y0, bw, bh, bh / 2); ctx.fill(); ctx.shadowBlur = 0;
     ctx.lineWidth = Math.max(4, u * .008); ctx.strokeStyle = P.line || P.gold; ctx.stroke(); ctx.restore();
-    let x = x0 + (bw - line.width) / 2; const y = y0 + fs * 1.05; ctx.font = face(fs, font); ctx.textBaseline = "alphabetic"; ctx.textAlign = "left"; ctx.shadowBlur = 0;
-    line.slice.forEach(w => { const on = time >= w.s - .05; ctx.globalAlpha = on ? 1 : .45; ctx.fillStyle = w.k === cur ? (P.line || P.gold) : (P.pillInk || P.ink); ctx.fillText(w.t, x, y); x += ctx.measureText(w.t).width + line.sp; });
+    let x = x0 + (bw - line.width) / 2; const y = y0 + fs * 1.05; ctx.font = `800 ${fs}px ${SANS}`; ctx.textBaseline = "alphabetic"; ctx.textAlign = "left"; ctx.shadowBlur = 0;
+    line.slice.forEach(w => { const on = time + 1e-3 >= w.s; ctx.globalAlpha = on ? 1 : .45; ctx.fillStyle = w.k === cur ? (P.line || P.gold) : (P.pillInk || P.ink); ctx.fillText(w.t, x, y); x += ctx.measureText(w.t).width + line.sp; });
     ctx.globalAlpha = 1; return y0 + bh;
   }
   function drawPop(ctx, W, H, o, time, P) {
-    const src = o.timed || []; if (!src.length) return H * .72; const cur = Math.max(0, wordAt(src, time));
-    const u = Math.min(W, H), font = o.font || "serif", sc = o.scale || 1, maxW = W * .88;
-    let fs = u * (H > W ? .11 : .09) * sc, chosen = null;
-    for (const count of [4, 3, 2]) {
-      if (count > src.length && count !== 2) continue;
-      const n = Math.min(count, src.length), a = Math.max(0, Math.min(cur - Math.floor((n - 1) / 2), src.length - n));
-      const slice = src.slice(a, a + n).map((w, i) => ({ ...w, k: a + i }));
-      ctx.font = face(fs, font); const sp = ctx.measureText("  ").width;
-      const width = slice.reduce((s, w) => s + ctx.measureText(w.t).width * (w.k === cur ? 1.18 : 1), 0) + sp * Math.max(0, slice.length - 1);
-      if (width <= maxW || count === 2) { chosen = { slice, sp, width }; if (width <= maxW) break; }
+    const src = o.timed || []; if (!src.length) return H * .72; const phrase = activePhrase(src, time), cur = phrase.cur;
+    const u = Math.min(W, H), sc = o.scale || 1, maxW = W * .88;
+    let fs = u * (H > W ? .1 : .084) * sc, chosen = null;
+    {
+      const slice = phrase.line.length ? phrase.line : [{ t: "", s: 0, e: 0, k: cur }];
+      ctx.font = `800 ${fs}px ${SANS}`; const sp = ctx.measureText(" ").width;
+      const width = slice.reduce((s, w) => s + ctx.measureText(w.t).width * (w.k === cur ? 1.12 : 1), 0) + sp * Math.max(0, slice.length - 1);
+      chosen = { slice, sp, width };
     }
     if (!chosen) return H * .72;
     while (chosen.width > maxW && fs > u * .045) {
-      fs *= .9; ctx.font = face(fs, font); const sp = ctx.measureText("  ").width;
-      chosen.sp = sp; chosen.width = chosen.slice.reduce((s, w) => s + ctx.measureText(w.t).width * (w.k === cur ? 1.18 : 1), 0) + sp * Math.max(0, chosen.slice.length - 1);
+      fs *= .9; ctx.font = `800 ${fs}px ${SANS}`; const sp = ctx.measureText(" ").width;
+      chosen.sp = sp; chosen.width = chosen.slice.reduce((s, w) => s + ctx.measureText(w.t).width * (w.k === cur ? 1.12 : 1), 0) + sp * Math.max(0, chosen.slice.length - 1);
     }
     const cy = H * (H > W * 1.3 ? .66 : .58) + (o.ty || 0) * H, xStart = (W - chosen.width) / 2 + (o.tx || 0) * W;
     let x = xStart; ctx.textBaseline = "middle"; ctx.shadowColor = "rgba(0,0,0,.5)"; ctx.shadowBlur = u * .02;
     chosen.slice.forEach(w => {
-      const hot = w.k === cur, grow = hot ? (calm() ? 1.12 : .94 + .24 * Math.min(1, Math.max(0, (time - w.s) / .16))) : 1;
+      const hot = w.k === cur, age = Math.max(0, time - w.s), grow = hot ? (calm() ? 1.08 : 1 + .22 * Math.exp(-age / .1)) : 1;
       const ww = ctx.measureText(w.t).width;
-      ctx.save(); ctx.translate(x + ww * grow / 2, cy); ctx.scale(grow, grow); ctx.font = face(fs, font); ctx.textAlign = "center"; ctx.fillStyle = hot ? P.gold : "#fffaf0"; ctx.fillText(w.t, 0, 0); ctx.restore();
+      ctx.save(); ctx.translate(x + ww * grow / 2, cy); ctx.scale(grow, grow); ctx.font = `800 ${fs}px ${SANS}`; ctx.textAlign = "center"; ctx.lineJoin = "round"; ctx.lineWidth = Math.max(3, fs * .12); ctx.strokeStyle = "rgba(0,0,0,.72)"; ctx.strokeText(w.t, 0, 0); ctx.fillStyle = hot ? P.gold : "#fffaf0"; ctx.fillText(w.t, 0, 0); ctx.restore();
       x += ww * (hot ? grow : 1) + chosen.sp;
     });
     ctx.shadowBlur = 0; return cy + fs * .6;
   }
   function drawLower(ctx, W, H, o, time, P) {
     const src = o.timed || []; if (!src.length) return H * .8;
-    const u = Math.min(W, H), story = H > W * 1.3, font = o.font || "sans", sc = o.scale || 1, cur = Math.max(0, wordAt(src, time));
-    const fs = u * .042 * sc, maxW = W * .9; ctx.font = face(fs, font);
-    let lines = takeLines(ctx, src, cur, maxW, 2);
-    if (lines.length < 2 && src.length > (lines[0] || []).length) {
-      const extra = takeLines(ctx, src, cur, maxW * .98, 2); if (extra.length > lines.length) lines = extra;
-    }
-    while (lines.length < 2 && lines[0] && lines[0].length > 1) { const L = lines[0], mid = Math.ceil(L.length / 2); lines = [L.slice(0, mid), L.slice(mid)]; }
-    const bh = Math.max(1, lines.length) * fs * 1.34 + u * .045;
-    const y0 = (story ? H * .5 : H * .68) + (o.ty || 0) * H, x0 = W * .03 + (o.tx || 0) * W, bw = W * .94;
-    ctx.save(); ctx.shadowColor = "rgba(0,0,0,.28)"; ctx.shadowBlur = u * .012; ctx.fillStyle = P.dark ? "rgba(8,10,16,.82)" : "rgba(255,252,246,.92)"; rr(ctx, x0, y0, bw, bh, u * .012); ctx.fill();
-    ctx.shadowBlur = 0; ctx.fillStyle = P.gold; ctx.fillRect(x0, y0, bw, Math.max(4, u * .007)); ctx.restore();
-    let y = y0 + fs * 1.15 + u * .004; const sp = ctx.measureText(" ").width; ctx.font = face(fs, font); ctx.textBaseline = "alphabetic"; ctx.textAlign = "left";
-    lines.forEach(L => { const lw = L.reduce((a, w) => a + w.ww, 0) + sp * Math.max(0, L.length - 1); let x = x0 + Math.max(u * .02, (bw - lw) / 2);
-      L.forEach(w => { const hot = w.k === cur; ctx.globalAlpha = time >= (w.s || 0) - .05 ? 1 : .5; ctx.fillStyle = hot ? P.gold : (P.dark ? "#fffaf0" : P.ink);
-        if (hot) { const pad = fs * .12; ctx.save(); ctx.globalAlpha = .22; ctx.fillStyle = P.gold; rr(ctx, x - pad, y - fs * .86, w.ww + pad * 2, fs * 1.15, fs * .2); ctx.fill(); ctx.restore(); ctx.fillStyle = P.gold; }
-        ctx.fillText(w.t, x, y); x += w.ww + sp; }); y += fs * 1.34; });
+    const u = Math.min(W, H), story = H > W * 1.3, sc = o.scale || 1;
+    const phrase = activePhrase(src, time), cur = phrase.cur, words = phrase.line.length ? phrase.line : [src[cur] || src[0]];
+    const mid = words.length > 3 ? Math.ceil(words.length / 2) : words.length;
+    const lines = words.length > 3 ? [words.slice(0, mid), words.slice(mid)] : [words];
+    let fs = u * (story ? .056 : .048) * sc, maxW = W * .86;
+    const measure = () => { ctx.font = `800 ${fs}px ${SANS}`; const sp = ctx.measureText(" ").width;
+      return { sp, rows: lines.map(L => ({ L, w: L.reduce((a, w) => a + ctx.measureText(w.t).width, 0) + sp * Math.max(0, L.length - 1) })) }; };
+    let lay = measure();
+    while (lay.rows.some(r => r.w > maxW) && fs > u * .032) { fs *= .9; lay = measure(); }
+    const bh = lines.length * fs * 1.42 + u * .05;
+    const y0 = (story ? H * .7 : H * .62) + (o.ty || 0) * H, x0 = W * .04 + (o.tx || 0) * W, bw = W * .92;
+    ctx.save(); ctx.shadowColor = "rgba(0,0,0,.45)"; ctx.shadowBlur = u * .02; ctx.fillStyle = "rgba(8,10,16,.86)"; rr(ctx, x0, y0, bw, bh, u * .018); ctx.fill();
+    ctx.shadowBlur = 0; ctx.fillStyle = P.gold; ctx.fillRect(x0, y0, bw, Math.max(5, u * .008)); ctx.restore();
+    let y = y0 + fs * 1.18; ctx.font = `800 ${fs}px ${SANS}`; ctx.textBaseline = "alphabetic"; ctx.textAlign = "left";
+    lay.rows.forEach(row => { let x = x0 + Math.max(u * .02, (bw - row.w) / 2);
+      row.L.forEach(w => { const hot = w.k === cur, on = time + 1e-3 >= w.s, ww = ctx.measureText(w.t).width;
+        ctx.globalAlpha = on ? 1 : .42; inkWord(ctx, w.t, x, y, fs, hot ? P.gold : "#fffaf0"); x += ww + lay.sp; });
+      y += fs * 1.42; });
     ctx.globalAlpha = 1; return y0 + bh;
   }
   function drawType(ctx, W, H, o, time, P) {
     const src = o.timed || []; if (!src.length) return H * .7; const words = src.map((w, i) => ({ ...w, k: i }));
     const u = Math.min(W, H), font = o.font || "italic", sc = o.scale || 1, cw = W * .84;
     const fit = fitLines(ctx, words, cw, font, u * .054 * sc, H * .3), fs = fit.fs, lines = fit.lines; if (!lines.length) return H * .7;
-    let li = 0; lines.forEach((L, i) => { if (time >= L[0].s - .05) li = i; });
+    let li = 0; lines.forEach((L, i) => { if (time + 1e-3 >= L[0].s) li = i; });
     const show = li > 0 ? [lines[li - 1], lines[li]] : [lines[li]];
     let y = H * (H > W ? .64 : .58) + (o.ty || 0) * H + fs; ctx.textAlign = "center"; ctx.textBaseline = "alphabetic"; ctx.shadowColor = P.dark ? "rgba(0,0,0,.5)" : "rgba(255,255,255,.35)"; ctx.shadowBlur = u * .01; ctx.font = face(fs, font);
     show.forEach(L => { const isCur = L === lines[li]; let alpha = 1, text;
       if (!isCur) { alpha = calm() ? .4 : Math.max(.25, 1 - Math.max(0, time - lines[li][0].s) / 1.15); text = L.map(w => w.t).join(" "); }
       else if (calm()) text = L.map(w => w.t).join(" ");
-      else { const parts = []; L.forEach(w => { if (time >= w.e) parts.push(w.t); else if (time >= w.s - .02) { const p = Math.max(0, Math.min(1, (time - w.s) / Math.max(.12, (w.e - w.s) || .2))); parts.push(w.t.slice(0, Math.max(1, Math.ceil(w.t.length * p)))); } }); text = parts.join(" "); }
+      else { const parts = []; L.forEach(w => { if (time >= w.e) parts.push(w.t); else if (time + 1e-3 >= w.s) { const p = Math.max(0, Math.min(1, (time - w.s) / Math.max(.12, (w.e - w.s) || .2))); parts.push(w.t.slice(0, Math.max(1, Math.ceil(w.t.length * p)))); } }); text = parts.join(" "); }
       ctx.globalAlpha = alpha; ctx.fillStyle = isCur ? P.gold : P.ink; ctx.fillText(text, W / 2 + (o.tx || 0) * W, y); y += fs * 1.28; });
     ctx.globalAlpha = 1; return y;
   }
@@ -413,42 +616,31 @@
       if (path) { ctx.fillStyle = P.ink; ctx.font = `600 ${u * .02}px ${SANS}`; ctx.fillText(path, W / 2, qy + qs + u * .078); }
     } else {
       let hook = String(o.hook || "").replace(/\s+/g, " ").trim(), own = !!o.own;
-      const font = o.font || "serif"; let fs = u * (story ? .058 : .048) * (o.scale || 1);
-      const fits = text => { let size = fs, lines = []; ctx.font = face(size, font); lines = wrapPlain(ctx, text, W * .84);
-        while (lines.length > 3 && size > u * .036) { size *= .9; ctx.font = face(size, font); lines = wrapPlain(ctx, text, W * .84); } return { size, lines }; };
-      let laid = fits(hook);
-      if (!hook || laid.lines.length > 3) { hook = String(o.title || hook).replace(/[“”„«»"]/g, "").replace(/\s+/g, " ").trim(); own = false; laid = fits(hook); fs = laid.size; }
-      else fs = laid.size;
-      const lines = laid.lines;
-      ctx.fillStyle = P.gold; ctx.font = `600 ${u * .018}px ${SANS}`;
-      ctx.fillText(o.phase === "poster" ? "BEST MOMENT" : (own ? "YOUR OWN WORDS" : "A MOMENT FROM CONFERENCE"), W / 2, H * (story ? .18 : .15));
-      if (own) { ctx.fillStyle = P.sub; ctx.font = `500 ${u * .016}px ${SANS}`; ctx.fillText("Added by the sharer, not a quote", W / 2, H * (story ? .18 : .15) + u * .028); }
-      if (o.cap === "lower") {
-        const show = lines.slice(0, 2), bh = show.length * fs * 1.2 + u * .05, y0 = H * .52;
-        ctx.fillStyle = P.dark ? "rgba(8,10,16,.84)" : "rgba(255,252,246,.92)"; rr(ctx, W * .04, y0, W * .92, bh, u * .012); ctx.fill();
-        ctx.fillStyle = P.gold; ctx.fillRect(W * .04, y0, W * .92, Math.max(3, u * .008));
-        ctx.font = face(fs * .85, font); let yy = y0 + fs; show.forEach((l, li) => { const parts = l.split(" "), last = li === show.length - 1;
-          ctx.fillStyle = last ? P.gold : "#fffaf0"; ctx.fillText(parts.join(" "), W / 2, yy); yy += fs * 1.05; });
-      } else if (o.cap === "pop") {
-        const bits = hook.split(/\s+/).filter(Boolean).slice(0, 4);
-        ctx.font = face(fs * 1.05, font); const hot = bits.length - 1; let y = H * .4;
-        bits.forEach((w, i) => { ctx.fillStyle = i === hot ? P.gold : "#fffaf0"; ctx.font = face(fs * (i === hot ? 1.28 : 1), font); ctx.fillText(w, W / 2, y); y += fs * (i === hot ? 1.35 : 1.15); });
-      } else if (o.cap === "pill") {
-        const one = lines[0] || hook; ctx.font = face(fs, font); const tw = Math.min(W * .8, ctx.measureText(one).width);
-        const bw = Math.min(W * .9, Math.max(u * .42, tw + u * .12)), bh = fs * 1.7, y0 = H * .38, x0 = (W - bw) / 2;
-        ctx.fillStyle = P.pill || "#fffaf0"; rr(ctx, x0, y0, bw, bh, bh / 2); ctx.fill();
-        ctx.lineWidth = Math.max(3, u * .012); ctx.strokeStyle = P.line || P.gold; ctx.stroke();
-        ctx.fillStyle = P.pillInk || "#1c160e"; ctx.fillText(one, W / 2, y0 + fs * 1.12);
-      } else {
-        const flat = []; lines.forEach(l => l.split(" ").forEach(w => flat.push(w))); const gi = Math.max(0, flat.length - 1);
-        let n = 0, y = H * (story ? .32 : .28); ctx.font = face(fs, font);
-        lines.forEach(l => { const parts = l.split(" "), sp = ctx.measureText(" ").width, widths = parts.map(w => ctx.measureText(w).width);
-          const lw = widths.reduce((a, b) => a + b, 0) + sp * Math.max(0, parts.length - 1); let x = (W - lw) / 2; ctx.textAlign = "left";
-          parts.forEach((w, i) => { ctx.fillStyle = n === gi ? P.gold : "#fffaf0"; ctx.fillText(w, x, y); x += widths[i] + sp; n++; }); y += fs * 1.18; });
-        ctx.textAlign = "center";
-      }
-      const sy = H * (story ? .78 : .74); ctx.textAlign = "center"; ctx.fillStyle = P.gold; ctx.font = `600 ${u * .022}px ${SANS}`; ctx.fillText(String(o.speaker || "").toUpperCase(), W / 2, sy);
-      if (o.title) { ctx.fillStyle = P.sub; ctx.font = `italic 500 ${u * .028}px ${SERIF}`; wrapPlain(ctx, o.title, W * .8).slice(0, 2).forEach((l, i) => ctx.fillText(l, W / 2, sy + u * .04 + i * u * .034)); }
+      let fs = u * (story ? .078 : .062) * (o.scale || 1);
+      const fitHook = text => { let size = fs, lines = []; ctx.font = `800 ${size}px ${SANS}`; lines = wrapPlain(ctx, text, W * .84);
+        while (lines.length > 3 && size > u * .04) { size *= .9; ctx.font = `800 ${size}px ${SANS}`; lines = wrapPlain(ctx, text, W * .84); } return { size, lines }; };
+      let laid = fitHook(hook);
+      if (!hook || laid.lines.length > 3) { hook = String(o.title || hook).replace(/[“”„«»"]/g, "").replace(/\s+/g, " ").trim(); own = false; laid = fitHook(hook); }
+      fs = laid.size; const lines = laid.lines;
+      const ruleY = H * (story ? .2 : .16);
+      ctx.strokeStyle = P.gold; ctx.globalAlpha = .85; ctx.lineWidth = Math.max(2, u * .003); ctx.beginPath(); ctx.moveTo(W * .32, ruleY); ctx.lineTo(W * .68, ruleY); ctx.stroke(); ctx.globalAlpha = 1;
+      ctx.fillStyle = P.gold; ctx.font = `700 ${u * .02}px ${SANS}`;
+      ctx.fillText(own ? "YOUR OWN WORDS" : "A MOMENT FROM CONFERENCE", W / 2, ruleY - u * .02);
+      if (own) { ctx.fillStyle = P.sub; ctx.font = `500 ${u * .016}px ${SANS}`; ctx.fillText("Added by the sharer, not a quote", W / 2, ruleY + u * .028); }
+      const words = []; lines.forEach(l => l.split(" ").forEach(w => words.push(w)));
+      const hot = Math.max(0, words.length - 1);
+      let n = 0, y = H * (story ? .38 : .34);
+      ctx.font = `800 ${fs}px ${SANS}`; ctx.textAlign = "left"; ctx.lineJoin = "round";
+      lines.forEach(l => {
+        const parts = l.split(" "), sp = ctx.measureText(" ").width, widths = parts.map(w => ctx.measureText(w).width);
+        const lw = widths.reduce((a, b) => a + b, 0) + sp * Math.max(0, parts.length - 1); let x = (W - lw) / 2;
+        parts.forEach((w, i) => { const fill = n === hot ? P.gold : (P.dark ? "#fffaf0" : P.ink); if (P.dark) inkWord(ctx, w, x, y, fs, fill); else { ctx.fillStyle = fill; ctx.fillText(w, x, y); } x += widths[i] + sp; n++; });
+        y += fs * 1.16;
+      });
+      ctx.textAlign = "center";
+      const sy = Math.max(y + u * .06, H * (story ? .72 : .68));
+      ctx.fillStyle = P.gold; ctx.font = `700 ${u * .022}px ${SANS}`; ctx.fillText(String(o.speaker || "").toUpperCase(), W / 2, sy);
+      if (o.title) { ctx.fillStyle = P.sub; ctx.font = `italic 500 ${u * .03}px ${SERIF}`; wrapPlain(ctx, o.title, W * .8).slice(0, 2).forEach((l, i) => ctx.fillText(l, W / 2, sy + u * .042 + i * u * .036)); }
     }
     const by = H - u * (story ? .09 : .065); if (K && K.wordmark) K.wordmark(ctx, W / 2, by, u * .032, P, "center");
     ctx.globalAlpha = .82; ctx.fillStyle = P.sub; ctx.font = `${u * .015}px ${SANS}`; ctx.textAlign = "center";
@@ -488,7 +680,7 @@
     let y = top + Math.max(0, (avail - lines.length * fs * 1.18) / 2) + fs; ctx.textBaseline = "alphabetic"; ctx.shadowColor = "rgba(0,0,0,.55)"; ctx.shadowBlur = u * .012;
     const sp = ctx.measureText(" ").width;
     lines.forEach(L => { const lw = L.reduce((a, x) => a + x.ww, 0) + sp * (L.length - 1); let x = (W - lw) / 2;
-      L.forEach(w => { const on = time >= w.s - .05, p = Math.max(0, Math.min(1, (time - w.s + .05) / .25));
+      L.forEach(w => { const on = time + 1e-3 >= w.s, p = Math.max(0, Math.min(1, (time - w.s) / .22));
         ctx.globalAlpha = o.captions ? (on ? .45 + .55 * p : .4) : 1; ctx.fillStyle = on && o.captions && p < 1 ? TH.gold : TH.ink; ctx.textAlign = "left"; ctx.fillText(w.t, x, y); x += w.ww + sp; }); y += fs * 1.18; });
     ctx.globalAlpha = 1; ctx.shadowBlur = u * .008;
     ctx.fillStyle = TH.gold; ctx.font = `600 ${u * .022}px ${SANS}`; ctx.textAlign = "center"; ctx.fillText(String(o.speaker).toUpperCase().split("").join(String.fromCharCode(8202)), W / 2, y + u * .03);
@@ -533,7 +725,8 @@
       clearInterval(stopIv); stopIv = setInterval(() => { if (v.currentTime - at0 >= VE) { v.pause(); clearInterval(stopIv); } }, 15);
       if (b) { mSrc = ac.createBufferSource(); mSrc.buffer = b; mSrc.loop = true; mSrc.connect(mGain); mSrc.start(t0); duck(t0); } }
     let stopIv, T0 = null; function stop() { T0 = null; clearInterval(stopIv); v.pause(); if (mSrc) { try { mSrc.stop(); } catch (e) {} mSrc = null; } }
-    return { v, start, stop, set music(x) { music = x; }, get music() { return music; }, set vol(x) { vol = x; }, stream: () => (audio(), dest.stream), t: () => T0 == null ? v.currentTime - at0 : (performance.now() - T0) / 1000, at0, ended: () => T0 == null || (performance.now() - T0) / 1000 >= clip.dur, ready: () => v.readyState >= 2 ? Promise.resolve() : (meta(), once("loadeddata")), seekTo };
+    // Caption time follows the media clock, so a stalled frame does not leave the words running ahead.
+    return { v, start, stop, set music(x) { music = x; }, get music() { return music; }, set vol(x) { vol = x; }, stream: () => (audio(), dest.stream), t: () => v.currentTime - at0, at0, ended: () => v.currentTime - at0 >= (clip.vEnd ?? clip.dur) - .02, ready: () => v.readyState >= 2 ? Promise.resolve() : (meta(), once("loadeddata")), seekTo };
   }
   const recType = () => ["video/mp4;codecs=avc1,mp4a.40.2", "video/mp4;codecs=avc1,opus", "video/mp4;codecs=avc1", "video/mp4", "video/webm;codecs=vp9,opus", "video/webm"].find(t => window.MediaRecorder && MediaRecorder.isTypeSupported(t));
   // Real-time export: plays the clip once while recording the canvas + mixed audio.
@@ -555,5 +748,5 @@
         const g = vg.gain; g.setValueAtTime(0, 0); g.linearRampToValueAtTime(1, .08); g.setValueAtTime(1, Math.max(.1, VE - .3)); g.linearRampToValueAtTime(0, VE); s.start(0);
         const m = MUSIC.find(x => x.id === music); if (m && m.file) { const ab = await (await fetch(base() + m.file)).arrayBuffer(), mb = await octx.decodeAudioData(ab), ms = octx.createBufferSource(), mg = octx.createGain();
           ms.buffer = mb; ms.loop = true; ms.connect(mg); mg.connect(octx.destination); duckOn(mg.gain, clip, vol, 0); ms.start(0); } } }); }
-  window.ClipKit = { exportExact, ASPECTS, MUSIC, FADES, THEMES, CAPS, applyFades, get, clipFor, clipForSpan, align, timings, timedQuote, draw, player, record, recType };
+  window.ClipKit = { exportExact, ASPECTS, MUSIC, FADES, THEMES, CAPS, applyFades, get, clipFor, clipForSpan, align, timings, timedQuote, draw, player, record, recType, phraseBlocks };
 })();

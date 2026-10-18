@@ -13,7 +13,7 @@ document.getElementById("main").innerHTML = `
     <figcaption><b>${esc(p.name)}</b><span>Photo: ${esc(p.author || "Unknown")} · <a href="${esc(p.license_url || p.source)}" rel="noopener">${esc(p.license)}</a> · <a href="${esc(p.source)}" rel="noopener">Source on Wikimedia Commons ↗</a></span>
     <span class="speaker">Resized and converted to WebP for this site${/SA/.test(p.license) ? "; this adapted version is shared under the same license" : ""}.</span></figcaption></figure>`).join("")}</div>
   <h2>Music for video clips</h2>
-  <p>These beds can play under a clip and duck while the speaker is talking. When a track needs credit, that CC BY line is burned into the exported video as well as listed here.</p>
+  <p>These beds can play under a clip and duck while the speaker is talking. When a track needs credit, that CC BY line is burned into the exported video as well as listed here. Kevin MacLeod says his music is not registered with YouTube Content ID; a false claim is still possible. U.S. military-band recordings are public domain and are sometimes misidentified by Content ID. Full notes are in LICENSES-music.md. The earlier original synth beds (Morning Light, Chorale of Faith) were replaced by these recordings.</p>
   <ul>${(window.ClipKit ? ClipKit.MUSIC : []).filter(m => m.file).map(m => `<li><b>${esc(m.name)}</b>: ${esc(m.credit)}${m.src ? ` · <a href="${esc(m.src)}" rel="noopener">source ↗</a>` : ""} · <a href="${esc(m.lurl)}" rel="noopener">${esc(m.license)}</a></li>`).join("")}</ul>
   <h2>Fonts &amp; code</h2>
   <ul><li>Cormorant Garamond and Inter: SIL Open Font License 1.1, self-hosted.</li>

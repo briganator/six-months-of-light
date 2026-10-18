@@ -56,8 +56,8 @@ const talkRow = t => { const cf = LB.confOf(t.c), mins = LB.minutes(t), ext = !t
     <span class="lt-title">${esc(t.t)}${ext ? ' <span class="ext" aria-label="opens ChurchofJesusChrist.org">↗</span>' : ""}</span>
     <span class="lt-meta">${esc(t.s)} · ${esc(cf.label)}${LB.sessName(t) ? " · " + esc(LB.sessName(t).replace(/ Session$/, "")) : ""}${mins ? ` · ${mins} min read` : t.recap ? " · recap" : ""}</span>
     ${t.tg.length ? `<span class="lt-tags">${t.tg.map(k => `<span class="pill">${esc(LB.themeName(k))}</span>`).join("")}</span>` : ""}</a>${makeLink(t)}</li>`; };
-const makeLink = t => { if (t.local) { const r = talkById(t.id); return r && r.quotes.length ? `<a class="lib-make" href="builder.html?t=${esc(t.id)}&q=0">Make a card</a>` : ""; }
-  return `<a class="lib-make" href="builder.html?lt=${esc(t.c)}/${esc(t.id)}" aria-label="Make a card for ${esc(t.t)}">Make a card</a>`; };
+const makeLink = t => { if (t.local) { const r = talkById(t.id); return r && r.quotes.length ? `<a class="lib-make" href="create.html?t=${esc(t.id)}&q=0">${esc(window.CREATE_NAME || "Share light")}</a>` : ""; }
+  return `<a class="lib-make" href="builder.html?lt=${esc(t.c)}/${esc(t.id)}" aria-label="Make a picture card for ${esc(t.t)}">Make a picture card</a>`; };
 function render() { sync(); chips();
   document.querySelectorAll(".lib-views button").forEach(b => { b.setAttribute("aria-pressed", b.dataset.v === st.view); });
   const list = LB.filter({ c: st.c, topic: st.topic, sp: st.sp, q: st.q, se: st.se || undefined });

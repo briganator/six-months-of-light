@@ -23,3 +23,6 @@ if (new URLSearchParams(location.search).get("mock") === "1") window.CONF_CONFIG
 // The Church CDN does not send CORS, so a canvas export cannot use it.
 // Any other origin can use a same-origin folder: clip.html?m=talk:moment&media=media/
 window.CLIP_MEDIA_BASE = "https://pub-61fed319631f4fc3b830feae00835d32.r2.dev/";
+// The creation hub’s name. One string, used in the nav, the home page, talk pages, and the hub itself.
+// Alternatives Brigham can swap in: "Make light" or "Daybreak".
+window.CREATE_NAME = "Share light";

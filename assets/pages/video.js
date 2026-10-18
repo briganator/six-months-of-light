@@ -2,14 +2,21 @@
 mount("video.html", true);
 (function () {
   const C = window.ClipKit, M = window.ClipMatch, Q = new URLSearchParams(location.search), $ = s => document.querySelector(s);
+  if (Q.get("sel")) {
+    const u = new URL("clip.html", location.href);
+    if (Q.get("t")) u.searchParams.set("t", Q.get("t"));
+    u.searchParams.set("sel", Q.get("sel"));
+    location.replace(u.pathname.replace(/^\//, "") + u.search);
+    return;
+  }
   const FL = [["off", "Off"], ["short", "Short"], ["medium", "Medium"], ["long", "Long"]], FV = C.FADES;
   const S = { m: null, p0: 0, p1: 0, clip: null, pl: null, aspect: "story", music: "dreamy-flashback", vol: .35, captions: true, vbg: "full",
     f: { vin: "short", vout: "medium", min: "short", mout: "medium" }, link: true, playing: false, busy: false, file: null, tok: 0 };
   const segH = (id, items, label) => `<div class="seg" id="${id}" role="group" aria-label="${label}">${items.map(([k, n]) => `<button type="button" data-k="${k}">${n}</button>`).join("")}</div>`;
   document.getElementById("main").innerHTML = `
   <section class="mv">
-    <h1 class="mv-h">Make a video</h1>
-    <p class="mv-sub">Paste a line from any October 2026 talk. We'll find it and cut the video to the moment it was spoken. Or open a ready-made passage in the <a href="moments.html">best moments</a> editor.</p>
+    <h1 class="mv-h">Paste a line</h1>
+    <p class="mv-sub">Paste a line from any October 2026 talk. We'll find it and open it in the video editor. To choose a video or a picture card, start at <a href="create.html">${esc(window.CREATE_NAME || "Share light")}</a>.</p>
     <div class="mv-in"><textarea id="mvQ" rows="3" placeholder="Paste a quote here…" aria-label="Quote"></textarea>
       <div class="mv-in-btns"><button type="button" class="btn secondary small" id="mvPaste">Paste</button><button type="button" class="btn secondary small" id="mvClear">Clear</button></div></div>
     <p class="mv-msg" id="mvMsg" aria-live="polite"></p>

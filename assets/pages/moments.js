@@ -3,7 +3,7 @@ mount("moments.html", true);
 (function () {
   const C = window.ClipKit, Y = window.ClipStyle, Q = new URLSearchParams(location.search);
   const main = document.getElementById("main");
-  main.innerHTML = `<section class="mm-page"><p class="crumbs"><a href="index.html">Home</a> · <a href="video.html">Make a video</a></p>
+  main.innerHTML = `<section class="mm-page"><p class="crumbs"><a href="index.html">Home</a> · <a href="create.html">${esc(window.CREATE_NAME || "Share light")}</a></p>
     <h1>Best moments</h1>
     <p class="mm-lead">Short passages from the October 2026 talks, in the speaker’s own words. Each one opens in the clip editor with a different starting look. You can change all of it.</p>
     <div class="mm-bar"><label>Session <select id="mmSess" aria-label="Session"><option value="">All sessions</option></select></label>
