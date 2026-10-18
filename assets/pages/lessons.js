@@ -3,8 +3,8 @@ mount("lessons.html", true);
 // Template-based questions; no talk text and no invented doctrine. Leaders prepare from the official text and the Spirit.
 const MODES = {
   fhe: { tab: "Family night", name: "Family home evening", time: "15–20 min", open: "Sing a favorite hymn or Primary song, then ask:", act: "Let each family member share one experience or idea connected to the message. Younger children can draw it.", close: "Choose one small family goal and check in at dinner during the week.", nq: 2, present: "Tonight's talk" },
-  eqrs: { tab: "Elders Quorum & Relief Society", name: "Elders Quorum & Relief Society", time: "about 45 min", fmt: "For second- and fourth-Sunday lessons that counsel together about a recent general conference message.", open: "Welcome everyone, invite someone to read the key quote, then give a minute to ponder:", act: "In small groups, take one question each, then share what you discussed with everyone.", close: "Consider how members could help one another act on it this week, including through ministering.", nq: 5, present: "Today's message" },
-  youth: { tab: "Youth", name: "Youth classes", sub: "Young Women classes and Aaronic Priesthood quorums", time: "25–30 min", open: "Write the ponder question on the board and give 1 minute of quiet thinking:", act: "In pairs, read a quote and discuss: What does it mean? Where have we seen it in real life? Then share with the class.", close: "Invite each youth to privately write one action they'll take this week.", nq: 3, present: "Today's message" },
+  eqrs: { tab: "Elders Quorum & Relief Society", name: "Elders Quorum & Relief Society", time: "25 min", timed: true, fmt: "Weekly 25-minute meeting (since Sept. 6, 2026). Begin and end with prayer, start the discussion quickly, and counsel together during the lesson. There is no separate counseling topic beforehand.", conducts: "Presidency", nq: 3, present: "Today's message" },
+  youth: { tab: "Youth", name: "Youth classes", sub: "Young Women classes and Aaronic Priesthood quorums", time: "25 min", timed: true, fmt: "Sunday youth classes now study the For the Strength of Youth guide (one chapter a month). Use this outline when leaders choose a conference message, such as a combined class, a fifth Sunday the bishopric assigns, a devotional or an activity.", conducts: "Class or quorum presidency", nq: 3, present: "Today's message" },
   talk: { tab: "Sacrament talk", name: "Sacrament meeting talk", time: "5–8 min", open: "Open with a brief personal experience related to the message, then introduce:", act: "Teach the message using one scripture and one quote, adding your own testimony and experience.", close: "Close by extending the invitation and bearing testimony of Jesus Christ.", nq: 0, present: "My talk" },
 };
 const LIB_OK = () => !!window.Library;
@@ -13,7 +13,7 @@ if (QS.get("t") && !QS.get("c") && !talkById(tid)) conf = "";   // library talk 
 const main = document.getElementById("main");
 main.innerHTML = `
   <h1 style="margin-top:38px">Lesson helps</h1>
-  <p class="lede" style="margin-top:-4px">A ready outline for any general conference talk: family night, Elders Quorum and Relief Society, youth classes or a sacrament talk.</p>
+  <p class="lede" style="margin-top:-4px">A ready outline for any general conference talk: family night, a 25-minute Elders Quorum or Relief Society lesson, youth classes or a sacrament talk.</p>
   <div class="notice"><strong>Starter outline.</strong> Built from this site's summaries, verified quotes and the scriptures each talk cites. The full talk is on the talk page, with text from ChurchofJesusChrist.org. Prepare with that text, and follow the Spirit.</div>
   <div class="card no-print">
     <div class="ls-pick">
@@ -61,10 +61,115 @@ function questions(n, m) {
   q.push(m === "eqrs" ? `How can we help one another act on this, including in our ministering?` : m === "youth" ? `What is one small thing you could do this week because of this message?` : `What will we try as a family this week?`);
   return q.slice(0, m === "fhe" ? 2 : m === "youth" ? 4 : 5);
 }
+// ---- 25-minute timed flow (Elders Quorum & Relief Society, youth) ----
+// Shape follows the Church's guidance for the 25-minute meetings: a simple welcome and prayer, start the
+// discussion quickly, a few principles that build faith in Jesus Christ, counsel together about applying them,
+// invitations, closing prayer. One core truth per lesson. Sources: research/rs-eq-25min-guidance.md
+const mm = x => `${x}:00`;
+function timedPlan(n, mk) {
+  const yth = mk === "youth", ref = n.refs.map(ScripRef.first).find(Boolean) || "", quote = n.quotes[0] || n.keyStatement || n.big;
+  const core = n.big || n.keyStatement || n.overview;
+  const q = [];
+  if (ref) q.push(`Read <strong>${esc(ref)}</strong> together. How does it help us understand this truth about following Jesus Christ?`);
+  else q.push(`What does this truth teach us about Jesus Christ and how we follow Him?`);
+  q.push(yth ? `When have you seen this truth make a difference for someone your age?` : `When have you seen this truth at work in your own life or family?`);
+  q.push(yth ? `What would living this look like at school, online or with friends this week?` : `What challenges or opportunities in our ward does this speak to? How could we help one another, including through our ministering and in our homes?`);
+  const segs = [
+    { a: 0, b: 2, k: "Welcome & prayer", who: MODES[mk].conducts, items: [yth ? "A youth from the class or quorum presidency welcomes everyone and invites someone to pray." : "A simple welcome, then invite someone to give the opening prayer.", "Keep business to what can't wait; no separate counseling topic. Then start right away."] },
+    { a: 2, b: 5, k: "Open", who: "Teacher", items: [`Ask: <em>${esc(n.ponder)}</em>`, `Invite someone to read: <q>${esc(quote)}</q>`, "Give a quiet moment to ponder before anyone answers."] },
+    { a: 5, b: 20, k: "Discuss one core truth", who: "Everyone", core, items: [
+      ...q.slice(0, 2).map((x, i) => `<b>Q${i + 1}.</b> ${i ? esc(x) : x}`),
+      `<span class="tl-opt">Optional, about 3 min</span> Turn to someone nearby and share your answer to Q2, then invite two or three people to share with everyone.`,
+      `<b>Q3.</b> ${esc(q[2])}`,
+      "Let members answer one another. Resist answering every question yourself." ] },
+    { a: 20, b: 24, k: "Invite, testify, follow up", who: "Teacher", items: [`From the talk: <strong>${esc(n.invitation)}</strong>`, `Ask: “What do you feel impressed to do?” Give a minute to write it down privately.`, "Bear brief testimony of Jesus Christ and this truth, or invite someone to.", yth ? "Next week, invite one or two youth to share how it went." : "Next week, open by inviting one or two people to share how it went."] },
+    { a: 24, b: 25, k: "Closing prayer", who: MODES[mk].conducts, items: ["Invite someone to give the closing prayer. End on time."] },
+  ];
+  return { segs, q: q.map(x => x.replace(/<[^>]+>/g, "")), ref, quote, core };
+}
+// One clear print area, shown near the top and again at the bottom of every lesson.
+let CAN_SHARE_CACHE; const canShareFiles = () => CAN_SHARE_CACHE ??= (() => { try { return PHONE && !!navigator.share && !!navigator.canShare && navigator.canShare({ files: [new File(["%PDF-"], "lesson.pdf", { type: "application/pdf" })] }); } catch (e) { return false; } })();
+const PP_ICON = `<svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/></svg>`;
+const ppBtns = (attr, cls) => ["outline", "handout", "onepage"].map(k => `<a class="btn ${cls} small" ${attr}="${k}" href="#" target="_blank" rel="noopener">${{ outline: "Outline", handout: "Handout", onepage: "One page" }[k]}</a>`).join("");
+// One clear print area, shown near the top and again at the bottom of every lesson.
+// Phones with file sharing get "Share / Print" first (opens the iOS share sheet, where Print is listed), then "Open PDF".
+const printPanel = where => `<div class="print-panel ${where}" role="group" aria-label="Print or save this lesson">
+  <div class="pp-k"><b>${PP_ICON} ${PHONE ? "Print or save as PDF" : "Print this lesson"}</b><small>${canShareFiles() ? "Share / Print opens your share sheet. Choose Print." : PHONE ? "Opens a PDF. Then tap Share → Print." : "Letter size, one page"}</small></div>
+  ${canShareFiles() ? `<div class="pp-row"><span class="pp-l">Share / Print</span><div class="pp-btns pp-share">${ppBtns("data-share", "gold")}</div></div>` : ""}
+  <div class="pp-row">${PHONE ? `<span class="pp-l">Open PDF</span>` : ""}<div class="pp-btns">${ppBtns("data-print", "secondary")}</div></div></div>`;
+function renderTimed(n, m, mk) {
+  const P = timedPlan(n, mk), out = $("out");
+  const bar = `<div class="tl-bar" aria-hidden="true">${P.segs.map(s => `<i style="flex:${s.b - s.a}" title="${esc(s.k)}"><span>${s.b - s.a}</span></i>`).join("")}</div>`;
+  const others = n.refs.slice(0, 6).filter(r => (ScripRef.first(r) || r) !== P.ref);
+  out.innerHTML = `
+    <div class="ls-kicker">${esc(m.name)} · ${esc(m.time)}</div>${m.sub ? `<p class="speaker" style="margin:2px 0 0">${esc(m.sub)}</p>` : ""}
+    <h2 style="margin:6px 0 2px">${esc(n.title)}</h2><p class="speaker">${esc(n.speaker)} · ${esc(n.conf)} general conference</p>
+    <p class="src" style="margin-top:6px">${esc(m.fmt)}</p>
+    ${printPanel("top")}
+    <div class="tl-core"><div class="tl-ck">One core truth</div><p>${esc(P.core)}</p></div>
+    ${bar}
+    <div class="tl-clock no-print"><button class="btn secondary small" id="clk">▶ Start 25-min clock</button><span id="clkv" aria-live="polite"></span></div>
+    <ol class="tl">${P.segs.map((s, i) => `<li class="tl-seg" data-a="${s.a}" data-b="${s.b}"><div class="tl-t"><b>${mm(s.a)}–${mm(s.b)}</b><span>${s.b - s.a} min</span></div><div class="tl-body"><h3>${esc(s.k)} <small>${esc(s.who)}</small></h3>${s.core ? `<p class="tl-truth">${esc(s.core)}</p>` : ""}<ul>${s.items.map(x => `<li>${x}</li>`).join("")}</ul></div></li>`).join("")}</ol>
+    <details class="tl-prep no-print"><summary>Before Sunday</summary>
+      <p>${esc(n.overview)}</p><p class="src">${esc(n.overviewSrc)}</p>
+      <ul><li>Read the full talk and pray about what your ${mk === "youth" ? "class" : "quorum or Relief Society"} needs from it.</li><li>Share the talk link a few days early so members come having read it.</li><li>Teach one truth well. Meaningful discussion matters more than covering everything.</li>${others.length ? `<li>Other scriptures the talk cites: ${others.map(esc).join("; ")}</li>` : ""}</ul></details>
+    <div class="links">
+      <button class="btn gold small" id="present">▶ Present</button>
+      <button class="btn secondary small" id="cp">Copy outline</button>
+      ${n.local ? `<a class="btn secondary small" href="${esc(n.local)}">Read this talk</a>` : ""}
+    </div>
+    ${printPanel("bottom")}
+    <p class="src talk-source">Source: <a href="${esc(n.official || n.session)}" rel="noopener">Official text on ChurchofJesusChrist.org</a>${n.local ? ". The full talk is on this site." : ""} Timing follows the Church's 25-minute meeting guidance; adapt it as the Spirit directs.</p>`;
+  $("handout").innerHTML = `<div class="ho-head"><div class="ho-k">${esc(m.name)}</div><h2>${esc(n.title)}</h2><p>${esc(n.speaker)} · ${esc(n.conf)} general conference</p></div>
+    <h3>One core truth</h3><blockquote>${esc(P.core)}</blockquote>
+    <h3>From the talk</h3><blockquote>“${esc(P.quote)}”</blockquote>
+    ${P.ref ? `<h3>Scripture</h3><p>${esc(P.ref)}</p>` : ""}
+    <h3>To ponder and discuss</h3><ol>${P.q.map(x => `<li>${esc(x)}</li>`).join("")}</ol>
+    <h3>This week</h3><p>${esc(n.invitation)}</p><p>What do I feel impressed to do? ______________________________</p>
+    <p class="ho-foot">Talk text from ChurchofJesusChrist.org · Handout from sixmonthsoflight.com (not an official Church site)</p>`;
+  const strip = x => x.replace(/<\/span>\s*/g, ": ").replace(/<q>/g, "“").replace(/<\/q>/g, "”").replace(/<[^>]+>/g, "").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+  const head = { kicker: `${m.name} · 25 min`, title: n.title, byline: `${n.speaker} · ${n.conf} general conference`, foot: PDF_FOOT, fit: true };
+  const segBlocks = () => P.segs.map(sg => ({ t: "seg", time: `${mm(sg.a)}–${mm(sg.b)}`, text: sg.k, who: sg.who, items: sg.items.map(strip) }));
+  wirePrint({
+    outline: () => ({ ...head, blocks: [{ t: "p", text: m.fmt }, { t: "core", text: P.core }, ...segBlocks(),
+      { t: "h", text: "Before Sunday" }, { t: "p", text: n.overview }, { t: "li", text: `Read the full talk and pray about what your ${mk === "youth" ? "class" : "quorum or Relief Society"} needs from it.` },
+      { t: "li", text: "Share the talk link a few days early so members come having read it." }, { t: "li", text: "Teach one truth well. Meaningful discussion matters more than covering everything." },
+      ...(others.length ? [{ t: "li", text: "Other scriptures the talk cites: " + others.join("; ") }] : []),
+      { t: "src", text: "Timing follows the Church's 25-minute meeting guidance; adapt it as the Spirit directs. Read the full talk at ChurchofJesusChrist.org." }] }),
+    onepage: () => ({ ...head, blocks: [{ t: "core", text: P.core }, ...P.segs.map(sg => ({ t: "seg", time: `${mm(sg.a)}–${mm(sg.b)}`, text: sg.k, who: sg.who, items: sg.items.map(strip) })),
+      { t: "src", text: "Timing follows the Church's 25-minute meeting guidance; adapt it as the Spirit directs. Read the full talk at ChurchofJesusChrist.org." }] }),
+    handout: () => ({ ...head, kicker: m.name, blocks: [{ t: "core", text: P.core }, { t: "h", text: "From the talk" }, { t: "q", text: P.quote },
+      ...(P.ref ? [{ t: "h", text: "Scripture" }, { t: "p", text: P.ref }] : []), { t: "h", text: "To ponder and discuss" }, ...P.q.map((x, i) => ({ t: "li", n: i + 1, text: x })),
+      { t: "h", text: "This week" }, { t: "p", text: n.invitation }, { t: "line", text: "What do I feel impressed to do?" }] }),
+  });
+  $("cp").onclick = () => navigator.clipboard.writeText([`${m.name} · 25 min`, `${n.title} · ${n.speaker}`, `One core truth: ${P.core}`, ...P.segs.map(s => `${mm(s.a)}–${mm(s.b)} ${s.k} (${s.who}): ` + s.items.map(x => x.replace(/<[^>]+>/g, "")).join(" "))].join("\n")).then(() => window.toast?.("Outline copied"));
+  $("present").onclick = () => present([
+    [m.present, n.title, n.speaker],
+    ["2:00 · Let's ponder", n.ponder, ""], ["Read aloud", "“" + P.quote + "”", n.speaker],
+    ["5:00 · One core truth", P.core, P.ref ? "Scripture: " + P.ref : ""],
+    ...P.q.map((x, i) => [`Discuss · ${i + 1}`, x, i === 1 ? "Optional: share with someone nearby first." : ""]),
+    ["20:00 · This week", n.invitation, "What do you feel impressed to do?"]]);
+  clockWire();
+}
+let clkT = null;
+function clockWire() {
+  if (clkT) { clearInterval(clkT); clkT = null; }
+  const b = $("clk"); if (!b) return;
+  b.onclick = () => {
+    if (clkT) { clearInterval(clkT); clkT = null; b.textContent = "▶ Start 25-min clock"; $("clkv").textContent = ""; document.querySelectorAll(".tl-seg").forEach(x => x.classList.remove("now", "done")); return; }
+    const t0 = Date.now(); b.textContent = "■ Stop clock";
+    const tick = () => { const sec = Math.floor((Date.now() - t0) / 1000), min = sec / 60;
+      $("clkv").textContent = `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, "0")} of 25:00`;
+      document.querySelectorAll(".tl-seg").forEach(x => { const a = +x.dataset.a, z = +x.dataset.b; x.classList.toggle("now", min >= a && min < z); x.classList.toggle("done", min >= z); }); };
+    tick(); clkT = setInterval(tick, 1000);
+  };
+}
 function gen() {
   const n = norm(), m = MODES[mode], out = $("out");
-  setURL(`?mode=${mode}&c=${encodeURIComponent(conf)}&t=${encodeURIComponent(tid || "")}`);
+  setURL(`?mode=${mode}&c=${encodeURIComponent(conf)}&t=${encodeURIComponent(tid || "")}${PRINT_VIEW ? "&print=" + PRINT_VIEW : ""}`);
   if (!n) { out.innerHTML = `<p class="empty">Loading talks…</p>`; return; }
+  if (m.timed) return renderTimed(n, m, mode);
+  clockWire();
   const qs = m.nq ? questions(n, mode) : [], quotes = n.quotes.slice(0, mode === "eqrs" ? 3 : 2), refs = n.refs.slice(0, 8);
   const refList = refs.map(r => `<li>${esc(r)}</li>`).join("") + (n.refs.length > refs.length ? `<li class="speaker">and ${n.refs.length - refs.length} more in the official footnotes</li>` : "");
   const quoteBlock = quotes.length ? `<ul>${quotes.map(q => `<li>“${esc(q)}”</li>`).join("")}</ul><p class="src">${esc(n.quoteSrc)}</p>`
@@ -74,6 +179,7 @@ function gen() {
     <div class="ls-kicker">${esc(m.name)} · ${esc(m.time)}</div>${m.sub ? `<p class="speaker" style="margin:2px 0 0">${esc(m.sub)}</p>` : ""}
     <h2 style="margin:6px 0 2px">${esc(n.title)}</h2><p class="speaker">${esc(n.speaker)} · ${esc(n.conf)} general conference</p>
     ${m.fmt ? `<p class="src" style="margin-top:6px">${esc(m.fmt)}</p>` : ""}
+    ${printPanel("top")}
     ${h("Talk overview")}<p>${esc(n.overview)}</p><p class="src">${esc(n.overviewSrc)}</p>
     ${h("Open")}<p>${esc(m.open)} <em>${esc(n.ponder)}</em></p>
     ${h(quotes.length ? "Key quotes" : "Key statement")}${quoteBlock}
@@ -83,11 +189,10 @@ function gen() {
     ${h("Suggested invitation")}<p><strong>${esc(n.invitation)}</strong> ${esc(m.close)}</p>${n.invSrc ? `<p class="src">${esc(n.invSrc)}</p>` : ""}
     <div class="links">
       <button class="btn gold small" id="present">▶ Present</button>
-      ${mode !== "talk" ? `<button class="btn secondary small" id="ph">Print handout</button>` : ""}
-      <button class="btn secondary small" id="po">Print outline</button>
       <button class="btn secondary small" id="cp">Copy outline</button>
       ${n.local ? `<a class="btn secondary small" href="${esc(n.local)}">Read this talk</a>` : ""}
     </div>
+    ${printPanel("bottom")}
     <p class="src talk-source">Source: <a href="${esc(n.official || n.session)}" rel="noopener">Official text on ChurchofJesusChrist.org</a>${n.local ? ". The full talk is on this site." : ""}</p>`;
   // Class-member handout: one page, big enough to read, no leader notes
   $("handout").innerHTML = `<div class="ho-head"><div class="ho-k">${esc(m.name)}</div><h2>${esc(n.title)}</h2><p>${esc(n.speaker)} · ${esc(n.conf)} general conference</p></div>
@@ -97,15 +202,96 @@ function gen() {
     <h3>This week</h3><p>${esc(n.invitation)}</p>
     <p class="ho-foot">Talk text from ChurchofJesusChrist.org · Handout from sixmonthsoflight.com (not an official Church site)</p>`;
   $("cp").onclick = () => navigator.clipboard.writeText(out.innerText).then(() => window.toast?.("Outline copied"));
-  $("po").onclick = () => print();
-  if ($("ph")) $("ph").onclick = () => { document.body.classList.add("print-handout"); print(); setTimeout(() => document.body.classList.remove("print-handout"), 500); };
+  const head = { kicker: `${m.name} · ${m.time}`, title: n.title, byline: `${n.speaker} · ${n.conf} general conference`, foot: PDF_FOOT, fit: true };
+  const quoteBlocks = quotes.length ? quotes.map(q => ({ t: "q", text: q })) : [{ t: "q", text: n.keyStatement }];
+  const pm = {
+    outline: () => ({ ...head, blocks: [{ t: "h", text: "1. Talk overview" }, { t: "p", text: n.overview }, { t: "src", text: n.overviewSrc },
+      { t: "h", text: "2. Open" }, { t: "p", text: `${m.open} ${n.ponder}` }, { t: "h", text: quotes.length ? "3. Key quotes" : "3. Key statement" }, ...quoteBlocks,
+      { t: "h", text: "4. Scriptures cited" }, ...(refs.length ? refs.map(r => ({ t: "li", text: r })) : [{ t: "p", text: "No verse reported yet." }]),
+      ...(qs.length ? [{ t: "h", text: "5. Discussion questions" }, ...qs.map((x, i) => ({ t: "li", n: i + 1, text: x }))] : []),
+      { t: "h", text: (qs.length ? "6. " : "5. ") + "Activity" }, { t: "p", text: m.act }, { t: "h", text: (qs.length ? "7. " : "6. ") + "Suggested invitation" }, { t: "p", text: `${n.invitation} ${m.close}` }] }),
+  };
+  pm.onepage = () => ({ ...head, blocks: [{ t: "h", text: "Open" }, { t: "p", text: `${m.open} ${n.ponder}` }, { t: "h", text: quotes.length ? "Key quote" : "Key statement" }, quoteBlocks[0],
+    ...(refs.length ? [{ t: "h", text: "Scriptures" }, { t: "p", text: refs.slice(0, 4).map(r => ScripRef.first(r) || r).join(" · ") }] : []),
+    ...(qs.length ? [{ t: "h", text: "Discuss" }, ...qs.map((x, i) => ({ t: "li", n: i + 1, text: x }))] : []),
+    { t: "h", text: mode === "talk" ? "Teach" : "Activity" }, { t: "p", text: m.act }, { t: "h", text: "Invitation" }, { t: "p", text: `${n.invitation} ${m.close}` }] });
+  pm.handout = () => ({ ...head, kicker: m.name, blocks: [{ t: "h", text: quotes.length ? "Key quotes" : "Key statement" }, ...quoteBlocks,
+    ...(refs.length ? [{ t: "h", text: "Scriptures to read" }, { t: "p", text: refs.map(r => ScripRef.first(r) || r).join(" · ") }] : []),
+    ...(qs.length ? [{ t: "h", text: "To ponder and discuss" }, ...qs.map((x, i) => ({ t: "li", n: i + 1, text: x }))] : []), { t: "h", text: "This week" }, { t: "p", text: n.invitation }] });
+  wirePrint(pm);
   $("present").onclick = () => present([
     [m.present, n.title, n.speaker], ["Let's ponder", n.ponder, ""], ["The big idea", n.big, ""],
     ...(quotes.length ? quotes.map(q => ["Read aloud", "“" + q + "”", n.speaker + (conf === "2026-10" && !OFFICIAL_TEXT() ? " (from the recap)" : "")]) : [["Key statement", n.keyStatement, n.speaker]]),
     ...(refs.length ? [["Scripture", refs.map(r => ScripRef.first(r) || r).slice(0, 3).join(" · "), "Read it together from your scriptures."]] : []),
     ...qs.slice(1).map((x, i) => [`Discuss · ${i + 1}`, x, ""]), [mode === "eqrs" ? "Counsel together" : "Activity", m.act, ""], ["This week", n.invitation, m.close]]);
 }
-window.addEventListener("afterprint", () => document.body.classList.remove("print-handout"));
+// ---- Printing ----
+// Phones (iPhone Safari especially) get a real PDF file behind a normal link: iOS opens it in its PDF viewer, where
+// Share → Print always works. Desktops keep window.print(), called directly in the click handler (never after an
+// await or timer), with the print layout kept on until afterprint because Safari's print() returns at once.
+// October 2026 lessons use PDFs pre-built by tools/build_lesson_pdfs.py (same builder); other talks are built here.
+const PRINT_KINDS = ["onepage", "handout", "outline"], PRINT_VIEW = PRINT_KINDS.includes(QS.get("print")) ? QS.get("print") : "";
+const PDF_V = "2", PDF_FOOT = "Talk text from ChurchofJesusChrist.org · sixmonthsoflight.com (personal study site, not an official Church site)";
+const PHONE = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) || matchMedia("(pointer: coarse)").matches;
+let MODELS = {}, blobUrls = [], buildSeq = 0;
+function setPrintMode(kind) { PRINT_KINDS.forEach(k => document.body.classList.toggle("print-" + k, k === kind)); }
+const pdfName = kind => `${(mode + "-" + (tid || "lesson") + "-" + kind).replace(/[^a-z0-9-]+/gi, "-")}.pdf`;
+const staticPdf = kind => conf === "2026-10" && talkById(tid) ? `assets/lesson-pdf/${pdfName(kind)}?v=${PDF_V}` : "";
+async function pdfBlobUrl(kind) { await LessonPDF.ready(); const bytes = await LessonPDF.build(MODELS[kind]()); const u = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" })); blobUrls.push(u); return u; }
+window.__lessonPdf = async kind => { await LessonPDF.ready(); const b = await LessonPDF.build(MODELS[kind]()); let s = ""; b.forEach(x => s += String.fromCharCode(x)); return btoa(s); };   // used by the build script
+let FILES = {}, PDF_P = {};
+const pdfTitle = kind => { const t = MODELS.__title || "Lesson"; return `${t} · ${{ outline: "Outline", handout: "Handout", onepage: "One page" }[kind]}`; };
+// Prefetch every PDF as a File while the panel renders, so a tap can call navigator.share() at once (iOS needs the tap).
+function pdfFile(kind, seq) {
+  if (!PDF_P[kind]) { const st = staticPdf(kind);
+    PDF_P[kind] = (st ? fetch(st).then(r => { if (!r.ok) throw new Error(r.status); return r.blob(); }) : LessonPDF.ready().then(() => LessonPDF.build(MODELS[kind]())).then(b => new Blob([b], { type: "application/pdf" })))
+      .then(blob => { if (seq !== buildSeq) return null; const f = new File([blob], pdfName(kind), { type: "application/pdf" }); FILES[kind] = f; return f; }); }
+  return PDF_P[kind];
+}
+function wirePrint(models) {
+  MODELS = models; blobUrls.forEach(u => URL.revokeObjectURL(u)); blobUrls = []; FILES = {}; PDF_P = {}; const seq = ++buildSeq;
+  MODELS.__title = $("out").querySelector("h2")?.textContent || "Lesson";
+  const blobFor = {};   // one in-browser PDF per kind (library talks), shared by both panels
+  document.querySelectorAll("#out [data-print]").forEach(a => {
+    const kind = a.dataset.print; if (!models[kind]) { a.hidden = true; return; }
+    if (!PHONE) { a.removeAttribute("target"); a.onclick = e => { e.preventDefault(); setPrintMode(kind); window.print(); }; return; }
+    const st = staticPdf(kind);
+    if (st) { a.href = st; a.type = "application/pdf"; return; }               // plain link to a real file
+    a.removeAttribute("target"); a.setAttribute("download", pdfName(kind)); a.dataset.state = "making";
+    a.onclick = e => { if (a.dataset.state !== "ready") { e.preventDefault(); window.toast?.("Making the PDF… tap again in a moment"); } };
+    (blobFor[kind] ||= pdfFile(kind, seq).then(f => { if (!f) return null; const u = URL.createObjectURL(f); blobUrls.push(u); return u; }))
+      .then(u => { if (!u) return; a.href = u; a.dataset.state = "ready"; }).catch(() => { a.dataset.state = "error"; });
+  });
+  document.querySelectorAll("#out [data-share]").forEach(a => {
+    const kind = a.dataset.share; if (!models[kind]) { a.hidden = true; return; }
+    const open = document.querySelector(`#out [data-print="${kind}"]`);
+    pdfFile(kind, seq).catch(() => {});
+    a.onclick = e => {
+      const f = FILES[kind], data = f && { files: [f], title: pdfTitle(kind) };
+      if (data && navigator.canShare?.(data)) {                                    // called right inside the tap: no await before share()
+        e.preventDefault();
+        navigator.share(data).catch(err => { if (err?.name !== "AbortError") window.toast?.("Sharing didn't open. Tap Open PDF instead."); });
+        return;
+      }
+      // Not ready or not supported: behave like the Open PDF link (same href, opened by this tap)
+      if (open && open.href && !open.href.endsWith("#")) { a.href = open.href; if (open.hasAttribute("download")) a.setAttribute("download", open.getAttribute("download")); else a.removeAttribute("download"); return; }
+      e.preventDefault(); window.toast?.("Getting the PDF ready… tap again in a moment");
+    };
+  });
+}
+addEventListener("afterprint", () => { if (!PRINT_VIEW) setPrintMode(""); });
+// Old printable-copy links (?print=…): show the layout, with a real PDF link on phones. No automatic print().
+if (PRINT_VIEW) {
+  setPrintMode(PRINT_VIEW);
+  const bar = document.createElement("div"); bar.className = "print-bar no-print";
+  const back = esc(location.href.replace(/([?&])print=[^&]*&?/, "$1").replace(/[?&]$/, ""));
+  bar.innerHTML = `<span>Printable ${PRINT_VIEW === "onepage" ? "one-page lesson" : PRINT_VIEW}</span><a class="btn gold small" id="pvGo" href="#" target="_blank" rel="noopener">${PHONE ? "Open PDF" : "Print"}</a><a class="btn secondary small" href="${back}">Back to lesson</a>`;
+  main.prepend(bar);
+  const sync = () => { const src = document.querySelector(`#out [data-print="${PRINT_VIEW}"]`); const go = $("pvGo"); if (!src || !go) return;
+    if (!PHONE) { go.removeAttribute("target"); go.onclick = e => { e.preventDefault(); window.print(); }; return; }
+    go.href = src.href; if (src.hasAttribute("download")) { go.setAttribute("download", src.getAttribute("download")); go.removeAttribute("target"); } go.onclick = e => src.onclick ? src.onclick(e) : null; };
+  new MutationObserver(sync).observe($("out"), { childList: true }); setInterval(sync, 1500); sync();
+}
 // Big-type slides for a TV or a phone passed around the room. Arrow keys, swipe or tap the sides; Esc closes.
 function present(slides) {
   let i = 0; const ov = document.createElement("div"); ov.className = "present"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true"); ov.setAttribute("aria-label", "Lesson slides");

@@ -16,7 +16,7 @@ pages = {
  "speaker": ("Speakers · Six Months of Light", [], []),
  "session": ("Session · Six Months of Light", [], []),
  "my": ("My Conference · Six Months of Light", [], []),
- "lessons": ("Lesson helps · Six Months of Light", [], ["themes3.js", "scripref.js"]),
+ "lessons": ("Lesson helps · Six Months of Light", [], ["themes3.js", "scripref.js", "lessonpdf.js"]),
  "challenge": ("Conference challenge · Six Months of Light", ["share"], []),
  "groups": ("Group links · Six Months of Light", [], []),
  "plan": ("Reading plan to April · Six Months of Light", [], []),
@@ -25,7 +25,13 @@ pages = {
  "subscribe": ("Keep the Light: conference reminders until April · Six Months of Light", [], ["themes3.js"]),
  "privacy": ("Privacy · Six Months of Light", [], []),
 }
+# Cache-busting: pages listed here get ?v=<version> on their CSS and JS so phones fetch new code after a change.
+VERSIONED = {"lessons": "20261017-share3"}
+import sys
+ONLY = set(sys.argv[1:])   # e.g. python3 tools/build_shells.py lessons   (writes only that page)
 for name, (title, pre, libs) in pages.items():
+    if ONLY and name not in ONLY: continue
+    qv = f"?v={VERSIONED[name]}" if name in VERSIONED else ""
     scripts = ["assets/config.js", "assets/api.js", "assets/data.js", "assets/common.js"] + [f"assets/{l}" for l in libs] + [f"assets/pages/{e}.js" for e in pre] + [f"assets/pages/{name}.js"] + (["assets/pages/builder-clip.js"] if name == "builder" else [])
     url = SITE + ("" if name == "index" else f"{name}.html")
     html = f'''<!doctype html>
@@ -48,10 +54,10 @@ for name, (title, pre, libs) in pages.items():
 <link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="assets/icon-180.png"><meta name="apple-mobile-web-app-title" content="Six Months">
 <link rel="preload" href="assets/fonts/CormorantGaramond.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/styles.css{qv}">
 </head>
 <body>
 <main class="wrap" id="main"></main>
-''' + "\n".join(f'<script src="{s}"></script>' for s in scripts) + "\n</body>\n</html>\n"
+''' + "\n".join(f'<script src="{s}{qv}"></script>' for s in scripts) + "\n</body>\n</html>\n"
     (root / f"{name}.html").write_text(html)
 print("shells written")

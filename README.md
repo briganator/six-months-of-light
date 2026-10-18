@@ -47,6 +47,8 @@ A personal study and sharing site for the 196th Semiannual General Conference (i
 - Commit to an invitation for 7 days, with day check-ins and a downloadable `.ics` reminder that repeats daily for 7 days
 - My Conference (`my.html`): saved quotes, private notes per talk, commitments and a JSON export
 - Lesson helps (`lessons.html`): a template-based outline **stub** for FHE, youth classes and sacrament talks, built only from the talk data; nothing is generated.
+- **25-minute Elders Quorum & Relief Society (and Youth) lessons** follow the Sept. 2026 schedule: one core truth, minute markers (0–2 welcome and prayer, 2–5 open, 5–20 discuss, 20–24 invite, testify and follow up, 24–25 closing prayer), an optional pair share, a live 25-minute clock, a one-page print and a handout. Sources: `research/rs-eq-25min-guidance.md`. The subscription feed (`supabase/functions/_shared/content.ts`) uses the same flow.
+- **Lesson print area** (top and bottom of every lesson: Outline, Handout, One page). **Print buttons:** phones get a real PDF behind a normal link (iPhone opens its PDF viewer; Share → Print). October 2026 PDFs are pre-built in `assets/lesson-pdf/` by `tools/build_lesson_pdfs.py` (rerun it and bump `PDF_V` in `assets/pages/lessons.js` and `VERSIONED` in `tools/build_shells.py`, then `python3 tools/build_shells.py lessons` after changing lesson text, talk data or `assets/lessonpdf.js`); other talks build the PDF in the browser (pdf-lib, `assets/vendor/`). Desktops use `window.print()` directly in the click handler.
 
 **Share**
 - "What stuck with me" under each talk: optional name and one line (up to 280 characters), moderated
@@ -165,3 +167,6 @@ See `critique-v2.md` for the design critique that drove these changes.
 ## Speaker photos (added Oct 15, 2026)
 - Brigham has rights to use speaker images. Talk listings, talk pages, session and speaker pages show the speaker's official photo (from the talk page on ChurchofJesusChrist.org), face-cropped and stored in `assets/speakers/` (no hotlinking). Refresh: `/workspace/.venv-cv/bin/python tools/fetch_speaker_photos.py && python3 tools/talks_source.py && python3 tools/build_pages.py`.
 - Card Studio, Look tab: "Show the speaker's photo on the card" (on by default; `sp=0` in the URL turns it off) plus a picker of up to 5 official photos per speaker from earlier conferences (`assets/speakers/opts/`, `assets/speaker-options.js`, from `tools/fetch_speaker_options.py`; choice is `pi=` in the URL). The photo is drawn into the canvas, so saved, shared and video cards include it.
+
+### Share / Print on phones
+On phones that can share files (`navigator.canShare({files})`, e.g. iPhone Safari), each lesson print box shows a **Share / Print** row (Outline, Handout, One page). The box downloads the PDFs ahead of time when it appears, so a tap calls `navigator.share({files:[pdf], title})` right inside the tap, with no `await` first. That opens the iOS share sheet, which lists Print. If the PDF isn't ready yet, or sharing isn't supported, the tap opens the PDF link instead. The **Open PDF** row is always there.

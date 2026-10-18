@@ -6,8 +6,8 @@ export const SITE = "https://sixmonthsoflight.com/";
 export const KINDS = ["insight", "talk", "quote", "review", "lesson"] as const;
 export const MODES: Record<string, { name: string; time: string; open: string; act: string; close: string; nq: number }> = {
   fhe: { name: "Family home evening", time: "15–20 min", open: "Sing a favorite hymn or Primary song, then ask:", act: "Let each family member share one experience or idea connected to the message. Younger children can draw it.", close: "Choose one small family goal and check in at dinner during the week.", nq: 2 },
-  eqrs: { name: "Elders Quorum & Relief Society", time: "about 45 min", open: "Welcome everyone, invite someone to read the key quote, then give a minute to ponder:", act: "In small groups, take one question each, then share what you discussed with everyone.", close: "Consider how members could help one another act on it this week, including through ministering.", nq: 5 },
-  youth: { name: "Youth classes", time: "25–30 min", open: "Write the ponder question on the board and give 1 minute of quiet thinking:", act: "In pairs, read a quote and discuss: What does it mean? Where have we seen it in real life? Then share with the class.", close: "Invite each youth to privately write one action they'll take this week.", nq: 3 },
+  eqrs: { name: "Elders Quorum & Relief Society", time: "25 min", open: "Welcome and opening prayer (presidency), then start right away. Ask:", act: "Counsel together about how this truth applies to our lives, families and ward; optional 3-minute pair share.", close: "Ask: What do you feel impressed to do? Bear brief testimony of Jesus Christ, follow up next week, closing prayer.", nq: 3 },
+  youth: { name: "Youth classes", time: "25 min", open: "Welcome and opening prayer (class or quorum presidency), then start right away. Ask:", act: "Turn to someone nearby and share an answer, then invite two or three to share with everyone.", close: "Invite each youth to privately write one action they'll take this week; follow up next week, closing prayer.", nq: 3 },
   talk: { name: "Sacrament meeting talk", time: "5–8 min", open: "Open with a brief personal experience related to the message, then introduce:", act: "Teach the message using one scripture and one quote, adding your own testimony and experience.", close: "Close by extending the invitation and bearing testimony of Jesus Christ.", nq: 0 },
 };
 export const START = Date.UTC(2026, 9, 5);   // Mon Oct 5, 2026: day 0 of the rotation
@@ -63,6 +63,12 @@ export const dayIndex = (dateISO: string) => Math.floor((Date.parse(dateISO + "T
 export const isDeliveryDay = (p: Prefs, dateISO: string) => p.f === "daily" || new Date(dateISO + "T00:00:00Z").getUTCDay() === p.d;
 
 function questions(n: Talk, m: string, names: Record<string, string>) {
+  if (m === "eqrs" || m === "youth") {   // 25-minute flow: one core truth, three questions (same wording as assets/pages/lessons.js)
+    const ref = n.refs.find(r => /\d/.test(r)), yth = m === "youth";
+    return [ref ? `Read ${ref} together. How does it help us understand this truth about following Jesus Christ?` : "What does this truth teach us about Jesus Christ and how we follow Him?",
+      yth ? "When have you seen this truth make a difference for someone your age?" : "When have you seen this truth at work in your own life or family?",
+      yth ? "What would living this look like at school, online or with friends this week?" : "What challenges or opportunities in our ward does this speak to? How could we help one another, including through our ministering and in our homes?"];
+  }
   const t0 = names[n.topics[0]] || "", tp = t0 === "Jesus Christ" ? "the Savior's help" : /^(Holy Ghost|Book of Mormon|Restoration|Second Coming|Christmas|Easter|Relief Society|Elders Quorum)$/.test(t0) ? t0.replace(/^(Restoration|Second Coming)$/, "the $1") : t0.toLowerCase().replace(" & ", " and ").replace(/^temple$/, "the temple").replace(/^youth$/, "the youth");
   const ref = n.refs[0];
   const q = [n.ponder];
@@ -106,7 +112,11 @@ export async function itemFor(p: Prefs, dateISO: string): Promise<Item> {
       return order(recaps.concat(themes), x => x.title, seed); },
     lesson: () => order(filt(all), t => t.c + t.id, seed).map((t, j) => { const mk = p.lm[(Math.floor(n / Math.max(1, p.k.length)) + j) % p.lm.length] || "fhe", m = MODES[mk];
       const qs = m.nq ? questions(t, mk, names) : [], quotes = t.quotes.slice(0, mk === "eqrs" ? 3 : 2), refs = t.refs.slice(0, 5);
-      const L = [`${m.name} · ${m.time}`, `Overview: ${t.overview}`, `Open: ${m.open} ${t.ponder}`,
+      const timed = mk === "eqrs" || mk === "youth";
+      const L = timed ? [`${m.name} · ${m.time}`, `One core truth: ${t.big}`, `0:00–2:00 Welcome & prayer: ${m.open.replace(/ Ask:$/, "")}`,
+        `2:00–5:00 Open: ${t.ponder} Read aloud: “${quotes[0] || t.big}”`, `5:00–20:00 Discuss: ` + qs.map((x, i) => `${i + 1}) ${x}`).join(" ") + ` ${m.act}`,
+        `20:00–24:00 Invite: ${t.invitation} ${m.close.replace(/, closing prayer\.$/, ".")}`, "24:00–25:00 Closing prayer."]
+      : [`${m.name} · ${m.time}`, `Overview: ${t.overview}`, `Open: ${m.open} ${t.ponder}`,
         quotes.length ? "Key quotes: " + quotes.map(q => `“${q}”`).join(" ") : `Key statement: ${t.big}`,
         refs.length ? "Scriptures: " + refs.join("; ") : "", qs.length ? "Discuss: " + qs.map((x, i) => `${i + 1}) ${x}`).join(" ") : "",
         `${mk === "eqrs" ? "Counsel together" : "Activity"}: ${m.act}`, `Invitation: ${t.invitation} ${m.close}`].filter(Boolean);

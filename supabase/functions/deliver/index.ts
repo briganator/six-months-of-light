@@ -29,7 +29,7 @@ const localNow = (tz: string) => { let p: Record<string, string>;
   try { p = Object.fromEntries(new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", hourCycle: "h23" }).formatToParts(new Date()).map(x => [x.type, x.value])); }
   catch { return localNow("America/Denver"); }
   return { date: `${p.year}-${p.month}-${p.day}`, hour: +p.hour }; };
-const prefsOf = (row: any): Prefs => ({ ...parsePrefs(row.prefs || {}), h: row.hour });
+const isoDay = (v: any): string => v ? (v instanceof Date ? v.toISOString().slice(0, 10) : String(v).slice(0, 10)) : ""; const prefsOf = (row: any): Prefs => ({ ...parsePrefs(row.prefs || {}), h: row.hour });
 const pushData = async (p: Prefs, date: string) => { const it = await itemFor(p, date), t = pushText(it);
   return { ...t, icon: SITE + "assets/icon-192.png", badge: SITE + "assets/icon-badge.png", tag: "sml-" + date, manage: SITE + "subscribe.html" }; };
 
@@ -37,9 +37,9 @@ async function runDue() {
   const out = { push: 0, pushGone: 0, email: 0, emailOff: false };
   const v = await vapid();
   const rows = await sql`select id, endpoint, p256dh, auth, prefs, tz, hour, last_sent from private.push_subs where fails < 5 limit 5000`;
-  const due = rows.map(r => ({ r, now: localNow(r.tz) })).filter(({ r, now }) => now.date >= "2026-10-05" && now.hour >= r.hour && String(r.last_sent || "") !== now.date && isDeliveryDay(prefsOf(r), now.date));
+  const due = rows.map(r => ({ r, now: localNow(r.tz) })).filter(({ r, now }) => now.date >= "2026-10-05" && now.hour >= r.hour && isoDay(r.last_sent) !== now.date && isDeliveryDay(prefsOf(r), now.date));
   for (let i = 0; i < due.length; i += 20) await Promise.all(due.slice(i, i + 20).map(async ({ r, now }) => {
-    try { const st = await sendPush(r as any, await pushData(prefsOf(r), now.date), v);
+    try { const claim = await sql`update private.push_subs set last_sent = ${now.date} where id = ${r.id} and last_sent is distinct from ${now.date}::date returning id`; if (!claim.length) return; const st = await sendPush(r as any, await pushData(prefsOf(r), now.date), v);
       if (st === 404 || st === 410) { await sql`delete from private.push_subs where id = ${r.id}`; out.pushGone++; }
       else if (st >= 200 && st < 300) { await sql`update private.push_subs set last_sent = ${now.date}, fails = 0 where id = ${r.id}`; out.push++; }
       else await sql`update private.push_subs set fails = fails + 1 where id = ${r.id}`;
@@ -48,7 +48,7 @@ async function runDue() {
   if (!(await emailOn())) { out.emailOff = true; return out; }
   const er = await sql`select id, email, prefs, tz, hour, last_sent, unsub_token from private.email_subs where status = 'confirmed' limit 2000`;
   for (const r of er) { const now = localNow(r.tz), p = prefsOf(r);
-    if (now.date < "2026-10-05" || now.hour < r.hour || String(r.last_sent || "") === now.date || !isDeliveryDay(p, now.date)) continue;
+    if (now.date < "2026-10-05" || now.hour < r.hour || isoDay(r.last_sent) === now.date || !isDeliveryDay(p, now.date)) continue;
     const unsub = `${FN}?unsub=${r.unsub_token}`, m = deliveryEmail(await itemFor(p, now.date), unsub, SITE + "subscribe.html?" + prefsQuery(p));
     try { await sendEmail(r.email, m.subject, m.html, m.text, { "List-Unsubscribe": `<${unsub}>`, "List-Unsubscribe-Post": "List-Unsubscribe=One-Click" });
       await sql`update private.email_subs set last_sent = ${now.date} where id = ${r.id}`; out.email++; } catch (_) { /* try again next run */ }
