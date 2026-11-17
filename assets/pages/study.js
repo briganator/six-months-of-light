@@ -18,7 +18,7 @@ const confDrop = CONF.sessions.map((s, i) => {
   return `<details class="conf-sess" ${i === 0 ? "open" : ""}><summary><span class="conf-name">${esc(s.name.replace(/ Session$/, ""))}</span><span class="pill">${n}</span></summary><div class="conf-rows">${rows}</div></details>`;
 }).join("");
 main.innerHTML = `
-  <div class="section-label">Study</div>
+  <div class="section-label">The study library</div><h1>Find the words you need.</h1>
   <section class="conf-drop" aria-labelledby="oct-h">
     <h2 class="lib-h2" id="oct-h">October 2026 talks</h2>
     <p class="conf-lead">The latest general conference. Open a session and tap a talk. Each one opens on this site.</p>
@@ -56,8 +56,7 @@ const talkRow = t => { const cf = LB.confOf(t.c), mins = LB.minutes(t), ext = !t
     <span class="lt-title">${esc(t.t)}${ext ? ' <span class="ext" aria-label="opens ChurchofJesusChrist.org">↗</span>' : ""}</span>
     <span class="lt-meta">${esc(t.s)} · ${esc(cf.label)}${LB.sessName(t) ? " · " + esc(LB.sessName(t).replace(/ Session$/, "")) : ""}${mins ? ` · ${mins} min read` : t.recap ? " · recap" : ""}</span>
     ${t.tg.length ? `<span class="lt-tags">${t.tg.map(k => `<span class="pill">${esc(LB.themeName(k))}</span>`).join("")}</span>` : ""}</a>${makeLink(t)}</li>`; };
-const makeLink = t => { if (t.local) { const r = talkById(t.id); return r && r.quotes.length ? `<a class="lib-make" href="builder.html?t=${esc(t.id)}&q=0">Make a card</a>` : ""; }
-  return `<a class="lib-make" href="builder.html?lt=${esc(t.c)}/${esc(t.id)}" aria-label="Make a card for ${esc(t.t)}">Make a card</a>`; };
+const makeLink = () => "";
 function render() { sync(); chips();
   document.querySelectorAll(".lib-views button").forEach(b => { b.setAttribute("aria-pressed", b.dataset.v === st.view); });
   const list = LB.filter({ c: st.c, topic: st.topic, sp: st.sp, q: st.q, se: st.se || undefined });
@@ -88,3 +87,4 @@ $("chips").addEventListener("click", e => { const b = e.target.closest("[data-k]
 document.querySelectorAll(".lib-views button").forEach(b => b.addEventListener("click", () => { st.view = b.dataset.v; render(); }));
 fillSe();
 render();
+

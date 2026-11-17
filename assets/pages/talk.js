@@ -33,7 +33,7 @@ else if (t.kind === "business") {
       <p class="speaker"><a href="speaker.html?s=${slug(t.speaker)}">${esc(t.speaker)}</a> · ${esc(t.calling)}</p></div>
     <div class="talk-actions">
       <a class="btn gold" href="lessons.html?t=${esc(t.id)}">Build a lesson from this talk</a>
-      <a class="btn secondary" href="moments.html?t=${esc(t.id)}">Best moments</a>
+      
       <a class="btn secondary" href="quiz.html?t=${esc(t.id)}">Quiz yourself</a>
     </div>
     <section class="recap60" aria-label="60-second recap">
@@ -49,7 +49,7 @@ else if (t.kind === "business") {
       <dt>Quotes <span style="text-transform:none;letter-spacing:0;font-weight:400;color:var(--muted)">(${t.official_url ? "from the official talk text" : "from recaps; confirm with official text"})</span></dt>
       <dd>${t.quotes.map((q,qi)=>`<blockquote id="q${qi+1}" class="qanchor" tabindex="-1">“${esc(q)}”</blockquote>
         <div class="qrow"><button type="button" data-save="${qi}" aria-pressed="${Store.isSaved(t.id,qi)}">${Store.isSaved(t.id,qi)?"★ Saved":"☆ Save"}</button>
-        <a class="qmake" href="builder.html?t=${t.id}&q=${qi}">Make a card</a></div>`).join("")}</dd>
+        </div>`).join("")}</dd>
     </dl>
     <div class="invite"><div class="label">Invitation</div>${esc(t.invitation)}
       <div id="commitbox" style="margin-top:8px">${committed ? `✓ You committed on ${fmtDate(committed.start)}. <a href="my.html">Track your 7 days</a>`
@@ -62,10 +62,10 @@ else if (t.kind === "business") {
   <section class="card study-panel" id="studyPanel" aria-labelledby="sp-h"><h2 id="sp-h" style="margin-top:0">Study this talk</h2><p class="empty">Loading…</p></section>
   ${sourceLine(t)}
   <section class="card"><h2 style="margin-top:0">Share this talk</h2>
-    <p class="speaker">Quote cards include a QR code that links back to this page.</p>
+    <p class="speaker">Send someone a link to read and study this talk.</p>
     <div class="links" style="margin-bottom:0">
-      <a class="btn" href="builder.html?t=${t.id}&q=0&size=portrait">Make a card</a>
-      <a class="btn secondary" href="builder.html?t=${t.id}&q=0&anim=1">▶ Animated story</a>
+      
+      
       <button class="btn secondary" id="cplink">Share link</button></div></section>
 
   <section class="card"><h2 style="margin-top:0">My private note</h2>
@@ -200,19 +200,3 @@ if (t && t.kind !== "business") whenNear("studyPanel", () => loadLib().then(LB =
   document.getElementById("printBtn").addEventListener("click", () => window.print());
 }).catch(() => { const el = document.getElementById("studyPanel"); if (el) el.remove(); }));
 
-// "Make video" from any selected passage in the full talk. Phones get a big fixed button at the bottom
-// (the iOS selection menu covers anything placed above the selection). The text is captured on selectionchange,
-// so it's already in the link when the tap clears the selection.
-(function () {
-  if (!t || t.kind === "business") return;
-  const mob = matchMedia("(pointer:coarse)").matches || innerWidth < 700;
-  const btn = document.createElement("a"); btn.className = "btn gold clip-fab" + (mob ? " mobile" : " small"); btn.hidden = true; btn.textContent = "🎬 Make video"; document.body.appendChild(btn);
-  const selText = () => { const s = getSelection(); if (!s || s.isCollapsed || !s.rangeCount) return ""; const ft = document.getElementById("fulltext"); if (!ft || !ft.contains(s.anchorNode) || !ft.contains(s.focusNode)) return "";
-    return String(s).replace(/\s+/g, " ").trim(); };
-  let hideT;
-  const place = () => { const x = selText(); if (x.split(" ").length < 2 || x.length > 1500) { clearTimeout(hideT); hideT = setTimeout(() => { if (!selText()) btn.hidden = true; }, mob ? 900 : 0); return; }
-    clearTimeout(hideT); btn.hidden = false; btn.href = `video.html?t=${encodeURIComponent(t.id)}&sel=${encodeURIComponent(x)}`;
-    if (!mob) { const r = getSelection().getRangeAt(0).getBoundingClientRect(); btn.style.top = Math.max(8, r.top + scrollY - 46) + "px"; btn.style.left = Math.max(8, Math.min(innerWidth - 200, r.left + scrollX + r.width / 2 - 90)) + "px"; } };
-  document.addEventListener("selectionchange", () => { clearTimeout(place.t); place.t = setTimeout(place, mob ? 120 : 250); });
-  document.addEventListener("touchend", () => setTimeout(place, 50), { passive: true });
-})();

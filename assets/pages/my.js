@@ -2,12 +2,14 @@ mount("my.html", true);
 function render() {
   const saved = Store.savedQuotes().map(k => { const [id, i] = k.split("#"); const t = talkById(id); return t && { t, i: +i, q: t.quotes[+i] }; }).filter(Boolean);
   const notes = Object.entries(Store.get("notes", {})).map(([id, n]) => ({ t: talkById(id), n })).filter(x => x.t);
+  const focus = Store.get("six-month-invite", null), focusTalk = focus && talkById(focus.id);
   const cs = Store.commitments().map(c => ({ ...c, t: talkById(c.talkId) })).filter(c => c.t);
   const dayOf = c => Math.min(7, Math.floor((Date.now() - Date.parse(c.start)) / 864e5) + 1);
   document.getElementById("main").innerHTML = `
-  <h1 style="margin-top:38px">My Conference</h1>
+  <h1 style="margin-top:38px">My Journal</h1>
   <div class="notice" style="background:#eef3f8;border-color:#d3deea;color:#2f3e55">🔒 Everything here is stored <strong>only on this device</strong> (browser storage). It isn't sent anywhere, and clearing your browser data erases it.</div>
   <a class="plan-cta card" href="plan.html"><b>Reading plan to April</b><span>${(() => { const d = Store.get("plan-done", []).filter(id => talkById(id)).length; return d ? `${d} of ${CONF.talks.length} talks read` : `One talk at a time until April conference`; })()} →</span></a>
+  ${focusTalk ? `<section class="card"><div class="light-kicker">MY LONGER-TERM INVITATION</div><h2>One thing I’m living.</h2><p>${esc(focusTalk.invitation)}</p><a href="talks/${esc(focusTalk.id)}.html">${esc(focusTalk.title)}</a><p><a href="index.html">Change my invitation →</a></p></section>` : ""}
   <section class="card"><h2 style="margin-top:0">My invitations</h2>
     ${cs.length ? cs.map(c => `<div class="comment"><b><a href="talks/${c.t.id}.html">${esc(c.t.title)}</a></b>
       <div>${esc(c.text)}</div><div class="who">Day ${dayOf(c)} of 7 · tap each day you acted</div>
@@ -15,7 +17,7 @@ function render() {
       <div class="qrow"><button data-ics="${c.t.id}">📅 7-day reminder</button><button data-rm="${c.t.id}">Remove</button></div></div>`).join("")
       : `<p class="empty">No commitments yet. Open a talk and tap “Commit for 7 days.”</p>`}</section>
   <section class="card"><h2 style="margin-top:0">Saved quotes</h2>
-    ${saved.length ? saved.map(x => `<blockquote>“${esc(x.q)}”<div class="who" style="font-family:var(--sans);font-size:13px;color:var(--muted)">— ${esc(x.t.speaker)} · <a href="builder.html?t=${x.t.id}&q=${x.i}">quote card</a></div></blockquote>`).join("")
+    ${saved.length ? saved.map(x => `<blockquote>“${esc(x.q)}”<div class="who" style="font-family:var(--sans);font-size:13px;color:var(--muted)">— ${esc(x.t.speaker)} · <a href="talks/${x.t.id}.html#q${x.i+1}">Return to talk</a></div></blockquote>`).join("")
       : `<p class="empty">Tap ☆ Save under any quote.</p>`}</section>
   <section class="card"><h2 style="margin-top:0">Private notes</h2>
     ${notes.length ? notes.map(x => `<div class="comment"><b><a href="talks/${x.t.id}.html">${esc(x.t.title)}</a></b><div style="white-space:pre-wrap">${esc(x.n)}</div></div>`).join("")
@@ -25,7 +27,8 @@ function render() {
   document.querySelectorAll("[data-rm]").forEach(b => b.addEventListener("click", () => { Store.removeCommit(b.dataset.rm); render(); }));
   document.querySelectorAll("[data-ics]").forEach(b => b.addEventListener("click", () => { const c = cs.find(x => x.t.id === b.dataset.ics); downloadReminder(c.t, c.text); }));
   document.getElementById("exp").addEventListener("click", () => { const a = document.createElement("a");
-    a.href = URL.createObjectURL(new Blob([JSON.stringify({ quotes: Store.savedQuotes(), notes: Store.get("notes", {}), commitments: Store.commitments(), plan: { pace: Store.get("plan-pace"), start: Store.get("plan-start"), done: Store.get("plan-done", []) }, flashcardsLearned: Store.get("flash-known", []) }, null, 2)], { type: "application/json" }));
+    a.href = URL.createObjectURL(new Blob([JSON.stringify({ invitation: Store.get("six-month-invite", null), quotes: Store.savedQuotes(), notes: Store.get("notes", {}), commitments: Store.commitments(), plan: { pace: Store.get("plan-pace"), start: Store.get("plan-start"), done: Store.get("plan-done", []) }, flashcardsLearned: Store.get("flash-known", []) }, null, 2)], { type: "application/json" }));
     a.download = "my-conference.json"; a.click(); });
 }
 render();
+
