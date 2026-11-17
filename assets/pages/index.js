@@ -1,93 +1,45 @@
-mount("index.html");
-const tw = CONF.talk_of_the_week, tt = talkById(tw.talk_id);
-const D = INSIGHTS.daily;
-let html = `<section class="today" aria-labelledby="today-h">
-  <div class="today-k"><span>Today's light</span><span>Day ${INSIGHTS.dayIdx + 1} · ${COUNTDOWN.days} days to April</span></div>
-  <h2 id="today-h" class="sr-only">Today's quote</h2>
-  <blockquote>“${esc(D.q)}”</blockquote>
-  <p class="today-by">${esc(D.t.speaker)} · <a href="talks/${esc(D.t.id)}.html">${esc(D.t.title)}</a></p>
-  <div class="today-actions"><a class="btn gold big" href="builder.html?t=${esc(D.t.id)}&q=${D.i}">Share this quote</a></div>
-  <p class="today-note">${OFFICIAL_TEXT() ? "Quoted from the official talk text." : "Quoted from recap; confirm with official text."}</p>
+mount('index.html', true);
+// Use the local calendar date: today's reading remains stable across refreshes.
+const now = new Date();
+const day = Math.floor(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) / 86400000);
+const talks = CONF.talks.filter(t => t.quotes && t.quotes.length);
+const current = talks[((day % talks.length) + talks.length) % talks.length];
+const quoteIndex = 0;
+const done = Store.get('plan-done', []);
+const nextTalk = CONF.talks.find(t => !done.includes(t.id));
+const main = document.getElementById('main');
+main.innerHTML = `
+<section class="light-intro">
+  <div><p class="light-kicker">GENERAL CONFERENCE · EVERYDAY DISCIPLESHIP</p>
+  <h1>Let the words become<br><em>the way you live.</em></h1>
+  <p class="light-lead">A quiet place to study, reflect, and draw closer to Jesus Christ.<br class="desktop-break"> One meaningful step at a time.</p></div>
+  <div class="light-emblem" aria-hidden="true"><span class="light-orbit"></span><span class="light-sun"></span><span class="light-hill hill-back"></span><span class="light-hill hill-front"></span><span class="emblem-caption">SIX MONTHS OF LIGHT</span></div>
 </section>
-`;
-const ENTRY = [["builder.html", "Make a card", "Turn a line into a card for your story or feed", "studio"], ["study.html", "Study", "Every talk, by session, topic or speaker", "study"], ["insights.html", "Insights", "Themes, words and scriptures at a glance", "insights"], ["lessons.html", "Build a lesson", "Family night, a class, or a sacrament talk", "lessons"]];
-html = `<section class="lesson-band" aria-labelledby="lb-h">
-  <div class="lb-k">Teach it</div>
-  <h2 id="lb-h">Build a lesson</h2>
-  <p>A ready outline for family home evening, a youth class, Elders Quorum, Relief Society, or a sacrament talk. Pick any talk from this conference.</p>
-  <div class="lb-actions">
-    <a class="btn gold big" href="lessons.html">Build a lesson</a>
-    <a class="btn secondary" href="quiz.html">Quiz yourself</a>
-  </div>
+<div class="light-grid">
+<section class="light-reading" aria-labelledby="daily-title">
+  <div class="light-meta"><span class="light-kicker">TODAY’S LIGHT</span><time datetime="${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}">${esc(now.toLocaleDateString(undefined,{month:'long',day:'numeric'}))}</time></div>
+  <h2 id="daily-title">A moment in the words.</h2>
+  <blockquote>“${esc(current.quotes[quoteIndex])}”</blockquote>
+  <p class="light-source">${esc(current.speaker)}<br><a href="talks/${esc(current.id)}.html">${esc(current.title)}</a></p>
+  <div class="light-actions"><a class="btn gold" href="talks/${esc(current.id)}.html">Study this talk <span aria-hidden="true">↗</span></a><button type="button" class="btn secondary" id="saveQuote" aria-pressed="${Store.isSaved(current.id,quoteIndex)}">${Store.isSaved(current.id,quoteIndex)?'Saved to journal':'Save thought'}</button></div>
+  <p class="light-caption">${current.official_url?'Excerpt from the official talk.':'Excerpt from a recap; confirm with the official talk.'} Read the talk for context.</p>
 </section>
-<nav class="entry" aria-label="Start here">${ENTRY.map(([h, t, d, i]) => `<a class="entry-i${i === "lessons" ? " teach" : ""}" href="${h}"><span class="entry-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${TAB_ICON[i]}</svg></span><b>${t}</b><span>${esc(d)}</span></a>`).join("")}</nav>` + html;
-const KEEP_ON = Store.get("keep-on", null);
-html += KEEP_ON ? `<a class="keep-band keep-on" href="subscribe.html"><span class="kb-ic">${KEEP_ICON(22)}</span><span class="kb-copy"><strong>You're keeping the light</strong><small>Your ${esc(KEEP_ON.how || "reminder")} is on until April.</small></span><span class="kb-go">Change</span></a>`
-  : `<section class="keep-band" aria-labelledby="kb-h"><div class="kb-glow" aria-hidden="true"></div><span class="kb-ic">${KEEP_ICON(26)}</span>
-  <div class="kb-copy"><div class="kb-k">Keep the Light</div><h2 id="kb-h">Stay close to conference until April</h2>
-  <p>A gentle reminder, daily or weekly: an insight, a talk, a quote card, a summary or a lesson outline. By email, on your phone or in your calendar.</p>
-  <a class="btn gold kb-btn" href="subscribe.html">Set up my reminder</a></div></section>`;
-html += `<div id="search"></div>${askTalksPanel()}`;
-html += `<div class="section-label" id="totw">Talk of the week</div><h2 class="sr-only">Talk of the Week</h2>
-<article class="card totw">
-  <div class="label">This week's focus</div>
-  ${speakerImg(tt, "sp-photo totw-photo", false)}<h3><a href="talks/${esc(tt.id)}.html" style="text-decoration:none;color:inherit">${esc(tt.title)}</a></h3>
-  <p class="speaker"><a href="speaker.html?s=${slug(tt.speaker)}">${esc(tt.speaker)}</a> · ${esc(tt.calling)}</p>
-  <p>${esc(tt.big_idea)}</p>
-  <blockquote>“${esc(tt.quotes[2])}”</blockquote>
-  <div class="ponder"><div class="label">Ponder</div>${esc(tw.ponder)}</div>
-  <div class="invite"><div class="label">Invitation</div>${esc(tw.invitation)}</div>
-  <div class="links" style="margin-bottom:0">
-    <a class="btn" href="talks/${esc(tt.id)}.html">Study this talk</a>
-    <a class="btn gold" href="lessons.html?t=${esc(tt.id)}">Build a lesson</a>
-    <a class="txt-link" href="builder.html?t=${esc(tt.id)}&q=2">Make a card →</a>
-  </div>
-</article>
-`;
-const withTalks = CONF.sessions.filter(s => CONF.talks.some(t => t.session === s.id)), openId = (withTalks[withTalks.length - 1] || {}).id;
-html += `<div class="section-label" id="sessions">Talks by session</div>`;
-for (const s of CONF.sessions) {
-  const ts = CONF.talks.filter(t => t.session === s.id).sort((a,b) => a.order-b.order);
-  const pill = ts.length ? `${ts.length} talk${ts.length === 1 ? "" : "s"}${s.status === "pending" ? " so far" : ""}` : "Coming soon";
-  const biz = (CONF.business || []).filter(b => b.session === s.id);
-  html += `<details class="session s-${s.color}" id="s-${s.id}" ${s.id === openId ? "open" : ""}>
-   <summary class="session-head"><h2>${esc(s.name)}</h2><span class="pill ${ts.length ? "" : "pending"}">${pill}</span></summary>
-   <div class="when">${esc(s.when)} · <a href="session.html?s=${s.id}">Session page</a></div>`;
-  html += biz.map(b => `<a class="talkcard s-${s.color} biz" href="talks/${esc(b.id)}.html"><span class="num">S</span><span class="tc-body"><span class="t-title">${esc(b.title)}</span><span class="t-speaker">${esc(b.speaker)}</span><span class="t-idea">${esc(b.lead)}</span></span><span class="tc-arrow" aria-hidden="true">→</span></a>`).join("");
-  html += ts.length ? `<ol class="talks">` + ts.map(t => `<li><a class="talkcard s-${s.color}" href="talks/${esc(t.id)}.html">
-      <span class="num">${t.order}</span>${speakerImg(t)}
-      <span class="tc-body"><span class="t-title">${esc(t.title)}</span><span class="t-speaker">${esc(t.speaker)}</span><span class="t-idea">${esc(t.big_idea)}</span></span><span class="tc-arrow" aria-hidden="true">→</span></a></li>`).join("") + `</ol>`
-    : `<p class="empty">${esc(s.note)}</p>`;
-  html += `</details>`;
-}
-html += `<div class="section-label">More</div><nav class="more-links" aria-label="More">${[["plan.html", "Reading plan"], ["my.html", "My Conference"], ["challenge.html", esc(CONF.challenge.title)], ["builder.html?src=promo", "Share this site"]].map(([h, l]) => `<a href="${h}">${l}</a>`).join("")}</nav>`;
-html += `${recapNotice() ? `<div class="intro">${recapNotice()}</div>` : ""}<p class="page-updated">Last updated ${esc(CONF.updated)}.</p>`;
-document.getElementById("main").innerHTML = html;
-
-
-// ---- After conference: "Choose one invitation" (saved on this device) + a six-month reminder card ----
-const INV_KEY = "six-month-invite", invTalks = () => CONF.talks.filter(t => t.invitation);
-const invCard = () => { const v = Store.get(INV_KEY, null), t = v && talkById(v.id); if (!t) return "";
-  const day = Math.max(1, Math.floor((Date.now() - Date.parse(v.start)) / 864e5) + 1), month = Math.min(6, Math.ceil(day / 30.5));
-  return `<section class="inv-card" aria-labelledby="inv-h"><div class="inv-k"><span id="inv-h">My invitation</span><span>Month ${month} of 6 · ${COUNTDOWN.days} days to April</span></div>
-    <p class="inv-text">${esc(t.invitation)}</p><p class="inv-by">From ${esc(t.speaker)} · <a href="talks/${esc(t.id)}.html">${esc(t.title)}</a></p>
-    <div class="inv-track" aria-hidden="true"><span style="--p:${Math.min(1, day / 182)}"></span></div>
-    <div class="inv-actions"><a class="btn gold" href="builder.html?ins=invite">Make it a card</a><button type="button" class="btn secondary" data-inv-change>Change</button></div>
-    <p class="inv-note">Saved only on this device. Come back any day; it stays here until April.</p></section>`; };
-const placeInv = () => { document.querySelector(".inv-card")?.remove(); const h = invCard(); if (h) document.querySelector(".entry")?.insertAdjacentHTML("afterend", h); };
-function openInvPicker() {
-  const cur = (Store.get(INV_KEY, null) || {}).id, el = document.createElement("div"); el.className = "sheet-backdrop"; el.id = "invsheet";
-  const bySess = CONF.sessions.map(s => [s, invTalks().filter(t => t.session === s.id).sort((a, b) => a.order - b.order)]).filter(([, ts]) => ts.length);
-  el.innerHTML = `<div class="sheet inv-sheet" role="dialog" aria-modal="true" aria-labelledby="invsheet-h"><div class="sheet-grip"></div>
-    <h2 id="invsheet-h">Choose one invitation</h2><p class="speaker">Pick one thing to act on until April. It's saved on this device, with a reminder on the home page.</p>
-    <div class="inv-list">${bySess.map(([s, ts]) => `<div class="b-label">${esc(s.name)}</div>${ts.map(t => `<button type="button" class="inv-opt" data-inv="${esc(t.id)}" aria-pressed="${t.id === cur}"><span class="inv-o-t">${esc(t.invitation)}</span><span class="inv-o-s">${esc(t.speaker)} · ${esc(t.title)}</span></button>`).join("")}`).join("")}</div>
-    <button type="button" class="btn secondary" data-inv-close style="width:100%;margin-top:12px">Close</button></div>`;
-  const close = () => { el.remove(); document.removeEventListener("keydown", onKey); document.getElementById("pickInvite")?.focus(); };
-  const onKey = e => { if (e.key === "Escape") close(); };
-  el.addEventListener("click", e => { if (e.target === el || e.target.closest("[data-inv-close]")) return close();
-    const b = e.target.closest("[data-inv]"); if (!b) return; Store.set(INV_KEY, { id: b.dataset.inv, start: new Date().toISOString() }); close(); placeInv();
-    const c = document.querySelector(".inv-card"); if (c) { c.scrollIntoView({ block: "center", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); c.classList.add("inv-new"); } });
-  document.addEventListener("keydown", onKey); document.body.appendChild(el); el.querySelector(".inv-opt")?.focus({ preventScroll: true });
-}
-document.addEventListener("click", e => { if (e.target.closest("#pickInvite, [data-inv-change]")) openInvPicker(); });
-if (POSTCONF) placeInv();
+<aside class="light-reflect" aria-labelledby="reflect-title"><span class="light-kicker">MAKE IT PERSONAL</span><h2 id="reflect-title">What will I do<br>with this light?</h2><p>${esc(current.ponder)}</p>
+<label for="reflection">An impression to remember</label><textarea id="reflection" rows="3" placeholder="Today, I feel prompted to…">${esc(Store.note(current.id))}</textarea>
+<button class="btn secondary" id="saveReflection" type="button">Save reflection</button><p class="light-caption" id="saveStatus" role="status">Private to this browser. No account needed.</p>
+</aside></div>
+<section class="light-step" aria-labelledby="step-title"><div><span class="light-kicker">FROM HEARING TO DOING</span><h2 id="step-title">One small act of faith.</h2><p id="invitationText"></p><p class="light-caption" id="invitationSource"></p></div><div class="light-step-action"><button class="btn gold" type="button" id="chooseStep">Choose an invitation</button><a href="my.html">Visit my journal →</a></div></section>
+<section class="light-paths" aria-label="Continue your journey"><a href="study.html"><span class="light-number">01 / STUDY</span><h2>Find the words<br>you need.</h2><p>Explore talks by topic, speaker, or conference.</p><span aria-hidden="true">Explore the library ↗</span></a><a href="lessons.html"><span class="light-number">02 / TEACH</span><h2>Help the words<br>reach someone.</h2><p>Prepare a thoughtful lesson for home or church.</p><span aria-hidden="true">Prepare a lesson ↗</span></a><a href="plan.html"><span class="light-number">03 / CONTINUE</span><h2>A little study.<br>Lasting light.</h2><p>${done.length?`${done.filter(id=>talkById(id)).length} of ${CONF.talks.length} talks marked read.`:'Create room for conference in your week.'} Your pace, without pressure.</p><span aria-hidden="true">${nextTalk?'Open my reading plan':'Revisit my reading plan'} ↗</span></a></section>
+<section class="light-return"><p>You don’t have to do everything. <strong>Begin with one thing.</strong></p><a href="subscribe.html">Set a gentle reminder →</a></section>
+<dialog id="invitationDialog" class="light-dialog"><form method="dialog"><button class="dialog-close" aria-label="Close invitation chooser">×</button></form><p class="light-kicker">ONE MEANINGFUL STEP</p><h2>What speaks to you?</h2><p>Choose an invitation to carry into everyday life. You can change it anytime.</p><div class="invitation-options">${talks.map(t=>`<button type="button" data-invitation="${esc(t.id)}"><strong>${esc(t.invitation)}</strong><span>${esc(t.speaker)}</span></button>`).join('')}</div></dialog>`;
+function save(action) { try { action(); return true; } catch { document.getElementById('saveStatus').textContent='Your browser couldn’t save this. Keep a copy before leaving.'; return false; } }
+document.getElementById('saveQuote').onclick = e => { let on; if(save(()=>{on=Store.toggleQuote(current.id,quoteIndex);})){e.currentTarget.setAttribute('aria-pressed',String(on));e.currentTarget.textContent=on?'Saved to journal':'Save thought';} };
+const note = document.getElementById('reflection');
+document.getElementById('saveReflection').onclick = () => { if(save(()=>Store.setNote(current.id,note.value))) document.getElementById('saveStatus').textContent='Saved in My Journal on this browser.'; };
+// Save on input, not a timer: moving straight to another page cannot lose the last words.
+note.addEventListener('input',()=>{if(save(()=>Store.setNote(current.id,note.value))) document.getElementById('saveStatus').textContent='Saved in My Journal on this browser.';});
+const dialog=document.getElementById('invitationDialog');
+function renderInvitation(){const selected=Store.get('six-month-invite',null);const talk=selected&&talkById(selected.id);document.getElementById('invitationText').textContent=talk?talk.invitation:'Choose one invitation from conference and make room for it in your life.';document.getElementById('invitationSource').textContent=talk?'From '+talk.speaker+' · Saved on this browser.':'A personal intention, without a streak to keep.';document.getElementById('chooseStep').textContent=talk?'Change my invitation':'Choose an invitation';}
+document.getElementById('chooseStep').onclick=()=>dialog.showModal();
+dialog.addEventListener('click',e=>{const b=e.target.closest('[data-invitation]');if(b&&save(()=>Store.set('six-month-invite',{id:b.dataset.invitation,start:new Date().toISOString()}))){renderInvitation();dialog.close();}});
+renderInvitation();
