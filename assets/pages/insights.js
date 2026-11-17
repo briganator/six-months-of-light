@@ -20,7 +20,7 @@ function mini(x) {
   if (B.type === "text") body = `<p class="ins-text">${esc(B.text)}</p>`;
   return `<article class="ins-card" id="${esc(x.id)}">
     <div class="ins-kicker">${esc(x.kicker)}</div><h3>${esc(x.title)}</h3>${body}
-    <div class="ins-actions"><a class="btn gold small" href="builder.html?ins=${esc(x.id)}">Share this card</a></div></article>`;
+    <div class="ins-actions"></div></article>`;
 }
 const QUIZ = [
   ["When life feels heavy, what helps you most?", [["Remembering the Savior", "Jesus Christ & His Atonement"], ["Time in the temple", "Temples & covenants"], ["A quiet prompting", "Holy Ghost & revelation"], ["Holding on and trusting", "Trusting God in trials"]]],
@@ -45,30 +45,30 @@ document.getElementById("main").innerHTML = `
   <section class="card quizbox" id="theme-quiz"><div class="ins-kicker">Quick quiz · 3 taps</div><h2 style="margin-top:4px">Which theme speaks to you?</h2>
     <form id="tq" onsubmit="return false">${QUIZ.map(([q, opts], qi) => `<fieldset><legend>${qi + 1}. ${esc(q)}</legend><div class="tq-opts">${opts.map(([l, th], oi) => `<label class="tq-opt"><input type="radio" name="q${qi}" value="${esc(th)}"><span>${esc(l)}</span></label>`).join("")}</div></fieldset>`).join("")}</form>
     <div id="tq-result" aria-live="polite"></div></section>
-  <section class="card" id="spotlight"><div class="ins-kicker">Speaker spotlight</div><h2 style="margin-top:4px">Share a speaker's big idea</h2>
+  <section class="card" id="spotlight"><div class="ins-kicker">Speaker spotlight</div><h2 style="margin-top:4px">Explore a speaker's message</h2>
     <div class="spot-row"><select id="spot" class="field" aria-label="Speaker">${T.map(t => `<option value="${t.id}">${esc(t.speaker)} — ${esc(t.title)}</option>`).join("")}</select>
-    <a class="btn gold" id="spotgo" href="builder.html?ins=spot-${T[0].id}">Make spotlight card</a></div></section>
+    <a class="btn gold" id="spotgo" href="talks/${T[0].id}.html">Study this talk</a></div></section>
   <section class="card cloud-card" id="words"><div class="section-label" style="margin:0 0 6px;color:var(--gold-hi)">Word cloud</div><h2 style="margin-top:0">What ${SCOPE.who === "Saturday" ? "Saturday" : "the conference"} talked about</h2>
     <div class="cloud">${[...topWords].sort((a, b) => a[0].length % 3 - b[0].length % 3 || a[0].localeCompare(b[0])).map(([w, n]) => { const k = (n - min) / (max - min || 1);
       const pal = ["#f6dfa6", "#e3a693", "#fbf3e3", "#c9b8f0", "#d8a95b"]; const col = k > .55 ? "#f6dfa6" : pal[(w.length + n) % pal.length];
       return `<span style="font-size:${(15 + Math.pow(k, .8) * 46).toFixed(0)}px;color:${col};font-style:${k > .4 ? "italic" : "normal"};font-weight:${k > .3 ? 500 : 400}" title="${n}×">${esc(w)}</span>`; }).join("")}</div>
-    <p class="speaker">Most frequent meaningful words (common words removed). <a href="builder.html?ins=ten-words">Share as “The conference in 10 words” →</a></p></section>
+    <p class="speaker">Most frequent meaningful words (common words removed). </p></section>
   <details class="more-sec" id="charts"><summary><span><b>More charts</b><span>Top themes, most-cited scriptures, who spoke</span></span></summary>
   <div class="ins-grid">
   <section class="card" id="themes"><h2 style="margin-top:0">Top themes</h2>${I.themeCounts.filter(x => x[1]).map(([n, c]) => bar(n, c, T.length)).join("")}
-    <p class="speaker">Number of talks touching each theme (keyword-based). <a href="builder.html?ins=themes">Share →</a></p></section>
+    <p class="speaker">Number of talks touching each theme (keyword-based). </p></section>
   <section class="card" id="scriptures"><h2 style="margin-top:0">Most-cited scriptures</h2>
     ${Object.entries(I.books).sort((a, b) => b[1] - a[1]).map(([b, n]) => bar(b, n, Math.max(...Object.values(I.books)))).join("")}
     <details><summary class="speaker">All references</summary><ul class="scriptures">${I.refs.map(r => `<li>${esc(r.ref)}${r.allusion ? " <em>(allusion)</em>" : ""} — <a href="talks/${r.t.id}.html">${esc(r.t.speaker)}</a></li>`).join("")}</ul></details>
-    <p class="speaker"><a href="builder.html?ins=scriptures">Share →</a></p></section>
-  <section class="card"><h2 style="margin-top:0">Who spoke</h2>${donut(I.callings)}<p class="speaker">${SCOPE.tail} <a href="builder.html?ins=who-spoke">Share →</a></p></section>
+    <p class="speaker"></p></section>
+  <section class="card"><h2 style="margin-top:0">Who spoke</h2>${donut(I.callings)}<p class="speaker">${SCOPE.tail} </p></section>
   </div></details>
   <div id="ask"></div>${askTalksPanel({ label: "the whole conference", questions: ["Which talks taught about the temple?", "Which talks focused on Jesus Christ?"],
     answer: k => { const key = k === 0 ? "Temples & covenants" : "Jesus Christ & His Atonement", ts = T.filter(t => talkThemes(t).includes(key));
       return talkAnswer(`${ts.length} of ${T.length} ${SCOPE.adj}talks touched “${esc(key)}” (keyword-based, ${OFFICIAL_TEXT() ? "from summaries and quotes" : "from recaps"}):`, ts); } })}`;
 initSubnav();
 const spot = document.getElementById("spot"), go = document.getElementById("spotgo");
-spot.addEventListener("change", () => go.href = `builder.html?ins=spot-${spot.value}`);
+spot.addEventListener("change", () => go.href = `talks/${spot.value}.html`);
 document.getElementById("tq").addEventListener("change", () => {
   const picks = QUIZ.map((_, i) => document.querySelector(`input[name=q${i}]:checked`)?.value);
   document.querySelectorAll(".tq-opt").forEach(l => l.classList.toggle("on", l.querySelector("input").checked));
@@ -79,10 +79,11 @@ document.getElementById("tq").addEventListener("change", () => {
   document.getElementById("tq-result").innerHTML = `<div class="tq-res"><div class="ins-kicker">Your theme</div><h3>${esc(theme)}</h3>
     <p class="speaker">${ts.length} of ${T.length} ${SCOPE.adj}talks touched this theme. Start with:</p>
     <ul>${ts.slice(0, 3).map(t => `<li><a href="talks/${t.id}.html">${esc(t.title)}</a> · ${esc(t.speaker)}</li>`).join("")}</ul>
-    <a class="btn gold" href="builder.html?ins=${esc(card.id)}">Share my result card</a></div>`;
+    </div>`;
 });
 
 loadLib().then(LB => { Explore.make(document.getElementById("zoomBox"), LB);
   if (["#zoom", "#compare", "#music"].includes(HASH0)) document.getElementById("zoom").scrollIntoView(); })
   .catch(() => { document.getElementById("zoomBox").innerHTML = `<p class="empty">The library didn't load. Check your connection and refresh.</p>`; });
 openCharts();
+
