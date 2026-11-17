@@ -2,7 +2,7 @@ mount("study.html", true);
 // Study library: every general conference talk in the library (see LIB.coverage) in one place.
 // Official talks: title, speaker, session, footnote references and derived counts only (no talk text). October 2026: this site's recaps.
 const LB = Library, main = document.getElementById("main");
-const st = { view: ["talks", "topics", "speakers"].includes(QS.get("view")) ? QS.get("view") : "talks", c: QS.get("c") || "2026-10", topic: QS.get("topic") || "", sp: QS.get("sp") || "", se: QS.get("se") || "", sort: QS.get("sort") === "n" ? "n" : "calling", q: QS.get("q") || "", n: 30 };
+const st = { view: ["talks", "topics", "speakers"].includes(QS.get("view")) ? QS.get("view") : "talks", c: QS.get("c") || "2026-10", topic: QS.get("topic") || "", sp: QS.get("sp") || "", se: QS.get("se") || "", sort: QS.get("sort") === "n" ? "n" : "calling", ts: QS.get("ts") === "title" ? "title" : "session", q: QS.get("q") || "", n: 30 };
 if (st.c !== "all" && !LB.confOf(st.c)) st.c = "2026-10";
 if (st.topic && !LB.THEME_KEYS.includes(st.topic)) st.topic = "";
 if (st.sp && !LB.speakers.some(x => x.sp === st.sp)) st.sp = "";
@@ -35,6 +35,7 @@ main.innerHTML = `
       <label class="lib-sel"><span>Conference</span><select id="c">${opt("all", "All conferences", st.c)}${LB.confs.map(x => opt(x.c, x.label, st.c)).join("")}</select></label>
       <label class="lib-sel"><span>Session</span><select id="se"></select></label>
       <label class="lib-sel"><span>Topic</span><select id="topic">${opt("", "Any topic", st.topic)}${LB.THEME_KEYS.map(k => opt(k, LB.themeName(k), st.topic)).join("")}</select></label>
+      <label class="lib-sel"><span>Sort</span><select id="ts">${opt("session", "Conference, then session", st.ts)}${opt("title", "Title A–Z", st.ts)}</select></label>
       <label class="lib-sel"><span>Speaker</span><select id="sp">${opt("", "Any speaker", st.sp)}${LB.GROUP_ORDER.map(g => { const l = LB.speakers.filter(x => x.g === g); return l.length ? `<optgroup label="${esc(LB.GROUPS[g][0])}">${l.map(x => opt(x.sp, x.s.replace(/^(President|Elder|Sister|Bishop|Brother)\s+/, "") + " (" + x.n + ")", st.sp)).join("")}</optgroup>` : ""; }).join("")}</select></label>
     </div>
     <div class="lib-chips" id="chips" aria-live="polite"></div>
@@ -57,12 +58,28 @@ const talkRow = t => { const cf = LB.confOf(t.c), mins = LB.minutes(t), ext = !t
     <span class="lt-meta">${esc(t.s)} · ${esc(cf.label)}${LB.sessName(t) ? " · " + esc(LB.sessName(t).replace(/ Session$/, "")) : ""}${mins ? ` · ${mins} min read` : t.recap ? " · recap" : ""}</span>
     ${t.tg.length ? `<span class="lt-tags">${t.tg.map(k => `<span class="pill">${esc(LB.themeName(k))}</span>`).join("")}</span>` : ""}</a>${makeLink(t)}</li>`; };
 const makeLink = () => "";
+// Conference order (newest first), then session order within each conference, then talk id; or title A–Z.
+const confIdx = c => LB.confs.findIndex(x => x.c === c);
+const sessIdx = t => Object.keys(LB.confOf(t.c)?.sessions || {}).indexOf(t.se);
+function sortTalks(list) {
+  if (st.ts === "title") return [...list].sort((a, b) => (a.t || a.title || "").localeCompare(b.t || b.title || ""));
+  return [...list].sort((a, b) => confIdx(a.c) - confIdx(b.c) || sessIdx(a) - sessIdx(b) || String(a.id).localeCompare(String(b.id)));
+}
+// In session order, each conference and session gets a heading row above its talks.
+function talkItems(items) {
+  if (st.ts !== "session") return items.map(talkRow).join("");
+  let prev = "", out = "";
+  items.forEach(t => { const key = t.c + "|" + t.se;
+    if (key !== prev) { prev = key; out += `<li class="lib-gh-row" role="presentation"><h3 class="lib-gh">${esc(LB.confOf(t.c)?.label || t.c)} · ${esc(LB.sessName(t) || "Session")}</h3></li>`; }
+    out += talkRow(t); });
+  return out;
+}
 function render() { sync(); chips();
   document.querySelectorAll(".lib-views button").forEach(b => { b.setAttribute("aria-pressed", b.dataset.v === st.view); });
-  const list = LB.filter({ c: st.c, topic: st.topic, sp: st.sp, q: st.q, se: st.se || undefined });
+  const list = sortTalks(LB.filter({ c: st.c, topic: st.topic, sp: st.sp, q: st.q, se: st.se || undefined }));
   if (st.view === "talks") {
     $("out").innerHTML = `<p class="lib-count" role="status">${list.length} talk${list.length === 1 ? "" : "s"}${st.c === "2026-10" && !st.topic && !st.sp && !st.se && !st.q ? " in October 2026 · choose <b>All conferences</b> to search all " + LB.talks.length : ""}</p>
-      ${list.length ? `<ol class="lib-list">${list.slice(0, st.n).map(talkRow).join("")}</ol>${list.length > st.n ? `<button type="button" class="btn secondary" id="more">Show ${Math.min(30, list.length - st.n)} more</button>` : ""}` : `<p class="empty">No talks match. Try All conferences or a shorter search.</p>`}`;
+      ${list.length ? `<ol class="lib-list">${talkItems(list.slice(0, st.n))}</ol>${list.length > st.n ? `<button type="button" class="btn secondary" id="more">Show ${Math.min(30, list.length - st.n)} more</button>` : ""}` : `<p class="empty">No talks match. Try All conferences or a shorter search.</p>`}`;
     $("more")?.addEventListener("click", () => { st.n += 30; render(); });
   } else if (st.view === "topics") {
     const by = {}; list.forEach(t => t.tg.forEach(k => by[k] = (by[k] || 0) + 1));
@@ -78,7 +95,7 @@ function render() { sync(); chips();
       ${byN ? `<ol class="lib-list sp">${sps.map(row).join("")}</ol>` : LB.GROUP_ORDER.map(g => { const l = sps.filter(x => x.g === g); return l.length ? `<h3 class="lib-gh">${esc(LB.GROUPS[g][0])} <small>${l.length}</small></h3><ol class="lib-list sp">${l.map(row).join("")}</ol>` : ""; }).join("")}`;
     $("out").querySelectorAll("[data-sort]").forEach(b => b.onclick = () => { st.sort = b.dataset.sort; render(); });
   } }
-["c", "se", "topic", "sp"].forEach(id => $(id).addEventListener("change", e => { st[id] = e.target.value; st.n = 30; if (id === "c") fillSe(); if (id === "sp" && st.sp && st.c === "2026-10") { st.c = "all"; $("c").value = "all"; fillSe(); } render(); }));
+["c", "se", "topic", "sp", "ts"].forEach(id => $(id).addEventListener("change", e => { st[id] = e.target.value; st.n = 30; if (id === "c") fillSe(); if (id === "sp" && st.sp && st.c === "2026-10") { st.c = "all"; $("c").value = "all"; fillSe(); } render(); }));
 let qt; $("q").addEventListener("input", e => { clearTimeout(qt); qt = setTimeout(() => { st.q = e.target.value.trim(); st.n = 30; render(); }, 160); });
 $("q").addEventListener("keydown", e => { if (e.key === "Enter") e.target.blur(); });
 $("chips").addEventListener("click", e => { const b = e.target.closest("[data-k]"); if (!b) return; const k = b.dataset.k;
