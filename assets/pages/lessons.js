@@ -14,6 +14,7 @@ const main = document.getElementById("main");
 main.innerHTML = `
   <h1 style="margin-top:38px">Lesson helps</h1>
   <p class="lede" style="margin-top:-4px">A ready outline for any general conference talk: family night, a 25-minute Elders Quorum or Relief Society lesson, youth classes or a sacrament talk.</p>
+    <div class="present-top"><button class="btn gold small" id="presentTop" type="button">▶ Present this lesson</button><span class="src">Full screen, for the room you are teaching.</span></div>
   <div class="notice"><strong>Starter outline.</strong> Built from this site's summaries, verified quotes and the scriptures each talk cites. The full talk is on the talk page, with text from ChurchofJesusChrist.org. Prepare with that text, and follow the Spirit.</div>
   <div class="card no-print">
     <div class="ls-pick">
@@ -35,7 +36,7 @@ function talkOptions() {
 function norm() {
   if (conf === "2026-10") { const t = talkById(tid); if (!t) return null;
     const tags = window.THEMES3 ? [...new Set(t.quotes.flatMap((_, i) => THEMES3.tagsFor(t.id, i)))].map(k => THEMES3.get(k)?.name).filter(Boolean) : [];
-    return { title: t.title, speaker: t.speaker, calling: t.calling, conf: "October 2026", official: t.official_url, session: officialUrl(t), local: `talks/${t.id}.html`,
+    return { title: t.title, speaker: t.speaker, calling: t.calling, photo: t.photo, conf: "October 2026", official: t.official_url, session: officialUrl(t), local: `talks/${t.id}.html`,
       overview: t.summary, overviewSrc: t.official_url ? "Summary written for this site; read the official text for the full message." : "Summary written from news recaps of the talk; not the official text.", big: t.big_idea, ponder: t.ponder,
       quotes: t.quotes, quoteSrc: t.official_url ? "Quoted from the official talk text." : "Quoted in news recaps; confirm the wording with the official text when it's posted.",
       refs: t.scriptures, refSrc: t.official_url ? "From the talk's footnotes and this site's notes." : "As reported in recaps.", invitation: t.invitation, invSrc: "", topics: tags };
@@ -77,7 +78,7 @@ function timedPlan(n, mk) {
   const segs = [
     { a: 0, b: 2, k: "Welcome & prayer", who: MODES[mk].conducts, items: [yth ? "A youth from the class or quorum presidency welcomes everyone and invites someone to pray." : "A simple welcome, then invite someone to give the opening prayer.", "Keep business to what can't wait; no separate counseling topic. Then start right away."] },
     { a: 2, b: 5, k: "Open", who: "Teacher", items: [`Ask: <em>${esc(n.ponder)}</em>`, `Invite someone to read: <q>${esc(quote)}</q>`, "Give a quiet moment to ponder before anyone answers."] },
-    { a: 5, b: 20, k: "Discuss one core truth", who: "Everyone", core, items: [
+    { a: 5, b: 20, k: "Discuss one core truth", who: "Everyone", items: [
       ...q.slice(0, 2).map((x, i) => `<b>Q${i + 1}.</b> ${i ? esc(x) : x}`),
       `<span class="tl-opt">Optional, about 3 min</span> Turn to someone nearby and share your answer to Q2, then invite two or three people to share with everyone.`,
       `<b>Q3.</b> ${esc(q[2])}`,
@@ -105,6 +106,7 @@ function renderTimed(n, m, mk) {
     <div class="ls-kicker">${esc(m.name)} · ${esc(m.time)}</div>${m.sub ? `<p class="speaker" style="margin:2px 0 0">${esc(m.sub)}</p>` : ""}
     <h2 style="margin:6px 0 2px">${esc(n.title)}</h2><p class="speaker">${esc(n.speaker)} · ${esc(n.conf)} general conference</p>
     <p class="src" style="margin-top:6px">${esc(m.fmt)}</p>
+    ${presentBtn(mk)}
     ${printPanel("top")}
     <div class="tl-core"><div class="tl-ck">One core truth</div><p>${esc(P.core)}</p></div>
     ${bar}
@@ -114,7 +116,6 @@ function renderTimed(n, m, mk) {
       <p>${esc(n.overview)}</p><p class="src">${esc(n.overviewSrc)}</p>
       <ul><li>Read the full talk and pray about what your ${mk === "youth" ? "class" : "quorum or Relief Society"} needs from it.</li><li>Share the talk link a few days early so members come having read it.</li><li>Teach one truth well. Meaningful discussion matters more than covering everything.</li>${others.length ? `<li>Other scriptures the talk cites: ${others.map(esc).join("; ")}</li>` : ""}</ul></details>
     <div class="links">
-      <button class="btn gold small" id="present">▶ Present</button>
       <button class="btn secondary small" id="cp">Copy outline</button>
       ${n.local ? `<a class="btn secondary small" href="${esc(n.local)}">Read this talk</a>` : ""}
     </div>
@@ -143,12 +144,7 @@ function renderTimed(n, m, mk) {
       { t: "h", text: "This week" }, { t: "p", text: n.invitation }, { t: "line", text: "What do I feel impressed to do?" }] }),
   });
   $("cp").onclick = () => navigator.clipboard.writeText([`${m.name} · 25 min`, `${n.title} · ${n.speaker}`, `One core truth: ${P.core}`, ...P.segs.map(s => `${mm(s.a)}–${mm(s.b)} ${s.k} (${s.who}): ` + s.items.map(x => x.replace(/<[^>]+>/g, "")).join(" "))].join("\n")).then(() => window.toast?.("Outline copied"));
-  $("present").onclick = () => present([
-    [m.present, n.title, n.speaker],
-    ["2:00 · Let's ponder", n.ponder, ""], ["Read aloud", "“" + P.quote + "”", n.speaker],
-    ["5:00 · One core truth", P.core, P.ref ? "Scripture: " + P.ref : ""],
-    ...P.q.map((x, i) => [`Discuss · ${i + 1}`, x, i === 1 ? "Optional: share with someone nearby first." : ""]),
-    ["20:00 · This week", n.invitation, "What do you feel impressed to do?"]]);
+  $("present").onclick = () => present(deckFor(mk, { title: n.title, speaker: n.speaker, photo: speakerPhoto(n), ponder: n.ponder, core: P.core, quotes: [P.quote], scripture: P.ref, discuss: P.q, invitation: conf === "2026-10" ? n.invitation : "" }));
   clockWire();
 }
 let clkT = null;
@@ -179,6 +175,7 @@ function gen() {
     <div class="ls-kicker">${esc(m.name)} · ${esc(m.time)}</div>${m.sub ? `<p class="speaker" style="margin:2px 0 0">${esc(m.sub)}</p>` : ""}
     <h2 style="margin:6px 0 2px">${esc(n.title)}</h2><p class="speaker">${esc(n.speaker)} · ${esc(n.conf)} general conference</p>
     ${m.fmt ? `<p class="src" style="margin-top:6px">${esc(m.fmt)}</p>` : ""}
+    ${presentBtn(mode)}
     ${printPanel("top")}
     ${h("Talk overview")}<p>${esc(n.overview)}</p><p class="src">${esc(n.overviewSrc)}</p>
     ${h("Open")}<p>${esc(m.open)} <em>${esc(n.ponder)}</em></p>
@@ -188,7 +185,6 @@ function gen() {
     ${h(mode === "eqrs" ? "Counsel together" : "Activity")}<p>${esc(m.act)}</p>
     ${h("Suggested invitation")}<p><strong>${esc(n.invitation)}</strong> ${esc(m.close)}</p>${n.invSrc ? `<p class="src">${esc(n.invSrc)}</p>` : ""}
     <div class="links">
-      <button class="btn gold small" id="present">▶ Present</button>
       <button class="btn secondary small" id="cp">Copy outline</button>
       ${n.local ? `<a class="btn secondary small" href="${esc(n.local)}">Read this talk</a>` : ""}
     </div>
@@ -219,11 +215,7 @@ function gen() {
     ...(refs.length ? [{ t: "h", text: "Scriptures to read" }, { t: "p", text: refs.map(r => ScripRef.first(r) || r).join(" · ") }] : []),
     ...(qs.length ? [{ t: "h", text: "To ponder and discuss" }, ...qs.map((x, i) => ({ t: "li", n: i + 1, text: x }))] : []), { t: "h", text: "This week" }, { t: "p", text: n.invitation }] });
   wirePrint(pm);
-  $("present").onclick = () => present([
-    [m.present, n.title, n.speaker], ["Let's ponder", n.ponder, ""], ["The big idea", n.big, ""],
-    ...(quotes.length ? quotes.map(q => ["Read aloud", "“" + q + "”", n.speaker + (conf === "2026-10" && !OFFICIAL_TEXT() ? " (from the recap)" : "")]) : [["Key statement", n.keyStatement, n.speaker]]),
-    ...(refs.length ? [["Scripture", refs.map(r => ScripRef.first(r) || r).slice(0, 3).join(" · "), "Read it together from your scriptures."]] : []),
-    ...qs.slice(1).map((x, i) => [`Discuss · ${i + 1}`, x, ""]), [mode === "eqrs" ? "Counsel together" : "Activity", m.act, ""], ["This week", n.invitation, m.close]]);
+  $("present").onclick = () => present(deckFor(mode, { title: n.title, speaker: n.speaker, photo: speakerPhoto(n), ponder: n.ponder, core: n.big, quotes: quotes.length ? quotes : [n.keyStatement], quoteNote: quotes.length && conf === "2026-10" && !OFFICIAL_TEXT() ? "from the recap" : "", scripture: refs.map(r => ScripRef.first(r) || r).slice(0, 3).join(" · "), discuss: qs.slice(1), invitation: conf === "2026-10" ? n.invitation : "" }));
 }
 // ---- Printing ----
 // Phones (iPhone Safari especially) get a real PDF file behind a normal link: iOS opens it in its PDF viewer, where
@@ -293,11 +285,49 @@ if (PRINT_VIEW) {
   new MutationObserver(sync).observe($("out"), { childList: true }); setInterval(sync, 1500); sync();
 }
 // Big-type slides for a TV or a phone passed around the room. Arrow keys, swipe or tap the sides; Esc closes.
+// Picture for what a slide mentions: the first photo whose subject appears in the slide's words (openly licensed or public domain).
+const PIC_RULES = [[/temple/i, "slc"], [/olive|gethsemane/i, "gethsemane-tree"], [/resurrect|tomb|risen|easter/i, "art-resurrection"],
+  [/sermon|mount|beatitude|blessed are/i, "art-sermon"], [/\bwell\b|water/i, "art-well"], [/child|little one|young people|youth/i, "art-children"],
+  [/rich|riches|wealth|possession/i, "art-rich-young-ruler"], [/transfigur/i, "art-transfiguration"], [/atone|atonement|suffer|burden/i, "art-gethsemane"],
+  [/comfort|peace|consol|rest\b/i, "art-consolator"], [/restor|kirtland|nauvoo|pioneer/i, "kirtland"], [/dawn|sunrise|light|growth|spring/i, "wheat-sunset"],
+  [/christ|jesus|savior|lord/i, "art-consolator"]];
+const picFor = text => { const hit = PIC_RULES.find(([re]) => re.test(text || "")); return hit ? (window.PHOTOS || []).find(p => p.id === hit[1]) || null : null; };
+const fallbackPic = () => (window.PHOTOS || []).find(p => p.id === "wheat-sunset") || null;
+// Wording for each audience. Slides never carry times or suggestions.
+const TONE = {
+  fhe: { cover: "Tonight's talk", ponder: "Let's ponder together", core: "Tonight's message", quote: "Read together", scr: "Read together", disc: i => `Ask your family · ${i}`, invite: "This week, as a family" },
+  eqrs: { cover: "Today's message", ponder: "Let's ponder", core: "One core truth", quote: "Read aloud", scr: "Read together", disc: i => `Discuss together · ${i}`, invite: "This week · ministering" },
+  youth: { cover: "Today's message", ponder: "Think about it", core: "The main idea", quote: "Read together", scr: "Find it in your scriptures", disc: i => `Talk about it · ${i}`, invite: "This week" },
+  talk: { cover: "My talk", ponder: "Ponder", core: "The message", quote: "In the words of", scr: "Scripture", disc: null, invite: "Invitation" },
+};
+const PRESENT_FOR = { fhe: "family night", eqrs: "Relief Society & quorum", youth: "youth class", talk: "sacrament talk" };
+// Slides for one audience. c: { title, speaker, photo, ponder, core, quotes, quoteNote, scripture, discuss, invitation }
+function deckFor(mk, c) {
+  const T = TONE[mk] || TONE.fhe, base = { photo: c.photo, speaker: c.speaker };
+  return [
+    { ...base, kind: "cover", k: T.cover, big: c.title, small: c.speaker },
+    ...(c.ponder ? [{ ...base, kind: "ponder", k: T.ponder, big: c.ponder }] : []),
+    ...(c.core ? [{ ...base, kind: "core", k: T.core, big: c.core }] : []),
+    ...c.quotes.map(q => ({ ...base, kind: "quote", k: T.quote, big: "“" + q + "”", small: [c.speaker, c.quoteNote].filter(Boolean).join(" · ") })),
+    ...(c.scripture ? [{ ...base, kind: "scripture", k: T.scr, big: c.scripture }] : []),
+    ...(T.disc ? c.discuss.map((x, i) => ({ ...base, kind: "discuss", k: T.disc(i + 1), big: x })) : []),
+    ...(c.invitation ? [{ ...base, kind: "invite", k: T.invite, big: c.invitation }] : []),
+  ];
+}
+// The Present button sits right under the title, labelled for the audience.
+const presentBtn = mk => `<div class="present-hero"><button class="btn gold" id="present">▶ Present for ${esc(PRESENT_FOR[mk] || "the room")}</button><span class="src">Full screen, one idea at a time.</span></div>`;
 function present(slides) {
+  slides = slides.map(s => ({ ...s, img: s.img !== undefined ? s.img : (picFor(`${s.k || ""} ${s.big || ""} ${s.small || ""}`) || fallbackPic()) }));
   let i = 0; const ov = document.createElement("div"); ov.className = "present"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true"); ov.setAttribute("aria-label", "Lesson slides");
   ov.innerHTML = `<button class="pr-x" aria-label="Close">×</button><div class="pr-slide" aria-live="polite"></div><div class="pr-nav"><button class="pr-prev" aria-label="Previous">‹</button><span class="pr-n"></span><button class="pr-next" aria-label="Next">›</button></div>`;
   document.body.appendChild(ov); document.body.style.overflow = "hidden";
-  const show = () => { const [k, big, small] = slides[i]; ov.querySelector(".pr-slide").innerHTML = `<div class="pr-k">${esc(k)}</div><div class="pr-big ${big.length > 140 ? "long" : ""}">${esc(big)}</div>${small ? `<div class="pr-small">${esc(small)}</div>` : ""}`;
+  const show = () => { const s = slides[i], kind = s.kind || "plain", big = s.big || "";
+    // Subtle picture behind every slide (what is mentioned, or a dawn fallback); the speaker's portrait sits in the corner.
+    const bg = s.img ? `<div class="pr-bg" style="background-image:url('${esc(s.img.file)}')"></div>` : "";
+    const corner = s.photo && kind !== "cover" ? `<img class="pr-corner" src="${esc(s.photo)}" alt="${esc(s.speaker || "The speaker")}">` : "";
+    const faceHtml = s.photo && kind === "cover" ? `<img class="pr-face" src="${esc(s.photo)}" alt="${esc(s.speaker || "The speaker")}">` : "";
+    ov.querySelector(".pr-slide").className = `pr-slide pr-${kind}`;
+    ov.querySelector(".pr-slide").innerHTML = `${bg}${corner}<div class="pr-wrap">${kind === "cover" ? faceHtml + `<div class="pr-txt">` : ""}<div class="pr-k">${esc(s.k || "")}</div><div class="pr-big ${big.length > 140 ? "long" : ""}">${esc(big)}</div>${s.small ? `<div class="pr-small">${esc(s.small)}</div>` : ""}${kind === "cover" ? `</div>` : ""}</div>`;
     ov.querySelector(".pr-n").textContent = `${i + 1} / ${slides.length}`; ov.querySelector(".pr-prev").disabled = i === 0; ov.querySelector(".pr-next").textContent = i === slides.length - 1 ? "✓" : "›"; };
   const go = d => { if (i + d >= slides.length) return close(); i = Math.max(0, i + d); show(); };
   const close = () => { ov.remove(); document.body.style.overflow = ""; document.removeEventListener("keydown", key); if (document.fullscreenElement) document.exitFullscreen?.().catch(() => {}); $("present")?.focus(); };
@@ -306,6 +336,7 @@ function present(slides) {
   let x0 = null; ov.addEventListener("touchstart", e => x0 = e.touches[0].clientX, { passive: true }); ov.addEventListener("touchend", e => { if (x0 == null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1); x0 = null; });
   ov.requestFullscreen?.().catch(() => {}); show(); ov.querySelector(".pr-next").focus();
 }
+document.addEventListener("click", e => { if (e.target.closest && e.target.closest("#presentTop")) $("present")?.click(); });
 $("lc").onchange = e => { conf = e.target.value; tid = null; talkOptions(); tid = $("lt").value; gen(); };
 $("lt").onchange = e => { tid = e.target.value; gen(); };
 document.querySelectorAll("#aud button").forEach(b => b.addEventListener("click", () => { mode = b.dataset.k;
