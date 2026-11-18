@@ -315,7 +315,11 @@ function deckFor(mk, c) {
   ];
 }
 // The Present button sits right under the title, labelled for the audience.
-const presentBtn = mk => `<div class="present-hero"><button class="btn gold" id="present">▶ Present for ${esc(PRESENT_FOR[mk] || "the room")}</button><span class="src">Full screen, one idea at a time.</span></div>`;
+const presentBtn = mk => `<div class="present-hero"><button class="btn gold" id="present">▶ Present for ${esc(PRESENT_FOR[mk] || "the room")}</button><button class="btn small" id="presentShare" type="button">Copy link to these slides</button><span class="src">Full screen, one idea at a time. Arrow keys, Space or swipe to move.</span></div>`;
+// A share link opens this exact lesson and goes straight into the slides (?present=1), so a co-teacher can start with one tap.
+const presentLink = () => { const u = new URL(location.href); u.searchParams.set("mode", mode); if (tid) u.searchParams.set("t", tid); if (conf) u.searchParams.set("c", conf); u.searchParams.set("present", "1"); return u.toString(); };
+let autoPresented = false;
+function autoPresent() { if (autoPresented || QS.get("present") !== "1" || !$("present")) return; autoPresented = true; $("present").click(); }
 function present(slides) {
   slides = slides.map(s => ({ ...s, img: s.img !== undefined ? s.img : (picFor(`${s.k || ""} ${s.big || ""} ${s.small || ""}`) || fallbackPic()) }));
   let i = 0; const ov = document.createElement("div"); ov.className = "present"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-modal", "true"); ov.setAttribute("aria-label", "Lesson slides");
@@ -331,12 +335,18 @@ function present(slides) {
     ov.querySelector(".pr-n").textContent = `${i + 1} / ${slides.length}`; ov.querySelector(".pr-prev").disabled = i === 0; ov.querySelector(".pr-next").textContent = i === slides.length - 1 ? "✓" : "›"; };
   const go = d => { if (i + d >= slides.length) return close(); i = Math.max(0, i + d); show(); };
   const close = () => { ov.remove(); document.body.style.overflow = ""; document.removeEventListener("keydown", key); if (document.fullscreenElement) document.exitFullscreen?.().catch(() => {}); $("present")?.focus(); };
-  const key = e => { if (e.key === "Escape") close(); if (["ArrowRight", " ", "PageDown"].includes(e.key)) { e.preventDefault(); go(1); } if (["ArrowLeft", "PageUp"].includes(e.key)) go(-1); };
+  const key = e => { if (e.key === "Escape") close(); if (["ArrowRight", " ", "PageDown"].includes(e.key)) { e.preventDefault(); go(1); } if (["ArrowLeft", "PageUp"].includes(e.key)) go(-1); if (e.key === "Home") { i = 0; show(); } if (e.key === "End") { i = slides.length - 1; show(); } };
   document.addEventListener("keydown", key); ov.querySelector(".pr-x").onclick = close; ov.querySelector(".pr-prev").onclick = () => go(-1); ov.querySelector(".pr-next").onclick = () => go(1);
   let x0 = null; ov.addEventListener("touchstart", e => x0 = e.touches[0].clientX, { passive: true }); ov.addEventListener("touchend", e => { if (x0 == null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1); x0 = null; });
   ov.requestFullscreen?.().catch(() => {}); show(); ov.querySelector(".pr-next").focus();
 }
-document.addEventListener("click", e => { if (e.target.closest && e.target.closest("#presentTop")) $("present")?.click(); });
+document.addEventListener("click", e => {
+  if (!e.target.closest) return;
+  if (e.target.closest("#presentTop")) $("present")?.click();
+  const sh = e.target.closest("#presentShare");
+  if (sh) { const url = presentLink(); (navigator.clipboard?.writeText(url) ?? Promise.reject()).then(() => window.toast?.("Link copied. It opens straight into the slides."), () => window.prompt("Copy this link", url)); }
+});
+new MutationObserver(autoPresent).observe(main, { childList: true, subtree: true });
 $("lc").onchange = e => { conf = e.target.value; tid = null; talkOptions(); tid = $("lt").value; gen(); };
 $("lt").onchange = e => { tid = e.target.value; gen(); };
 document.querySelectorAll("#aud button").forEach(b => b.addEventListener("click", () => { mode = b.dataset.k;
